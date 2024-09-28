@@ -31,8 +31,8 @@ export const SOCIAL_LINKS = {
 
 
 export const LANGUAGES = {
-  VN: 'vi-VN',
-  EN: 'en-US'
+  VN: 'vi',
+  EN: 'en'
 };
 
 export const CURRENCY = {
