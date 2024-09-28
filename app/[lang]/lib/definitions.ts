@@ -86,35 +86,35 @@ export interface BreadcrumbProp {
 // ----------------Table-----------------------
 
 export interface DataType {
-    key: React.Key;
-    name: string;
-    price?: number;
-    author?: string;
-    files?: FileUpload[];
-    src?: string;
-    description?: string;
-    email?: string;
-    children?: unknown[];
-    icon?: React.ReactNode;
-    images?: FileUpload[];
-    currency_code?: string;
-    link?: string;
-    title?: string;
-    content?: string;
-    createdDate?: string;
-    imagesPreview?: { src: string, alt: string }[];
-  }
-  
-  export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-    editing: boolean;
-    dataIndex: string;
-    // title: any;
-    inputType: 'number' | 'text';
-    record: DataType;
-    index: number;
-    children: React.ReactNode;
-  }
-  
+	key: React.Key;
+	name: string;
+	price?: number;
+	author?: string;
+	files?: FileUpload[];
+	src?: string;
+	description?: string;
+	email?: string;
+	children?: unknown[];
+	icon?: React.ReactNode;
+	images?: FileUpload[];
+	currency_code?: string;
+	link?: string;
+	title?: string;
+	content?: string;
+	createdDate?: string;
+	imagesPreview?: { src: string, alt: string }[];
+}
+
+export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+	editing: boolean;
+	dataIndex: string;
+	// title: any;
+	inputType: 'number' | 'text';
+	record: DataType;
+	index: number;
+	children: React.ReactNode;
+}
+
 //   export interface DataTableProps extends TableProps<DataType> {
 //     pageSize?: number;
 //     pageIndex?: number;
@@ -128,11 +128,11 @@ export interface DataType {
 //     onShowSizeChange?: (current: number, size: number) => void;
 //     onTableChange?: (pagination: any, filters: any, sorter: any, extra: any) => void;
 //   }
-  
-  export interface SearchParams {
-    filters: Filter[];
-  };
-  
+
+export interface SearchParams {
+	filters: Filter[];
+};
+
 //   export interface SearchTableProps {
 //     onAddNew: () => void;
 //     onSearch?: SearchProps['onSearch'];
@@ -145,9 +145,12 @@ export interface DataType {
 //     searchFields?: string[];
 //     isShowStatusFilter?:boolean;
 //   }
-  
-  export interface Paging {
-    pageSize: number;
-    pageIndex: number;
-    currentIndex: number
-  }
+
+export interface Paging {
+	pageSize: number;
+	pageIndex: number;
+	currentIndex: number
+}
+
+// Setting
+export type TBannerType = 'Shop' | 'About' | 'Pattern' | 'Product' | 'Free pattern' | 'Contact' | 'Home' | 'Blog' | 'Advertisement' | '';
