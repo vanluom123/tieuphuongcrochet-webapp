@@ -1,45 +1,44 @@
 import { Dropdown, Button, Space } from "antd"
 import { LANGUAGES_LIST } from "../../lib/constant"
 import { CaretDownOutlined } from "@ant-design/icons"
-import { useState } from "react";
-import { useParams, usePathname } from "next/navigation";
-import { Locale } from "@/i18n.config";
-import Link from "next/link";
+import { useState, useTransition } from "react";
+import { useLocale } from "use-intl";
+import { Locale } from "@/i18n/config";
+import { setUserLocale } from "@/app/lib/service/locale";
 
 const Languages = () => {
+    const locale = useLocale();
     const [isOpenLang, setIsOpenLang] = useState(false);
-    const { lang } = useParams();
-    const pathName = usePathname();
+    const [, startTransition] = useTransition();
 
     const getLabel = (key: string) => {
         const item = LANGUAGES_LIST.find(l => key === l?.key);
-        return item?.label || lang;
+        return item?.label || locale;
     }
 
-    const redirectedPathName = (locale: Locale) => {
-      if (!pathName) return "/";
-      const segments = pathName.split("/");
-      segments[1] = locale;
-      return segments.join("/");
-    };
+    const switchLanguage = (lang: { key: string }) => {
+        const locale = lang.key as Locale;
+        startTransition(() => {
+            setUserLocale(locale);
+        });
+
+    }
 
     const onOpenChange = (open: boolean) => {
         setIsOpenLang(open);
-    };
+    }
     return (
         <Dropdown
             trigger={['click']}
             menu={{
-                items: LANGUAGES_LIST.map(item => ({
-                    key: item?.key,
-                    label: <Link href={redirectedPathName(item?.key as Locale)}>{item?.label}</Link>,
-                })),
+                items: LANGUAGES_LIST,
+                onClick: (item) => switchLanguage(item)
             }}
             onOpenChange={onOpenChange}
         >
             <Button type='text' className='btn-lang'>
                 <Space>
-                    {getLabel(lang as string)}
+                    {getLabel(locale)}
                     <CaretDownOutlined className={isOpenLang ? 'transition-transform rote-180' : 'transition-transform'} />
                 </Space>
             </Button>

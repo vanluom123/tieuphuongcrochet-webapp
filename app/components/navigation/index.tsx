@@ -7,12 +7,12 @@ import Image from 'next/image';
 import { MenuOutlined, UserOutlined } from '@ant-design/icons';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-
-import { MENU_NAV, ROUTE_PATH } from '@/app/[lang]/lib/constant';
-import useTrans from '../../lib/useTrans';
-import Languages from './Languages';
+import { useTranslations } from 'next-intl';
 
 import logo from '@/public/logo.png';
+import { ROUTE_PATH, MENU_NAV } from '@/app/lib/constant';
+
+import Languages from './Languages';
 import '../../ui/navigation.scss';
 
 type MenuType = 'vertical' | 'horizontal' | 'inline';
@@ -20,14 +20,10 @@ type MenuType = 'vertical' | 'horizontal' | 'inline';
 const Navigation = () => {
 	const [currentNav, setCurrentNav] = useState(ROUTE_PATH.HOME);
 	const pathname = usePathname();
-	const trans = useTrans();
+	const t = useTranslations('MenuNav');
 
 	useEffect(() => {
-		console.log('location', pathname);
-
-		const nav = pathname.split('/')[2] || ROUTE_PATH.HOME;
-		console.log('nav', nav);
-		
+		const nav = pathname.split('/')[1] || ROUTE_PATH.HOME;
 		setCurrentNav(`/${nav}`);
 	}, [pathname]);
 
@@ -36,7 +32,7 @@ const Navigation = () => {
 	const { Header } = Layout;
 	// const context = useContext(Context);
 
-	const onClickNav = (e: { key: string }) => {		
+	const onClickNav = (e: { key: string }) => {
 		const key = e.key;
 		if (key) {
 			setCurrentNav(key);
@@ -62,7 +58,7 @@ const Navigation = () => {
 						key: item.path,
 						label: (
 							<Link href={item.path} rel="noreferrer">
-								{trans[item.name as keyof typeof trans]}
+								{t(item.name)}
 							</Link>
 						),
 					};
