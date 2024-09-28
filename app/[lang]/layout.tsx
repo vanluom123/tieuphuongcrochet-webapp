@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { ThemeProvider } from "./components/theme-prodiver";
+import Navigation from "./components/navigation";
+import { i18n, type Locale } from "@/i18n.config";
+import "./globals.scss";
+
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ lang: locale }));
+}
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,13 +28,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { lang: Locale };
 }>) {
   return (
-    <html lang="en">
+    <html lang={params.lang}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <AntdRegistry>{children}</AntdRegistry>
+        <ThemeProvider>
+          <AntdRegistry>
+            <Navigation />
+            {children}
+          </AntdRegistry>
+        </ThemeProvider>
       </body>
     </html>
   );

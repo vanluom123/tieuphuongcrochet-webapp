@@ -5,12 +5,13 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
 } from '@ant-design/icons';
-import { ROUTE_PATH } from '../lib/constant';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button, Flex, Layout, theme } from 'antd';
+
+import { ROUTE_PATH } from '../lib/constant';
 import NavLinks from '../ui/admin/nav-links';
-import logo from '../public/logo.png'
+import logo from '@/public/logo.png';
 
 const LayoutAdmin = (
     { children }: Readonly<{
