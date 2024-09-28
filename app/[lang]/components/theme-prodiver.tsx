@@ -14,8 +14,13 @@ export function ThemeProvider({ children }: Props) {
 				token: {
 					colorPrimary: '#fc8282',
 				},
-				cssVar: true,
-				hashed: false,
+				/* here is your component tokens */
+				components: {
+					Segmented: {
+						itemSelectedBg: '#fecdcd',
+					},
+				},
+
 			}}
 		>
 			{children}

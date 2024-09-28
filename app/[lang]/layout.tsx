@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ThemeProvider } from "./components/theme-prodiver";
-import Navigation from "./components/navigation";
 import { i18n, type Locale } from "@/i18n.config";
 import "./globals.scss";
+import LayoutPage from "./components/layout";
+
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
@@ -35,11 +36,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={params.lang}>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>
         <ThemeProvider>
           <AntdRegistry>
-            <Navigation />
-            {children}
+            <LayoutPage>
+              {children}
+            </LayoutPage>
           </AntdRegistry>
         </ThemeProvider>
       </body>
