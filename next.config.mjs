@@ -1,9 +1,5 @@
+import withNextIntl from 'next-intl/plugin';
 /** @type {import('next').NextConfig} */
+const nextConfig = {};
 
-const nextConfig = {
-	sassOptions: {
-    implementation: 'sass-embedded',
-  },
-};
-
-export default nextConfig;
+export default withNextIntl()(nextConfig);

@@ -1,6 +1,6 @@
 
 export const metadata = {
-    title: 'Free patterns - Tieu Phuong Crochet',
+    title: '',
   }
 
 const FreePattern = () => {
