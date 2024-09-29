@@ -7,7 +7,7 @@ import Navigation from "../navigation";
 import { Content } from "antd/es/layout/layout";
 import FooterPage from "../footer-page";
 import CoverPage from "../cover-page";
-import { animationHeader } from "@/app/lib/utils";
+import { animationHeader, onScrollBody } from "@/app/lib/utils";
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -28,11 +28,19 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
             window.scrollTo(0, 0);
         }
         else {
-            // onScrollBody('.content-wrap');
+            onScrollBody('.content-wrap');
         }
     }, [pathname]);
 
     // const currentUser = useAppSelector((state) => state.auth.currentUser);
+
+    if (pathname === ROUTE_PATH.LOGIN) {
+        return (
+            <Layout className='layout-wrap'>
+                {children}
+            </Layout>
+        )
+    }
 
     return (
         <Layout className='layout-wrap'>
