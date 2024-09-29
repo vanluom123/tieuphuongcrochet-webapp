@@ -1,15 +1,26 @@
-import { getTranslations } from 'next-intl/server';
-import styles from './ui/home.module.css';
-
+import { Spin } from 'antd';
+import FreePatternsNode from './components/home/FreePatternsNode';
+import ProductsNode from './components/home/ProductsNode';
+import BlogsNode from './components/home/BlogsNode';
+import SocialNode from './components/home/SocialNode';
+import './ui/home.scss';
 export default async function Home() {
-  const t = await getTranslations('Home');
 
   return (
-    <div className={styles.page}>
-      <p>
-        This text is rendered on the server:{" "}
-        {t('title')}
-      </p>
-    </div>
+<div className='home-page'>
+			<Spin spinning={false} tip="Loading...">
+				{/* Product list */}
+				<ProductsNode />
+
+				{/* Free patterns list */}
+				<FreePatternsNode />
+
+				{/* Social network */}
+				<SocialNode />
+
+				{/* Blogs */}
+				<BlogsNode />
+			</Spin>
+		</div>
   );
 }

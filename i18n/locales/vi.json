@@ -22,7 +22,7 @@
     },
     "FreePattern": {
       "title": "Chart miễn phí",
-      "description": "'Đây là những chart mình sưu tập, và một số chart mình viết. Nếu mình lỡ có đăng phải chart bản quyền thì nhắc mình xóa nhé!!"
+      "description": "Đây là những chart mình sưu tập, và một số chart mình viết. Nếu mình lỡ có đăng phải chart bản quyền thì nhắc mình xóa nhé!!"
     },
     "Blog": {
       "title": "Nơi chia sẻ những điều tốt đẹp!!",
@@ -55,7 +55,7 @@
     "note": "Nếu mình nhỡ đăng nhằm chart có bản quyền, xin hãy nói với mình để mình gỡ xuống ạ! Cảm ơn bạn!",
     "status": {
       "ALL": "Tất cả",
-      "TRANSLATED": "Đã dịch",
+      "SUCCESS": "Đã dịch",
       "PENDING": "Đang dịch",
       "NONE": "Chưa dịch"
     }
@@ -88,7 +88,7 @@
   },
 
   "Btn": {
-    "btn_readmore": "Xem thêm",
+    "readMore": "Xem thêm",
     "btn_buy": "Mua hàng",
     "btn_view_detail": "Chi tiết",
     "btn_send": "Gửi",

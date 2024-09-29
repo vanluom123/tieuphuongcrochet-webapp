@@ -1,0 +1,31 @@
+
+@import './../variables.module.scss';
+
+.home-page {
+
+	.read-more {
+		display: flex;
+		justify-content: center;
+		padding-top: 50px;
+	}
+
+
+	.blogs {
+		padding: 40px 30px 30px;
+		background-color: #fff5f5;
+		border-top: 1px solid $borderColor;
+		margin-top: 100px;
+
+		@media screen and (min-width: $md) {
+			padding: 40px 50px 50px;	
+		}
+
+		@media screen and (min-width: $xl) {
+			padding: 40px 100px 100px;
+		}
+	}
+
+	.ant-row {
+		justify-content: center;
+	}
+}

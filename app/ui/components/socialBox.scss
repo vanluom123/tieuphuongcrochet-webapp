@@ -1,0 +1,19 @@
+.card-social {
+	.ant-card-meta-detail {
+		display: flex;
+		justify-content: center;
+	}
+
+	.ant-card-cover {
+		padding: 5px;
+
+		.ant-image {
+			overflow: visible;
+
+			img {
+				border-radius: 50%;
+			}
+		}
+
+	}
+}

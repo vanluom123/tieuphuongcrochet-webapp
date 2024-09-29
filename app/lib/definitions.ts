@@ -282,3 +282,45 @@ export interface PostPayload {
     params: Post;
     callback: () => void;
 }
+
+// -------------------------- Product --------------------------
+
+export interface Product {
+	id?: React.Key,
+	name: string,
+	price?: number,
+	description?: string,
+	images?: FileUpload[];
+	src?: string;
+	author?: string;
+	currency_code?: string;
+	category?: Category;
+	imagesPreview?: { src: string, alt: string }[];
+	link?: string;
+	content?: string;
+}
+
+export interface ProductPayloadFile {
+	file: unknown;
+	resolve?: unknown
+}
+
+export interface HomeData {
+	products: Product[],
+	patterns: Pattern[],
+	freePatterns: Pattern[],
+	banners: Banner[],
+	blogs: Post[]
+};
+
+export interface ProductState {
+	loading: boolean;
+	data: DataType[];
+	totalRecord: number;
+	product: Product;
+}
+
+export interface ProductPayload {
+	params: Product;
+	callback: () => void;
+}
