@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Navigation from "../navigation";
 import { Content } from "antd/es/layout/layout";
+import FooterPage from "../footer-page";
+
 interface LayoutProps {
     children: React.ReactNode;
 }
@@ -42,7 +44,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
             <Content className='content-wrap container'>
                 {children   }
             </Content>
-            {/* <FooterPage currentNav={currentNav} /> */}
+            <FooterPage currentNav={currentNav} />
             <FloatButton.BackTop visibilityHeight={0} />
         </Layout>
     )

@@ -1,6 +1,6 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "./globals.scss";
-import LayoutPage from "./components/layout";
+import LayoutPage from "./components/layout-page";
 import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "./components/theme-provider";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
