@@ -93,7 +93,8 @@
     "btn_view_detail": "Chi tiết",
     "btn_send": "Gửi",
     "btn_grid": "Dạng lưới",
-    "btn_list": "Danh sách"
+    "btn_list": "Danh sách",
+    "all": "Tất cả"
   },
   "Notification": {
     "success": "Thành công",

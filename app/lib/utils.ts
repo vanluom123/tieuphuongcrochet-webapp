@@ -5,7 +5,7 @@ import { RadioChangeEvent } from 'antd';
 import { filter, findIndex, forEach, isEmpty, map } from 'lodash';
 
 import { modal } from './notify';
-import { Banner, Category, FileUpload, Filter, FilterCriteria, Paging, TBannerType, TTranslationStatus } from './definitions';
+import { Banner, Category, DataType, FileUpload, Filter, FilterCriteria, Paging, TabsItem, TBannerType, TTranslationStatus } from './definitions';
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, TRANSLATION_STATUS, TRANSLATION_STATUS_COLOR } from './constant';
 
 export const checkMobile = () => {
@@ -297,13 +297,13 @@ export const checkPdfFile = (fileName: string): boolean => {
     return ext === 'pdf';
 };
 
-export function filterByText(value: string, ...keys: FilterCriteria[]): Filter {
+export function filterByText(value: string, ...keys: string[]): Filter {
     if (!value) return {} as Filter;
     return {
         filterLogic: FILTER_LOGIC.ANY,
         filterCriteria: map(keys, (key) => (
             {
-                key: key.key,
+                key: key,
                 operation: FILTER_OPERATION.LIKE,
                 value
             })
@@ -407,4 +407,27 @@ export const getStatusFilter = (value: SegmentedValue): Filter => {
 export const getStatusColor = (status: TTranslationStatus) => {
 
     return status ? TRANSLATION_STATUS_COLOR[status] : TRANSLATION_STATUS_COLOR.NONE;
+}
+
+
+export const mapTabsData = (data: DataType[]): TabsItem[] => {
+    const result = map(data, c => {
+        const { children, name, key, icon } = c;
+        
+        let newTab: TabsItem = {
+            label: name,
+            key: key || 'N/A',
+            icon: icon,
+        };
+
+        if (children && children.length > 0) {
+            newTab = {
+                ...newTab,
+                children: mapTabsData(children as DataType[])
+            } as TabsItem;
+        }
+        return newTab;
+    });
+
+    return result;
 }
