@@ -3,7 +3,7 @@ import { Col, Empty, Flex, Row } from 'antd';
 import { map } from 'lodash';
 
 import HeaderPart from "../header-part";
-import CardProduct from '../product-card';
+import ProductCard from '../product-card';
 import ReadMoreBtn from '../read-more';
 import { ROUTE_PATH } from '@/app/lib/constant';
 import { Product } from '@/app/lib/definitions';
@@ -101,7 +101,7 @@ const ProductsNode = () => {
           {
             map(products, (product, index) =>
               <Col key={`product_${index}`} xs={12} sm={8} lg={6} >
-                <CardProduct
+                <ProductCard
                   loading={false}
                   product={product}
                   // onReadDetail={() => onViewProduct(product.id || '')}

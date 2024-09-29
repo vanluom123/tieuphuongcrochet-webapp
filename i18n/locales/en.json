@@ -52,7 +52,7 @@
     "detail": "Chart detail",
     "content": "Translated chart",
     "note": "If I accidentally posted a copyrighted chart, please tell me so I can take it down! Thank you!",
-    "status":{
+    "status": {
       "ALL": "ALL",
       "SUCCESS": "TRANSLATED",
       "PENDING": "PENDING",
@@ -74,14 +74,14 @@
     "title": "Get in touch with me",
     "description": "Are you having problems placing an order or requesting crochet in the pattern you want? Please contact me via email or message on my facebook page. I will try my best to help you!",
     "Form": {
-    "success": "You have sent email successfully!",
-    "error": "The mail has not been sent yet!! Try again!",
-    "title": "Send email for me",
-    "via": "Or contact me via",
-    "input_email": "Please input your email!",
-    "input_name": "Please input your name!",
-    "input_title": "Please input title!",
-    "input_content": "Please input content!"
+      "success": "You have sent email successfully!",
+      "error": "The mail has not been sent yet!! Try again!",
+      "title": "Send email for me",
+      "via": "Or contact me via",
+      "input_email": "Please input your email!",
+      "input_name": "Please input your name!",
+      "input_title": "Please input title!",
+      "input_content": "Please input content!"
     }
   },
 
@@ -91,7 +91,8 @@
     "btn_view_detail": "View detail",
     "btn_send": "Send",
     "btn_grid": "Grid",
-    "btn_list": "List"
+    "btn_list": "List",
+    "all": "All"
   },
 
   "Notification": {

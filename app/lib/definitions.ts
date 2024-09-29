@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 export interface Pagination {
 	last: boolean;
@@ -324,3 +324,17 @@ export interface ProductPayload {
 	params: Product;
 	callback: () => void;
 }
+
+// -------------------------- Tabs --------------------------
+
+export interface TabsItem {
+    label: string;
+    key: React.Key;
+    icon?: React.ReactNode;
+    children?: TabsItem[];
+}
+
+
+// -------------------------- Direction --------------------------
+
+export type TDirection = 'horizontal' | 'vertical';
