@@ -1,4 +1,8 @@
 {
+  "App": {
+    "title": "Tieu Phuong Crochet",
+    "description": "The place collects free chart"
+  },
   "MenuNav": {
     "home": "Home",
     "about": "About us",
