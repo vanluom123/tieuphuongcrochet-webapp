@@ -195,15 +195,15 @@ export const TRANSLATION_STATUS_COLOR = {
 
 export const TRANSLATION_OPTIONS: TranslationStatus[] = [
   {
-    label: "translation_status.ALL",
+    label: "ALL",
     value: 'ALL',
   },
   {
-    label: 'translation_status.PENDING',
+    label: 'PENDING',
     value: 'PENDING',
   },
   {
-    label: 'translation_status.SUCCESS',
+    label: 'SUCCESS',
     value: 'SUCCESS',
   },
 ]

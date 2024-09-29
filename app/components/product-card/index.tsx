@@ -26,7 +26,7 @@ const FormattedCurrency: React.FC<FormattedCurrencyProps> = ({ currencyCode, pri
 	return <span>{formattedPrice}</span>;
 };
 
-interface CardProductProps {
+interface ProductCardProps {
 	width?: string | number;
 	product: Product;
 	onPreview?: () => void;
@@ -36,7 +36,7 @@ interface CardProductProps {
 	loading?: boolean;
 };
 
-const CardProduct = (
+const ProductCard = (
 	{
 		width,
 		product,
@@ -45,7 +45,7 @@ const CardProduct = (
 		onShopping,
 		parentLink = `${ROUTE_PATH.SHOP}/${ROUTE_PATH.DETAIL}`,
 		loading
-	}: CardProductProps) => {
+	}: ProductCardProps) => {
 	const t = useTranslations("Btn");
 	const { Meta } = Card;
 	const { currency_code, price, name, src, link, id, imagesPreview } = product;
@@ -112,4 +112,4 @@ const CardProduct = (
 
 }
 
-export default CardProduct;
+export default ProductCard;

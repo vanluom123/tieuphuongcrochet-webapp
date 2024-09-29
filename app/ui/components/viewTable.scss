@@ -1,0 +1,101 @@
+@import "../../variables.module.scss";
+
+
+.data-list {
+    .direction-icon {
+      .ant-btn {
+        padding: 4px 10px;
+  
+        &:hover {
+          background: none;
+  
+          .anticon {
+            color: $colorPrimary;
+          }
+        }
+  
+        .anticon {
+          color: $textPrimaryColor;
+        }
+      }
+    }
+  
+    .search-wrap,
+    .pagination {
+      border-top: 1px solid $borderColor;
+      border-bottom: 1px solid $borderColor;
+    }
+    
+    .search-wrap{
+      padding: 5px;
+    }
+  
+    .pagination {
+      padding: 10px;
+      margin-top: 60px;
+      display: flex;
+      justify-content: flex-end;
+      position: relative;
+  
+      .ant-pagination-total-text {
+        position: absolute;
+        left: 10px;
+      }
+    }
+  
+    .tabs-menu {
+      padding: 5px 0;
+      border: none;
+  
+      .ant-menu-submenu,
+      .ant-menu-item {
+        opacity: 0.9 !important;
+        letter-spacing: 0.5px;
+        
+        &.ant-menu-item-selected {
+          opacity: 1 !important;
+        }
+      }
+      .ant-menu-title-content{
+        font-size: $fontSize_small;
+      }
+    }
+    .ant-empty {
+      margin-top: 70px;
+    }
+  
+    .ant-menu-overflow-item-rest {
+      .anticon {
+        font-size: 30px;
+      }
+    }
+  
+    .affix-search-area {
+      background-color: $backgroundColor;
+      .search-wrap,
+      .ant-segmented {
+        background-color: $backgroundColor;
+      }
+    }
+  
+    // Translation status
+    .ant-segmented {
+      .ant-segmented-item-label {
+        font-size: 12px;
+      }
+  
+      &.large-screen {
+        display: none;
+        margin-left: 5px;
+      }
+  
+      &.small-screen {
+        display: flex;
+        width: 100%;
+        border-radius: 0;
+        padding: 5px 10px;
+        border-bottom: 1px solid $borderColor;
+      }
+    }
+  }
+  
