@@ -23,16 +23,38 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server";
 // };
 
 export async function generateMetadata() {
-// here use your way to get translation string
-  const t = await getTranslations("App"); 
+  const t = await getTranslations("App");
 
   return {
-      title: {
-        template: `%s | ${t("title")}`,
-        default: t("title")
-      },
-      description: t("description")
-  }
+    title: {
+      template: `%s | ${t("title")}`,
+      default: t("title"),
+    },
+    description: t("description"),
+    // Add the following SEO-related metadata
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      type: "website",
+      locale: "en_US",
+      siteName: t("title"),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+    icons: {
+      icon: "/favicon.ico",
+      apple: "/opengraph-image.jpg",
+    },
+    viewport: "width=device-width, initial-scale=1",
+    charSet: "utf-8",
+  };
 }
 
 export default async function RootLayout({

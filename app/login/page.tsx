@@ -9,25 +9,26 @@ import { ROUTE_PATH, REGEX } from '../lib/constant';
 import Image from 'next/image';
 import '../ui/components/login.scss';
 import logo from '@/public/logo.png';
+import { useRouter } from 'next/navigation';
+import { signIn } from "next-auth/react";
 
 const Login = () => {
     const [form] = Form.useForm();
+    const router = useRouter();
 
-    const onFinish = (values: User) => {
-        // const callback = () => {
-        // 	navigate(ROUTE_PATH.HOME);
-        // 	form.resetFields();
-        // };
 
-        // dispatch(authActions.login({
-        // 	params: {
-        // 		email: values.email,
-        // 		password: values.password
-        // 	},
-        // 	callback
-        // }))
-
-        console.log('---login--- values', values);
+    const onFinish = async (values: User) => {
+        const result = await signIn("credentials", {
+            email: values.email,
+            password: values.password,
+            redirect: false,
+          });
+      
+          if (result?.error) {
+            console.error(result.error);
+          } else {
+            router.push("/admin");
+          }
     };
 
     return (
@@ -121,3 +122,4 @@ const Login = () => {
 };
 
 export default Login;
+
