@@ -1,11 +1,18 @@
+import { getTranslations } from "next-intl/server";
 
-export const metadata = {
-    title: '',
-  }
+export async function generateMetadata() {
+
+    const t = await getTranslations("FreePattern");
+
+    return {
+        title: t("title"),
+        description: t("description")
+    }
+}
 
 const FreePattern = () => {
-    
-    return(
+
+    return (
         <div> Free pattern</div>
     )
 }

@@ -1,40 +1,42 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { Button, Menu, Layout, Drawer } from 'antd';
+import { Button, Layout } from 'antd';
 
 import Image from 'next/image';
 import { MenuOutlined, UserOutlined } from '@ant-design/icons';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 
 import logo from '@/public/logo.png';
-import { ROUTE_PATH, MENU_NAV } from '@/app/lib/constant';
+import { ROUTE_PATH } from '@/app/lib/constant';
 
 import Languages from './Languages';
 import '../../ui/navigation.scss';
+import SidebarNav from './SibarNav';
+import MenuNav from './MenuNav';
 
-type MenuType = 'vertical' | 'horizontal' | 'inline';
 
 const Navigation = () => {
 	const [currentNav, setCurrentNav] = useState(ROUTE_PATH.HOME);
+	const [isOpenSidebar, setIsOpenSidebar] = useState(false);
+
+	const { Header } = Layout;
 	const pathname = usePathname();
-	const t = useTranslations('MenuNav');
 
 	useEffect(() => {
 		const nav = pathname.split('/')[1] || ROUTE_PATH.HOME;
 		setCurrentNav(`/${nav}`);
 	}, [pathname]);
 
-	const [isOpenSidebar, setIsOpenSidebar] = useState(false);
 
-	const { Header } = Layout;
 	// const context = useContext(Context);
 
 	const onClickNav = (e: { key: string }) => {
 		const key = e.key;
 		if (key) {
+			console.log('key', key);
+			
 			setCurrentNav(key);
 			if (isOpenSidebar) {
 				setIsOpenSidebar(false);
@@ -46,25 +48,6 @@ const Navigation = () => {
 		setCurrentNav(ROUTE_PATH.HOME);
 	}
 
-
-	const getMenu = (mode: MenuType) => (
-		<div className='header-sidebar'>
-			<Menu
-				mode={mode}
-				onClick={onClickNav}
-				selectedKeys={[currentNav]}
-				items={MENU_NAV.map((item) => {
-					return {
-						key: item.path,
-						label: (
-							<Link href={item.path} rel="noreferrer">
-								{t(item.name)}
-							</Link>
-						),
-					};
-				})} />
-		</div>
-	);
 
 	return (
 		<>
@@ -95,30 +78,23 @@ const Navigation = () => {
 					</div>
 				</div>
 
-				{/* sidebar */}
-				{getMenu('horizontal')}
+				{/* menu navigation for desktop */}
+				<MenuNav
+					mode='horizontal'
+					onClickNav={onClickNav}
+					currentNav={currentNav} />
 
 			</Header>
 
-			{/* sidebar for mobile */}
-			<Drawer
-				width={340}
-				className='drawer-menu'
-				placement='left'
-				open={isOpenSidebar}
-				onClose={() => setIsOpenSidebar(false)}
-				extra={
-					<Link
-						// onClick={() => { isOpenSidebar && setIsOpenSidebar(false) }}
-						href={`${ROUTE_PATH.HOME}`} className='drawer-menu-header__logo'
-					>
-						<Image width={50} src={logo.src} alt='Tiểu Phương crochet' />
-						<span className='logo-text'>Tiểu Phương crochet</span>
-					</Link>
-				}
-			>
-				{getMenu('inline')}
-			</Drawer>
+			{/* menu navigation for mobile */}
+			<SidebarNav
+				isOpenSidebar={isOpenSidebar}
+				setIsOpenSidebar={setIsOpenSidebar}>
+				<MenuNav
+					mode='inline'
+					onClickNav={onClickNav}
+					currentNav={currentNav} />
+			</SidebarNav>
 		</>
 	)
 }

@@ -1,4 +1,9 @@
 {
+  "App": {
+    "title": "Tiểu Phương Crochet",
+    "description": "Nơi chia sẻ chart miễn phí!!!"
+  },
+
   "MenuNav": {
     "home": "Trang chủ",
     "about": "Giới thiệu",
@@ -48,7 +53,7 @@
     "detail": "Chi tiết",
     "content": "Chart đã dịch",
     "note": "Nếu mình nhỡ đăng nhằm chart có bản quyền, xin hãy nói với mình để mình gỡ xuống ạ! Cảm ơn bạn!",
-    "status":{
+    "status": {
       "ALL": "Tất cả",
       "TRANSLATED": "Đã dịch",
       "PENDING": "Đang dịch",
@@ -70,15 +75,15 @@
     "title": "Liên lạc với tôi",
     "description": "Bạn đang gặp vấn đề với đặt hàng hoặc yêu cầu móc theo mẫu bạn muốn? Hãy liên lạc với mình qua email hoặc tin nhắn trên trang facebook của mình nhé. Mình sẽ cố gắng hết sức để giúp bạn!",
     "Form": {
-    "success": "Bạn đã gửi thư thành công!",
-    "error": "Thư vẫn chưa được gửi! Bạn thử gửi lại nhé!",
-    "title": "Gửi thư cho mình nhé",
-    "via": "Hoặc liên lạc với mình qua",
-    "input_email": "Nhập email của bạn",
-    "input_name": "Nhập tên",
-    "input_title": "Nhập tiêu đề",
-    "input_content": "Nhập nội dung",
-    "error_msg_incorrect_email": "Định dạng email không chính xác!"
+      "success": "Bạn đã gửi thư thành công!",
+      "error": "Thư vẫn chưa được gửi! Bạn thử gửi lại nhé!",
+      "title": "Gửi thư cho mình nhé",
+      "via": "Hoặc liên lạc với mình qua",
+      "input_email": "Nhập email của bạn",
+      "input_name": "Nhập tên",
+      "input_title": "Nhập tiêu đề",
+      "input_content": "Nhập nội dung",
+      "error_msg_incorrect_email": "Định dạng email không chính xác!"
     }
   },
 
@@ -97,6 +102,5 @@
   "Form": {
     "name": "Họ và tên",
     "email": "Email"
-
   }
 }
