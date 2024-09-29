@@ -78,11 +78,6 @@ export interface BreadCrumbItem {
 	title: string | ReactNode;
 };
 
-export interface BreadcrumbProp {
-	background?: string;
-	pathname: string;
-}
-
 // ----------------Table-----------------------
 
 export interface DataType {
@@ -154,3 +149,136 @@ export interface Paging {
 
 // Setting
 export type TBannerType = 'Shop' | 'About' | 'Pattern' | 'Product' | 'Free pattern' | 'Contact' | 'Home' | 'Blog' | 'Advertisement' | '';
+
+// Banner
+
+export interface Banner {
+	fileContent: string;
+	fileName: string;
+	title?: string;
+	content?: string;
+	url?: string;
+	bannerTypeId: string;
+	active?: boolean;
+	id?: string;
+	bannerType?: IBannerType;
+	textColor?: string;
+};
+
+
+export interface IBannerType {
+	id?: React.Key;
+	name: TBannerType;
+	createdDate?: string;
+}
+
+export interface SettingState {
+	loading: {
+		banner: boolean,
+		bannerType: boolean
+	};
+	bannerTypes: DataType[];
+	banners: Banner[];
+}
+
+// ---------------------------------- Category ----------------------------------
+
+export interface Category {
+    id?: React.Key;
+    name: string;
+    children?: unknown[];
+    parentIds?: unknown[];
+    key?: string;
+};
+
+export interface CategoryState {
+    loading: boolean;
+    data: DataType[];
+    totalRecord: number;
+}
+
+// -------------------------- FreePattern --------------------------
+export interface FreePattern {
+	id: string;
+	name: string;
+	description: string;
+	bytes: string[];
+}
+
+// -------------------------- Pattern --------------------------
+export interface Menu {
+    key: string;
+    name: string;
+    path: string;
+}
+
+export interface Pattern {
+	id?: React.Key;
+	name: string;
+	price?: number;
+	description?: string;
+	files?: FileUpload[];
+	author?: string;
+	src?: string;
+	images?: FileUpload[];
+	category?: Category;
+	imagesPreview?: { src: string, alt: string }[];
+	link?: string;
+	currency_code?: string;
+	content?: string;
+	status?: TTranslationStatus;
+	home?:boolean
+}
+
+export interface PayloadFile {
+	file: unknown;
+	resolve?: unknown
+}
+
+export interface PatternPayload {
+	params: Pattern;
+	callback: () => void;
+};
+
+export interface PatternState {
+	loading: boolean;
+	data: DataType[];
+	totalRecord: number;
+	pattern: Pattern;
+}
+
+export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';
+
+export interface TranslationStatus {
+	label: string;
+	value: TTranslationStatus;
+}
+
+// -------------------------- Post --------------------------
+
+export interface Post {
+    id?: React.Key,
+    title: string,
+    content: string,
+    createdDate: string,
+    files?: FileUpload[],
+    src?: string,
+    is_home?:boolean
+}
+
+export interface PostPayloadFile {
+    file: unknown;
+    resolve?: unknown
+}
+
+export interface PostState {
+    loading: boolean;
+    data: DataType[];
+    totalRecord: number;
+    post: Post;
+}
+
+export interface PostPayload {
+    params: Post;
+    callback: () => void;
+}

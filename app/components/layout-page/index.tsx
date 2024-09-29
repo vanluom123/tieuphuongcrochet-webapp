@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import Navigation from "../navigation";
 import { Content } from "antd/es/layout/layout";
 import FooterPage from "../footer-page";
+import CoverPage from "../cover-page";
+import { animationHeader } from "@/app/lib/utils";
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -19,7 +21,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
         const navs =pathname.split('/');
         setCurrentNav(`/${navs[1]}`);
         if (pathname !== ROUTE_PATH.HOME) {
-            // animationHeader();
+            animationHeader();
         }
 
         if (navs.length <= 2) {
@@ -35,12 +37,10 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
     return (
         <Layout className='layout-wrap'>
             {/* <HeaderPage currentNav={currentNav} setCurrentNav={setCurrentNav} /> */}
-            <Navigation />
-            {
-                // location?.pathname === ROUTE_PATH.HOME ?
-                //     <Banner /> :
-                //     <BreadCrumbs pathname={location?.pathname} />
-            }
+            <Navigation currentNav={currentNav} setCurrentNav={setCurrentNav} />
+
+            {/* Cover image - banner - breadcrumbs */}
+            <CoverPage />
             <Content className='content-wrap container'>
                 {children   }
             </Content>
