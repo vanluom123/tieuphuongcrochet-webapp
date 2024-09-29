@@ -16,16 +16,19 @@ import '../../ui/navigation.scss';
 import SidebarNav from './SibarNav';
 import MenuNav from './MenuNav';
 
+interface NavigationProps {
+    currentNav: string;
+    setCurrentNav: (nav: string) => void;
+}
 
-const Navigation = () => {
-	const [currentNav, setCurrentNav] = useState(ROUTE_PATH.HOME);
+const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 	const [isOpenSidebar, setIsOpenSidebar] = useState(false);
 
 	const { Header } = Layout;
 	const pathname = usePathname();
 
 	useEffect(() => {
-		const nav = pathname.split('/')[1] || ROUTE_PATH.HOME;
+		const nav = pathname.split('/')[1] || '';
 		setCurrentNav(`/${nav}`);
 	}, [pathname]);
 

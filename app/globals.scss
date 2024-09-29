@@ -598,3 +598,63 @@ body {
 		margin-top: 80px;
 	}
 }
+
+// Breadcrumbs
+
+.bread-crumbs-wrap {
+	background-size: cover;
+	background-position: center center;
+	height: 250px;
+
+	@media screen and (min-width: $xs) {
+		height: 300px;
+	}
+
+	@media screen and (min-width: $md) {
+		height: 350px;
+	}
+
+	@media screen and (min-width: $xl) {
+		height: 400px;
+	}
+
+	@media screen and (min-width: $xxl) {
+		height: 450px;
+	}
+
+	.container {
+		position: relative;
+		height: 100%;
+	}
+
+	.bread-crumbs-title {
+		position: absolute;
+		text-transform: capitalize;
+		top: 40%;
+
+		.title-page {
+			font-size: 40px;
+			color: $textPrimaryColor;
+			margin: 0;
+		}
+
+		.ant-breadcrumb {
+			font-size: 26px;
+
+			a {
+				color: $textSecondColor;
+				&:hover {
+					background-color: unset;
+					text-decoration: underline;
+				}
+			}
+
+			li {
+				&:last-child {
+					color: $textPrimaryColor;
+				}
+			}
+		}
+	}
+
+}
