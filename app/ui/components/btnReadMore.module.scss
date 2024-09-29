@@ -1,0 +1,37 @@
+@import "../../variables.module.scss";
+
+.readmoreBtn {
+	overflow: hidden;
+	
+	a {
+		color: $textPrimaryColor;
+		font-size: 18px;
+		padding-bottom: 5px;
+		border-bottom: 2px solid $borderColor;
+		display: inline-block;
+		position: relative;
+
+		&::before {
+			content: '';
+			position: absolute;
+			display: block;
+			width: 100%;
+			top: 100%;
+			opacity: 0;
+			z-index: 9;
+			transform: translateX(-100%);
+			border-bottom: 2px solid $colorPrimary;
+			transition: all .7s ease 0s;
+			-webkit-transition: all .7s ease 0s;
+
+		}
+
+		&:hover {
+			color: $textSecondColor;
+			&::before {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+	}
+}

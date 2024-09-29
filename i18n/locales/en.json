@@ -54,7 +54,7 @@
     "note": "If I accidentally posted a copyrighted chart, please tell me so I can take it down! Thank you!",
     "status":{
       "ALL": "ALL",
-      "TRANSLATED": "TRANSLATED",
+      "SUCCESS": "TRANSLATED",
       "PENDING": "PENDING",
       "NONE": "NONE"
     }
@@ -86,7 +86,7 @@
   },
 
   "Btn": {
-    "btn_readmore": "Read more",
+    "readMore": "Read more",
     "btn_buy": "Buy",
     "btn_view_detail": "View detail",
     "btn_send": "Send",

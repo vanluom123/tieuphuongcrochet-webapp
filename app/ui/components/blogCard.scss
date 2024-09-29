@@ -1,0 +1,50 @@
+
+@import "../../variables.module.scss";
+
+.card-article {
+	.artice-image {
+		position: relative;
+		max-height: 250px;
+		overflow: hidden;
+
+		.artice-date {
+			color: #929292;
+			font-size: 12px;
+			line-height: 1;
+			position: absolute;
+			text-transform: capitalize;
+			top: 20px;
+			right: 20px;
+			background: #fff;
+			box-shadow: 1px 1px 1px #0000001a;
+			padding: 15px 18px;
+			border-radius: 3px;
+
+			span {
+				color: $textPrimaryColor;
+				font-family: Karla, HelveticaNeue, Helvetica Neue, sans-serif;
+				font-weight: 700;
+				font-size: 20px;
+				display: block;
+				margin-top: 10px;
+			}
+		}
+
+		img {
+			width: 100%;
+		}
+	}
+
+	.ant-card-body {
+		.ant-card-meta-title a {
+			font-family: Playfair Display, serif;
+			text-transform: uppercase;
+			color: $textPrimaryColor;
+		}
+
+		.ant-card-meta {
+			padding-bottom: 20px;
+		}
+	}
+
+}

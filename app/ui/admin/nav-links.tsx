@@ -1,6 +1,6 @@
 'use client';
 
-import { ROUTE_PATH } from "@/app/[lang]/lib/constant";
+import { ROUTE_PATH } from '@/app/lib/constant';
 import {
     ReadOutlined,
     TeamOutlined,

@@ -1,0 +1,15 @@
+.free-pattern-card {
+	&.ant-card {
+		.ant-card-cover{
+			// height: 270px;
+			// width: 270px;
+			overflow: hidden;
+		}
+	}
+
+	.status-tag {
+		text-transform: lowercase;
+		margin: 0;
+		margin-bottom: 5px;
+	}
+}
