@@ -382,3 +382,10 @@ export interface UserState {
 	totalRecord: number;
 	user: User;
 }
+
+// -------------------------- API --------------------------
+export interface ApiResponse<T> {
+  data: T;
+  status: number;
+  statusText: string;
+}

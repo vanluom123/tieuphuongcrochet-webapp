@@ -233,24 +233,18 @@ export const API_ROUTES = {
 	PAGINATION: 'pagination',
 
 	// Auth
-	LOGIN: 'auth/login',
-	SIGNUP: 'auth/signup',
-	LOGOUT: 'auth/login',
-	RESET_PASSWORD: 'auth/login',
+	LOGIN: '/auth/login',
+	SIGNUP: '/auth/signup',
+	LOGOUT: '/auth/login',
+	RESET_PASSWORD: '/auth/login',
 	REFRESH_TOKEN: 'auth/refresh-token',
 	UPLOAD_FILE: 'firebase-storage/upload-file',
 	DELETE_MULTIPLE_FILES: 'firebase-storage/delete-multiple-files',
 
 	//Setting
-	CU_BANNER_TYPE : 'bannerType/createOrUpdate',
-	D_BANNER_TYPE : 'bannerType/delete',
-	BANNER_TYPE : 'bannerType/getAll',
-	CU_BANNER: 'banner/batchInsertOrUpdate',
-	GETT_ALL_BANNER: 'banner/getAll',
+	CU_BANNER_TYPE : '/bannerType/createOrUpdate',
+	D_BANNER_TYPE : '/bannerType/delete',
+	BANNER_TYPE : '/bannerType/getAll',
+	CU_BANNER: '/banner/batchInsertOrUpdate',
+	GETT_ALL_BANNER: '/banner/getAll',
 }
-
-const isProd = process.env.NEXT_PUBLIC_ENV === 'development';
-
-export const APP_URL = isProd 
-  ? 'https://tieuphuongcrochet-90b41ee4488a.herokuapp.com'
-  : 'http://localhost:8080';

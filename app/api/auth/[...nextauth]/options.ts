@@ -1,27 +1,23 @@
-import { User } from '@/app/lib/definitions';
-import { error } from 'console';
-import type { NextAuthOptions, Session } from 'next-auth'
+
 import CredentialsProvider from 'next-auth/providers/credentials'
 import * as jwtDecode from 'jsonwebtoken';
 import { JWT } from 'next-auth/jwt';
-import { API_ROUTES, APP_URL } from '@/app/lib/constant';
+import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
 import { JwtPayload } from 'jsonwebtoken';
+import { NextAuthOptions, User } from 'next-auth';
+import fetchApi from '../../fetchApi';
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
-    const response = await fetch(`${APP_URL}/${API_ROUTES.REFRESH_TOKEN}?refreshToken=${token.refreshToken}`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        refreshToken: token.refreshToken,
-      }),
-    });
+    const response = await fetchApi<JWT>(
+      `/${API_ROUTES.REFRESH_TOKEN}?refreshToken=${token.refreshToken}`,
+       'POST', 
+       {refreshedToken: token.refreshToken})
 
-    const refreshedTokens = await response.json();
 
-    if (!response.ok) {
+    const refreshedTokens =  response.data;
+
+    if (response.status !== 200) {
       throw refreshedTokens;
     }
 
@@ -42,7 +38,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
 export const options: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/login",
+    signIn: ROUTE_PATH.LOGIN,
   },
   providers: [
     CredentialsProvider({
@@ -65,27 +61,22 @@ export const options: NextAuthOptions = {
         }
 
         try {
-          const res = await fetch(`${APP_URL}/${API_ROUTES.LOGIN}`, {
-            method: 'POST',
-            body: JSON.stringify(credentials),
-            headers: { "Content-Type": "application/json" }
-          })
-          const user = await res.json()
-          if (res.ok && user) {
+          const res = await fetchApi<User>(API_ROUTES.LOGIN, 'POST', credentials);
+          
+          const user =  res.data;
+          if (res.status === 200 && user) {
             return user;
           } else {
-            console.log('Login failed:', user.message || 'Unknown error');
             return null;
           }
         } catch (error) {
-          console.error('Login error:', error);
           return null;
         }
       }
     })
   ],
+
   callbacks: {
-    // Ref: https://authjs.dev/guides/basics/role-based-access-control#persisting-the-role
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role
@@ -94,7 +85,7 @@ export const options: NextAuthOptions = {
 
         // Decode the access token
         const decoded = jwtDecode.decode(user.accessToken) as JwtPayload;
-        if (decoded && Date.now() < (decoded.exp as number)) {
+        if (decoded && Date.now() < (decoded.exp as number) * 1000) {
           return token;
         }
 
@@ -108,6 +99,7 @@ export const options: NextAuthOptions = {
       if (session?.user) {
         session.user.role = token.role;
         session.user.email = token.email as string;
+        session.user.accessToken = token.accessToken as string;
       }
       return session
     },
