@@ -16,19 +16,20 @@ const Login = () => {
     const [form] = Form.useForm();
     const router = useRouter();
 
-
     const onFinish = async (values: User) => {
-        const result = await signIn("credentials", {
+        const result = await signIn('credentials', {
             email: values.email,
             password: values.password,
             redirect: false,
-          });
-      
-          if (result?.error) {
-            console.error(result.error);
-          } else {
-            router.push("/admin");
-          }
+        });
+
+        if (result?.error) {
+            // Handle error, e.g., show an error message
+            console.error('Login failed:', result.error);
+        } else {
+            // Redirect to the admin page on successful login
+            router.push('/admin');
+        }
     };
 
     return (

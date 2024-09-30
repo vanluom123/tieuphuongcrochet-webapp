@@ -1,80 +1,52 @@
+import { error } from 'console';
 import type { NextAuthOptions } from 'next-auth'
-import GitHubProvider from 'next-auth/providers/github'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
 export const options: NextAuthOptions = {
-    providers: [
-        GitHubProvider({
-            clientId: process.env.GITHUB_ID as string,
-            clientSecret: process.env.GITHUB_SECRET as string,
-        }),
-        CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-                email: {
-                    label: "Email:",
-                    type: "text",
-                    placeholder: "Enter your email"
-                },
-                password: {
-                    label: "Password:",
-                    type: "password",
-                    placeholder: "Enter your password"
-                }
-            },
-            async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password) {
-                    return null;
-                  }
-                  
-                  const res = await fetch("https://tieuphuongcrochet-90b41ee4488a.herokuapp.com/auth/login", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      email: credentials.email,
-                      password: credentials.password,
-                    }),
-                  });
-          
-                  const user = await res.json();
-          
-                  if (res.ok && user) {
-                    console.log('user', user);
-                    return user;
-                  } else {
-                    console.log('Login failed');
-                    return null;
-                }
-            }
-        })
-    ],
-    pages: {
-        signIn: "/login",
-      },
-      callbacks: {
-        async jwt({ token, user }) {
-          if (user) {
-            token.id = user.id;
-            token.email = user.email;
-          }
-          return token;
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login",
+  },
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: {
+          label: "Email:",
+          type: "email",
+          placeholder: "Enter your email"
         },
-        async session({ session, token }) {
-          if (token && session.user) {
-            session.user = {
-              ...session.user,
-              id: token.id as string,
-              email: token.email as string
-            } as {
-              id: string;
-              email: string;
-              name?: string | null;
-              image?: string | null;
-            };
-          }
-          return session;
-        },
+        password: {
+          label: "Password:",
+          type: "password",
+          placeholder: "Tham Phuong"
+        }
       },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        try {
+          const res = await fetch("https://tieuphuongcrochet-90b41ee4488a.herokuapp.com/auth/login", {
+            method: 'POST',
+            body: JSON.stringify(credentials),
+            headers: { "Content-Type": "application/json" }
+          })
+          const user = await res.json()
+          console.log(user, 'login user');
+          if (res.ok && user) {
+            console.log('Login success');
+            return user;
+          } else {
+            console.log('Login failed:', user.message || 'Unknown error');
+            return null;
+          }
+        } catch (error) {
+          console.error('Login error:', error);
+          return null;
+        }
+      }
+    })
+  ],
 }

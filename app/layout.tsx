@@ -4,6 +4,7 @@ import LayoutPage from "./components/layout-page";
 import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "./components/theme-provider";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
+import AuthProvider from "./context/AuthProvider";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -74,15 +75,17 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider>
-            <AntdRegistry>
-              <LayoutPage>
-                {children}
-              </LayoutPage>
-            </AntdRegistry>
-          </ThemeProvider>
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ThemeProvider>
+              <AntdRegistry>
+                <LayoutPage>
+                  {children}
+                </LayoutPage>
+              </AntdRegistry>
+            </ThemeProvider>
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );
