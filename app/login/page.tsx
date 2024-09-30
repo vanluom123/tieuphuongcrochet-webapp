@@ -1,20 +1,28 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Flex, Form, Input, Row, Space } from 'antd';
-import { User } from '../lib/definitions';
-import Link from 'next/link';
-import { ROUTE_PATH, REGEX } from '../lib/constant';
-import Image from 'next/image';
-import '../ui/components/login.scss';
-import logo from '@/public/logo.png';
 import { useRouter } from 'next/navigation';
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import Link from 'next/link';
+import Image from 'next/image';
+
+import { User } from '../lib/definitions';
+import logo from '@/public/logo.png';
+import { ROUTE_PATH, REGEX } from '../lib/constant';
+import '../ui/components/login.scss';
 
 const Login = () => {
     const [form] = Form.useForm();
     const router = useRouter();
+    const { data: session } = useSession({ required: false });
+
+    useEffect(() => {
+        if (session?.user) {
+            router.push(ROUTE_PATH.ADMIN);
+        }
+    }, [session, router]);
 
     const onFinish = async (values: User) => {
         const result = await signIn('credentials', {
@@ -28,7 +36,7 @@ const Login = () => {
             console.error('Login failed:', result.error);
         } else {
             // Redirect to the admin page on successful login
-            router.push('/admin');
+            router.push(ROUTE_PATH.ADMIN);
         }
     };
 

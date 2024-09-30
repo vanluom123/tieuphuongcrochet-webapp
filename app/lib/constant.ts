@@ -209,7 +209,7 @@ export const TRANSLATION_OPTIONS: TranslationStatus[] = [
 ]
 
 
-export const API_URL = {
+export const API_ROUTES = {
 	HOME: '/home',
 	PRODUCT: '/product',
 	PATTERN: '/pattern',
@@ -248,3 +248,9 @@ export const API_URL = {
 	CU_BANNER: 'banner/batchInsertOrUpdate',
 	GETT_ALL_BANNER: 'banner/getAll',
 }
+
+const isProd = process.env.NEXT_PUBLIC_ENV === 'development';
+
+export const APP_URL = isProd 
+  ? 'https://tieuphuongcrochet-90b41ee4488a.herokuapp.com'
+  : 'http://localhost:8080';
