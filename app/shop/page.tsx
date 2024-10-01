@@ -1,59 +1,21 @@
 'use client'
 import { useEffect, useState } from "react";
 import HeaderPart from "../components/header-part";
-import { ALL_ITEM, API_ROUTES, FILTER_LOGIC, FILTER_OPERATION } from "../lib/constant";
-import { initialViewTableParams, Filter, ListParams, DataType, FileUpload, Product } from "../lib/definitions";
-import { filterByText, getAvatar, mapImagesPreview, mapNameFilters } from "../lib/utils";
+import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION } from "../lib/constant";
+import { Filter, DataType, initialListParams } from "../lib/definitions";
+import { filterByText, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
 import { useTranslations } from "next-intl";
 import { fetchProducts } from "../lib/service/productService";
 import { fetchCategories } from "../lib/service/categoryService";
 
-const mockCategories: DataType[] = [
-	{
-		name: 'Electronics',
-		key: 'electronics',
-		children: [
-			{
-				id: '1-1',
-				name: 'Smartphones',
-				key: 'smartphones',
-			},
-			{
-				id: '1-2',
-				name: 'Laptops',
-				key: 'laptops',
-			}
-		]
-	},
-	{
-		name: 'Clothing',
-		key: 'clothing',
-		children: [
-			{
-				id: '2-1',
-				name: 'Men\'s Wear',
-				key: 'mens-wear',
-			},
-			{
-				id: '2-2',
-				name: 'Women\'s Wear',
-				key: 'womens-wear',
-			}
-		]
-	},
-	{
-		name: 'Books',
-		key: 'books',
-	}
-];
-
 const Shop = () => {
 	const [products, setProducts] = useState<DataType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [totalRecords, setTotalRecords] = useState(0);
-	const [params, setParams] = useState(initialViewTableParams);
+	const [params, setParams] = useState(initialListParams);
 	const [categories, setCategories] = useState<any[]>([]);
+	const [filters, setFilters] = useState<Filter[]>([]);
 	const t = useTranslations("Shop");
 
 	const onPageChange = (current: number, pageSize: number) => {
@@ -67,13 +29,13 @@ const Shop = () => {
 
 	useEffect(() => {
 		setLoading(true);
-		fetchProducts(params).then(({ data, totalRecords }) => {
+		fetchProducts(params, filters).then(({ data, totalRecords }) => {
 			setProducts(data);
 			setTotalRecords(totalRecords);
 		}).finally(() => {
 			setLoading(false);
 		});
-	}, [params]);
+	}, [params, filters]);
 
 	useEffect(() => {
 		fetchCategories().then((data) => {
@@ -82,18 +44,12 @@ const Shop = () => {
 	}, []);
 
 	const onSearchProducts = (value: string) => {
-		const filters: Filter = filterByText(value, 'name', 'description');
-		const tempFilters = mapNameFilters(params.filters, 'searchText', filters);
-
-		const newParams = {
-			...initialViewTableParams,
-			filters: tempFilters
-		};
-		setParams(newParams);
+		const prodFilter: Filter = filterByText(value, 'name', 'description');
+		const tempFilters = mapNameFilters(filters, 'searchText', prodFilter);
+		setFilters(tempFilters);
 	}
 
 	const onViewProduct = (id: React.Key) => {
-		// navigate(`${ROUTE_PATH.SHOP}/${ROUTE_PATH.DETAIL}/${id}`);
 	};
 
 	const onTabChange = (key: React.Key) => {
@@ -111,14 +67,8 @@ const Shop = () => {
 			}
 			;
 
-		const tempFilters = mapNameFilters(params.filters, 'category', categoryFilter);
-
-		const newParams: ListParams = {
-			...initialViewTableParams,
-			filters: tempFilters
-		};
-
-		setParams(newParams);
+		const tempFilters = mapNameFilters(filters, 'category', categoryFilter);
+		setFilters(tempFilters);
 	}
 
 	return (
@@ -135,7 +85,7 @@ const Shop = () => {
 				pageIndex={params.pageNo}
 				pageSize={params.pageSize}
 				onPageChange={onPageChange}
-				// onSeach={onSearchProducts}
+				onSearch={onSearchProducts}
 				onTabChange={onTabChange}
 			/>
 		</div>
