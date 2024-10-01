@@ -1,40 +1,13 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeaderPart from "../components/header-part";
-import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION } from "../lib/constant";
-import { initialViewTableParams, Filter, ListParams, DataType } from "../lib/definitions";
-import { filterByText, mapNameFilters } from "../lib/utils";
+import { ALL_ITEM, API_ROUTES, FILTER_LOGIC, FILTER_OPERATION } from "../lib/constant";
+import { initialViewTableParams, Filter, ListParams, DataType, FileUpload, Product } from "../lib/definitions";
+import { filterByText, getAvatar, mapImagesPreview, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
 import { useTranslations } from "next-intl";
-
-const mockProductData: DataType[] = [
-	{
-		key: '1',
-		name: 'Sample Product 1',
-		price: 19.99,
-		description: 'This is a sample product description.',
-		images: [{ fileContent: 'base64encodedimage', fileName: 'product1.jpg', url: 'https://example.com/product1.jpg' }],
-		src: 'https://example.com/product1.jpg',
-		author: 'John Doe',
-		currency_code: 'USD',
-		imagesPreview: [{ src: 'https://example.com/product1.jpg', alt: 'Product 1' }],
-		link: 'https://example.com/product/1',
-		content: 'Detailed content about the product goes here.'
-	},
-	{
-		key: '2',
-		name: 'Sample Product 2',
-		price: 29.99,
-		description: 'Another sample product description.',
-		images: [{ fileContent: 'base64encodedimage', fileName: 'product2.jpg', url: 'https://example.com/product2.jpg' }],
-		src: 'https://example.com/product2.jpg',
-		author: 'Jane Smith',
-		currency_code: 'EUR',
-		imagesPreview: [{ src: 'https://example.com/product2.jpg', alt: 'Product 2' }],
-		link: 'https://example.com/product/2',
-		content: 'More detailed content about this product.'
-	}
-];
+import { fetchProducts } from "../lib/service/productService";
+import { fetchCategories } from "../lib/service/categoryService";
 
 const mockCategories: DataType[] = [
 	{
@@ -75,39 +48,38 @@ const mockCategories: DataType[] = [
 	}
 ];
 
-
-
 const Shop = () => {
-	// const navigate = useNavigate();
-	// const dispatch = useAppDispatch();
-	// const productList: DataType[] = useAppSelector(selectProducts);
-	// const totalRecords = useAppSelector(selectTotalRecords);
-	// const loading = useAppSelector(selectLoading);
-	// const categories = useAppSelector(state => state.category.data);
-
+	const [products, setProducts] = useState<DataType[]>([]);
+	const [loading, setLoading] = useState(false);
+	const [totalRecords, setTotalRecords] = useState(0);
 	const [params, setParams] = useState(initialViewTableParams);
-
+	const [categories, setCategories] = useState<any[]>([]);
 	const t = useTranslations("Shop");
 
 	const onPageChange = (current: number, pageSize: number) => {
 		const newParams = {
 			...params,
-			_pageNo: current - 1,
-			_pageSize: pageSize,
+			pageNo: current - 1,
+			pageSize: pageSize,
 		}
 		setParams(newParams)
 	}
 
+	useEffect(() => {
+		setLoading(true);
+		fetchProducts(params).then(({ data, totalRecords }) => {
+			setProducts(data);
+			setTotalRecords(totalRecords);
+		}).finally(() => {
+			setLoading(false);
+		});
+	}, [params]);
 
-	// useEffect(() => {
-	// 	dispatch(productAction.fetchData(params));
-	// }, [params]);
-
-	// useEffect(() => {
-	// 	if (categories.length <= 0) {
-	// 		dispatch(categoryAction.fetchData());
-	// 	}
-	// }, [categories.length, dispatch]);
+	useEffect(() => {
+		fetchCategories().then((data) => {
+			setCategories(data);
+		});
+	}, []);
 
 	const onSearchProducts = (value: string) => {
 		const filters: Filter = filterByText(value, 'name', 'description');
@@ -155,13 +127,13 @@ const Shop = () => {
 			<ViewTable
 				mode='Product'
 				onReadDetail={(id) => onViewProduct(id)}
-				dataSource={mockProductData as DataType[]}
-				total={48}
-				loading={false}
+				dataSource={products}
+				total={totalRecords}
+				loading={loading}
 				isShowTabs
-				itemsTabs={mockCategories}
-				pageIndex={params._pageNo}
-				pageSize={params._pageSize}
+				itemsTabs={categories}
+				pageIndex={params.pageNo}
+				pageSize={params.pageSize}
 				onPageChange={onPageChange}
 				// onSeach={onSearchProducts}
 				onTabChange={onTabChange}

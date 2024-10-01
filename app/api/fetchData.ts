@@ -1,5 +1,5 @@
 async function fetchData<T = any>({
-    baseUrl = '',
+    baseUrl = process.env.NEXT_PUBLIC_API_URL,
     endpoint = '',
     method = 'GET',
     data = null,

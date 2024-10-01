@@ -18,26 +18,26 @@ export interface ListResponse<T> {
 };
 
 export interface ListParams {
-	_pageNo: number;
-	_pageSize: number;
-	_sortBy?: string;
-	_sortDir?: 'asc' | 'desc';
+	pageNo: number;
+	pageSize: number;
+	sortBy?: string;
+	sortDir?: 'asc' | 'desc';
 	filters: Filter[];
 };
 
 export const initialListParams: ListParams = {
-	_pageNo: 0,
-	_pageSize: 30,
-	_sortBy: 'createdDate',
-	_sortDir: 'desc',
+	pageNo: 0,
+	pageSize: 30,
+	sortBy: 'createdDate',
+	sortDir: 'desc',
 	filters: []
 };
 
 export const initialViewTableParams: ListParams = {
-	_pageNo: 0,
-	_pageSize: 48,
-	_sortBy: 'createdDate',
-	_sortDir: 'desc',
+	pageNo: 0,
+	pageSize: 48,
+	sortBy: 'createdDate',
+	sortDir: 'desc',
 	filters: []
 };
 
