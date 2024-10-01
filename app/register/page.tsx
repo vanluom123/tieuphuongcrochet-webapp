@@ -6,35 +6,42 @@ import { Form, Input, Button, Row, Col, Flex } from 'antd';
 import logo from '@/public/logo.png';
 import { User } from "../lib/definitions";
 import Link from "next/link";
-import { ROUTE_PATH, REGEX } from "../lib/constant";
+import { ROUTE_PATH, REGEX, API_ROUTES } from "../lib/constant";
 import Image from "next/image";
+import fetchData from "../api/fetchData";
+import { useRouter } from "next/navigation";
 import '../ui/components/register.scss';
 
 const RegisterPage = () => {
 
     const [isDisable, setIsDisable] = useState(false);
     const [form] = Form.useForm();
+    const router = useRouter();
 
     const onCancel = () => {
-        form.resetFields();
+        router.push(ROUTE_PATH.LOGIN);
     }
 
     const onSubmitRegister = async (values: User) => {
-        // const callback = () => {
-        // 	setIsDisable(true);
-        // 	navigate(ROUTE_PATH.LOGIN);
-        // 	form.resetFields();
-        // };
+        console.log("values", values);
+        setIsDisable(true);
+        const res = await fetchData({
+            baseUrl: process.env.NEXT_PUBLIC_API_URL,
+            endpoint: API_ROUTES.SIGNUP,
+            method: 'POST',
+            data: values,
+        }).catch((error) => {
+            console.log("error", error);
+            setIsDisable(false);
+            return;
+        });
 
-        // if (values) {
-        // 	const params: User = {
-        // 		name: values.name,
-        // 		email: values.email,
-        // 		password: values.password,
-        // 		role: values.email
-        // 	};
-        // 	dispatch(authActions.resigter({ params, callback }));
-        // }
+        if (res == null) {
+            setIsDisable(false);
+            return;
+        }
+
+        router.push(ROUTE_PATH.LOGIN);
     }
 
     return (

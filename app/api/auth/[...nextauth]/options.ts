@@ -4,35 +4,36 @@ import * as jwtDecode from 'jsonwebtoken';
 import { JWT } from 'next-auth/jwt';
 import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
 import { JwtPayload } from 'jsonwebtoken';
-import { NextAuthOptions, User } from 'next-auth';
-import fetchApi from '../../fetchApi';
+import { NextAuthOptions } from 'next-auth';
+import GoogleProvider from "next-auth/providers/google";
+import fetchData from '../../fetchData';
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
-  try {
-    const response = await fetchApi<JWT>(
-      `/${API_ROUTES.REFRESH_TOKEN}?refreshToken=${token.refreshToken}`,
-       'POST', 
-       {refreshedToken: token.refreshToken})
-
-
-    const refreshedTokens =  response.data;
-
-    if (response.status !== 200) {
-      throw refreshedTokens;
-    }
-
+  const res = await fetchData({
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    endpoint: `${API_ROUTES.REFRESH_TOKEN}?refreshToken=${token.refreshToken}`,
+    method: 'POST',
+    data: { refreshedToken: token.refreshToken },
+  }).catch((error) => {
+    console.log("error", error);
     return {
       ...token,
-      accessToken: refreshedTokens.accessToken,
-      refreshToken: refreshedTokens.refreshToken ?? token.refreshToken,
+      error: "RefreshAccessTokenError",
     };
-  } catch (error) {
-    console.error("RefreshAccessTokenError", error);
+  });
+
+  if (res == null) {
     return {
       ...token,
       error: "RefreshAccessTokenError",
     };
   }
+
+  return {
+    ...token,
+    accessToken: res.accessToken,
+    refreshToken: res.refreshToken ?? token.refreshToken,
+  };
 }
 
 export const options: NextAuthOptions = {
@@ -41,6 +42,10 @@ export const options: NextAuthOptions = {
     signIn: ROUTE_PATH.LOGIN,
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -60,18 +65,21 @@ export const options: NextAuthOptions = {
           return null;
         }
 
-        try {
-          const res = await fetchApi<User>(API_ROUTES.LOGIN, 'POST', credentials);
-          
-          const user =  res.data;
-          if (res.status === 200 && user) {
-            return user;
-          } else {
-            return null;
-          }
-        } catch (error) {
+        const res = await fetchData({
+          baseUrl: process.env.NEXT_PUBLIC_API_URL,
+          endpoint: API_ROUTES.LOGIN,
+          method: 'POST',
+          data: credentials,
+        }).catch((error) => {
+          console.log("error", error);
+          return null;
+        });
+
+        if (res == null) {
           return null;
         }
+
+        return res;
       }
     })
   ],
