@@ -1,0 +1,49 @@
+@import "../../variables.module.scss";
+
+
+.auth-page {
+  .logo {
+    max-height: 170px;
+
+    img {
+      max-height: 150px;
+      margin: 10px 0;
+    }
+  }
+
+  .header-title {
+    .title {
+      margin-bottom: 10px;
+    }
+
+    color: $textPrimaryColor;
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+
+  .ant-row {
+    justify-content: center;
+
+    & > * {
+      font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
+
+      label {
+        color: $textPrimaryColor;
+      }
+    }
+
+    .note {
+      font-style: italic;
+      color: $textSecondColor;
+    }
+  }
+
+  a {
+    color: $secondColor;
+    font-size: $fontSize_middle;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

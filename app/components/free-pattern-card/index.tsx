@@ -38,8 +38,10 @@ const FreePatternCard = (
 			hoverable
 			className='free-pattern-card card-item'
 			style={{ width: width || '100%' }}
-			bodyStyle={{
-				overflow: 'hidden',
+			styles={{
+				body: {
+					overflow: 'hidden',
+				},
 			}}
 			cover={
 				<>
