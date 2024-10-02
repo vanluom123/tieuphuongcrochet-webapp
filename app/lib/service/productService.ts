@@ -4,7 +4,7 @@ import { Product, FileUpload, ListParams, DataType } from "../definitions";
 import { getAvatar, mapImagesPreview } from "../utils";
 import fetchData from "../../api/fetchData";
 
-export const fetchProducts = async (params: ListParams, filters: any[]): Promise<{data: DataType[], totalRecords: number}> => {
+export const fetchProducts = async (params: ListParams): Promise<{data: DataType[], totalRecords: number}> => {
     const res = await fetchData({
         endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.PAGINATION}`,
         method: 'POST',
@@ -14,7 +14,7 @@ export const fetchProducts = async (params: ListParams, filters: any[]): Promise
             'sortBy': params.sortBy as string,
             'sortDir': params.sortDir as string,
         },
-        data: filters,
+        data: params.filters,
     }).catch((err) => {
         console.log("err", err);
     });

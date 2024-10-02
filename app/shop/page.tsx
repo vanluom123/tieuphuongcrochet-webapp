@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import HeaderPart from "../components/header-part";
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION } from "../lib/constant";
-import { Filter, DataType, initialListParams } from "../lib/definitions";
+import { Filter, DataType, initialListParams, ListParams } from "../lib/definitions";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
 import { useTranslations } from "next-intl";
@@ -15,7 +15,6 @@ const Shop = () => {
 	const [totalRecords, setTotalRecords] = useState(0);
 	const [params, setParams] = useState(initialListParams);
 	const [categories, setCategories] = useState<any[]>([]);
-	const [filters, setFilters] = useState<Filter[]>([]);
 	const t = useTranslations("Shop");
 
 	const onPageChange = (current: number, pageSize: number) => {
@@ -29,13 +28,13 @@ const Shop = () => {
 
 	useEffect(() => {
 		setLoading(true);
-		fetchProducts(params, filters).then(({ data, totalRecords }) => {
+		fetchProducts(params).then(({ data, totalRecords }) => {
 			setProducts(data);
 			setTotalRecords(totalRecords);
 		}).finally(() => {
 			setLoading(false);
 		});
-	}, [params, filters]);
+	}, [params]);
 
 	useEffect(() => {
 		fetchCategories().then((data) => {
@@ -45,8 +44,13 @@ const Shop = () => {
 
 	const onSearchProducts = (value: string) => {
 		const prodFilter: Filter = filterByText(value, 'name', 'description');
-		const tempFilters = mapNameFilters(filters, 'searchText', prodFilter);
-		setFilters(tempFilters);
+		const tempFilters = mapNameFilters(params.filters as Filter[], 'searchText', prodFilter);
+
+		const newParams = {
+			...initialListParams,
+			filters: tempFilters
+		};
+		setParams(newParams);
 	}
 
 	const onViewProduct = (id: React.Key) => {
@@ -67,8 +71,14 @@ const Shop = () => {
 			}
 			;
 
-		const tempFilters = mapNameFilters(filters, 'category', categoryFilter);
-		setFilters(tempFilters);
+		const tempFilters = mapNameFilters(params.filters as Filter[], 'category', categoryFilter);
+
+		const newParams: ListParams = {
+			...initialListParams,
+			filters: tempFilters
+		};
+
+		setParams(newParams);
 	}
 
 	return (

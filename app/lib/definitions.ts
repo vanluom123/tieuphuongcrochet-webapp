@@ -22,6 +22,7 @@ export interface ListParams {
 	pageSize: number;
 	sortBy?: string;
 	sortDir?: 'asc' | 'desc';
+	filters?: Filter[];
 };
 
 export const initialListParams: ListParams = {
@@ -29,6 +30,7 @@ export const initialListParams: ListParams = {
 	pageSize: 48,
 	sortBy: 'createdDate',
 	sortDir: 'desc',
+	filters: []
 };
 
 export interface ListTablePayload<T> {
