@@ -1,6 +1,5 @@
 import { TabsItem } from "@/app/lib/definitions";
 import { Menu, MenuProps } from "antd";
-import { useState } from "react";
 
 interface CategoryMenuProps {
     items: TabsItem[];
@@ -10,16 +9,11 @@ interface CategoryMenuProps {
 }
 
 const CategoryMenu = ({ items, currentTab, onClickMenu, tabsProps }: CategoryMenuProps) => {
-    const [openKeys, setOpenKeys] = useState<string[]>([]);
-
-    const onOpenChange = (keys: string[]) => {
-        setOpenKeys(keys);
-    };
 
     const renderMenuItem = ({ label, key, icon, children }: TabsItem) => {
         if (children && children.length > 0) {
             return (
-                <Menu.SubMenu key={key} title={label} icon={icon}>
+                <Menu.SubMenu onTitleClick={({ key }) => onClickMenu(key)} key={key} title={label} icon={icon} >
                     {children.map(renderMenuItem)}
                 </Menu.SubMenu>
             );
@@ -36,8 +30,6 @@ const CategoryMenu = ({ items, currentTab, onClickMenu, tabsProps }: CategoryMen
             className='tabs-menu'
             selectedKeys={[currentTab]}
             mode="horizontal"
-            openKeys={openKeys}
-            onOpenChange={onOpenChange}
             onClick={({ key }) => onClickMenu(key)}
             {...tabsProps}
         >
