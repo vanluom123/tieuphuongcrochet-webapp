@@ -1,0 +1,21 @@
+@import './../variables.module.scss';
+
+.contact-page {
+
+    .form-contact {
+      padding: 30px;
+      background-color: #fff;
+      box-shadow: 0 10px 10px 0px $colorPrimary;
+      border-radius: 3px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .7s ease 0s;
+      -webkit-transition: all .7s ease 0s;
+  
+      input,
+      textarea {
+        border-radius: 0;
+        border-color: $borderColor;
+      }
+    }
+  }

@@ -1,0 +1,113 @@
+{
+  "App": {
+    "title": "Tiểu Phương Crochet",
+    "description": "Nơi chia sẻ chart miễn phí!!!"
+  },
+
+  "MenuNav": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "shop": "Cửa hàng",
+    "freePattern": "Chart miễn phí",
+    "detail": "Chi tiết",
+    "create": "Tạo mới",
+    "blog": "Blog"
+  },
+
+  "Home": {
+    "Product": {
+      "title": "Sản phẩm",
+      "description": "Đây là những sản phẩm mình bán nhé. Ngoài ra mình cũng có nhận làm theo yêu cầu!!"
+    },
+    "FreePattern": {
+      "title": "Chart miễn phí",
+      "description": "Đây là những chart mình sưu tập, và một số chart mình viết. Nếu mình lỡ có đăng phải chart bản quyền thì nhắc mình xóa nhé!!"
+    },
+    "Blog": {
+      "title": "Nơi chia sẻ những điều tốt đẹp!!",
+      "description": "Nơi chia sẻ những điều tốt đẹp!!"
+    },
+    "Social": {
+      "title": "Theo dõi mình trên mạng xã hội nhé!",
+      "description": "Fanpage và những kênh bán hàng của mình ạ!"
+    }
+  },
+
+  "Tab": {
+    "all": "Tất cả"
+  },
+
+  "Shop": {
+    "title": "Sản phẩm",
+    "description": "Dưới đây là những sản phẩm mà mình đã làm nè! Nếu các bạn muốn mình làm theo yêu cầu của bạn thì hãy inbox cho mình nhé! Tương lai, mình sẽ cập nhật thêm những sản phẩm mới và có thêm chức năng đặt hàng để các bạn dễ đặt hàng hơn nè. Hãy ủng hộ cho mình nhé!",
+    "detail": "Hình ảnh sản phẩm",
+    "note": "Nếu bạn muốn đặt mua sản phẩm này theo yêu cầu của bạn, hãy liên hệ với mình nhé. Mình sẽ cố gắng hết sức để mang đến cho bạn những sản phẩm tốt nhất. Cảm ơn bạn!"
+  },
+
+  "FreePattern": {
+    "title": "Chart miễn phí",
+    "description": "Dưới đây là những mẫu móc mà mình đã sưu tầm được ( Mình sẽ dịch dần dần nhé). Trong thời gian sắp tới, mình sẽ tiếp tục cập nhật thêm nhiều mẫu móc len đẹp khác và những mẫu mà mình tự sáng tạo nữa đấy. Hãy tham khảo và lựa chọn cho mình một mẫu ưng ý nhé!",
+    "detail": "Chi tiết",
+    "content": "Chart đã dịch",
+    "note": "Nếu mình nhỡ đăng nhằm chart có bản quyền, xin hãy nói với mình để mình gỡ xuống ạ! Cảm ơn bạn!",
+    "status": {
+      "ALL": "Tất cả",
+      "SUCCESS": "Đã dịch",
+      "PENDING": "Đang dịch",
+      "NONE": "Chưa dịch"
+    }
+  },
+
+  "Blog": {
+    "title": "Blogs",
+    "message": "Nơi chia sẻ những điều tốt đẹp!!",
+    "description": "Nơi chia sẻ những điều tốt đẹp!!"
+  },
+
+  "About": {
+    "title": "Về chúng tôi",
+    "message": "Chào mừng bạn đến website của tôi!",
+    "content": "Cảm ơn bạn đã ghé thăm website của mình nhé. Hy vọng bạn sẽ tìm thấy những điều tốt đẹp ở đây. Mình rất thích móc len và tạo ra những mẫu đồ đẹp và độc đáo. Mong bạn sẽ thích những sản phẩm mình làm ra. Trên trang web của mình có rất nhiều mẫu móc len đẹp mà mình đã sưu tầm và dịch, tương lai mình sẽ cập nhật thêm nhiều mẫu móc len đẹp khác nữa và những mấu mà tự mình sáng tạo ra nè, bạn hãy tham khảo và chọn cho mình một mẫu ưng ý nhé. Ngoài những mẫu móc len đẹp ra mình cũng có bán những sản phẩm mình đã móc sẵn. Đối với những sản phẩm mình đặt trước, bạn có thể yêu cầu mình móc theo mẫu bạn muốn bằng cách gửi yêu cầu qua email của mình hoặc qua tin nhắn trên trang facebook của mình. Mình sẽ cố gắng hết sức để mang đến cho bạn những sản phẩm tốt nhất. Cảm ơn bạn đã ủng hộ mình!"
+  },
+
+  "Contact": {
+    "title": "Liên lạc với tôi",
+    "description": "Bạn đang gặp vấn đề với đặt hàng hoặc yêu cầu móc theo mẫu bạn muốn? Hãy liên lạc với mình qua email hoặc tin nhắn trên trang facebook của mình nhé. Mình sẽ cố gắng hết sức để giúp bạn!",
+    "Form": {
+      "success": "Bạn đã gửi thư thành công!",
+      "error": "Thư vẫn chưa được gửi! Bạn thử gửi lại nhé!",
+      "title": "Gửi thư cho mình nhé",
+      "via": "Hoặc liên lạc với mình qua",
+      "input_email": "Nhập email của bạn",
+      "input_name": "Nhập tên",
+      "input_title": "Nhập tiêu đề",
+      "input_content": "Nhập nội dung",
+      "error_msg_incorrect_email": "Định dạng email không chính xác!",
+      "btn_send": "Gửi"
+    }
+  },
+
+  "Btn": {
+    "readMore": "Xem thêm",
+    "btn_buy": "Mua hàng",
+    "btn_view_detail": "Chi tiết",
+    "btn_send": "Gửi",
+    "btn_grid": "Dạng lưới",
+    "btn_list": "Danh sách",
+    "all": "Tất cả"
+  },
+  "Notification": {
+    "success": "Thành công",
+    "error": "Lỗi"
+  },
+  "Form": {
+    "name": "Họ và tên",
+    "email": "Email"
+  },
+
+  "IntroductionCard": {
+    "author": "Tác giả",
+    "btn_buy": "Đặt hàng"
+  }
+}

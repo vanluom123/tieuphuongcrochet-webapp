@@ -1,0 +1,15 @@
+@import "../../variables.module.scss";
+
+.view-pdf-wrap {
+  padding: 10px;
+  background-color: #ffe6f9;
+
+  canvas.react-pdf__Page__canvas {
+    width: 100% !important;
+    height: fit-content !important;
+  }
+
+  .react-pdf__Page:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
