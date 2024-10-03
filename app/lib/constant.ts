@@ -5,7 +5,7 @@ export const ROUTE_PATH = {
   HOME: '/',
   SHOP: '/shop',
   FREEPATTERNS: '/free-patterns',
-  BLOG: '/blog',
+  BLOG: '/blogs',
   ABOUT: '/about',
   CONTACT: '/contact',
   LOGIN: '/login',

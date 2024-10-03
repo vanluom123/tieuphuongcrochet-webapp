@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
-import { Product, FileUpload, ListParams, DataType, FreePattern } from "../definitions";
+import { FileUpload, ListParams, DataType, FreePattern } from "../definitions";
 import { getAvatar, mapImagesPreview } from "../utils";
 import fetchData from "../../api/fetchData";
 

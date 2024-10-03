@@ -2,20 +2,22 @@
 import { useEffect, useState } from "react";
 import HeaderPart from "../components/header-part";
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION } from "../lib/constant";
-import { Filter, DataType, initialListParams, ListParams } from "../lib/definitions";
+import { Filter, initialListParams, ListParams, DataTableState } from "../lib/definitions";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
-import { useTranslations } from "next-intl";
 import { fetchProducts } from "../lib/service/productService";
 import { fetchCategories } from "../lib/service/categoryService";
 
+const initialState: DataTableState = {
+    loading: false,
+    data: [],
+    totalRecord: 0,
+};
+
 const Shop = () => {
-	const [products, setProducts] = useState<DataType[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [totalRecords, setTotalRecords] = useState(0);
+	const [state, setState] = useState(initialState);
 	const [params, setParams] = useState(initialListParams);
 	const [categories, setCategories] = useState<any[]>([]);
-	const t = useTranslations("Shop");
 
 	const onPageChange = (current: number, pageSize: number) => {
 		const newParams = {
@@ -27,12 +29,11 @@ const Shop = () => {
 	}
 
 	useEffect(() => {
-		setLoading(true);
+		setState({ ...state, loading: true });
 		fetchProducts(params).then(({ data, totalRecords }) => {
-			setProducts(data);
-			setTotalRecords(totalRecords);
+			setState({ ...state, data, totalRecord: totalRecords });
 		}).finally(() => {
-			setLoading(false);
+			setState(prevState => ({ ...prevState, loading: false }));
 		});
 	}, [params]);
 
@@ -87,9 +88,9 @@ const Shop = () => {
 			<ViewTable
 				mode='Product'
 				onReadDetail={(id) => onViewProduct(id)}
-				dataSource={products}
-				total={totalRecords}
-				loading={loading}
+				dataSource={state.data}
+				total={state.totalRecord}
+				loading={state.loading}
 				isShowTabs
 				itemsTabs={categories}
 				pageIndex={params.pageNo}

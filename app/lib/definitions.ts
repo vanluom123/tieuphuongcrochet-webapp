@@ -232,12 +232,7 @@ export interface PatternPayload {
 	callback: () => void;
 };
 
-export interface PatternState {
-	loading: boolean;
-	data: DataType[];
-	totalRecord: number;
-	pattern: Pattern;
-}
+
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';
 
@@ -263,11 +258,10 @@ export interface PostPayloadFile {
     resolve?: unknown
 }
 
-export interface PostState {
+export interface DataTableState {
     loading: boolean;
     data: DataType[];
     totalRecord: number;
-    post: Post;
 }
 
 export interface PostPayload {
@@ -305,12 +299,7 @@ export interface HomeData {
 	blogs: Post[]
 };
 
-export interface ProductState {
-	loading: boolean;
-	data: DataType[];
-	totalRecord: number;
-	product: Product;
-}
+
 
 export interface ProductPayload {
 	params: Product;
@@ -380,4 +369,16 @@ export interface ApiResponse<T> {
   data: T;
   status: number;
   statusText: string;
+}
+
+//------------------------Blogs--------------------------
+
+export interface Post {
+    id?: React.Key,
+    title: string,
+    content: string,
+    createdDate: string,
+    files?: FileUpload[],
+    src?: string,
+    is_home?:boolean
 }

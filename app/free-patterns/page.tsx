@@ -1,23 +1,25 @@
 "use client"
-import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
+import { SegmentedValue } from "antd/es/segmented";
+
 import HeaderPart from "../components/header-part";
 import ViewTable from "../components/view-table";
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, TRANSLATION_STATUS } from "../lib/constant";
-import { DataType, initialListParams, Filter, ListParams } from "../lib/definitions";
+import { initialListParams, Filter, ListParams, DataTableState } from "../lib/definitions";
 import { fetchCategories } from "../lib/service/categoryService";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import { fetchFreePatterns } from "../lib/service/freePatternService";
-import { SegmentedValue } from "antd/es/segmented";
+
+const initialState: DataTableState = {
+    loading: false,
+    data: [],
+    totalRecord: 0,
+};
 
 const FreePattern = () => {
-
-    const [freePatterns, setFreePatterns] = useState<DataType[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [totalRecords, setTotalRecords] = useState(0);
+	const [state, setState] = useState(initialState);
 	const [params, setParams] = useState(initialListParams);
 	const [categories, setCategories] = useState<any[]>([]);
-	const t = useTranslations("FreePattern");
 
 	const onPageChange = (current: number, pageSize: number) => {
 		const newParams = {
@@ -29,12 +31,12 @@ const FreePattern = () => {
 	}
 
 	useEffect(() => {
-		setLoading(true);
+		setState({ ...state, loading: true });
 		fetchFreePatterns(params).then(({ data, totalRecords }) => {
-			setFreePatterns(data);
-			setTotalRecords(totalRecords);
-		}).finally(() => {
-			setLoading(false);
+			setState({ ...state, data, totalRecord: totalRecords });
+			
+		}).finally(() => {			
+			setState(prevState => ({ ...prevState, loading: false }));
 		});
 	}, [params]);
 
@@ -114,9 +116,9 @@ const FreePattern = () => {
 			<ViewTable
 				mode='Pattern'
 				onReadDetail={(id) => onViewFreePattern(id)}
-				dataSource={freePatterns}
-				total={totalRecords}
-				loading={loading}
+				dataSource={state.data}
+				total={state.totalRecord}
+				loading={state.loading}
 				isShowTabs
 				itemsTabs={categories}
 				pageIndex={params.pageNo}

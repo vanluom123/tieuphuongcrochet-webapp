@@ -81,7 +81,8 @@
       "input_email": "Please input your email!",
       "input_name": "Please input your name!",
       "input_title": "Please input title!",
-      "input_content": "Please input content!"
+      "input_content": "Please input content!",
+      "btn_send": "Send"
     }
   },
 
