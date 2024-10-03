@@ -5,6 +5,7 @@ import { map } from 'lodash';
 import BannerItem from './BannerItem';
 import { getBannersByType } from '@/app/lib/utils';
 import { Banner } from '@/app/lib/definitions';
+import '../../ui/components/banner-style.scss';
 
 interface BannersListProps {    
     banners: Banner[];

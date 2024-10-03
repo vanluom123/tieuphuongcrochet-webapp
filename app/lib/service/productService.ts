@@ -2,10 +2,10 @@ import { map } from "lodash";
 import { API_ROUTES } from "../constant";
 import { Product, FileUpload, ListParams, DataType } from "../definitions";
 import { getAvatar, mapImagesPreview } from "../utils";
-import fetchData from "../../api/fetchData";
+import apiService from "./apiService";
 
 export const fetchProducts = async (params: ListParams): Promise<{ data: DataType[], totalRecords: number }> => {
-    const res = await fetchData({
+    const res = await apiService({
         endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.PAGINATION}`,
         method: 'POST',
         queryParams: {
@@ -37,9 +37,12 @@ export const fetchProducts = async (params: ListParams): Promise<{ data: DataTyp
 };
 
 export const fetchProductDetail = async (id: string): Promise<Product> => {
-    const res = await fetchData({
+    const res = await apiService({
         endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.DETAIL}?id=${id}`,
         method: 'GET',
+    }).catch((err) => {
+        console.log("err", err);
+        return {} as Product;
     });
 
     const newData: Product = {

@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 import { fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
 
 export default function Page({ params }: { params: { slug: string } }) {
-    const id = params.slug;
+
     const [state, setState] = useState({
         pattern: { name: '' } as Pattern,
         loading: false,
@@ -19,14 +19,16 @@ export default function Page({ params }: { params: { slug: string } }) {
     const t = useTranslations("FreePattern");
 
     useEffect(() => {
-        setState({ ...state, loading: true });
+        if (params.slug) {
+            setState({ ...state, loading: true });
 
-        fetchFreePatternDetail(id as string).then(pattern => {
-            setState({ ...state, pattern: pattern })
-        }).finally(() => {			
-			setState(prevState => ({ ...prevState, loading: false }));
-		});
-    }, [id])
+            fetchFreePatternDetail(params.slug).then(pattern => {
+                setState({ ...state, pattern: pattern })
+            }).finally(() => {
+                setState(prevState => ({ ...prevState, loading: false }));
+            });
+        }
+    }, [params.slug])
 
     const { pattern, loading } = state;
 
@@ -44,7 +46,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 name='free-patterns'
                 contentTitle={t("detail")}
                 content={pattern.content}
-                images={pattern.files}            />
+                images={pattern.files} />
         </ViewDetailWrapper>
     )
 }

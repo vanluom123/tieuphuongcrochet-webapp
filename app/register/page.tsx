@@ -8,7 +8,7 @@ import { User } from "../lib/definitions";
 import Link from "next/link";
 import { ROUTE_PATH, REGEX, API_ROUTES } from "../lib/constant";
 import Image from "next/image";
-import fetchData from "../api/fetchData";
+import apiService from "../lib/service/apiService";
 import { useRouter } from "next/navigation";
 import '../ui/components/register.scss';
 
@@ -25,7 +25,7 @@ const RegisterPage = () => {
     const onSubmitRegister = async (values: User) => {
         console.log("values", values);
         setIsDisable(true);
-        const res = await fetchData({
+        const res = await apiService({
             baseUrl: process.env.NEXT_PUBLIC_API_URL,
             endpoint: API_ROUTES.SIGNUP,
             method: 'POST',

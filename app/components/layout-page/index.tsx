@@ -50,7 +50,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
             {/* Cover image - banner - breadcrumbs */}
             <CoverPage />
             <Content className='content-wrap container'>
-                {children   }
+                {children}
             </Content>
             <FooterPage currentNav={currentNav} />
             <FloatButton.BackTop visibilityHeight={0} />

@@ -1,95 +1,21 @@
+'use client'
 import React from 'react';
 import { Col, Empty, Flex, Row } from 'antd';
 import { map } from 'lodash';
-
+import { useRouter } from 'next/navigation';
 import HeaderPart from "../header-part";
 import ProductCard from '../product-card';
 import ReadMoreBtn from '../read-more';
 import { ROUTE_PATH } from '@/app/lib/constant';
 import { Product } from '@/app/lib/definitions';
-import patternImg from '../../../public/shope.jpg';
 
+const ProductsNode = ({products}: {products: Product[]}) => {
+ 
+  const router = useRouter();
+  const onViewProduct = (id: React.Key) => {
+    router.push(`${ROUTE_PATH.SHOP}/${id}`);
+  };
 
-export const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Cozy Knit Sweater',
-    price: 59.99,
-    description: 'A warm and stylish knit sweater perfect for chilly days.',
-    images: [
-      {
-        fileContent: 'base64encodedstring',
-        fileName: 'cozy_sweater.jpg',
-        url: 'https://example.com/images/cozy_sweater.jpg'
-      }
-    ],
-    src: patternImg.src,
-    author: 'Jane Doe',
-    currency_code: 'USD',
-    category: { id: 'cat1', name: 'Sweaters' },
-    imagesPreview: [
-      { src: 'https://example.com/images/cozy_sweater_preview.jpg', alt: 'Cozy Knit Sweater Preview' }
-    ],
-    link: '/products/cozy-knit-sweater',
-    content: 'This cozy knit sweater is made from soft, high-quality yarn...'
-  },
-  {
-    id: '2',
-    name: 'Summer Breeze Dress',
-    price: 45.50,
-    description: 'A light and airy dress perfect for summer days.',
-    images: [
-      {
-        fileContent: 'base64encodedstring',
-        fileName: 'summer_dress.jpg',
-        url: 'https://example.com/images/summer_dress.jpg'
-      }
-    ],
-    src: 'https://example.com/images/summer_dress.jpg',
-    author: 'Emily Smith',
-    currency_code: 'EUR',
-    category: { id: 'cat2', name: 'Dresses' },
-    imagesPreview: [
-      { src: 'https://example.com/images/summer_dress_preview.jpg', alt: 'Summer Breeze Dress Preview' }
-    ],
-    link: '/products/summer-breeze-dress',
-    content: 'This Summer Breeze Dress is designed to keep you cool and stylish...'
-  },
-  {
-    id: '3',
-    name: 'Classic Denim Jeans',
-    price: 79.99,
-    description: 'Timeless denim jeans that never go out of style.',
-    images: [
-      {
-        fileContent: 'base64encodedstring',
-        fileName: 'denim_jeans.jpg',
-        url: 'https://example.com/images/denim_jeans.jpg'
-      }
-    ],
-    src: 'https://example.com/images/denim_jeans.jpg',
-    author: 'John Smith',
-    currency_code: 'GBP',
-    category: { id: 'cat3', name: 'Jeans' },
-    imagesPreview: [
-      { src: 'https://example.com/images/denim_jeans_preview.jpg', alt: 'Classic Denim Jeans Preview' }
-    ],
-    link: '/products/classic-denim-jeans',
-    content: 'Our Classic Denim Jeans are crafted from high-quality denim...'
-  }
-];
-
-const ProductsNode = () => {
-
-  // const products = useAppSelector(selectHomeProducts);
-  // const loading = useAppSelector(selectHomeLoading);
-  // const navigate = useNavigate();
-
-  // const onViewProduct = (id) => {
-  //   navigate(`${ROUTE_PATH.SHOP}/${ROUTE_PATH.DETAIL}/${id}`);
-  // };
-
-  const products = mockProducts;
   return (
     <div className="products scroll-animate">
       <HeaderPart
@@ -104,7 +30,7 @@ const ProductsNode = () => {
                 <ProductCard
                   loading={false}
                   product={product}
-                  // onReadDetail={() => onViewProduct(product.id || '')}
+                  onReadDetail={() => onViewProduct(product.id || '')}
                 />
               </Col>
             )

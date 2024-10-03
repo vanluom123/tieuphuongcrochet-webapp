@@ -1,7 +1,6 @@
 import { Card, Image } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import logo from '@/public/logo.png';
 import { StaticImageData } from 'next/image';
@@ -20,7 +19,7 @@ interface SocialBoxProps {
 const SocialBox = ({ textColor, src, social, url, description }: SocialBoxProps) => {
 	return (
 		<a
-			href={url}
+			href={url || SOCIAL_LINKS.FACEBOOK}
 			target="_blank"
 			rel="noreferrer"
 			className='card-social'
@@ -42,20 +41,5 @@ const SocialBox = ({ textColor, src, social, url, description }: SocialBoxProps)
 		</a>
 	)
 }
-
-SocialBox.propTypes = {
-	textColor: PropTypes.string,
-	social: PropTypes.string.isRequired,
-	src: PropTypes.string,
-	description: PropTypes.string,
-	url: PropTypes.string
-};
-
-SocialBox.defaultProps = {
-	textColor: '#333',
-	src: logo,
-	url: SOCIAL_LINKS.FACEBOOK,
-	description: ''
-};
 
 export default SocialBox;

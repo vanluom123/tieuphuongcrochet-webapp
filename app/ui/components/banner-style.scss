@@ -1,0 +1,42 @@
+
+@import "../../variables.module.scss";
+
+.banner-item {
+	position: relative;
+
+	img {
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+	}
+
+	&__infor {
+		position: absolute;
+		text-align: center;
+		top: 50%;
+		right: 30%;
+		transform: translate(50%, -50%);
+
+		.title {
+			color: #fff;
+			margin-bottom: 0;
+			transition: all 1s ease 0s;
+			-webkit-transition: all 1s ease 0s;
+		}
+
+		.content {
+			color: #fff;
+			font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
+			font-weight: $fontWeight_normal;
+			margin: 5px auto;
+			max-width: 55%;
+		}
+
+		.btn-view {
+			font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
+			text-transform: uppercase;
+			padding: 5px;
+			border-radius: 0;
+		}
+	}
+}

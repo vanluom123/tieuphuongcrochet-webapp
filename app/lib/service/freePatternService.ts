@@ -2,10 +2,10 @@ import { map } from "lodash";
 import { API_ROUTES } from "../constant";
 import { FileUpload, ListParams, DataType, Pattern } from "../definitions";
 import { getAvatar, mapImagesPreview } from "../utils";
-import fetchData from "../../api/fetchData";
+import apiService from "./apiService";
 
 export const fetchFreePatterns = async (params: ListParams): Promise<{data: DataType[], totalRecords: number}> => {
-    const res = await fetchData({
+    const res = await apiService({
         endpoint: `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.PAGINATION}`,
         method: 'POST',
         queryParams: {
@@ -17,6 +17,7 @@ export const fetchFreePatterns = async (params: ListParams): Promise<{data: Data
         data: params.filters,
     }).catch((err) => {
         console.log("err", err);
+        return { data: [], totalElements: 0 }
     });
 
     const newData = map(res.contents, item => ({
@@ -34,9 +35,12 @@ export const fetchFreePatterns = async (params: ListParams): Promise<{data: Data
 };
 
 export const fetchFreePatternDetail = async (id: string): Promise<Pattern> => {
-    const data = await fetchData({
+    const data = await apiService({
         endpoint: `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.DETAIL}?id=${id}`,
         method: 'GET',
+    }).catch((err) => {
+        console.log("err", err);
+        return {} as Pattern;
     });
 
     const newData: Pattern = {
