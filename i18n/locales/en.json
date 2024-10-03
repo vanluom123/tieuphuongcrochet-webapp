@@ -60,12 +60,14 @@
   },
 
   "Blog": {
-    "title": "A place to share good things!!",
+    "title": "Blogs",
+    "message": "A place to share good things!!",
     "description": "A place to share good things!!"
   },
 
   "About": {
-    "title": "Well comte to my website!",
+    "title": "About us",
+    "message": "Well comte to my website!",
     "content": "Thank you for visiting my website. Hope you will find good things here. I love crocheting and creating beautiful and unique patterns. Hope you will like the products I make. On my website, there are many beautiful crochet patterns that I have collected. In the future, I will update many more beautiful crochet patterns and patterns that I have created myself. Please refer and choose a model that suits you. In addition to crochet patterns, I also sell pre-crocheted products. For pre-order products, you can also ask me to crochet according to the pattern you want by sending a request via email or via message on my Facebook page. I will try my best to bring you the best products. Thank you for supporting me!"
   },
 
@@ -81,7 +83,8 @@
       "input_name": "Please input your name!",
       "input_title": "Please input title!",
       "input_content": "Please input content!",
-      "btn_send": "Send"
+      "btn_send": "Send",
+      "error_msg_incorrect_email": "Email format is incorrect!"
     }
   },
 
