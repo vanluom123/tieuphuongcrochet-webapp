@@ -211,7 +211,7 @@ export interface Pattern {
 	description?: string;
 	files?: FileUpload[];
 	author?: string;
-	src?: string;
+	src: string;
 	images?: FileUpload[];
 	category?: Category;
 	imagesPreview?: { src: string, alt: string }[];
