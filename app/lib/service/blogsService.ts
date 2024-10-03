@@ -1,11 +1,11 @@
 import { API_ROUTES } from "../constant";
 import { DataType, ListParams, ListResponse, Post } from "../definitions";
-import fetchData from "../../api/fetchData";
+import apiService from "./apiService";
 import { map } from "lodash";
 import { getAvatar } from "../utils";
 
 export const fetchBlogs = async (params: ListParams): Promise<{data: DataType[], totalRecords: number}> => {
-    const res: ListResponse<Post>  = await fetchData({
+    const res: ListResponse<Post>  = await apiService({
         endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.PAGINATION}`,
         method: 'POST',
         queryParams: {
@@ -17,6 +17,7 @@ export const fetchBlogs = async (params: ListParams): Promise<{data: DataType[],
         data: params.filters,
     }).catch((err) => {
         console.log("err", err);
+        return { data: [], totalElements: 0 }
     });
 
     const newData = res.contents?.map(item => ({
@@ -35,10 +36,14 @@ export const fetchBlogs = async (params: ListParams): Promise<{data: DataType[],
 };
 
 export const fetchPostDetail = async (id: string): Promise<Post> => {
-    const res: Post = await fetchData({
+    const res: Post = await apiService({
         endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.DETAIL}?id=${id}`,
         method: 'GET',
+    }).catch((err) => {
+        console.log("err", err);
+        return {} as Post;
     });
+
     const newData = {
         ...res,
         src: getAvatar(res.files || []),

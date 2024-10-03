@@ -70,8 +70,6 @@ export default async function RootLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
 
-  console.log('locale', locale);
-  console.log('messages', messages);
   return (
     <html lang={locale}>
       <body>

@@ -1,3 +1,5 @@
+'use client'
+
 import React from "react";
 import { Col, Empty, Row } from "antd";
 import { map } from "lodash";
@@ -7,36 +9,15 @@ import HeaderPart from "../header-part";
 import { ROUTE_PATH } from "@/app/lib/constant";
 import ReadMoreBtn from "../read-more";
 import { Pattern } from "@/app/lib/definitions";
-import patternImg from '../../../public/shope.jpg';
+import { useRouter } from "next/navigation";
 
-export const mockPatterns: Pattern[] = [
-    {
-      id: 1,
-      name: "Cozy Sweater",
-      description: "A warm and stylish sweater pattern",
-      author: "Jane Doe",
-      src:patternImg.src,
-      imagesPreview: [{ src: "../../../public/shope.jpg", alt: "Cozy Sweater Preview" }],
-      category: { id: 1, name: "Sweaters" },
-      currency_code: "USD",
-      status: "SUCCESS",
-      home: true
-    },
-    {
-      id: 2,
-      name: "Summer Dress",
-      description: "Light and breezy summer dress pattern",
-      author: "John Smith",
-      src:patternImg.src,
-      imagesPreview: [{ src: "../../../public/shope.jpg", alt: "Summer Dress Preview" }],
-      category: { id: 2, name: "Dresses" },
-      status: "PENDING"
-    },
-    // Add more mock patterns as needed
-  ];
+const FreePatternsNode = ({patterns}: {patterns: Pattern[]}) => {
 
-const FreePatternsNode = () => {
-    const patterns = mockPatterns;
+	const router = useRouter();
+	const onViewPattern = (id: React.Key) => {
+		router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`);
+	};
+	
 	return (
 		<div className='patterns scroll-animate'>
 			<HeaderPart
@@ -50,6 +31,7 @@ const FreePatternsNode = () => {
 						<Col key={`freepattern_${index}`} xs={12} sm={8} lg={6} >
 							<FreePatternCard
 								pattern={pattern}
+								onReadDetail={() => onViewPattern(pattern.id || '')}
 							/>
 						</Col>
 					)

@@ -6,10 +6,10 @@ import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
 import { JwtPayload } from 'jsonwebtoken';
 import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from "next-auth/providers/google";
-import fetchData from '../../fetchData';
+import apiService from '../../../lib/service/apiService';
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
-  const res = await fetchData({
+  const res = await apiService({
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
     endpoint: `${API_ROUTES.REFRESH_TOKEN}?refreshToken=${token.refreshToken}`,
     method: 'POST',
@@ -65,7 +65,7 @@ export const options: NextAuthOptions = {
           return null;
         }
 
-        const res = await fetchData({
+        const res = await apiService({
           baseUrl: process.env.NEXT_PUBLIC_API_URL,
           endpoint: API_ROUTES.LOGIN,
           method: 'POST',

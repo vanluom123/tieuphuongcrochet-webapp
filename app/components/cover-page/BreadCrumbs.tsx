@@ -12,10 +12,10 @@ import { BreadcrumbItemType, BreadcrumbSeparatorType } from "antd/es/breadcrumb/
 
 interface BreadCrumbsProps {
     pathname: string;
-    banners: Banner[];
+    banners?: Banner[];
 }
 
-const BreadCrumbs = ({ pathname = '', banners }: BreadCrumbsProps) => {
+const BreadCrumbs = ({ pathname = '', banners = [] }: BreadCrumbsProps) => {
     const t = useTranslations("MenuNav");
 
     const { crumbs, titlePage, bannerType } = useMemo(() => {

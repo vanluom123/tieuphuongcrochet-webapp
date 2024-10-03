@@ -29,7 +29,7 @@ const ProductCard = (
 		onPreview,
 		onReadDetail,
 		onShopping,
-		parentLink = `${ROUTE_PATH.SHOP}/${ROUTE_PATH.DETAIL}`,
+		parentLink = `${ROUTE_PATH.SHOP}`,
 		loading
 	}: ProductCardProps) => {
 	const t = useTranslations("Btn");

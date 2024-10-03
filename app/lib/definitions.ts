@@ -293,7 +293,7 @@ export interface ProductPayloadFile {
 
 export interface HomeData {
 	products: Product[],
-	patterns: Pattern[],
+	patterns?: Pattern[],
 	freePatterns: Pattern[],
 	banners: Banner[],
 	blogs: Post[]

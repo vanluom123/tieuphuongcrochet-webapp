@@ -1,15 +1,15 @@
-// import { Alert, Divider, Space, Spin } from "antd";
 'use client'
+import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { Divider } from "antd";
+
 import IntroductionCard from "@/app/components/introduction-card";
 import ViewDetailWrapper from "@/app/components/view-detail-wrapper";
 import ViewImagesList from "@/app/components/view-image-list";
 import { Product } from "@/app/lib/definitions";
 import { fetchProductDetail } from "@/app/lib/service/productService";
-import {Divider } from "antd";
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+
 export default function Page({ params }: { params: { slug: string } }) {
-    const id = params.slug;
     const [state, setState] = useState({
         product: { name: '' } as Product,
         loading: false,
@@ -18,14 +18,15 @@ export default function Page({ params }: { params: { slug: string } }) {
     const t = useTranslations("Shop");
 
     useEffect(() => {
-        setState({ ...state, loading: true });
-
-        fetchProductDetail(id as string).then(product => {
-            setState({ ...state, product: product })
-        }).finally(() => {			
-			setState(prevState => ({ ...prevState, loading: false }));
-		});
-    }, [id])
+        if (params.slug) {
+            setState({ ...state, loading: true });
+            fetchProductDetail(params.slug as string).then(product => {
+                setState({ ...state, product: product })
+            }).finally(() => {
+                setState(prevState => ({ ...prevState, loading: false }));
+            });
+        }
+    }, [params.slug])
 
     const { product, loading } = state;
 
@@ -35,7 +36,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             isShowAlert
             alertMessage={t("note")}
             alertType="info">
-                
+
             {/* Introducing the product */}
             <IntroductionCard isPreviewAvatar={false} data={product} />
             <Divider />
