@@ -1,21 +1,23 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Card, Image } from 'antd';
+
 import { ROUTE_PATH } from '@/app/lib/constant';
 import { Post } from '@/app/lib/definitions';
-import Link from 'next/link';
 import ReadMoreBtn from '../read-more';
 import '../../ui/components/blogCard.scss';
 
 interface BlogCardProps {
-	item: Post,
-}
+		item: Post,
+		onReadDetail?: () => void;
+	}
 
-const BlogCard = ({ item }: BlogCardProps) => {
+const BlogCard = ({ item, onReadDetail }: BlogCardProps) => {
 	const { Meta } = Card;
 	const { createdDate, title, src, id } = item;
-	const detailPath = `${ROUTE_PATH.BLOG}/${ROUTE_PATH.DETAIL}/${id}`;
+	const detailPath = `${ROUTE_PATH.BLOG}/${id}`;
 
 	const date = new Date(createdDate);
 	const month = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
@@ -38,9 +40,8 @@ const BlogCard = ({ item }: BlogCardProps) => {
 				</div>
 			}
 		>
-			<Meta title={
-				<Link href={detailPath}>{title}</Link>
-			}
+			<Meta title={<Link href={detailPath} tabIndex={1} className='card-title' onClick={onReadDetail}>{title}</Link>}
+
 			/>
 			<ReadMoreBtn path={detailPath} />
 		</Card>

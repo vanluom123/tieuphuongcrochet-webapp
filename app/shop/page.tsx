@@ -1,127 +1,64 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeaderPart from "../components/header-part";
-import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION } from "../lib/constant";
-import { initialViewTableParams, Filter, ListParams, DataType } from "../lib/definitions";
+import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH } from "../lib/constant";
+import { Filter, initialListParams, ListParams, DataTableState } from "../lib/definitions";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
-import { useTranslations } from "next-intl";
+import { fetchProducts } from "../lib/service/productService";
+import { fetchCategories } from "../lib/service/categoryService";
+import { useRouter } from "next/navigation";
 
-const mockProductData: DataType[] = [
-	{
-		key: '1',
-		name: 'Sample Product 1',
-		price: 19.99,
-		description: 'This is a sample product description.',
-		images: [{ fileContent: 'base64encodedimage', fileName: 'product1.jpg', url: 'https://example.com/product1.jpg' }],
-		src: 'https://example.com/product1.jpg',
-		author: 'John Doe',
-		currency_code: 'USD',
-		imagesPreview: [{ src: 'https://example.com/product1.jpg', alt: 'Product 1' }],
-		link: 'https://example.com/product/1',
-		content: 'Detailed content about the product goes here.'
-	},
-	{
-		key: '2',
-		name: 'Sample Product 2',
-		price: 29.99,
-		description: 'Another sample product description.',
-		images: [{ fileContent: 'base64encodedimage', fileName: 'product2.jpg', url: 'https://example.com/product2.jpg' }],
-		src: 'https://example.com/product2.jpg',
-		author: 'Jane Smith',
-		currency_code: 'EUR',
-		imagesPreview: [{ src: 'https://example.com/product2.jpg', alt: 'Product 2' }],
-		link: 'https://example.com/product/2',
-		content: 'More detailed content about this product.'
-	}
-];
-
-const mockCategories: DataType[] = [
-	{
-		name: 'Electronics',
-		key: 'electronics',
-		children: [
-			{
-				id: '1-1',
-				name: 'Smartphones',
-				key: 'smartphones',
-			},
-			{
-				id: '1-2',
-				name: 'Laptops',
-				key: 'laptops',
-			}
-		]
-	},
-	{
-		name: 'Clothing',
-		key: 'clothing',
-		children: [
-			{
-				id: '2-1',
-				name: 'Men\'s Wear',
-				key: 'mens-wear',
-			},
-			{
-				id: '2-2',
-				name: 'Women\'s Wear',
-				key: 'womens-wear',
-			}
-		]
-	},
-	{
-		name: 'Books',
-		key: 'books',
-	}
-];
-
-
+const initialState: DataTableState = {
+    loading: false,
+    data: [],
+    totalRecord: 0,
+};
 
 const Shop = () => {
-	// const navigate = useNavigate();
-	// const dispatch = useAppDispatch();
-	// const productList: DataType[] = useAppSelector(selectProducts);
-	// const totalRecords = useAppSelector(selectTotalRecords);
-	// const loading = useAppSelector(selectLoading);
-	// const categories = useAppSelector(state => state.category.data);
+	const [state, setState] = useState(initialState);
+	const [params, setParams] = useState(initialListParams);
+	const [categories, setCategories] = useState<any[]>([]);
 
-	const [params, setParams] = useState(initialViewTableParams);
-
-	const t = useTranslations("Shop");
+	const router = useRouter();
 
 	const onPageChange = (current: number, pageSize: number) => {
 		const newParams = {
 			...params,
-			_pageNo: current - 1,
-			_pageSize: pageSize,
+			pageNo: current - 1,
+			pageSize: pageSize,
 		}
 		setParams(newParams)
 	}
 
+	useEffect(() => {
+		setState({ ...state, loading: true });
+		fetchProducts(params).then(({ data, totalRecords }) => {
+			setState({ ...state, data, totalRecord: totalRecords });
+		}).finally(() => {
+			setState(prevState => ({ ...prevState, loading: false }));
+		});
+	}, [params]);
 
-	// useEffect(() => {
-	// 	dispatch(productAction.fetchData(params));
-	// }, [params]);
-
-	// useEffect(() => {
-	// 	if (categories.length <= 0) {
-	// 		dispatch(categoryAction.fetchData());
-	// 	}
-	// }, [categories.length, dispatch]);
+	useEffect(() => {
+		fetchCategories().then((data) => {
+			setCategories(data);
+		});
+	}, []);
 
 	const onSearchProducts = (value: string) => {
-		const filters: Filter = filterByText(value, 'name', 'description');
-		const tempFilters = mapNameFilters(params.filters, 'searchText', filters);
+		const prodFilter: Filter = filterByText(value, 'name', 'description');
+		const tempFilters = mapNameFilters(params.filters as Filter[], 'searchText', prodFilter);
 
 		const newParams = {
-			...initialViewTableParams,
+			...initialListParams,
 			filters: tempFilters
 		};
 		setParams(newParams);
 	}
 
 	const onViewProduct = (id: React.Key) => {
-		// navigate(`${ROUTE_PATH.SHOP}/${ROUTE_PATH.DETAIL}/${id}`);
+		router.push(`${ROUTE_PATH.SHOP}/${id}`);
 	};
 
 	const onTabChange = (key: React.Key) => {
@@ -139,10 +76,10 @@ const Shop = () => {
 			}
 			;
 
-		const tempFilters = mapNameFilters(params.filters, 'category', categoryFilter);
+		const tempFilters = mapNameFilters(params.filters as Filter[], 'category', categoryFilter);
 
 		const newParams: ListParams = {
-			...initialViewTableParams,
+			...initialListParams,
 			filters: tempFilters
 		};
 
@@ -155,15 +92,15 @@ const Shop = () => {
 			<ViewTable
 				mode='Product'
 				onReadDetail={(id) => onViewProduct(id)}
-				dataSource={mockProductData as DataType[]}
-				total={48}
-				loading={false}
+				dataSource={state.data}
+				total={state.totalRecord}
+				loading={state.loading}
 				isShowTabs
-				itemsTabs={mockCategories}
-				pageIndex={params._pageNo}
-				pageSize={params._pageSize}
+				itemsTabs={categories}
+				pageIndex={params.pageNo}
+				pageSize={params.pageSize}
 				onPageChange={onPageChange}
-				// onSeach={onSearchProducts}
+				onSearch={onSearchProducts}
 				onTabChange={onTabChange}
 			/>
 		</div>

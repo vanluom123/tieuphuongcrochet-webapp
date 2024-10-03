@@ -174,7 +174,7 @@ export const getDateFormatted = (dateString: string | number | Date, locale: 'en
     const hour = new Intl.DateTimeFormat(locale, { hour: '2-digit' }).format(date);
     const minute = new Intl.DateTimeFormat(locale, { minute: '2-digit' }).format(date);
 
-    return `${day}/ ${month}/ ${year}  ${hour}:${minute}`
+    return `${day} ${month}, ${year} - ${hour}:${minute}`
 }
 
 export const getBaseUrl = () => {

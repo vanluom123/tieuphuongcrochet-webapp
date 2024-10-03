@@ -18,26 +18,18 @@ export interface ListResponse<T> {
 };
 
 export interface ListParams {
-	_pageNo: number;
-	_pageSize: number;
-	_sortBy?: string;
-	_sortDir?: 'asc' | 'desc';
-	filters: Filter[];
+	pageNo: number;
+	pageSize: number;
+	sortBy?: string;
+	sortDir?: 'asc' | 'desc';
+	filters?: Filter[];
 };
 
 export const initialListParams: ListParams = {
-	_pageNo: 0,
-	_pageSize: 30,
-	_sortBy: 'createdDate',
-	_sortDir: 'desc',
-	filters: []
-};
-
-export const initialViewTableParams: ListParams = {
-	_pageNo: 0,
-	_pageSize: 48,
-	_sortBy: 'createdDate',
-	_sortDir: 'desc',
+	pageNo: 0,
+	pageSize: 48,
+	sortBy: 'createdDate',
+	sortDir: 'desc',
 	filters: []
 };
 
@@ -240,12 +232,7 @@ export interface PatternPayload {
 	callback: () => void;
 };
 
-export interface PatternState {
-	loading: boolean;
-	data: DataType[];
-	totalRecord: number;
-	pattern: Pattern;
-}
+
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';
 
@@ -271,11 +258,10 @@ export interface PostPayloadFile {
     resolve?: unknown
 }
 
-export interface PostState {
+export interface DataTableState {
     loading: boolean;
     data: DataType[];
     totalRecord: number;
-    post: Post;
 }
 
 export interface PostPayload {
@@ -313,12 +299,7 @@ export interface HomeData {
 	blogs: Post[]
 };
 
-export interface ProductState {
-	loading: boolean;
-	data: DataType[];
-	totalRecord: number;
-	product: Product;
-}
+
 
 export interface ProductPayload {
 	params: Product;
@@ -388,4 +369,16 @@ export interface ApiResponse<T> {
   data: T;
   status: number;
   statusText: string;
+}
+
+//------------------------Blogs--------------------------
+
+export interface Post {
+    id?: React.Key,
+    title: string,
+    content: string,
+    createdDate: string,
+    files?: FileUpload[],
+    src?: string,
+    is_home?:boolean
 }

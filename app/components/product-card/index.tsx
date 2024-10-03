@@ -8,23 +8,9 @@ import Link from 'next/link'
 
 import { IMAGE_FALLBACK, ROUTE_PATH } from '@/app/lib/constant';
 import { Product } from '@/app/lib/definitions';
+import FormattedCurrency from '../forrmat-currency';
 
 import '../../ui/components/productCard.scss';
-
-
-interface FormattedCurrencyProps {
-	currencyCode: string;
-	price: number;
-}
-
-const FormattedCurrency: React.FC<FormattedCurrencyProps> = ({ currencyCode, price }) => {
-	const formattedPrice = new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: currencyCode,
-	}).format(price);
-
-	return <span>{formattedPrice}</span>;
-};
 
 interface ProductCardProps {
 	width?: string | number;
@@ -105,7 +91,7 @@ const ProductCard = (
 			{name &&
 				<Meta
 					title={<span tabIndex={1} className='card-title' onClick={onClickBtn}>{name}</span>}
-					description={<FormattedCurrency currencyCode={currency_code as string} price={price as number} />}
+					description={<FormattedCurrency price={price} currency_code={currency_code || 'VND'} />}
 				/>
 			}
 		</Card>

@@ -1,0 +1,95 @@
+@import "../../variables.module.scss";
+
+.introduction-card {
+  .card-title {
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  .author {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 48px;
+  }
+
+  .thumbnail-photos {
+    width: 100%;
+    padding: 10px 30px 0;
+    position: relative;
+
+    &.show-prev-next {
+      &:hover {
+        .prev,
+        .next {
+          transform: scale(1);
+          transition: 0.3;
+        }
+      }
+    }
+
+    .prev,
+    .next {
+      position: absolute;
+      top: 35%;
+      transform: scale(0);
+    }
+
+    .prev {
+      left: 15px;
+    }
+
+    .next {
+      right: 15px;
+    }
+
+    .images-outer {
+
+      position: relative;
+      overflow-x: scroll;
+      transform: translate3d(0, 0, 0);
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .images {
+
+        .ant-image {
+          &:not(:last-child) {
+            margin-right: 10px;
+          }
+
+          .thumbnail-item {
+            opacity: 0.5;
+            object-fit: fill;
+
+            &:hover {
+              opacity: .7;
+            }
+          
+            &.active-thumbnail {
+              opacity: 1;
+            }
+          }
+        }
+
+        // @media screen and (min-width: $xs) {
+        // 	width: 435px;
+        // }
+
+        // @media screen and (min-width: $md) {
+        // 	width: 600px;
+        // }
+
+        // @media screen and (min-width: $xl) {
+        // 	width: 900px;
+        // }
+
+        // @media screen and (min-width: $xxl) {
+        // 	width: 1000px;
+        // }
+      }
+    }
+  }
+}
