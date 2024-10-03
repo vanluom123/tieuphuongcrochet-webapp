@@ -1,10 +1,10 @@
-async function fetchData<T = any>({
+async function apiService<T = any>({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
     endpoint = '',
     method = 'GET',
     data = null,
     headers = {},
-    timeout = 5000,
+    timeout = 20000,
     queryParams = {},
     retries = 3,
     logRequests = false
@@ -81,4 +81,4 @@ async function fetchData<T = any>({
     return makeRequest(1);
 }
 
-export default fetchData;
+export default apiService;
