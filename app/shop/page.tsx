@@ -1,12 +1,13 @@
 'use client'
 import { useEffect, useState } from "react";
 import HeaderPart from "../components/header-part";
-import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION } from "../lib/constant";
+import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH } from "../lib/constant";
 import { Filter, initialListParams, ListParams, DataTableState } from "../lib/definitions";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
 import { fetchProducts } from "../lib/service/productService";
 import { fetchCategories } from "../lib/service/categoryService";
+import { useRouter } from "next/navigation";
 
 const initialState: DataTableState = {
     loading: false,
@@ -18,6 +19,8 @@ const Shop = () => {
 	const [state, setState] = useState(initialState);
 	const [params, setParams] = useState(initialListParams);
 	const [categories, setCategories] = useState<any[]>([]);
+
+	const router = useRouter();
 
 	const onPageChange = (current: number, pageSize: number) => {
 		const newParams = {
@@ -55,6 +58,7 @@ const Shop = () => {
 	}
 
 	const onViewProduct = (id: React.Key) => {
+		router.push(`${ROUTE_PATH.SHOP}/${id}`);
 	};
 
 	const onTabChange = (key: React.Key) => {

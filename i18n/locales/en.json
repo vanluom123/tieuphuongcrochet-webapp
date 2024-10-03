@@ -40,10 +40,9 @@
   "Shop": {
     "title": "Products",
     "description": "Below are the products I made! If you want me to follow your order, please inbox me! In the future, I will update new products and add an ordering function to make it easier for you to order.",
-    "Product": {
-      "detail": "Product images",
-      "note": "If I accidentally posted a copyrighted chart, please tell me so I can take it down! Thank you!"
-    }
+    "detail": "Product images",
+    "note": "If you want to order this product according to your requirements, please contact me. I will try my best to bring you the best products. Thank you!"
+
   },
 
   "FreePattern": {
@@ -105,5 +104,10 @@
     "name": "Full name",
     "email": "Email",
     "error_msg_incorrect_email": "Email format is incorrect!"
+  },
+
+  "IntroductionCard": {
+    "author": "Author",
+    "btn_buy": "Order"
   }
 }

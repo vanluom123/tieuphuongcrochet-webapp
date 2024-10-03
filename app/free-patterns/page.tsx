@@ -1,10 +1,11 @@
 "use client"
 import { useState, useEffect } from "react";
 import { SegmentedValue } from "antd/es/segmented";
+import { useRouter } from "next/navigation";
 
 import HeaderPart from "../components/header-part";
 import ViewTable from "../components/view-table";
-import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, TRANSLATION_STATUS } from "../lib/constant";
+import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH, TRANSLATION_STATUS } from "../lib/constant";
 import { initialListParams, Filter, ListParams, DataTableState } from "../lib/definitions";
 import { fetchCategories } from "../lib/service/categoryService";
 import { filterByText, mapNameFilters } from "../lib/utils";
@@ -21,6 +22,7 @@ const FreePattern = () => {
 	const [params, setParams] = useState(initialListParams);
 	const [categories, setCategories] = useState<any[]>([]);
 
+	const router = useRouter();	
 	const onPageChange = (current: number, pageSize: number) => {
 		const newParams = {
 			...params,
@@ -58,6 +60,7 @@ const FreePattern = () => {
 	}
 
 	const onViewFreePattern = (id: React.Key) => {
+		router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`);
 	};
 
 	const onTabChange = (key: React.Key) => {

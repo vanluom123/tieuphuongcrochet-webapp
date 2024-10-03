@@ -102,7 +102,7 @@ const ViewTable = (
             case 'Pattern':
                 return <FreePatternCard loading={loading} pattern={item} onReadDetail={() => onReadDetail(item.key)} />;
             default:
-                return <BlogCard item={{ ...item } as Post} />;
+                return <BlogCard item={{ ...item } as Post} onReadDetail={() => onReadDetail(item.key)}/>;
         }
     }, [mode, loading, onReadDetail]);
 

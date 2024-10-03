@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
-import { FileUpload, ListParams, DataType, FreePattern } from "../definitions";
+import { FileUpload, ListParams, DataType, Pattern } from "../definitions";
 import { getAvatar, mapImagesPreview } from "../utils";
 import fetchData from "../../api/fetchData";
 
@@ -31,4 +31,20 @@ export const fetchFreePatterns = async (params: ListParams): Promise<{data: Data
         data: newData as DataType[],
         totalRecords: res.totalElements || 0
     }
+};
+
+export const fetchFreePatternDetail = async (id: string): Promise<Pattern> => {
+    const data = await fetchData({
+        endpoint: `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.DETAIL}?id=${id}`,
+        method: 'GET',
+    });
+
+    const newData: Pattern = {
+        ...data,
+        src: getAvatar(data.images as FileUpload[]),
+        files: data.files ? map(data.files, f => ({...f, url: f?.fileContent})) : [],
+        images: data.images ? map(data.images, f => ({...f, url: f?.fileContent})) : [],
+    };
+    
+    return newData;
 };

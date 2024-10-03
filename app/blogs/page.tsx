@@ -1,24 +1,29 @@
 'use client'
 import { Flex, Alert } from "antd";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
+
 import ViewTable from "../components/view-table";
 import { Filter, DataTableState, initialListParams } from "../lib/definitions";
 import { filterByText } from "../lib/utils";
-import { useTranslations } from "next-intl";
 import { fetchBlogs } from "../lib/service/blogsService";
+import { ROUTE_PATH } from "../lib/constant";
 
 const initialState: DataTableState = {
-    loading: false,
-    data: [],
-    totalRecord: 0,
+	loading: false,
+	data: [],
+	totalRecord: 0,
 };
 
 const Blogs = () => {
 
-    const [state, setState] = useState(initialState);
+	const [state, setState] = useState(initialState);
 	const [params, setParams] = useState(initialListParams);
-    const t = useTranslations("Blog");
- 
+
+	const t = useTranslations("Blog");
+	const router = useRouter();
+
 	const onPageChange = (current: number, pageSize: number) => {
 		const newParams = {
 			...params,
@@ -32,13 +37,14 @@ const Blogs = () => {
 		setState({ ...state, loading: true });
 		fetchBlogs(params).then(({ data, totalRecords }) => {
 			setState({ ...state, data, totalRecord: totalRecords });
-			
-		}).finally(() => {			
+
+		}).finally(() => {
 			setState(prevState => ({ ...prevState, loading: false }));
-		});	}, [params]);
+		});
+	}, [params]);
 
 	const onSearchPosts = (value: string) => {
-		const filters: Filter= filterByText(value, 'title');
+		const filters: Filter = filterByText(value, 'title');
 		const newParams = {
 			...initialListParams,
 			filters: [filters]
@@ -47,7 +53,7 @@ const Blogs = () => {
 	}
 
 	const onViewBlog = (id: React.Key) => {
-		// navigate(`${ROUTE_PATH.FREEPATTERNS}/${ROUTE_PATH.DETAIL}/${id}`)
+		router.push(`${ROUTE_PATH.BLOG}/${id}`);
 	};
 
 	return (

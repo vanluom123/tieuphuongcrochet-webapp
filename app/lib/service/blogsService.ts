@@ -1,6 +1,8 @@
 import { API_ROUTES } from "../constant";
 import { DataType, ListParams, ListResponse, Post } from "../definitions";
 import fetchData from "../../api/fetchData";
+import { map } from "lodash";
+import { getAvatar } from "../utils";
 
 export const fetchBlogs = async (params: ListParams): Promise<{data: DataType[], totalRecords: number}> => {
     const res: ListResponse<Post>  = await fetchData({
@@ -30,4 +32,17 @@ export const fetchBlogs = async (params: ListParams): Promise<{data: DataType[],
         data: newData as DataType[],
         totalRecords: res.totalElements || 0
     }
+};
+
+export const fetchPostDetail = async (id: string): Promise<Post> => {
+    const res: Post = await fetchData({
+        endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.DETAIL}?id=${id}`,
+        method: 'GET',
+    });
+    const newData = {
+        ...res,
+        src: getAvatar(res.files || []),
+        files: res.files ? map(res.files, f => ({...f, url: f?.fileContent})) : [],
+    };
+    return newData;
 };
