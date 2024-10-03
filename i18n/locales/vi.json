@@ -41,10 +41,8 @@
   "Shop": {
     "title": "Sản phẩm",
     "description": "Dưới đây là những sản phẩm mà mình đã làm nè! Nếu các bạn muốn mình làm theo yêu cầu của bạn thì hãy inbox cho mình nhé! Tương lai, mình sẽ cập nhật thêm những sản phẩm mới và có thêm chức năng đặt hàng để các bạn dễ đặt hàng hơn nè. Hãy ủng hộ cho mình nhé!",
-    "Product": {
-      "detail": "Hình ảnh sản phẩm",
-      "note": "Nếu bạn muốn đặt mua sản phẩm này theo yêu cầu của bạn, hãy liên hệ với mình nhé. Mình sẽ cố gắng hết sức để mang đến cho bạn những sản phẩm tốt nhất. Cảm ơn bạn!"
-    }
+    "detail": "Hình ảnh sản phẩm",
+    "note": "Nếu bạn muốn đặt mua sản phẩm này theo yêu cầu của bạn, hãy liên hệ với mình nhé. Mình sẽ cố gắng hết sức để mang đến cho bạn những sản phẩm tốt nhất. Cảm ơn bạn!"
   },
 
   "FreePattern": {
@@ -83,7 +81,8 @@
       "input_name": "Nhập tên",
       "input_title": "Nhập tiêu đề",
       "input_content": "Nhập nội dung",
-      "error_msg_incorrect_email": "Định dạng email không chính xác!"
+      "error_msg_incorrect_email": "Định dạng email không chính xác!",
+      "btn_send": "Gửi"
     }
   },
 
@@ -103,5 +102,10 @@
   "Form": {
     "name": "Họ và tên",
     "email": "Email"
+  },
+
+  "IntroductionCard": {
+    "author": "Tac gia",
+    "btn_buy": "Dat hang"
   }
 }
