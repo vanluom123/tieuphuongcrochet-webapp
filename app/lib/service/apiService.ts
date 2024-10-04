@@ -1,4 +1,4 @@
-async function apiService<T = any>({
+async function apiService<T = unknown>({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
     endpoint = '',
     method = 'GET',
@@ -67,8 +67,8 @@ async function apiService<T = any>({
             } else {
                 return await response.text();
             }
-        } catch (error: any) {
-            if (attempt <= retries && (error.name === 'AbortError' || error.message.includes('Server error'))) {
+        } catch (error: unknown) {
+            if (attempt <= retries && (error instanceof Error && (error.name === 'AbortError' || error.message.includes('Server error')))) {
                 console.warn(`Retrying request... Attempt ${attempt} failed`);
                 return makeRequest(attempt + 1);
             } else {
