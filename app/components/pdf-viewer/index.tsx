@@ -6,7 +6,7 @@ import '../../ui/components/pdfViewer.scss';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-const PdfViewer = ({ pdfFile }: { pdfFile: any }) => {
+const PdfViewer = ({ pdfFile }: { pdfFile: File | string }) => { // Specify a more precise type
   const [numPages, setNumPages] = useState<number>();
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
@@ -19,13 +19,14 @@ const PdfViewer = ({ pdfFile }: { pdfFile: any }) => {
         file={pdfFile}
         onLoadSuccess={onDocumentLoadSuccess}
       >
-        {Array.apply(null, Array(numPages))
-          .map((x, i) => i + 1)
-          .map((page) =>
-            <Page pageNumber={page}
-              renderTextLayer={false}
-              renderAnnotationLayer={false} />
-          )}
+        {[...Array(numPages)].map((_, i) => ( // Use spread operator
+          <Page
+            key={i} // Add key prop
+            pageNumber={i + 1}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+          />
+        ))}
       </Document>
     </div>
   );

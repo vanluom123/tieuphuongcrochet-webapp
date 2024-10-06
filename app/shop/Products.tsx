@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import HeaderPart from "../components/header-part";
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH } from "../lib/constant";
-import { Filter, initialListParams, ListParams, DataTableState } from "../lib/definitions";
+import { Filter, initialListParams, ListParams, DataTableState, Category, DataType } from "../lib/definitions";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
 import { fetchProducts } from "../lib/service/productService";
@@ -18,7 +18,7 @@ const initialState: DataTableState = {
 const Products = () => {
 	const [state, setState] = useState(initialState);
 	const [params, setParams] = useState(initialListParams);
-	const [categories, setCategories] = useState<any[]>([]);
+	const [categories, setCategories] = useState<Category[]>([]);
 
 	const router = useRouter();
 
@@ -42,7 +42,7 @@ const Products = () => {
 
 	useEffect(() => {
 		fetchCategories().then((data) => {
-			setCategories(data);
+			setCategories(data as Category[]);
 		});
 	}, []);
 
@@ -96,7 +96,7 @@ const Products = () => {
 				total={state.totalRecord}
 				loading={state.loading}
 				isShowTabs
-				itemsTabs={categories}
+				itemsTabs={categories as DataType[]}
 				pageIndex={params.pageNo}
 				pageSize={params.pageSize}
 				onPageChange={onPageChange}
