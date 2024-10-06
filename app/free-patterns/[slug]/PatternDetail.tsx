@@ -39,7 +39,7 @@ const PatternDetail = ({ params }: { params: { slug: string } }) => {
             alertType="warning">
 
             {/* Introducing the free pattern */}
-            <IntroductionCard isPreviewAvatar={false} data={pattern} />
+            <IntroductionCard isPreviewAvatar={false} data={pattern} isShowThumbnail />
             <Divider />
             <ViewImagesList
                 name='free-patterns'
