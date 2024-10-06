@@ -34,7 +34,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
 
     // const currentUser = useAppSelector((state) => state.auth.currentUser);
 
-    if (pathname === ROUTE_PATH.LOGIN || pathname.includes(ROUTE_PATH.ADMIN) || pathname === ROUTE_PATH.REGISTER) {
+    if (pathname === ROUTE_PATH.LOGIN || pathname.includes(ROUTE_PATH.DASHBOARD) || pathname === ROUTE_PATH.REGISTER) {
         return (
             <Layout className='layout-wrap'>
                 {children}

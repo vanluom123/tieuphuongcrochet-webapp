@@ -109,5 +109,49 @@
   "IntroductionCard": {
     "author": "Tác giả",
     "btn_buy": "Đặt hàng"
+  },
+  "UserAccount": {
+    "sign_in": "Đăng nhập",
+    "sign_out": "Đăng xuất",
+    "profile": "Hồ sơ",
+    "logout": "Đăng xuất",
+    "logout_confirm": "Bạn có chắc chắn muốn đăng xuất?",
+    "dashboard": "Bảng điều khiển"
+  },
+  "Login": {
+    "title": "Đăng nhập",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "btn_login": "Đăng nhập",
+    "btn_register": "Đăng ký",
+    "input_email": "Email",
+    "input_password": "Mật khẩu",
+    "remember_me": "Ghi nhớ tôi",
+    "forgot_password": "Quên mật khẩu",
+    "error_msg_incorrect_email": "Định dạng email không chính xác!",
+    "error_msg_required_email": "Vui lòng nhập email",
+    "error_msg_required_password": "Vui lòng nhập mật khẩu",
+    "error_msg_incorrect_password": "Định dạng mật khẩu không chính xác!"
+  },
+  "Register": {
+    "title": "Đăng ký",
+    "account_exist": "Đã có tài khoản?",
+    "btn_sign_in": "Đăng nhập!",
+    "btn_register": "Đăng ký",
+    "btn_cancel": "Hủy",
+    "input_fullname": "Họ và tên",
+    "input_email": "Email",
+    "input_password": "Mật khẩu",
+    "input_confirm_password": "Nhập lại mật khẩu",
+    "error_msg_required_fullname": "Vui lòng nhập họ và tên",
+    "error_msg_required_email": "Vui lòng nhập email",
+    "error_msg_required_password": "Vui lòng nhập mật khẩu",
+    "error_msg_required_confirm_password": "Vui lòng nhập lại mật khẩu",
+    "error_msg_not_match_confirm_password": "Không khớp mật khẩu!",
+    "error_msg_incorrect_email": "Định dạng email không chính xác!",
+    "error_msg_incorrect_password": "Định dạng mật khẩu không chính xác!",
+    "note_title": "Lưu ý",
+    "note_content_1": "Các trường bắt buộc",
+    "note_content_2": "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 ký tự đặc biệt, chữ thường và số."
   }
 }

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 import { User } from '../lib/definitions';
 import logo from '@/public/logo.png';
@@ -17,10 +18,11 @@ const Login = () => {
     const [form] = Form.useForm();
     const router = useRouter();
     const { data: session } = useSession({ required: false });
+    const t = useTranslations('Login');
 
     useEffect(() => {
         if (session?.user) {
-            router.push(ROUTE_PATH.ADMIN);
+            router.push(ROUTE_PATH.DASHBOARD);
         }
     }, [session, router]);
 
@@ -36,7 +38,7 @@ const Login = () => {
             console.error('Login failed:', result.error);
         } else {
             // Redirect to the admin page on successful login
-            router.push(ROUTE_PATH.ADMIN);
+            router.push(ROUTE_PATH.DASHBOARD);
         }
     };
 
@@ -50,7 +52,7 @@ const Login = () => {
             <Flex
                 className="header-title"
                 justify='center'>
-                <h3 className="title">Login</h3>
+                <h3 className="title">{t('title')}</h3>
             </Flex>
             <Row >
                 <Col xs={20} sm={18} md={10}>
@@ -66,17 +68,17 @@ const Login = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your email'
+                                    message: t('error_msg_required_email')
                                 },
                                 {
                                     pattern: new RegExp(REGEX.EMAIL),
-                                    message: 'Please input format email',
+                                    message: t('error_msg_incorrect_email'),
                                 },
                             ]}
                         >
                             <Input
                                 maxLength={100}
-                                placeholder="Email"
+                                placeholder={t('input_email')}
                                 autoComplete='email'
                                 prefix={<MailOutlined className="site-form-item-icon" />}
                             />
@@ -86,26 +88,26 @@ const Login = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your password'
+                                    message: t('error_msg_required_password')
                                 },
                                 {
                                     pattern: new RegExp(REGEX.PASSWORD),
-                                    message: 'Format password incorrect',
+                                    message: t('error_msg_incorrect_password'),
                                 },
                             ]}
                         >
                             <Input.Password
                                 autoComplete="new-password"
                                 prefix={<LockOutlined className="site-form-item-icon" />}
-                                placeholder="Password" />
+                                placeholder={t('input_password')} />
                         </Form.Item>
                         <Form.Item>
                             <Form.Item name="remember" valuePropName="checked" noStyle>
-                                <Checkbox>Remember me</Checkbox>
+                                    <Checkbox>{t('remember_me')}</Checkbox>
                             </Form.Item>
 
                             <Link className="login-form-forgot" href="#">
-                                Forgot password
+                                {t('forgot_password')}
                             </Link>
                         </Form.Item>
                         <Form.Item name='actions' className='actions'>
@@ -117,9 +119,9 @@ const Login = () => {
                                     className="login-form-button btn-border"
                                     disabled={false}
                                 >
-                                    Log in
+                                    {t('btn_login')}
                                 </Button>
-                                Or <Link href={ROUTE_PATH.REGISTER}>Register now!</Link>
+                                Or <Link href={ROUTE_PATH.REGISTER}>{t('btn_register')}</Link>
                             </Space>
                         </Form.Item>
                     </Form>

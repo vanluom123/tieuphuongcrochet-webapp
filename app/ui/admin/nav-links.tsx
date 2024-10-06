@@ -16,26 +16,26 @@ import Link from "next/link";
 
 const items = [
     {
-        key: ROUTE_PATH.ADMIN,
+        key: ROUTE_PATH.DASHBOARD,
         icon: <AppstoreOutlined />,
         label: 'Dashboard',
     },
     {
-        key: ROUTE_PATH.ADMIN_CATEGORY,
+        key: ROUTE_PATH.DASHBOARD_CATEGORY,
         icon: <UnorderedListOutlined />,
         label: 'Categories list'
     }, {
-        key: ROUTE_PATH.ADMIN_FREE_PATTERNS,
+        key: ROUTE_PATH.DASHBOARD_FREE_PATTERNS,
         icon: <ReadOutlined />,
         label: 'Free Patterns',
 
         children: [
             {
-                key: `${ROUTE_PATH.ADMIN_FREE_PATTERNS}/${ROUTE_PATH.CREATE}`,
+                key: `${ROUTE_PATH.DASHBOARD_FREE_PATTERNS}/${ROUTE_PATH.CREATE}`,
                 label: 'Add pattern'
             },
             {
-                key: ROUTE_PATH.ADMIN_FREE_PATTERNS,
+                key: ROUTE_PATH.DASHBOARD_FREE_PATTERNS,
                 label: 'Free patterns list'
             }
         ]
@@ -47,37 +47,37 @@ const items = [
         label: 'Products',
         children: [
             {
-                key: `${ROUTE_PATH.AMIN_PRODUCTS}/${ROUTE_PATH.CREATE}`,
+                key: `${ROUTE_PATH.DASHBOARD_PRODUCTS}/${ROUTE_PATH.CREATE}`,
                 label: 'Add product'
             },
             {
-                key: ROUTE_PATH.AMIN_PRODUCTS,
+                key: ROUTE_PATH.DASHBOARD_PRODUCTS,
                 label: 'Products list'
             }
         ]
     },
     {
-        key: ROUTE_PATH.ADMIN_POSTS,
+            key: ROUTE_PATH.DASHBOARD_POSTS,
         icon: <FileOutlined />,
         label: 'Posts',
         children: [
             {
-                key: ROUTE_PATH.ADMIN_POSTS,
+                key: ROUTE_PATH.DASHBOARD_POSTS,
                 label: 'Posts'
             },
             {
-                key: `${ROUTE_PATH.ADMIN_POSTS}/${ROUTE_PATH.CREATE}`,
+                key: `${ROUTE_PATH.DASHBOARD_POSTS}/${ROUTE_PATH.CREATE}`,
                 label: 'Add post'
             }
         ]
     },
     {
-        key: ROUTE_PATH.ADMIN_USERS,
+        key: ROUTE_PATH.DASHBOARD_USERS,
         icon: <TeamOutlined />,
         label: 'Users',
     },
     {
-        key: ROUTE_PATH.ADMIN_SETTING,
+        key: ROUTE_PATH.DASHBOARD_SETTING,
         icon: <SettingOutlined />,
         label: 'Setting',
     },
@@ -108,7 +108,7 @@ const NavLinks = () => {
     return (
         <Menu
             mode="inline"
-            defaultSelectedKeys={[ROUTE_PATH.ADMIN]}
+            defaultSelectedKeys={[ROUTE_PATH.DASHBOARD]}
         >
             {getMenuItems(items as SubMenuType[])}
         </Menu>

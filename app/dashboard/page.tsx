@@ -7,7 +7,7 @@ const Dashboard = () => {
     const session = useSession({
         required: true,
         onUnauthenticated() {
-            redirect(`${ROUTE_PATH.LOGIN}?callbackUrl=${ROUTE_PATH.ADMIN}`)
+            redirect(`${ROUTE_PATH.LOGIN}?callbackUrl=${ROUTE_PATH.DASHBOARD}`)
         }
     })
 

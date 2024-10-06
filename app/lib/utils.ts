@@ -50,7 +50,7 @@ export const getBase64 = (file: File): Promise<string> =>
         reader.onerror = (error) => reject(error);
     });
 
-export const getCurrentDate = (d: Date | number | string, formatDate = 'YYYY-MM-DD') => moment(d).format(formatDate);
+export const getCurrentDate = (d: Date | number | string, formatDate = 'DD/MM/YYYY') => moment(d).format(formatDate);
 
 export const getFileNameAndExt = (name: string) => {
     if (!name) {

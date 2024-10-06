@@ -112,5 +112,49 @@
   "IntroductionCard": {
     "author": "Author",
     "btn_buy": "Order"
+  },
+  "UserAccount": {
+    "sign_in": "Sign in",
+    "sign_out": "Sign out",
+    "profile": "Profile",
+    "logout": "Logout",
+    "logout_confirm": "Are you sure you want to log out?",
+    "dashboard": "Dashboard"
+  },
+  "Login": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "btn_login": "Login",
+    "btn_register": "Register",
+    "input_email": "Email",
+    "input_password": "Password",
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot password",
+    "error_msg_incorrect_email": "Email format is incorrect!",
+    "error_msg_required_email": "Please input your email",
+    "error_msg_required_password": "Please input your password",
+    "error_msg_incorrect_password": "Password format is incorrect!"
+  },
+  "Register": {
+    "title": "Register account",
+    "btn_sign_in": "Sign in!",
+    "btn_register": "Register",
+    "btn_cancel": "Cancel",
+    "account_exist": "Already have an account?",
+    "input_fullname": "Full name",
+    "input_email": "Email",
+    "input_password": "Password",
+    "input_confirm_password": "Confirm password",
+    "error_msg_required_fullname": "Please input your fullname",
+    "error_msg_required_email": "Please input your email",
+    "error_msg_required_password": "Please input your password",
+    "error_msg_required_confirm_password": "Please confirm your password",
+    "error_msg_not_match_confirm_password": "Do not match confirm password!",
+    "error_msg_incorrect_email": "Email format is incorrect!",
+    "error_msg_incorrect_password": "Password format is incorrect!",
+    "note_title": "Note",
+    "note_content_1": "required fields",
+    "note_content_2": "Password must contain at least 8 characters, including at least 1 uppercase letter, 1 special character, lowercase letter and number."
   }
 }
