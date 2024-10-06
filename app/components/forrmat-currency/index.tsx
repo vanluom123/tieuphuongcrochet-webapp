@@ -1,5 +1,4 @@
 import { CURRENCY } from "@/app/lib/constant";
-import { Currency } from "@/app/lib/definitions";
 import React, { useMemo } from "react";
 interface Props {
 	price?: number;

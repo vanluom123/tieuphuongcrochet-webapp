@@ -44,7 +44,9 @@ const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: Introducti
 
 		if (src) {
 			const index = findIndex(images, (img: FileUpload) => img.fileContent === src);
-			index !== -1 && setActiveThumbnail({ index, src });
+			if (index !== -1) {
+				setActiveThumbnail({ index, src });
+			}
 		}
 		if (isShowThumbnail && images && images?.length > 1) {
 			DragScroll('.images-outer');

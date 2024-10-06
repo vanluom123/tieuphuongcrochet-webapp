@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import HeaderPart from "../components/header-part";
 import ViewTable from "../components/view-table";
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH, TRANSLATION_STATUS } from "../lib/constant";
-import { initialListParams, Filter, ListParams, DataTableState } from "../lib/definitions";
+import { initialListParams, Filter, ListParams, DataTableState, Category, DataType } from "../lib/definitions";
 import { fetchCategories } from "../lib/service/categoryService";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import { fetchFreePatterns } from "../lib/service/freePatternService";
@@ -20,7 +20,7 @@ const initialState: DataTableState = {
 const FreePatterns = () => {
     const [state, setState] = useState(initialState);
 	const [params, setParams] = useState(initialListParams);
-	const [categories, setCategories] = useState<any[]>([]);
+	const [categories, setCategories] = useState<Category[]>([]);
 
 	const router = useRouter();
 	const onPageChange = (current: number, pageSize: number) => {
@@ -44,7 +44,7 @@ const FreePatterns = () => {
 
 	useEffect(() => {
 		fetchCategories().then((data) => {
-			setCategories(data);
+			setCategories(data as Category[]);
 		});
 	}, []);
 
@@ -123,7 +123,7 @@ const FreePatterns = () => {
 				total={state.totalRecord}
 				loading={state.loading}
 				isShowTabs
-				itemsTabs={categories}
+				itemsTabs={categories as DataType[]}
 				pageIndex={params.pageNo}
 				pageSize={params.pageSize}
 				onPageChange={onPageChange}

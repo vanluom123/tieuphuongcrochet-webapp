@@ -15,12 +15,20 @@ const Contact = () => {
 
   const t = useTranslations("Contact");
 
-  const onSendEmail = (value: any) => {
+  // Define a type for the form values
+  interface ContactFormValues {
+    name: string;
+    email: string;
+    subject: string;
+    content: string;
+  }
+
+  const onSendEmail = (value: ContactFormValues) => {
     const templateParams = {
       from_name: value.name,
       from_email: value.email,
       message: value.content,
-      subject: ((value.subject) as string).toUpperCase()
+      subject: value.subject.toUpperCase()
     };
 
     emailjs
@@ -118,11 +126,12 @@ const Contact = () => {
           </Form>
         </Col>
       </Row>
-      <Divider children={
+      <Divider>
         <h1 className='align-center'>
           {t('Form.via')}
-        </h1>} />
-        <Row className='justify-center' gutter={[{ xs: 36, md: 16, lg: 48 }, { xs: 36, md: 16, lg: 48 }]}>
+        </h1>
+      </Divider>
+      <Row className='justify-center' gutter={[{ xs: 36, md: 16, lg: 48 }, { xs: 36, md: 16, lg: 48 }]}>
         {(SOCIALS || []).map(({ social, src, url, ...rest }, index) =>
           <Col key={`social_${index}`} xs={12} md={6}>
             <SocialBox social={social} src={src} url={url} {...rest} />
