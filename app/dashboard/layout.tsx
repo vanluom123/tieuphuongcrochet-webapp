@@ -7,11 +7,11 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button, Flex, Layout, theme } from 'antd';
+import { App, Button, Flex, Layout, theme } from 'antd';
 
 import { ROUTE_PATH } from '../lib/constant';
-import NavLinks from '../ui/admin/nav-links';
 import logo from '@/public/logo.png';
+import NavLinksDashboard from '../components/nav-link-dashboard';
 
 const LayoutAdmin = (
     { children }: Readonly<{
@@ -27,6 +27,7 @@ const LayoutAdmin = (
 
     return (
         <Layout className='admin-layout'>
+
             <Sider
                 trigger={null}
                 collapsible
@@ -37,7 +38,7 @@ const LayoutAdmin = (
                         <Image width={75} src={logo} alt='Tiệm len Tiểu Phương' />
                     </Link>
                 </div>
-                <NavLinks />
+                <NavLinksDashboard />
             </Sider>
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>

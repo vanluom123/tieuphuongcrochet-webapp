@@ -104,7 +104,7 @@ const getMenuItems = (navlinks: SubMenuType[]) => {
     })
 }
 
-const NavLinks = () => {
+const NavLinksDashboard = () => {
     return (
         <Menu
             mode="inline"
@@ -115,4 +115,4 @@ const NavLinks = () => {
     )
 }
 
-export default NavLinks;
+export default NavLinksDashboard;

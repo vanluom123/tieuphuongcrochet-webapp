@@ -1,3 +1,6 @@
+import { getSession } from "next-auth/react";
+import { notification } from "../notify";
+
 async function apiService<T = unknown>({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
     endpoint = '',
@@ -7,7 +10,7 @@ async function apiService<T = unknown>({
     timeout = 20000,
     queryParams = {},
     retries = 3,
-    logRequests = false
+    logRequests = false,
 }: {
     baseUrl?: string;
     endpoint?: string;
@@ -72,7 +75,8 @@ async function apiService<T = unknown>({
                 console.warn(`Retrying request... Attempt ${attempt} failed`);
                 return makeRequest(attempt + 1);
             } else {
-                console.error('Fetch operation failed:', error);
+                const message = (error as Error).message;
+                notification.error({message: 'Failed', description: message})
                 throw error;
             }
         }

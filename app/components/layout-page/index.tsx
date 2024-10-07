@@ -1,24 +1,26 @@
 "use client"
-import { FloatButton, Layout } from "antd";
-import { ROUTE_PATH } from "../../lib/constant";
+import { Content } from "antd/es/layout/layout";
+import { App, FloatButton, Layout } from "antd";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+
+import { ROUTE_PATH } from "../../lib/constant";
 import Navigation from "../navigation";
-import { Content } from "antd/es/layout/layout";
 import FooterPage from "../footer-page";
 import CoverPage from "../cover-page";
 import { animationHeader, onScrollBody } from "@/app/lib/utils";
+import Notify from "@/app/lib/notify";
 
 interface LayoutProps {
     children: React.ReactNode;
 }
 
 const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
-	const pathname = usePathname();
+    const pathname = usePathname();
     const [currentNav, setCurrentNav] = useState(ROUTE_PATH.HOME);
 
     useEffect(() => {
-        const navs =pathname.split('/');
+        const navs = pathname.split('/');
         setCurrentNav(`/${navs[1]}`);
         if (pathname !== ROUTE_PATH.HOME) {
             animationHeader();
@@ -37,6 +39,9 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
     if (pathname === ROUTE_PATH.LOGIN || pathname.includes(ROUTE_PATH.DASHBOARD) || pathname === ROUTE_PATH.REGISTER) {
         return (
             <Layout className='layout-wrap'>
+                <App notification={{ placement: 'topRight' }}>
+                    <Notify />
+                </App>
                 {children}
             </Layout>
         )

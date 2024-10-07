@@ -1,12 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { SaveOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useSession } from 'next-auth/react';
+import { Form, Checkbox, CheckboxProps, Button, Popconfirm, Modal, Input, Divider, List, Typography, CheckboxOptionType } from 'antd'; import { map } from 'lodash';
 
 import DataTable from '@/app/components/data-table';
 import { Category, DataTableState, DataType } from '@/app/lib/definitions';
-import { fetchCategories } from '@/app/lib/service/categoryService';
+import { createCategory, deleteCategory, fetchCategories, updateCategory } from '@/app/lib/service/categoryService';
 import SearchTable from '@/app/components/data-table/SearchTable';
-import { Form, Checkbox, CheckboxProps, Button, Popconfirm, Modal, Input, Divider, List, Typography, CheckboxOptionType } from 'antd'; import { map } from 'lodash';
 
 interface CUCategoryProps {
 	categorySelected: DataType;
@@ -21,10 +22,12 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 	const [childForm] = Form.useForm();
 	const [checkedList, setCheckedList] = useState<string[]>([]);
 	const CheckboxGroup = Checkbox.Group;
+	const [loading, setLoading] = useState(false);
 
 	const isEditing = Object.keys(categorySelected || {}).length > 0;
 	const checkAll = categories.length === checkedList.length;
 	const indeterminate = checkedList.length > 0 && checkedList.length < categories.length;
+
 
 	useEffect(() => {
 		if (isEditing) {
@@ -35,32 +38,36 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 		}
 	}, [categorySelected]);
 
-	const handleOk = () => {
+	const handleOk = async () => {
+		setLoading(true);
 		form.validateFields()
-			.then((values) => {
+			.then(async (values) => {
 
 				let sendData: Category = {
 					name: values.name,
 				}
 
-				if (isEditing) {
+				if (isEditing && sendData.name !== categorySelected.name) {
 					sendData = {
 						...sendData,
 						id: categorySelected.key
 					}
-					// dispatch(categoryAction.update(sendData));
+					await updateCategory(sendData);
 				}
 				else {
 					sendData = {
 						...sendData,
 						parentIds: checkedList
 					};
-					// createCategory(sendData);
+					await createCategory(sendData);
 				}
-				handleCancel();
+				form.resetFields();
+				setIsModalOpen(false);
+				setLoading(false);
 			})
 			.catch((errorInfo) => {
 				console.log(errorInfo);
+				setLoading(false);
 			});
 	};
 
@@ -72,20 +79,30 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 		setIsModalOpen(false);
 	};
 
-	const onDelete = (id: string) => {
+	const onDelete = async (id: string) => {
+		await deleteCategory(id);
 	}
 
 	const onUpdateChildCategory = (index: string) => {
 		childForm.validateFields()
-			.then((values) => {
-				//   dispatch(categoryAction.update({
-				// 	id: index,
-				// 	name: values[`children${index}`]
-				//   } as Category));
+			.then(async (values) => {
+				setLoading(true);
+				const sendData = {
+					id: index,
+					name: values[`children${index}`]
+				} as Category;
+
+				if (sendData.name !== categorySelected[`children${index}` as keyof typeof categorySelected]) {
+					await updateCategory(sendData);
+					childForm.resetFields();
+					setIsModalOpen(false);
+				}
+				setLoading(false);
 			})
 
 			.catch((errorInfo) => {
 				console.log(errorInfo);
+				setLoading(false);
 			});
 	};
 
@@ -117,10 +134,13 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 				title={isEditing ? 'Update the category' : 'Create a new category'}
 				open={isModalOpen}
 				onOk={handleOk}
+				confirmLoading={loading}
+				cancelButtonProps={{disabled: loading}}
 				onCancel={handleCancel}>
 				<Form layout="vertical"
 					name='CUCategoryForm'
 					form={form}
+					disabled={loading}
 				>
 					<Form.Item
 						name="name"
@@ -131,53 +151,59 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 					</Form.Item>
 
 					{
-						!isEditing ?
-							// Form Creating
-							<Form.Item
-								name="parentIds"
-								label="Parents"
-							>
-								<Checkbox
-									indeterminate={indeterminate}
-									onChange={onCheckAllChange}
-									checked={checkAll}>
-									Check all
-								</Checkbox>
-								<Divider />
-								<CheckboxGroup
-									options={categories}
-									value={checkedList}
-									onChange={onChange}
-								/>
-							</Form.Item> :
+						!isEditing &&
+						// Form Creating
+						<Form.Item
+							name="parentIds"
+							label="Parents"
+						>
+							<Checkbox
+								indeterminate={indeterminate}
+								onChange={onCheckAllChange}
+								checked={checkAll}>
+								Check all
+							</Checkbox>
+							<Divider />
+							<CheckboxGroup
+								options={categories}
+								value={checkedList}
+								onChange={onChange}
+							/>
+						</Form.Item>
 
-							/* Form editing */
-							< Form.Item name='children' label='Children'>
-								<List
-									itemLayout="horizontal"
-									dataSource={categorySelected?.children as { key: string, name: string }[]}
-									renderItem={(item, index) => (
-										<List.Item
-											actions={childActions(item.key)}
-										>
-											<Typography.Text >[{index + 1}]</Typography.Text>
-											<Form
-												name='childrenForm'
-												layout='inline'
-												form={childForm}
-												initialValues={{ [`children${item.key}`]: item.name }}
-											>
-												<Form.Item
-													name={`children${item.key}`}
-												>
-													<Input placeholder="Child category" />
-												</Form.Item>
-											</Form>
-										</List.Item>
-									)}
-								/>
-							</Form.Item>}
+					}
 				</Form>
+
+				{/* Editing form */}
+				<Form
+					name='childrenForm'
+					layout='inline'
+					form={childForm}
+					disabled={loading}
+				>
+
+					< Form.Item name='children' label='Children'>
+						<List
+							itemLayout="horizontal"
+							dataSource={categorySelected?.children as { key: string, name: string }[]}
+							renderItem={(item, index) => (
+								<List.Item
+									key={item.key}
+									actions={childActions(item.key)}
+								>
+									<Typography.Text >[{index + 1}]</Typography.Text>
+									<Form.Item
+										name={`children${item.key}`}
+										initialValue={item.name}
+									>
+										<Input placeholder="Child category" />
+									</Form.Item>
+								</List.Item>
+							)}
+						/>
+					</Form.Item>
+				</Form>
+
 			</Modal >
 		</>
 	);
@@ -193,6 +219,9 @@ const CategoriesList = () => {
 	const [state, setState] = useState(initialState);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [categorySelected, setCategorySelected] = useState({} as DataType);
+	const { data: session, status } = useSession();
+
+	console.log('session CategoriesList', session, status);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -200,10 +229,11 @@ const CategoriesList = () => {
 		const loadCategories = async () => {
 			setState({ ...state, loading: true });
 			try {
-				const data = await fetchCategories();
-				if (isMounted) {
-					setState(prevState => ({ ...prevState, data: data as DataType[], loading: false }));
-				}
+				fetchCategories().then((data) => {
+					if (isMounted) {
+						setState(prevState => ({ ...prevState, data: data as DataType[], loading: false }));
+					}
+				});
 			} catch (error) {
 				console.error('Error fetching categories:', error);
 				if (isMounted) {
@@ -228,7 +258,8 @@ const CategoriesList = () => {
 		setIsModalOpen(true);
 	}
 
-	const onDeleteRecord = (key: React.Key) => {
+	const onDeleteRecord = async (key: React.Key) => {
+		await deleteCategory(key as string);
 	}
 
 	return (
@@ -237,7 +268,7 @@ const CategoriesList = () => {
 				<SearchTable onAddNew={showModal} />
 				<div className='admin-table'>
 					<DataTable
-						loading={state.loading}
+						loading={state.loading || status === 'loading'}
 						dataSource={state.data as DataType[]}
 						onDeleteRecord={onDeleteRecord}
 						onEditRecord={onEditRecord}

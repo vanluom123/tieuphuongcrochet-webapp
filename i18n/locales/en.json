@@ -156,5 +156,13 @@
     "note_title": "Note",
     "note_content_1": "required fields",
     "note_content_2": "Password must contain at least 8 characters, including at least 1 uppercase letter, 1 special character, lowercase letter and number."
+  },
+  "Category": {
+    "title": "Category",
+    "description": "Category of products, and crochet patterns"
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "description": "Dashboard of website"
   }
 }

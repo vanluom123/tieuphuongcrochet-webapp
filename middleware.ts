@@ -10,7 +10,7 @@ export default withAuth(
         const role = request?.nextauth?.token?.role;
         const token = request?.nextauth?.token?.accessToken;
 
-        // Set Authorization header
+        // Set Authorization heade        
         if (token && role) {
             const newHeaders = new Headers(request.headers);
             newHeaders.set("Authorization", `Bearer ${token}`);
@@ -23,11 +23,11 @@ export default withAuth(
     },
     {
         callbacks: {
-            authorized: ({ token }) => !!token
+          authorized: ({ token }) => true,
         },
     }
 )
 
 // Applies next-auth only to matching routes - can be regex
 // Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-export const config = { matcher: ["/admin"] }
+export const config = { matcher: ["/dashboard", "/api/:path*"] }
