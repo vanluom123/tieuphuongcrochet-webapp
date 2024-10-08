@@ -70,8 +70,8 @@ const Products = () => {
         const { current, pageSize } = pagination;
         const newParams = {
             ...params,
-            _pageNo: current - 1,
-            _pageSize: pageSize,
+            pageNo: current - 1,
+            pageSize: pageSize,
         }
         setParams(newParams)
     }

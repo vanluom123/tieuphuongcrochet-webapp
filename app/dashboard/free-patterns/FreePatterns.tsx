@@ -91,9 +91,10 @@ const FreePatterns = () => {
         const { current, pageSize } = pagination;
         const newParams = {
             ...params,
-            _pageNo: current - 1,
-            _pageSize: pageSize,
+            pageNo: current - 1,
+            pageSize: pageSize,
         }
+        console.log("newParams", newParams);
         setParams(newParams)
     }
 
