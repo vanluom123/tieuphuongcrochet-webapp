@@ -51,12 +51,43 @@
     "detail": "Chi tiết",
     "content": "Chart đã dịch",
     "note": "Nếu mình nhỡ đăng nhằm chart có bản quyền, xin hãy nói với mình để mình gỡ xuống ạ! Cảm ơn bạn!",
+    "createPattern": "Tạo chart mới",
+    "updatePattern": "Cập nhật chart",
     "status": {
       "ALL": "Tất cả",
       "SUCCESS": "Đã dịch",
       "PENDING": "Đang dịch",
       "NONE": "Chưa dịch"
+    },
+    "Fields": {
+      "name": "Tên chart",
+      "category": "Danh mục",
+      "author": "Tác giả",
+      "is_home": "Hiển thị trang chủ",
+      "status": "Trạng thái dịch",
+      "created_date": "Ngày tạo",
+      "images": "Hình ảnh",
+      "files": "Chart files",
+      "content": "Nội dung chart",
+      "description": "Mô tả",
+      "link": "Link",
+      "error_msg_required_images": "Vui lòng upload hình ảnh cho chart",
+      "error_msg_required_name": "Vui lòng nhập tên chart",
+      "error_msg_required_author": "Vui lòng nhập tên tác giả",
+      "error_msg_required_category": "Vui lòng chọn danh mục",
+      "error_msg_required_files": "Vui lòng upload file cho chart"
+    },
+    "Btn": {
+      "submit": "Gửi",
+      "cancel": "Hủy"
     }
+  },
+
+  "DataTable": {
+    "name": "Tên",
+    "created_date": "Ngày tạo",
+    "image": "Hình ảnh",
+    "action": "Hành động"
   },
 
   "Blog": {
@@ -131,7 +162,10 @@
     "error_msg_incorrect_email": "Định dạng email không chính xác!",
     "error_msg_required_email": "Vui lòng nhập email",
     "error_msg_required_password": "Vui lòng nhập mật khẩu",
-    "error_msg_incorrect_password": "Định dạng mật khẩu không chính xác!"
+    "error_msg_incorrect_password": "Định dạng mật khẩu không chính xác!",
+    "error_login_401_description": "Email hoặc mật khẩu không đúng!",
+    "error_login_title": "Đăng nhập thất bại",
+    "error_login_unknown_error": "Đã có lỗi xảy ra"
   },
   "Register": {
     "title": "Đăng ký",

@@ -7,11 +7,12 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 import Image from 'next/image';
-import { App, Button, Flex, Layout, theme } from 'antd';
+import { Button, Flex, Layout, theme } from 'antd';
 
 import { ROUTE_PATH } from '../lib/constant';
 import logo from '@/public/logo.png';
 import NavLinksDashboard from '../components/nav-link-dashboard';
+import { useSession } from 'next-auth/react';
 
 const LayoutAdmin = (
     { children }: Readonly<{
@@ -24,6 +25,9 @@ const LayoutAdmin = (
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+    const { data: session, status } = useSession();
+    console.log("session dashboard layout", session);
+    console.log("status dashboard layout", status);
 
     return (
         <Layout className='admin-layout'>

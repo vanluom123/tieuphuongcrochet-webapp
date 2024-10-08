@@ -13,37 +13,43 @@ import { User } from '../lib/definitions';
 import logo from '@/public/logo.png';
 import { ROUTE_PATH, REGEX } from '../lib/constant';
 import '../ui/components/login.scss';
+import { notification } from '../lib/notify';
 
 const Login = () => {
     const [form] = Form.useForm();
     const router = useRouter();
-    const { data: session } = useSession({ required: false });
+    const {data: session, status} = useSession({ required: false });
     const t = useTranslations('Login');
 
     const [isLoading, setIsLoading] = useState(false);
-
+    
     useEffect(() => {
-        if (session?.user) {
+        if (session?.user?.email && status === 'authenticated') {
             router.push(ROUTE_PATH.DASHBOARD);
         }
     }, [session, router]);
 
     const onFinish = async (values: User) => {
         setIsLoading(true);
-        const result = await signIn('credentials', {
-            email: values.email,
-            password: values.password,
-            redirect: false,
-        });
-        if (result?.error) {
-            // Handle error, e.g., show an error message
-            console.error('Login failed:', result.error);
+        try {
+            const result = await signIn('credentials', {
+                email: values.email,
+                password: values.password,
+                redirect: false,
+            });
+            // Handle successful login
+            if (result?.error) {
+                const description = result.status === 401 ? t('error_login_401_description') : result.error;
+                notification.error({ message: t('error_login_title'), description });
+            }
             setIsLoading(false);
-
-        } else {
-            // Redirect to the admin page on successful login
+        } catch (error) {
+            if (error instanceof Error) {
+                notification.error({ message: t('error_login_title'), description: error.message });
+            } else {
+                notification.error({ message: t('error_login_title'), description: t('error_login_unknown_error') });
+            }
             setIsLoading(false);
-            router.push(ROUTE_PATH.DASHBOARD);
         }
     };
 
@@ -51,7 +57,7 @@ const Login = () => {
         <div className='auth-page'>
             <Flex justify='center' className='logo'>
                 <Link href={ROUTE_PATH.HOME} >
-                    <Image src={logo} alt='Tiệm len Tiểu Phương' width={150} height={150} />
+                    <Image priority src={logo} alt='Tiệm len Tiểu Phương' width={150} height={150} />
                 </Link>
             </Flex>
             <Flex

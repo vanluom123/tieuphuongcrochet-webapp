@@ -1,5 +1,5 @@
 import { getSession } from "next-auth/react";
-import { notification } from "../notify";
+import { message, notification } from "../notify";
 
 async function apiService<T = unknown>({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
@@ -11,6 +11,7 @@ async function apiService<T = unknown>({
     queryParams = {},
     retries = 3,
     logRequests = false,
+    formData
 }: {
     baseUrl?: string;
     endpoint?: string;
@@ -21,6 +22,7 @@ async function apiService<T = unknown>({
     queryParams?: Record<string, string>;
     retries?: number;
     logRequests?: boolean;
+    formData?: FormData;
 }) {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -42,6 +44,10 @@ async function apiService<T = unknown>({
         options.body = JSON.stringify(data);
     }
 
+    if (formData) {
+        options.body = formData;
+    }
+
     // Function to make the actual request with retry logic
     const makeRequest = async (attempt: number) => {
         if (logRequests) {
@@ -54,11 +60,15 @@ async function apiService<T = unknown>({
             clearTimeout(timeoutId); // Clear timeout when response is received
 
             if (!response.ok) {
+                console.log('response login', response);
+                
                 // Handle specific status codes differently if needed
                 if (response.status === 401) {
                     throw new Error('Unauthorized. Please check your credentials.');
                 } else if (response.status >= 500) {
+                    
                     throw new Error('Server error. Retrying...');
+                    
                 } else {
                     throw new Error(`HTTP error! Status: ${response.status}, ${response.statusText}`);
                 }
@@ -70,13 +80,11 @@ async function apiService<T = unknown>({
             } else {
                 return await response.text();
             }
-        } catch (error: unknown) {
+        } catch (error: unknown) {            
             if (attempt <= retries && (error instanceof Error && (error.name === 'AbortError' || error.message.includes('Server error')))) {
                 console.warn(`Retrying request... Attempt ${attempt} failed`);
                 return makeRequest(attempt + 1);
             } else {
-                const message = (error as Error).message;
-                notification.error({message: 'Failed', description: message})
                 throw error;
             }
         }

@@ -1,12 +1,14 @@
 import React from 'react';
-import { Button, Image, Space, Table } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { TableProps } from 'antd';
 import { filter } from 'lodash';
+import { ColumnsType } from 'antd/es/table';
+import { useTranslations } from 'next-intl';
+import { Button, Image, Space, Table } from 'antd';
+
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { computePaging, getCurrentDate, showConfirmDelete } from '@/app/lib/utils';
 import { DataType } from '@/app/lib/definitions';
 import { IMAGE_FALLBACK } from '@/app/lib/constant';
-import { TableProps } from 'antd';
-import { ColumnsType } from 'antd/es/table';
 
 interface DataTableProps extends TableProps<DataType> {
   pageSize?: number;
@@ -38,6 +40,8 @@ const DataTable = ({
   ...restProps
 }: DataTableProps) => {
 
+  const t = useTranslations('DataTable');
+
   const colNumberIndex = {
     title: '#',
     align: 'center',
@@ -49,18 +53,18 @@ const DataTable = ({
   const defaultColumns = [
     colNumberIndex,
     {
-      title: 'Name',
+      title: t('name'),
       dataIndex: 'name',
     },
     {
-      title: 'Created Date',
+      title: t('created_date'),
       dataIndex: 'createdDate',
       render: ((value: any) => (
         value ? getCurrentDate(value) : null
       ))
     },
     {
-      title: 'Action',
+      title: t('action'),
       dataIndex: 'action',
       key: 'x',
       width: '110px',
@@ -90,7 +94,7 @@ const DataTable = ({
         (isShowImage ?
 
           {
-            title: 'Image',
+            title: t('image'),
             dataIndex: 'imgUrl',
             width: '120px',
             render: (_: any, rd: DataType) =>
@@ -101,12 +105,12 @@ const DataTable = ({
               />
           } : {}),
         {
-          title: 'Name',
+          title: t('name'),
           dataIndex: 'name',
         },
         ...customColumns,
         {
-          title: 'Action',
+          title: t('action'),
           dataIndex: 'action',
           key: 'x',
           width: '120px',
@@ -122,7 +126,7 @@ const DataTable = ({
                   shape='circle'
                   icon={<DeleteOutlined />}
                   onClick={() => showConfirmDelete(record.key, () => onDeleteRecord(record.key))}
-                  />
+                />
               </Space> : null
         }] : [...defaultColumns];
 

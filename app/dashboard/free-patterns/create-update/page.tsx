@@ -1,8 +1,9 @@
-const CUFreePattern = () => {
-    
-    return(
-        <div> CUFreePattern</div>
+import FreePatternForm from "../FreePatternForm";
+
+const CreateFreePattern = () => {
+    return (
+        <FreePatternForm />
     )
 }
 
-export default CUFreePattern;
+export default CreateFreePattern;
