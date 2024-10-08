@@ -1,84 +1,70 @@
 'use client'
-import { Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { DataTableState, initialListParams, SearchParams, TTranslationStatus } from '@/app/lib/definitions';
-import { getStatusColor } from '@/app/lib/utils';
-import { SegmentedValue } from 'antd/es/segmented';
+import { Category, DataTableState, initialListParams, SearchParams } from '@/app/lib/definitions';
 import DataTable from '@/app/components/data-table';
 import SearchTable from '@/app/components/data-table/SearchTable';
-import { deleteFreePattern, fetchFreePatterns } from '@/app/lib/service/freePatternService';
+import { deleteProduct, fetchProducts } from '@/app/lib/service/productService';
 import { ROUTE_PATH } from '@/app/lib/constant';
-
+import { fetchCategories } from '@/app/lib/service/categoryService';
+import { DefaultOptionType } from 'antd/es/select';
 
 const initialState: DataTableState = {
-	loading: false,
-	data: [],
-	totalRecord: 0,
+    loading: false,
+    data: [],
+    totalRecord: 0,
 };
 
-const FreePatterns = () => {
-
+const Products = () => {
     const [state, setState] = useState(initialState);
     const [params, setParams] = useState(initialListParams)
+	const [categories, setCategories] = useState<Category[]>([]);
 
-    const t = useTranslations('FreePattern');
+    const t = useTranslations('Product');
     const router = useRouter();
 
     useEffect(() => {
         setState({ ...state, loading: true });
-		fetchFreePatterns(params).then(({ data, totalRecords }) => {
-			setState({ ...state, data, totalRecord: totalRecords });
-
-		}).finally(() => {
-			setState(prevState => ({ ...prevState, loading: false }));
-		});
+        Promise.all([
+            fetchProducts(params),
+            fetchCategories()
+        ])
+        .then(([{ data, totalRecords }, categoriesData]) => {
+            setState({ ...state, data, totalRecord: totalRecords });
+            setCategories(categoriesData as Category[]);
+        })
+        .finally(() => {
+            setState(prevState => ({ ...prevState, loading: false }));
+        });
     }, [params]);
 
     const onEditRecord = (id: React.Key) => {
-        router.push(`${ROUTE_PATH.DASHBOARD_FREE_PATTERNS}/${id}`)
+        router.push(`${ROUTE_PATH.DASHBOARD_PRODUCTS}/${id}`)
     }
 
     const onDeleteRecord = async (rd: React.Key) => {
-        await deleteFreePattern(rd as string)
+        await deleteProduct(rd as string)
     }
 
     const columns = [
         {
-            title: t('Fields.category'),
-            dataIndex: 'category',
-            render: (category: any) => (
-                <span>{category?.name}</span>
-            )
+            title: t('Fields.name'),
+            dataIndex: 'name',
         },
         {
-            title: t('Fields.author'),
-            dataIndex: 'author',
-            width: '25%',
+            title: t('Fields.price'),
+            dataIndex: 'price',
         },
         {
-            title: t('Fields.is_home'),
-            dataIndex: 'is_home',
-            render: (value: boolean) => value ? 'Yes' : 'No'
-        },
-        {
-            title: t('Fields.status'),
-            dataIndex: 'status',
-            render: (value: SegmentedValue) => (
-                <Tag className='status-tag' color={getStatusColor(value as TTranslationStatus)}>
-                    {
-                        value ? t(`status.${value}`) :
-                            t('status.NONE')
-                    }
-                </Tag>
-            )
+            title: t('Fields.currency_code'),
+            dataIndex: 'currency_code',
         },
     ]
 
     const onAddNew = () => {
-        router.push(`${ROUTE_PATH.DASHBOARD_FREE_PATTERNS}/${ROUTE_PATH.CREATE}`)
-    }   
+        router.push(`${ROUTE_PATH.DASHBOARD_PRODUCTS}/${ROUTE_PATH.CREATE}`)
+    }
 
     const onPageChange = (pagination: any, filters: any, sorter: any) => {
         const { current, pageSize } = pagination;
@@ -91,7 +77,6 @@ const FreePatterns = () => {
     }
 
     const onSearchChange = (searchParams: SearchParams) => {
-
         const newParams = {
             ...params,
             ...searchParams
@@ -101,14 +86,14 @@ const FreePatterns = () => {
 
     return (
         <>
-            <div className='patterns-admin'>
+            <div className='products-admin'>
                 <SearchTable
                     isShowFilter
                     onAddNew={onAddNew}
                     onSearchChange={onSearchChange}
                     loading={state.loading}
-                    searchFields={['name', 'author', 'description']}
-                    isShowStatusFilter
+                    searchFields={['name', 'description']}
+                    categories={categories as DefaultOptionType[]}
                 />
                 <div className='admin-table'>
                     <DataTable
@@ -130,4 +115,4 @@ const FreePatterns = () => {
     )
 }
 
-export default FreePatterns;
+export default Products;

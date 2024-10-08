@@ -83,6 +83,24 @@
     }
   },
 
+  "Product": {
+    "title": "Sản phẩm",
+    "description": "Dưới đây là những sản phẩm mà mình đã làm nè! Nếu các bạn muốn mình làm theo yêu cầu của bạn thì hãy inbox cho mình nhé! Tương lai, mình sẽ cập nhật thêm những sản phẩm mới và có thêm chức năng đặt hàng để các bạn dễ đặt hàng hơn nè. Hãy ủng hộ cho mình nhé!",
+    "detail": "Hình ảnh sản phẩm",
+    "note": "Nếu bạn muốn đặt mua sản phẩm này theo yêu cầu của bạn, hãy liên hệ với mình nhé. Mình sẽ cố gắng hết sức để mang đến cho bạn những sản phẩm tốt nhất. Cảm ơn bạn!",
+    "createProduct": "Tạo sản phẩm mới",
+    "updateProduct": "Cập nhật sản phẩm",
+    "Fields": {
+      "name": "Tên sản phẩm",
+      "description": "Mô tả",
+      "price": "Giá",
+      "currency_code": "Mệnh giá",
+      "category": "Danh mục",
+      "images": "Hình ảnh",
+      "content": "Nội dung"
+    }
+  },
+
   "DataTable": {
     "name": "Tên",
     "created_date": "Ngày tạo",

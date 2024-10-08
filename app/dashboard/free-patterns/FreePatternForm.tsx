@@ -4,13 +4,12 @@ import { Form, Input, TreeSelect, Button, Row, Col, Flex, Switch, Spin } from "a
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
-import { Category, DataType, FileUpload, Pattern } from "@/app/lib/definitions";
+import { Category, FileUpload, Pattern } from "@/app/lib/definitions";
 import { ROUTE_PATH, TRANSLATION_STATUS } from "@/app/lib/constant";
 import { fetchCategories } from "@/app/lib/service/categoryService";
 import FreePatternStatus from "@/app/components/free-pattern-status";
 import CustomEditor from "@/app/components/custom-editor";
 import UploadFiles from "@/app/components/upload-files";
-import { mapTreeData } from "@/app/lib/utils";
 import { createUpdateFreePattern, fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
 import { DefaultOptionType } from "antd/es/select";
 

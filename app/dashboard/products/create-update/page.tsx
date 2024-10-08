@@ -1,8 +1,9 @@
-const CUProduct = () => {
-    
-    return(
-        <div> CUProduct</div>
+import ProductForm from "../ProductForm";
+
+const CreateProduct = () => {
+    return (
+        <ProductForm />
     )
 }
 
-export default CUProduct;
+export default CreateProduct;

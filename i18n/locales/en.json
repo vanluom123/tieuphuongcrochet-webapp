@@ -82,6 +82,19 @@
       "cancel": "Cancel"
     }
   },
+  "Product": {
+    "title": "Products",
+    "description": "These are the products I sell. In addition, I also accept orders!!",
+    "Fields": {
+      "name": "Product name",
+      "description": "Description",
+      "price": "Price",
+      "currency_code": "Currency",
+      "category": "Category",
+      "images": "Images",
+      "content": "Content"
+    }
+  },
 
   "DataTable": {
     "name": "Name",
