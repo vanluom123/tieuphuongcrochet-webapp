@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Category, DataTableState, initialListParams, SearchParams } from '@/app/lib/definitions';
@@ -19,7 +19,7 @@ const initialState: DataTableState = {
 const Products = () => {
     const [state, setState] = useState(initialState);
     const [params, setParams] = useState(initialListParams)
-	const [categories, setCategories] = useState<Category[]>([]);
+	const categories = useRef<Category[]>([]);
 
     const t = useTranslations('Product');
     const router = useRouter();
@@ -32,7 +32,7 @@ const Products = () => {
         ])
         .then(([{ data, totalRecords }, categoriesData]) => {
             setState({ ...state, data, totalRecord: totalRecords });
-            setCategories(categoriesData as Category[]);
+            categories.current = categoriesData as Category[];
         })
         .finally(() => {
             setState(prevState => ({ ...prevState, loading: false }));
@@ -93,7 +93,7 @@ const Products = () => {
                     onSearchChange={onSearchChange}
                     loading={state.loading}
                     searchFields={['name', 'description']}
-                    categories={categories as DefaultOptionType[]}
+                    categories={categories.current as DefaultOptionType[]}
                 />
                 <div className='admin-table'>
                     <DataTable

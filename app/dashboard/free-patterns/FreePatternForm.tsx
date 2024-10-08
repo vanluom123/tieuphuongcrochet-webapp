@@ -34,7 +34,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
     useEffect(() => {
         fetchCategories().then((data) => {
             categories.current = data as Category[];
-        });        
+        });
     }, []);
 
     useEffect(() => {

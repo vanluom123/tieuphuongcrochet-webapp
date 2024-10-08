@@ -1,39 +1,46 @@
 'use client'
 import { Tag } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { DataTableState, initialListParams, SearchParams, TTranslationStatus } from '@/app/lib/definitions';
+import { Category, DataTableState, initialListParams, SearchParams, TTranslationStatus } from '@/app/lib/definitions';
 import { getStatusColor } from '@/app/lib/utils';
 import { SegmentedValue } from 'antd/es/segmented';
 import DataTable from '@/app/components/data-table';
 import SearchTable from '@/app/components/data-table/SearchTable';
 import { deleteFreePattern, fetchFreePatterns } from '@/app/lib/service/freePatternService';
 import { ROUTE_PATH } from '@/app/lib/constant';
+import { fetchCategories } from '@/app/lib/service/categoryService';
+import { DefaultOptionType } from 'antd/es/select';
 
 
 const initialState: DataTableState = {
-	loading: false,
-	data: [],
-	totalRecord: 0,
+    loading: false,
+    data: [],
+    totalRecord: 0,
 };
 
 const FreePatterns = () => {
 
     const [state, setState] = useState(initialState);
-    const [params, setParams] = useState(initialListParams)
+    const [params, setParams] = useState(initialListParams);
+    const categories = useRef<Category[]>([]);
 
     const t = useTranslations('FreePattern');
     const router = useRouter();
 
     useEffect(() => {
         setState({ ...state, loading: true });
-		fetchFreePatterns(params).then(({ data, totalRecords }) => {
-			setState({ ...state, data, totalRecord: totalRecords });
-
-		}).finally(() => {
-			setState(prevState => ({ ...prevState, loading: false }));
-		});
+        Promise.all([
+            fetchCategories().then((data) => {
+                categories.current = data as Category[];
+            }),
+            fetchFreePatterns(params).then(({ data, totalRecords }) => {
+                setState({ ...state, data, totalRecord: totalRecords });
+            })
+        ]).finally(() => {
+            setState(prevState => ({ ...prevState, loading: false }));
+        });
     }, [params]);
 
     const onEditRecord = (id: React.Key) => {
@@ -78,7 +85,7 @@ const FreePatterns = () => {
 
     const onAddNew = () => {
         router.push(`${ROUTE_PATH.DASHBOARD_FREE_PATTERNS}/${ROUTE_PATH.CREATE}`)
-    }   
+    }
 
     const onPageChange = (pagination: any, filters: any, sorter: any) => {
         const { current, pageSize } = pagination;
@@ -109,6 +116,7 @@ const FreePatterns = () => {
                     loading={state.loading}
                     searchFields={['name', 'author', 'description']}
                     isShowStatusFilter
+                    categories={categories.current as DefaultOptionType[]}
                 />
                 <div className='admin-table'>
                     <DataTable
