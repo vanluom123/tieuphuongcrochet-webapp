@@ -17,7 +17,7 @@ export const ROUTE_PATH = {
   DASHBOARD_SETTING: '/dashboard/setting',
   DASHBOARD_POSTS: '/dashboard/blogs',
   DASHBOARD_CATEGORY: '/dashboard/categories',
-  CREATE: 'create-update',
+  CREATE: 'create',
   DETAIL: 'detail'
 };
 
