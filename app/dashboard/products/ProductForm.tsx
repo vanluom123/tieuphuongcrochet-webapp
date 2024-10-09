@@ -46,9 +46,9 @@ const ProductForm = ({ params }: ProductFormProps) => {
                     category_id: product.category?.id,
                 }
                 form.setFieldsValue(newProduct);
-                setState({...state, product})
+                setState({...state, product: newProduct})
             }).finally(() => {
-                setState(prevState => ({ ...prevState, loading: false }));
+                setState({ ...state, loading: false });
             });
         }
     }, [params?.id])
@@ -189,7 +189,6 @@ const ProductForm = ({ params }: ProductFormProps) => {
                         >
                             Submit
                         </Button>
-                        {/* <Button className="btn-form" htmlType="reset">reset</Button> */}
                         <Button className="btn-form" onClick={onCancel}>Cancel</Button>
                     </Flex>
                 </Form>
