@@ -25,8 +25,11 @@ const Blogs = () => {
         setState({ ...state, loading: true });
         fetchBlogs(params)
             .then(({ data, totalRecords }) => {
-                setState({ ...state, data, totalRecord: totalRecords, loading: false });
+                setState({ ...state, data, totalRecord: totalRecords });
             })
+            .finally(() => {
+                setState(prevState => ({ ...prevState, loading: false }));
+            });
     }, [params]);
 
     const onEditRecord = (id: React.Key) => {

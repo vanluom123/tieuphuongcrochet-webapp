@@ -28,7 +28,8 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
 
     const [state, setState] = useState({
         loading: false,
-        pattern: {} as Pattern
+        pattern: {} as Pattern,
+        editorContent: ''
     })
 
     useEffect(() => {
@@ -49,7 +50,11 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                     status: pattern.status || TRANSLATION_STATUS.NONE
                 }
                 form.setFieldsValue(newPattern);
-                setState({...state, pattern})
+                setState({
+                    ...state,
+                    pattern,
+                    editorContent: pattern.content || ''
+                });
             }).finally(() => {
                 setState(prevState => ({ ...prevState, loading: false }));
             });
@@ -70,7 +75,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
         console.log("sendData", sendData);
 
         const res = await createUpdateFreePattern(sendData);
-        if(res?.id) {
+        if (res?.id) {
             form.resetFields();
             router.push(ROUTE_PATH.DASHBOARD_FREE_PATTERNS);
         }
@@ -84,7 +89,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
     return (<>
         <div className="crupattern-page">
             <Flex justify="center">
-                <h1>{params?.id ? t('updatePattern') : t('createPattern')   }</h1>
+                <h1>{params?.id ? t('updatePattern') : t('createPattern')}</h1>
             </Flex>
             <Spin spinning={state.loading} tip="Loading...">
                 <Form layout="vertical"
@@ -205,9 +210,11 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                         label={t('Fields.content')}
                     >
                         <CustomEditor
-                            initialData={state.pattern?.content || ''}
+                            initialData={state.editorContent}
                             onBlur={(_, editor) => {
-                                form.setFieldsValue({ content: editor.getData() })
+                                const content = editor.getData();
+                                form.setFieldsValue({ content });
+                                setState(prevState => ({ ...prevState, editorContent: content }));
                             }}
                         />
                     </Item>

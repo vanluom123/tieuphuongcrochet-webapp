@@ -35,12 +35,10 @@ const BlogForm = ({ params }: BlogFormProps) => {
                 setState({
                     ...state,
                     post: newPost,
-                    editorContent: newPost.content || '',
-                    loading: false
+                    editorContent: newPost.content || ''
                 });
-            }).catch(error => {
-                console.error("Error fetching post:", error);
-                setState({ ...state, loading: false });
+            }).finally(() => {
+                setState(prevState => ({ ...prevState, loading: false }));
             });
         }
     }, [params?.id]);

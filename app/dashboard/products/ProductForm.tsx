@@ -27,7 +27,8 @@ const ProductForm = ({ params }: ProductFormProps) => {
 
     const [state, setState] = useState({
         loading: false,
-        product: {} as Product
+        product: {} as Product,
+        editorContent: ''
     })
 
     useEffect(() => {
@@ -39,16 +40,19 @@ const ProductForm = ({ params }: ProductFormProps) => {
     useEffect(() => {
         if (params?.id) {
             setState({ ...state, loading: true });
-
             fetchProductDetail(params.id).then(product => {
                 const newProduct = {
                     ...product,
                     category_id: product.category?.id,
                 }
                 form.setFieldsValue(newProduct);
-                setState({...state, product: newProduct})
+                setState({
+                    ...state,
+                    product: newProduct,
+                    editorContent: product.content || ''
+                });
             }).finally(() => {
-                setState({ ...state, loading: false });
+                setState(prevState => ({ ...prevState, loading: false }));
             });
         }
     }, [params?.id])
@@ -174,9 +178,11 @@ const ProductForm = ({ params }: ProductFormProps) => {
                         label='Pattern text'
                     >
                         <CustomEditor
-                            initialData={state.product?.content || ''}
+                            initialData={state.editorContent}
                             onBlur={(_, editor) => {
-                                form.setFieldsValue({ content: editor.getData() })
+                                const content = editor.getData();
+                                form.setFieldsValue({ content });
+                                setState(prevState => ({ ...prevState, editorContent: content }));
                             }} />
                     </Item>
                     <Flex justify="center" gap={10} wrap="wrap">
