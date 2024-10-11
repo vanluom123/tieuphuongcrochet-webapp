@@ -1,7 +1,20 @@
-const Users = () => {
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import Users from "./Users";
+
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations('User');
+    return {
+        title: t('title'),
+        description: t('description')
+    };
+}
+
+const User = () => {
+    
     return(
-        <div>Admin Users page</div>
+        <Users />
     )
 }
 
-export default Users;
+export default User;
