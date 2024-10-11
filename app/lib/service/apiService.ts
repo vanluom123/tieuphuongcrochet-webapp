@@ -1,5 +1,3 @@
-import { getSession } from "next-auth/react";
-import { message, notification } from "../notify";
 
 async function apiService<T = unknown>({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
@@ -60,15 +58,11 @@ async function apiService<T = unknown>({
             clearTimeout(timeoutId); // Clear timeout when response is received
 
             if (!response.ok) {
-                console.log('response login', response);
-                
                 // Handle specific status codes differently if needed
                 if (response.status === 401) {
                     throw new Error('Unauthorized. Please check your credentials.');
                 } else if (response.status >= 500) {
-                    
                     throw new Error('Server error. Retrying...');
-                    
                 } else {
                     throw new Error(`HTTP error! Status: ${response.status}, ${response.statusText}`);
                 }
