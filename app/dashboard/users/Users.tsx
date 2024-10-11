@@ -47,6 +47,16 @@ const Users = () => {
         setParams(newParams);
     }
 
+    const onPageChange = (pagination: any, filters: any, sorter: any) => {
+        const { current, pageSize } = pagination;
+        const newParams = {
+            ...params,
+            pageNo: current - 1,
+            pageSize: pageSize,
+        }
+        setParams(newParams)
+    }
+
     const columns = [
         {
             title: 'Email',
@@ -68,7 +78,7 @@ const Users = () => {
     return (
         <>
             <div className='users-admin'>
-                <SearchTable isShowAddNew={false} onSearch={onSearch} loading={state.loading} onAddNew={() => {}} />
+                <SearchTable isShowAddNew={false} onSearch={onSearch} loading={state.loading} onAddNew={() => { }} />
                 <div className='admin-table'>
                     <DataTable
                         loading={state.loading}
@@ -76,7 +86,11 @@ const Users = () => {
                         onDeleteRecord={onDeleteRecord}
                         onEditRecord={onEditRecord}
                         customColumns={columns}
-                        rowKey="id"
+                        totalPageSize={state.totalRecord}
+                        pageSize={params.pageSize}
+                        pageIndex={params.pageNo}
+                        visiblePagination
+                        onTableChange={onPageChange}
                     />
                 </div>
             </div>
