@@ -87,7 +87,7 @@ const FreePatterns = () => {
         router.push(`${ROUTE_PATH.DASHBOARD_FREE_PATTERNS}/${ROUTE_PATH.CREATE}`)
     }
 
-    const onPageChange = (pagination: any, filters: any, sorter: any) => {
+    const onPageChange = (pagination: any) => {
         const { current, pageSize } = pagination;
         const newParams = {
             ...params,

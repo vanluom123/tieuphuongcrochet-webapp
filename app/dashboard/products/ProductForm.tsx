@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from "react";
 import { Form, Input, TreeSelect, Button, Row, Col, Flex, InputNumber, Spin, Space, Switch } from "antd";
-import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 import { Category, FileUpload, Product } from "@/app/lib/definitions";
@@ -56,8 +55,6 @@ const ProductForm = ({ params }: ProductFormProps) => {
             });
         }
     }, [params?.id])
-
-    const t = useTranslations('Product');
 
     const onSubmitForm = async (values: Product) => {
         let sendData = { ...values }

@@ -16,6 +16,7 @@ async function apiJwtService<T = unknown>({
     headers = {},
     timeout = 20000,
     queryParams = {},
+    formData
 }: {
     baseUrl?: string;
     endpoint?: string;
@@ -24,6 +25,7 @@ async function apiJwtService<T = unknown>({
     headers?: Record<string, string>;
     timeout?: number;
     queryParams?: Record<string, string>;
+    formData?: FormData;
 }) {
     const session = await getSession();
     let accessToken = session?.user?.accessToken;
@@ -81,7 +83,8 @@ async function apiJwtService<T = unknown>({
         data,
         headers: options.headers as Record<string, string>,
         timeout,
-        queryParams
+        queryParams,
+        formData
     });
 }
 

@@ -11,9 +11,9 @@ import SearchTable from '@/app/components/data-table/SearchTable';
 
 interface CUCategoryProps {
 	categorySelected: DataType;
-	setCategorySelected: Function;
+	setCategorySelected: (category: DataType) => void;
 	isModalOpen: boolean;
-	setIsModalOpen: Function;
+	setIsModalOpen: (open: boolean) => void;
 	categories: CheckboxOptionType[];
 }
 
@@ -72,7 +72,9 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 	};
 
 	const handleCancel = () => {
-		categorySelected && setCategorySelected({});
+		if (categorySelected) {
+			setCategorySelected({} as DataType);
+		}
 		childForm.resetFields();
 		form.resetFields();
 		setCheckedList([]);
@@ -112,8 +114,9 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 	};
 
 	const childActions = (key: string) => [
-		<Button shape='circle' icon={<SaveOutlined />} onClick={() => onUpdateChildCategory(key)} />,
+		<Button key="save" shape='circle' icon={<SaveOutlined />} onClick={() => onUpdateChildCategory(key)} />,
 		<Popconfirm
+			key="delete"
 			title="Sure to delete?"
 			onConfirm={() => onDelete(key)}>
 			<Button

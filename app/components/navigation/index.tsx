@@ -7,15 +7,14 @@ import { MenuOutlined } from '@ant-design/icons';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-
 import logo from '@/public/logo.png';
 import { ROUTE_PATH } from '@/app/lib/constant';
 
 import Languages from './Languages';
-import '../../ui/navigation.scss';
 import SidebarNav from './SibarNav';
 import MenuNav from './MenuNav';
 import UserAccount from './UserAccount';
+import '../../ui/navigation.scss';
 
 interface NavigationProps {
     currentNav: string;

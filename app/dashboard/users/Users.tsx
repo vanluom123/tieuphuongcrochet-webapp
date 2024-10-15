@@ -36,7 +36,7 @@ const Users = () => {
         deleteUser(id as string);
     }
 
-    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
+    const onSearch: SearchProps['onSearch'] = (value) => {
         const filters: Filter = filterByText(value, 'name', 'role', 'email');
         const tempFilters = mapNameFilters(params.filters as Filter[], 'searchText', filters);
 
@@ -47,7 +47,7 @@ const Users = () => {
         setParams(newParams);
     }
 
-    const onPageChange = (pagination: any, filters: any, sorter: any) => {
+    const onPageChange = (pagination: any) => {
         const { current, pageSize } = pagination;
         const newParams = {
             ...params,

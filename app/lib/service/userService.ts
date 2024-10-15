@@ -1,6 +1,5 @@
 import { User } from '@/app/lib/definitions';
 import { ListParams } from '@/app/lib/definitions';
-import apiService from './apiService';
 import { API_ROUTES } from '../constant';
 import apiJwtService from './apiJwtService';
 

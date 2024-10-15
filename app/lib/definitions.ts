@@ -33,11 +33,6 @@ export const initialListParams: ListParams = {
 	filters: []
 };
 
-export interface ListTablePayload<T> {
-	data: T[];
-	total: number;
-}
-
 export interface FileUpload {
 	fileContent: string;
 	fileName: string;
@@ -91,15 +86,6 @@ export interface DataType {
 	createdDate?: string;
 	imagesPreview?: { src: string, alt: string }[];
 }
-
-export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-	editing: boolean;
-	dataIndex: string;
-	inputType: 'number' | 'text';
-	record: DataType;
-	index: number;
-	children: React.ReactNode;
-};
 
 export interface SearchParams {
 	filters: Filter[];

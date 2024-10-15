@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, Col, Flex, Form, Input, Radio, RadioChangeEvent, Row, TreeSelect } from 'antd';
 import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import { SearchProps } from 'antd/es/input';
@@ -47,7 +47,9 @@ const SearchTable = ({
 
     const onHandleSearch = (searchParams: SearchParams) => {
         setSearchParams(searchParams);
-        onSearchChange instanceof Function && onSearchChange(searchParams);
+        if (onSearchChange instanceof Function) {
+            onSearchChange(searchParams);
+        }
     };
 
     const onchangeRadio = (e: RadioChangeEvent) => {
@@ -62,7 +64,7 @@ const SearchTable = ({
         onHandleSearch(newSearchParams);
     };
 
-    const onSearchText: SearchProps['onSearch'] = (value, _e, info) => {
+    const onSearchText: SearchProps['onSearch'] = (value) => {
         if (onSearch instanceof Function) {
             onSearch(value);
             return;

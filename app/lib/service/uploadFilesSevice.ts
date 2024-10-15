@@ -1,13 +1,13 @@
 import { API_ROUTES } from "../constant";
 import { FileUpload } from "../definitions";
-import apiService from "./apiService";
+import apiJwtService from "./apiJwtService";
 
 const uploadFile = {
 	
 	async upload(formData: FormData) :Promise<any> {
         const headers= { 'Content-Type': 'multipart/form-data' } 
         const url = `${API_ROUTES.UPLOAD_FILE}`;
-		const res = await apiService({  
+		const res = await apiJwtService({  
 			endpoint: url,
 			method: 'POST',
 			formData,
@@ -21,7 +21,7 @@ const uploadFile = {
 
 	delete(fileNames: string[]) :Promise<any> {
 		const url = `${API_ROUTES.DELETE_MULTIPLE_FILES}`
-		return apiService({
+		return apiJwtService({
 			endpoint: url,
 			method: 'DELETE',
 			data: fileNames

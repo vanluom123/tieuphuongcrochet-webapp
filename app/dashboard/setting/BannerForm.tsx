@@ -3,9 +3,9 @@ import { PlusOutlined } from '@ant-design/icons';
 
 
 import { map } from "lodash";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect } from "react";
 import UploadFiles from "@/app/components/upload-files";
-import { FileUpload, Banner, DataTableState, DataType } from "@/app/lib/definitions";
+import { FileUpload, Banner, DataType } from "@/app/lib/definitions";
 
 
 export interface EdittingBanner {

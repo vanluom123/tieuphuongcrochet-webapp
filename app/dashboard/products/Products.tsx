@@ -66,7 +66,7 @@ const Products = () => {
         router.push(`${ROUTE_PATH.DASHBOARD_PRODUCTS}/${ROUTE_PATH.CREATE}`)
     }
 
-    const onPageChange = (pagination: any, filters: any, sorter: any) => {
+    const onPageChange = (pagination: any) => {
         const { current, pageSize } = pagination;
         const newParams = {
             ...params,

@@ -9,9 +9,10 @@ import { UploadMode } from "@/app/lib/definitions";
 import { getBase64, showConfirmDelete } from "@/app/lib/utils";
 import uploadFile from "@/app/lib/service/uploadFilesSevice";
 import { notification } from "@/app/lib/notify";
+import Image from "next/image";
 
 interface UploadFilesProps extends UploadProps {
-	onChangeFile: Function;
+	onChangeFile: (files: FileUpload[]) => void;
 	files?: FileUpload[];
 	imgsNumber?: number;
 	isMultiple?: boolean;
@@ -63,7 +64,7 @@ const UploadFiles = ({ onChangeFile, files, imgsNumber = 20, isMultiple = true, 
 		const ext = name[name.length - 1];
 		const newName = `${name[0]}_${new Date().getTime()}.${ext}`;
 		
-		var blob = file.slice(0, file.size);
+		const blob = file.slice(0, file.size);
 		return new File([blob], newName, { type: file.type });
 	}
 
@@ -80,7 +81,11 @@ const UploadFiles = ({ onChangeFile, files, imgsNumber = 20, isMultiple = true, 
 
 		formData.append('files', getNewFile(file));
 		const res: FileUpload[] = await uploadFile.upload(formData);
-		res && setLoading(false);
+		console.log('upload res', res);
+		
+		if (res) {
+			setLoading(false);
+		}
 
 		if (res.length > 0) {
 			const newFiles = {
@@ -173,7 +178,7 @@ const UploadFiles = ({ onChangeFile, files, imgsNumber = 20, isMultiple = true, 
 				footer={null}
 				onCancel={handleCancel}
 			>
-				<img alt="example" style={{ width: '100%' }} src={previewImage} />
+				<Image alt="example" style={{ width: '100%' }} src={previewImage} />
 			</Modal>
 		</>
 	)

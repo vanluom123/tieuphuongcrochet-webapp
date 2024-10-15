@@ -46,6 +46,7 @@ export const updateCategory = async (data: Category) => {
 
 export const deleteCategory = async (id: string) => {
     const url = `${API_ROUTES.CATEGORY}/${API_ROUTES.DELETE}?id=${id}`
+    
     await apiJwtService({
         endpoint: url,
         method: 'DELETE',

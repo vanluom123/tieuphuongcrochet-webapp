@@ -102,6 +102,7 @@ const DataTable = ({
                 width={88}
                 src={rd.src}
                 fallback={IMAGE_FALLBACK}
+                alt={rd.name || 'image fallback'}
               />
           } : {}),
         {
@@ -141,14 +142,14 @@ const DataTable = ({
     ...(onShowSizeChange ? { onShowSizeChange } : {}),
     showTotal: (total: number, range: any) => `${range[0]}-${range[1]} of ${total} items`
   } : false;
-  return (
-    <Table
-      bordered
-      dataSource={dataSource}
-      columns={filter(newColumns, col => Object.keys(col).length !== 0)}
-      pagination={paginationProps}
-      onChange={onTableChange}
-      {...restProps}
+	return (
+		<Table
+			bordered
+			dataSource={dataSource}
+			columns={filter(newColumns, col => Object.keys(col).length !== 0)}
+			pagination={paginationProps}
+			onChange={onTableChange}
+			{...restProps}
     />
   );
 };
