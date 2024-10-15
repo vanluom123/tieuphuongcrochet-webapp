@@ -26,7 +26,7 @@ export default function ViewPost({ params }: { params: { slug: string } }) {
 				setState(prevState => ({ ...prevState, loading: false }));
 			});
 		}
-	}, [params.slug])
+	}, [params.slug, state])
 
 	const { post, loading } = state;
 	const { title, content, createdDate, src } = post;

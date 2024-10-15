@@ -33,11 +33,6 @@ export const initialListParams: ListParams = {
 	filters: []
 };
 
-export interface ListTablePayload<T> {
-	data: T[];
-	total: number;
-}
-
 export interface FileUpload {
 	fileContent: string;
 	fileName: string;
@@ -92,46 +87,9 @@ export interface DataType {
 	imagesPreview?: { src: string, alt: string }[];
 }
 
-export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-	editing: boolean;
-	dataIndex: string;
-	// title: any;
-	inputType: 'number' | 'text';
-	record: DataType;
-	index: number;
-	children: React.ReactNode;
-}
-
-//   export interface DataTableProps extends TableProps<DataType> {
-//     pageSize?: number;
-//     pageIndex?: number;
-//     onEditRecord: (key: React.Key, record?: any) => void;
-//     onDeleteRecord: (key: React.Key) => void;
-//     customColumns?: ColumnsType<DataType>;
-//     isShowImage?: boolean;
-//     visiblePagination?: boolean;
-//     totalPageSize?: number;
-//     onPageChange?: (page: number, pageSize: number) => void;
-//     onShowSizeChange?: (current: number, size: number) => void;
-//     onTableChange?: (pagination: any, filters: any, sorter: any, extra: any) => void;
-//   }
-
 export interface SearchParams {
 	filters: Filter[];
 };
-
-//   export interface SearchTableProps {
-//     onAddNew: () => void;
-//     onSearch?: SearchProps['onSearch'];
-//     onSearchChange?: (searchParams: SearchParams) => void;
-//     textAddNew?: string;
-//     loading?: boolean;
-//     isShowFilter?: boolean;
-//     isShowSearch?: boolean;
-//     isShowAddNew?: boolean;
-//     searchFields?: string[];
-//     isShowStatusFilter?:boolean;
-//   }
 
 export interface Paging {
 	pageSize: number;
@@ -156,7 +114,6 @@ export interface Banner {
 	bannerType?: IBannerType;
 	textColor?: string;
 };
-
 
 export interface IBannerType {
 	id?: React.Key;
@@ -183,20 +140,6 @@ export interface Category {
     key?: string;
 };
 
-export interface CategoryState {
-    loading: boolean;
-    data: DataType[];
-    totalRecord: number;
-}
-
-// -------------------------- FreePattern --------------------------
-export interface FreePattern {
-	id: string;
-	name: string;
-	description: string;
-	bytes: string[];
-}
-
 // -------------------------- Pattern --------------------------
 export interface Menu {
     key: string;
@@ -222,18 +165,6 @@ export interface Pattern {
 	home?:boolean
 }
 
-export interface PayloadFile {
-	file: unknown;
-	resolve?: unknown
-}
-
-export interface PatternPayload {
-	params: Pattern;
-	callback: () => void;
-};
-
-
-
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';
 
 export interface TranslationStatus {
@@ -241,32 +172,10 @@ export interface TranslationStatus {
 	value: TTranslationStatus;
 }
 
-// -------------------------- Post --------------------------
-
-export interface Post {
-    id?: React.Key,
-    title: string,
-    content: string,
-    createdDate: string,
-    files?: FileUpload[],
-    src?: string,
-    is_home?:boolean
-}
-
-export interface PostPayloadFile {
-    file: unknown;
-    resolve?: unknown
-}
-
 export interface DataTableState {
     loading: boolean;
     data: DataType[];
-    totalRecord: number;
-}
-
-export interface PostPayload {
-    params: Post;
-    callback: () => void;
+    totalRecord?: number;
 }
 
 // -------------------------- Product --------------------------
@@ -286,11 +195,6 @@ export interface Product {
 	content?: string;
 }
 
-export interface ProductPayloadFile {
-	file: unknown;
-	resolve?: unknown
-}
-
 export interface HomeData {
 	products: Product[],
 	patterns?: Pattern[],
@@ -298,13 +202,6 @@ export interface HomeData {
 	banners: Banner[],
 	blogs: Post[]
 };
-
-
-
-export interface ProductPayload {
-	params: Product;
-	callback: () => void;
-}
 
 // -------------------------- Tabs --------------------------
 
@@ -330,45 +227,6 @@ export interface User {
 	password?: string;
 	createdDate?: string;
 	lastModifiedDate?: string;
-}
-
-export interface AuthPayload {
-	params: User;
-	callback: () => void;
-};
-
-export interface LoginRes {
-	accessToken: string;
-	tokenType?: string;
-	email?: string;
-	role?: string;
-	refreshToken: string;
-}
-
-export interface RefreshTokenRes{
-	refreshToken: string;
-	jwtToken: string;
-}
-
-export interface ErrorData {
-	message: string;
-	statusCode: string;
-	code?: string;
-	error?: string;
-}
-
-export interface UserState {
-	loading: boolean;
-	data: DataType[];
-	totalRecord: number;
-	user: User;
-}
-
-// -------------------------- API --------------------------
-export interface ApiResponse<T> {
-  data: T;
-  status: number;
-  statusText: string;
 }
 
 //------------------------Blogs--------------------------

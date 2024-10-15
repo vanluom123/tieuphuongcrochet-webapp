@@ -3,6 +3,8 @@ import { API_ROUTES } from "../constant";
 import { Product, FileUpload, ListParams, DataType } from "../definitions";
 import { getAvatar, mapImagesPreview } from "../utils";
 import apiService from "./apiService";
+import { notification } from "antd";
+import apiJwtService from "./apiJwtService";
 
 export const fetchProducts = async (params: ListParams): Promise<{ data: DataType[], totalRecords: number }> => {
     const res = await apiService({
@@ -17,14 +19,16 @@ export const fetchProducts = async (params: ListParams): Promise<{ data: DataTyp
         data: params.filters,
     }).catch((err) => {
         console.log("err", err);
+        return {} as Product;
     });
 
     const newData = map(res.contents, (item: Product) => ({
         ...item,
         key: item.id,
         name: item.name,
-        author: item.author,
-        description: item.description,
+        price: item.price,
+        currency_code: item.currency_code,
+        category: item.category,
         images: item.images?.map(f => ({ ...f, url: f?.fileContent })),
         src: getAvatar(item.images as FileUpload[]),
         imagesPreview: mapImagesPreview(item.images || [])
@@ -52,4 +56,38 @@ export const fetchProductDetail = async (id: string): Promise<Product> => {
     };
     
     return newData;
+};
+
+export const deleteProduct = async (id: string) => {
+    const url = `${API_ROUTES.PRODUCT}/${API_ROUTES.DELETE}?id=${id}`;
+    await apiJwtService({
+        endpoint: url,
+        method: 'DELETE',
+    }).then(() => {
+        notification.success({ message: 'Success', description: 'Delete product successfully' })
+    }).catch((err) => {
+        console.log("err", err);
+        notification.error({ message: 'Failed', description: err.message })
+    })
+};
+
+export const createUpdateProduct = async (data: Product): Promise<Product> => {
+    const endpoint = `${API_ROUTES.PRODUCT}/${API_ROUTES.CREATE}`
+    const res = await apiJwtService({
+        endpoint,
+        method: 'POST',
+        data,
+    }).catch((err) => {
+        notification.error({message: 'Failed', description: err.message});
+   });
+    
+
+    if (res?.id && !data.id) {
+        notification.success({ message: 'Success', description: 'Create product successfully' })
+    }
+    if(res?.id && data.id) {
+        notification.success({ message: 'Success', description: 'Update product successfully' })
+    }
+
+    return res;
 };

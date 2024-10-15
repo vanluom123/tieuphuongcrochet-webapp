@@ -1,10 +1,9 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { Button, Layout } from 'antd';
-
+import {Layout } from 'antd';
 import Image from 'next/image';
-import { MenuOutlined, UserOutlined } from '@ant-design/icons';
+import { MenuOutlined } from '@ant-design/icons';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -12,9 +11,10 @@ import logo from '@/public/logo.png';
 import { ROUTE_PATH } from '@/app/lib/constant';
 
 import Languages from './Languages';
-import '../../ui/navigation.scss';
 import SidebarNav from './SibarNav';
 import MenuNav from './MenuNav';
+import UserAccount from './UserAccount';
+import '../../ui/navigation.scss';
 
 interface NavigationProps {
     currentNav: string;
@@ -77,7 +77,7 @@ const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 						<Languages />
 
 						{/* user icon */}
-						<Button shape='circle' icon={<UserOutlined />} />
+						<UserAccount />	
 					</div>
 				</div>
 

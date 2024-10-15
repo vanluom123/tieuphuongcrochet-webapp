@@ -9,15 +9,15 @@ export const ROUTE_PATH = {
   ABOUT: '/about',
   CONTACT: '/contact',
   LOGIN: '/login',
-  ADMIN: '/admin',
+  DASHBOARD: '/dashboard',
   REGISTER: '/register',
-  ADMIN_FREE_PATTERNS: '/admin/free-patterns',
-  AMIN_PRODUCTS: '/admin/products',
-  ADMIN_USERS: '/admin/users',
-  ADMIN_SETTING: '/admin/setting',
-  ADMIN_POSTS: '/admin/blogs',
-  ADMIN_CATEGORY: '/admin/categories',
-  CREATE: 'create-update',
+  DASHBOARD_FREE_PATTERNS: '/dashboard/free-patterns',
+  DASHBOARD_PRODUCTS: '/dashboard/products',
+  DASHBOARD_USERS: '/dashboard/users',
+  DASHBOARD_SETTING: '/dashboard/setting',
+  DASHBOARD_POSTS: '/dashboard/blogs',
+  DASHBOARD_CATEGORY: '/dashboard/categories',
+  CREATE: 'create',
   DETAIL: 'detail'
 };
 
@@ -56,7 +56,7 @@ export const LANGUAGES_LIST = [
   { key: LANGUAGES.EN, label: 'EN' },
 ];
 
-export const ROLES = {
+export const USER_ROLES = {
   ADMIN: 'ADMIN',
   USER: 'USER',
 };

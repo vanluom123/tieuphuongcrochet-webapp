@@ -37,7 +37,6 @@ const Blogs = () => {
 		setState({ ...state, loading: true });
 		fetchBlogs(params).then(({ data, totalRecords }) => {
 			setState({ ...state, data, totalRecord: totalRecords });
-
 		}).finally(() => {
 			setState(prevState => ({ ...prevState, loading: false }));
 		});
