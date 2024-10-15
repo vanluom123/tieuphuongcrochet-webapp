@@ -3,14 +3,14 @@ import { getTranslations } from "next-intl/server";
 import Blogs from "./Blogs";
 
 export async function generateMetadata(): Promise<Metadata> {
-	const t = await getTranslations('Blogs');
+	const t = await getTranslations('Blog');
 	return {
 		title: t('title'),
 		description: t('description')
 	};
 }
 
-export const Blog = () => {
+const Blog = () => {
     return(
         <Blogs />
     )

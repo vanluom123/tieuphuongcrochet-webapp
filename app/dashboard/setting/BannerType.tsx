@@ -5,6 +5,7 @@ import { DataType, IBannerType, TBannerType } from "@/app/lib/definitions";
 import { BANNER_TYPES_DEFAULT } from "@/app/lib/constant";
 import DataTable from "@/app/components/data-table";
 import '../../ui/bannerTypes.scss';
+import { createUpdateBannerType, deleteBannerType } from "@/app/lib/service/settingService";
 
 interface ModalForm {
 	open: boolean;
@@ -26,11 +27,12 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal }: TypeBannerModalProps) => {
 			}
 			form.setFieldsValue(formData);
 		}
-	}, [openCUModal.id]);
+	}, [form, openCUModal.name,openCUModal.id]);
 
 	const onSubmit = () => {
-		form.validateFields().then((values: IBannerType) => {
-			const sendData = openCUModal.id ? { ...values, id: openCUModal.id } : values
+		form.validateFields().then(async (values: IBannerType) => {
+			const sendData = openCUModal.id ? { ...values, id: openCUModal.id } : values;
+			await createUpdateBannerType(sendData);
 			setOpenCUModal({ open: false, id: '' });
 			form.resetFields()
 		})
@@ -96,11 +98,8 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal }: TypeBannerModalProps) => {
 const BannerType = ({ bannerTypes }: { bannerTypes: DataType[] }) => {
 	const [openCUModal, setOpenCUModal] = useState<ModalForm>({ open: false, id: '' });
 
-
-
-
 	const onDeleteRecord = async (id: React.Key) => {
-		// dispatch(settingAction.deleteBannerType(id));
+		await deleteBannerType(id as string	);
 	};
 
 	const onEditRecord = (id: React.Key, values: IBannerType) => {

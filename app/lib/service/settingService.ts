@@ -69,6 +69,7 @@ export const createUpdateBannerType = async (data: IBannerType): Promise<void> =
             data,
         });
         console.log('res createUpdateBannerType', res);
+        notification.success({ message: 'Success', description: 'Create banner type successfully' });
     } catch (err) {
         handleApiError(err);
     }
