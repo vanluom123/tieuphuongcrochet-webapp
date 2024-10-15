@@ -40,7 +40,7 @@ const Blogs = () => {
 		}).finally(() => {
 			setState(prevState => ({ ...prevState, loading: false }));
 		});
-	}, [params, state, setState]);
+	}, [params]);
 
 	const onSearchPosts = (value: string) => {
 		const filters: Filter = filterByText(value, 'title');
