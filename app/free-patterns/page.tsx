@@ -23,7 +23,10 @@ export async function generateMetadata(): Promise<Metadata> {
 		},  
 		  // Add these lines:
 		keywords: t("title"), // Add relevant keywords
-		robots: "index, follow", // Ensure the page is indexable
+		robots: {
+			index: true,
+			follow: true,
+		}, // Ensure the page is indexable
 	};
 }
 
