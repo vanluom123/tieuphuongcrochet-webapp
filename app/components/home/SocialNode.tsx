@@ -5,7 +5,7 @@ import SocialBox from "../social-box";
 
 const SocialNode = () => {
     return (
-        <div className='social scroll-animate'>
+        <div className='social'>
             <HeaderPart
                 isShowDivider
                 titleId='Home.Social.title'
