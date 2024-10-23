@@ -7,20 +7,22 @@ import HeaderPart from "../components/header-part";
 import ViewTable from "../components/view-table";
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH, TRANSLATION_STATUS } from "../lib/constant";
 import { initialListParams, Filter, ListParams, DataTableState, Category, DataType } from "../lib/definitions";
-import { fetchCategories } from "../lib/service/categoryService";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import { fetchFreePatterns } from "../lib/service/freePatternService";
 
-const initialState: DataTableState = {
-	loading: false,
-	data: [],
-	totalRecord: 0,
-};
+interface FreePatternProps {
+	initialData: DataTableState
+	categories: Category[];
+}
 
-const FreePatterns = () => {
-    const [state, setState] = useState(initialState);
+const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
+	const [state, setState] = useState<DataTableState>({
+		loading: false,
+		data: initialData.data,
+		totalRecord: initialData.totalRecord,
+	});
+
 	const [params, setParams] = useState(initialListParams);
-	const [categories, setCategories] = useState<Category[]>([]);
 
 	const router = useRouter();
 	const onPageChange = (current: number, pageSize: number) => {
@@ -33,20 +35,15 @@ const FreePatterns = () => {
 	}
 
 	useEffect(() => {
-		setState({ ...state, loading: true });
-		fetchFreePatterns(params).then(({ data, totalRecords }) => {
-			setState({ ...state, data, totalRecord: totalRecords });
-
-		}).finally(() => {
-			setState(prevState => ({ ...prevState, loading: false }));
-		});
+		if (params !== initialListParams) {
+			setState({ ...state, loading: true });
+			fetchFreePatterns(params).then(({ data, totalRecords }) => {
+				setState({ ...state, data, totalRecord: totalRecords });
+			}).finally(() => {
+				setState(prevState => ({ ...prevState, loading: false }));
+			});
+		}
 	}, [params]);
-
-	useEffect(() => {
-		fetchCategories().then((data) => {
-			setCategories(data as Category[]);
-		});
-	}, []);
 
 	const onSearchFreePatterns = (value: string) => {
 		const prodFilter: Filter = filterByText(value, 'name', 'description');

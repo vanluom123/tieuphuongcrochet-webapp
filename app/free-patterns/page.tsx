@@ -3,7 +3,9 @@ import { Metadata } from "next";
 import FreePatterns from "./FreePatterns";
 import { getTranslations } from "next-intl/server";
 import { ROUTE_PATH } from "../lib/constant";
-
+import { fetchFreePatterns } from "../lib/service/freePatternService";
+import { fetchCategories } from "../lib/service/categoryService";
+import { Category, initialListParams } from "../lib/definitions";
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,9 +22,27 @@ export async function generateMetadata(): Promise<Metadata> {
 	};
 }
 
-const Page = () => {
+async function getFreePatterns() {
+	const { data, totalRecords } = await fetchFreePatterns(initialListParams);
+	return { data, totalRecords };
+}
+
+async function getCategories() {
+	return await fetchCategories();
+}
+
+const Page = async () => {
+	const [freePatterns, categories] = await Promise.all([
+		getFreePatterns(),
+		getCategories(),
+	]);
+
 	return (
-		<FreePatterns />
+		<FreePatterns initialData={{
+			loading: false,
+			data: freePatterns.data,
+			totalRecord: freePatterns.totalRecords,
+		}} categories={categories as Category[]} />
 	)
 }
 

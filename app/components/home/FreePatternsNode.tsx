@@ -19,7 +19,7 @@ const FreePatternsNode = ({patterns}: {patterns: Pattern[]}) => {
 	};
 	
 	return (
-		<div className='patterns scroll-animate'>
+		<div className='patterns'>
 			<HeaderPart
 				titleId='Home.FreePattern.title'
 				descriptionId='Home.FreePattern.description'
