@@ -1137,6 +1137,7 @@ body {
   font-weight: 700;
   color: $textPrimaryColor;
   padding: 0 20px;
+  text-transform: capitalize;
 }
 
 .admin-page-layout {
@@ -1191,7 +1192,7 @@ body {
   padding: 40px 0;
 }
 
-.btn-form {
+.ant-form .btn-form, .btn-form {
   min-width: 120px;
   height: 44px;
 }

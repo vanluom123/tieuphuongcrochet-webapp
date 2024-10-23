@@ -173,7 +173,7 @@ export interface TranslationStatus {
 }
 
 export interface DataTableState {
-    loading: boolean;
+    loading?: boolean;
     data: DataType[];
     totalRecord?: number;
 }

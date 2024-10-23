@@ -18,7 +18,7 @@ const BlogsNode = ({ posts }: { posts: Post[] }) => {
 	};
 
 	return (
-		<div className='blogs scroll-animate'>
+		<div className='blogs'>
 			<HeaderPart titleId='Home.Blog.title'
 				descriptionId='Home.Blog.description'
 			/>

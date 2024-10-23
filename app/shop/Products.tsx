@@ -1,24 +1,21 @@
 'use client'
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import HeaderPart from "../components/header-part";
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH } from "../lib/constant";
 import { Filter, initialListParams, ListParams, DataTableState, Category, DataType } from "../lib/definitions";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
 import { fetchProducts } from "../lib/service/productService";
-import { fetchCategories } from "../lib/service/categoryService";
-import { useRouter } from "next/navigation";
 
-const initialState: DataTableState = {
-    loading: false,
-    data: [],
-    totalRecord: 0,
-};
+interface ProductsProps {
+	initialData: DataTableState	;
+	categories: Category[];
+}
 
-const Products = () => {
-	const [state, setState] = useState(initialState);
+const Products = ({ initialData, categories }: ProductsProps) => {
+	const [state, setState] = useState(initialData);
 	const [params, setParams] = useState(initialListParams);
-	const [categories, setCategories] = useState<Category[]>([]);
 
 	const router = useRouter();
 
@@ -32,19 +29,15 @@ const Products = () => {
 	}
 
 	useEffect(() => {
-		setState({ ...state, loading: true });
-		fetchProducts(params).then(({ data, totalRecords }) => {
-			setState({ ...state, data, totalRecord: totalRecords });
-		}).finally(() => {
-			setState(prevState => ({ ...prevState, loading: false }));
-		});
+		if (params !== initialListParams) {
+			setState({ ...state, loading: true });
+			fetchProducts(params).then(({ data, totalRecords }) => {
+				setState({ ...state, data, totalRecord: totalRecords });
+			}).finally(() => {
+				setState(prevState => ({ ...prevState, loading: false }));
+			});
+		}
 	}, [params]);
-
-	useEffect(() => {
-		fetchCategories().then((data) => {
-			setCategories(data as Category[]);
-		});
-	}, []);
 
 	const onSearchProducts = (value: string) => {
 		const prodFilter: Filter = filterByText(value, 'name', 'description');
