@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "./components/theme-provider";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import AuthProvider from "./context/AuthProvider";
+import GoogleTag from "./components/GoogleTag";
 
 export async function generateMetadata() {
   const t = await getTranslations("App");
@@ -56,6 +57,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
+      <GoogleTag /> 
       <body>
         <AuthProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
