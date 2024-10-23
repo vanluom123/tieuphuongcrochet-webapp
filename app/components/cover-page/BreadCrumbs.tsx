@@ -1,6 +1,6 @@
 import { BREADCRUMB, ROUTE_PATH } from "@/app/lib/constant";
 import { Banner, BreadCrumbItem, TBannerType } from "@/app/lib/definitions";
-import { useCallback, useMemo } from "react";
+import { ReactNode, useCallback, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Breadcrumb } from "antd";

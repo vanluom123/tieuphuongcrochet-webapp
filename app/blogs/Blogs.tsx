@@ -37,7 +37,6 @@ const Blogs = () => {
 		setState({ ...state, loading: true });
 		fetchBlogs(params).then(({ data, totalRecords }) => {
 			setState({ ...state, data, totalRecord: totalRecords });
-
 		}).finally(() => {
 			setState(prevState => ({ ...prevState, loading: false }));
 		});
@@ -62,7 +61,6 @@ const Blogs = () => {
 				type='success'
 				className="animation-alert"
 				message={t('message')}
-				description={t('description')}
 				showIcon
 			/>
 			<ViewTable

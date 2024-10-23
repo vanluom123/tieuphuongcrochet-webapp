@@ -14,9 +14,10 @@ import { IMAGE_FALLBACK } from '@/app/lib/constant';
 interface DownloadImageProps extends ImageProps {
 	src?: string;
 	width?: number | string;
+	alt?: string;
 };
 
-const DownloadImage = ({ src, width, ...restProps }: DownloadImageProps) => {
+const DownloadImage = ({ src, width, alt, ...restProps }: DownloadImageProps) => {
 	// or you can download flipped and rotated image
 	// https://codesandbox.io/s/zi-ding-yi-gong-ju-lan-antd-5-7-0-forked-c9jvmp
 	const onDownload = async () => {
@@ -72,6 +73,7 @@ const DownloadImage = ({ src, width, ...restProps }: DownloadImageProps) => {
 			src={src}
 			fallback={IMAGE_FALLBACK}
 			preview={{ toolbarRender: renderToolbar }}
+			alt={alt || 'image'}
 			{...restProps}
 		/>
 	);

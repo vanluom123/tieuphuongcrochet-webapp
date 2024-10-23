@@ -1,4 +1,5 @@
-async function apiService<T = any>({
+
+async function apiService<T = unknown>({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
     endpoint = '',
     method = 'GET',
@@ -7,7 +8,8 @@ async function apiService<T = any>({
     timeout = 20000,
     queryParams = {},
     retries = 3,
-    logRequests = false
+    logRequests = false,
+    formData
 }: {
     baseUrl?: string;
     endpoint?: string;
@@ -18,6 +20,7 @@ async function apiService<T = any>({
     queryParams?: Record<string, string>;
     retries?: number;
     logRequests?: boolean;
+    formData?: FormData;
 }) {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -37,6 +40,10 @@ async function apiService<T = any>({
 
     if (data) {
         options.body = JSON.stringify(data);
+    }
+
+    if (formData) {
+        options.body = formData;
     }
 
     // Function to make the actual request with retry logic
@@ -67,12 +74,11 @@ async function apiService<T = any>({
             } else {
                 return await response.text();
             }
-        } catch (error: any) {
-            if (attempt <= retries && (error.name === 'AbortError' || error.message.includes('Server error'))) {
+        } catch (error: unknown) {            
+            if (attempt <= retries && (error instanceof Error && (error.name === 'AbortError' || error.message.includes('Server error')))) {
                 console.warn(`Retrying request... Attempt ${attempt} failed`);
                 return makeRequest(attempt + 1);
             } else {
-                console.error('Fetch operation failed:', error);
                 throw error;
             }
         }

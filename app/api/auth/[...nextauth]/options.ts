@@ -1,55 +1,23 @@
 
 import CredentialsProvider from 'next-auth/providers/credentials'
 import * as jwtDecode from 'jsonwebtoken';
-import { JWT } from 'next-auth/jwt';
 import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
 import { JwtPayload } from 'jsonwebtoken';
 import { NextAuthOptions } from 'next-auth';
-import GoogleProvider from "next-auth/providers/google";
 import apiService from '../../../lib/service/apiService';
-
-async function refreshAccessToken(token: JWT): Promise<JWT> {
-  const res = await apiService({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL,
-    endpoint: `${API_ROUTES.REFRESH_TOKEN}?refreshToken=${token.refreshToken}`,
-    method: 'POST',
-    data: { refreshedToken: token.refreshToken },
-  }).catch((error) => {
-    console.log("error", error);
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
-  });
-
-  if (res == null) {
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
-  }
-
-  return {
-    ...token,
-    accessToken: res.accessToken,
-    refreshToken: res.refreshToken ?? token.refreshToken,
-  };
-}
+import refreshAccessToken from '../../refreshToken';
 
 export const options: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: ROUTE_PATH.LOGIN,
+    error: ROUTE_PATH.ERROR
   },
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
-    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {
+      email: {
           label: "Email:",
           type: "email",
           placeholder: "Enter your email"
@@ -86,18 +54,16 @@ export const options: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
+      if ( user) {
         token.role = user.role
         token.accessToken = user.accessToken
         token.refreshToken = user.refreshToken
 
         // Decode the access token
         const decoded = jwtDecode.decode(user.accessToken) as JwtPayload;
-        if (decoded && Date.now() < (decoded.exp as number) * 1000) {
-          return token;
+        if (decoded && Date.now() >= (decoded.exp as number) * 1000) {
+          return await refreshAccessToken(token);
         }
-
-        return refreshAccessToken(token);
       }
 
       return token;
@@ -108,6 +74,7 @@ export const options: NextAuthOptions = {
         session.user.role = token.role;
         session.user.email = token.email as string;
         session.user.accessToken = token.accessToken as string;
+        session.user.refreshToken = token.refreshToken as string;
       }
       return session
     },

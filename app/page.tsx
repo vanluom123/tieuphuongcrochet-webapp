@@ -4,11 +4,11 @@ import FreePatternsNode from './components/home/FreePatternsNode';
 import ProductsNode from './components/home/ProductsNode';
 import BlogsNode from './components/home/BlogsNode';
 import SocialNode from './components/home/SocialNode';
-import './ui/home.scss';
 import { fetchHomeData } from './lib/service/homeService';
 import { useEffect, useState } from 'react';
 import { HomeData } from './lib/definitions';
 import { animationHome } from './lib/utils';
+import './ui/home.scss';
 
 interface HomeState extends HomeData {
 	loading: boolean,

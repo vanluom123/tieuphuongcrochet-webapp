@@ -1,8 +1,6 @@
 import React from "react";
 import { Divider, Flex } from "antd";
 import { useTranslations } from "next-intl";
-import '../../ui/components/headerPart.scss';
-
 interface HeaderPartProps {
 	titleId: string;
 	descriptionId: string;

@@ -4,7 +4,7 @@ import React, { useCallback, useState } from 'react';
 import { SegmentedValue } from 'antd/es/segmented';
 import { useTranslations } from 'next-intl';
 import { ALL_ITEM, TRANSLATION_STATUS, TRANSLATION_OPTIONS } from '@/app/lib/constant';
-import { DataType, Post, TabsItem, TDirection } from '@/app/lib/definitions';
+import { DataType, Pattern, Post, Product, TabsItem, TDirection } from '@/app/lib/definitions';
 import { mapTabsData, onScrollBody } from '@/app/lib/utils';
 import ProductCard from '../product-card';
 import FreePatternStatus from '../free-pattern-status';
@@ -98,11 +98,11 @@ const ViewTable = (
     const getCardItem = useCallback((item: DataType) => {
         switch (mode) {
             case 'Product':
-                return <ProductCard loading={loading} product={item} onReadDetail={() => onReadDetail(item.key)} />;
+                return <ProductCard loading={loading} product={item as Product} onReadDetail={() => onReadDetail(item.key)} />;
             case 'Pattern':
-                return <FreePatternCard loading={loading} pattern={item} onReadDetail={() => onReadDetail(item.key)} />;
+                return <FreePatternCard loading={loading} pattern={item as Pattern} onReadDetail={() => onReadDetail(item.key)} />;
             default:
-                return <BlogCard item={{ ...item } as Post} onReadDetail={() => onReadDetail(item.key)}/>;
+                return <BlogCard item={{ ...item } as Post} onReadDetail={() => onReadDetail(item.key)} />;
         }
     }, [mode, loading, onReadDetail]);
 
@@ -132,7 +132,7 @@ const ViewTable = (
 
                         {/* direction icon */}
                         <DirectionGroup direction={direction} setDirection={setDirection} />
-                        
+
                     </Flex>
 
                     {/* Translation status on small-screen*/}
