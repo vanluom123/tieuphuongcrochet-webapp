@@ -2,7 +2,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { Button, Spin } from "antd";
 
-const Dashboard = () => {
+const Page = () => {
     const { data: session, status } = useSession()
 
     return (
@@ -19,4 +19,4 @@ const Dashboard = () => {
 }
 
 
-export default Dashboard;
+export default Page;
