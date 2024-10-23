@@ -1,22 +1,18 @@
-'use client'
-import { signOut, useSession } from "next-auth/react";
-import { Button, Spin } from "antd";
+import { ROUTE_PATH } from "../lib/constant";
+
 
 const Dashboard = () => {
-    const { data: session, status } = useSession()
-
     return (
-        <Spin size='large' tip='Loading...' spinning={status === 'loading'}>
-            <div>
-                Admin Dashboard page
-                <div>
-                    <p>Email: {session?.user?.email}</p>
-                </div>
-            </div>
-            <Button type="primary" onClick={() => signOut()}>Sign out</Button>
-        </Spin>
-    )
-}
+        <div>
+            Admin Dashboard
+        </div>
+    );
+};
 
+Dashboard.auth = {
+    required: true,
+    role: 'ADMIN',
+    redirectTo: ROUTE_PATH.LOGIN
+}
 
 export default Dashboard;

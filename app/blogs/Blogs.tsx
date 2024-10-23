@@ -10,15 +10,13 @@ import { filterByText } from "../lib/utils";
 import { fetchBlogs } from "../lib/service/blogsService";
 import { ROUTE_PATH } from "../lib/constant";
 
-const initialState: DataTableState = {
-	loading: false,
-	data: [],
-	totalRecord: 0,
-};
+interface BlogsProps {
+    initialData: DataTableState
+}
 
-const Blogs = () => {
+const Blogs = ({ initialData }: BlogsProps) => {
 
-	const [state, setState] = useState(initialState);
+	const [state, setState] = useState(initialData);
 	const [params, setParams] = useState(initialListParams);
 
 	const t = useTranslations("Blog");

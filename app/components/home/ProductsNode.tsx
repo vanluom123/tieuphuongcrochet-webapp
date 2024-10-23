@@ -17,7 +17,7 @@ const ProductsNode = ({products}: {products: Product[]}) => {
   };
 
   return (
-    <div className="products scroll-animate">
+    <div className="products">
       <HeaderPart
         titleId="Home.Product.title"
         descriptionId='Home.Product.description'
