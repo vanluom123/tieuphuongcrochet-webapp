@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 
@@ -23,13 +24,21 @@ const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const toggleCollapsed = useCallback(() => setCollapsed(prev => !prev), []);
 
     const { data: session, status } = useSession();
-    
+    const pathname = usePathname();
+
+
     if (status === 'unauthenticated') {
         redirect(`${ROUTE_PATH.LOGIN}?callbackUrl=${ROUTE_PATH.DASHBOARD}`)
     }
 
     if (status === 'authenticated' && session?.user.role !== USER_ROLES.ADMIN) {
         redirect(ROUTE_PATH.HOME);
+    }
+
+    const getTitle = () => {
+        const pathnameArr = pathname.split('/');
+        const title = pathnameArr[pathnameArr.length - 1];
+        return title;
     }
 
     return (
@@ -59,7 +68,7 @@ const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 height: 64,
                             }}
                         />
-                        <span className='table-title'>Text</span>
+                        <span className='table-title'>{getTitle()}</span>
                     </Flex>
                 </Header>
                 <Content
