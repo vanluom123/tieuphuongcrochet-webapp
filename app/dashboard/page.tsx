@@ -1,7 +1,5 @@
 'use client'
 import { signOut, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { ROUTE_PATH } from "../lib/constant"
 import { Button, Spin } from "antd";
 
 const Dashboard = () => {
@@ -20,11 +18,5 @@ const Dashboard = () => {
     )
 }
 
-Dashboard.auth = {
-    required: true,
-    onUnauthenticated() {
-        redirect(`${ROUTE_PATH.LOGIN}?callbackUrl=${ROUTE_PATH.DASHBOARD}`)
-    }
-};
 
 export default Dashboard;

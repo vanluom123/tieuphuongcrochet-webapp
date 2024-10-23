@@ -3,6 +3,7 @@ import Link from "next/link";
 import { MENU_NAV } from "@/app/lib/constant";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
+import { MenuProps } from "antd";
 
 type MenuType = 'vertical' | 'horizontal' | 'inline';
 
@@ -15,7 +16,7 @@ interface MenuNavProps {
 const MenuNav = ({ mode, onClickNav, currentNav }: MenuNavProps) => {
     const t = useTranslations('MenuNav');
     
-    const menuItems = useMemo(() => MENU_NAV.map((item) => ({
+    const menuItems: MenuProps['items'] = useMemo(() => MENU_NAV.map((item) => ({
         key: item.path,
         label: (
             <Link href={item.path} rel="noreferrer">
