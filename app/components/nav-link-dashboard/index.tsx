@@ -11,32 +11,32 @@ import {
     SettingOutlined
 } from '@ant-design/icons';
 import { Menu } from "antd";
-import { SubMenuType } from "antd/es/menu/interface";
+import { usePathname } from 'next/navigation';
 import Link from "next/link";
+import { useMemo } from 'react';
 
-const items = [
+export const sidebarItems = [
     {
         key: ROUTE_PATH.DASHBOARD,
         icon: <AppstoreOutlined />,
-        label: 'Dashboard',
+        label: <Link href={ROUTE_PATH.DASHBOARD}>Dashboard</Link>,
     },
     {
         key: ROUTE_PATH.DASHBOARD_CATEGORY,
         icon: <UnorderedListOutlined />,
-        label: 'Categories list'
+        label: <Link href={ROUTE_PATH.DASHBOARD_CATEGORY}>Categories list</Link>,
     }, {
-        key: ROUTE_PATH.DASHBOARD_FREE_PATTERNS,
+        key: 'free-patterns',
         icon: <ReadOutlined />,
         label: 'Free Patterns',
-
         children: [
             {
                 key: `${ROUTE_PATH.DASHBOARD_FREE_PATTERNS}/${ROUTE_PATH.CREATE}`,
-                label: 'Add pattern'
+                label: <Link href={`${ROUTE_PATH.DASHBOARD_FREE_PATTERNS}/${ROUTE_PATH.CREATE}`}>Add pattern</Link>
             },
             {
                 key: ROUTE_PATH.DASHBOARD_FREE_PATTERNS,
-                label: 'Free patterns list'
+                label: <Link href={ROUTE_PATH.DASHBOARD_FREE_PATTERNS}>Free patterns list</Link>
             }
         ]
     },
@@ -48,70 +48,53 @@ const items = [
         children: [
             {
                 key: `${ROUTE_PATH.DASHBOARD_PRODUCTS}/${ROUTE_PATH.CREATE}`,
-                label: 'Add product'
+                label: <Link href={`${ROUTE_PATH.DASHBOARD_PRODUCTS}/${ROUTE_PATH.CREATE}`}>Add product</Link>
             },
             {
                 key: ROUTE_PATH.DASHBOARD_PRODUCTS,
-                label: 'Products list'
+                label: <Link href={ROUTE_PATH.DASHBOARD_PRODUCTS}>Products list</Link>
             }
         ]
     },
     {
-            key: ROUTE_PATH.DASHBOARD_POSTS,
+        key: 'posts',
         icon: <FileOutlined />,
         label: 'Posts',
         children: [
             {
                 key: ROUTE_PATH.DASHBOARD_POSTS,
-                label: 'Posts'
+                label: <Link href={ROUTE_PATH.DASHBOARD_POSTS}>Posts</Link>
             },
             {
                 key: `${ROUTE_PATH.DASHBOARD_POSTS}/${ROUTE_PATH.CREATE}`,
-                label: 'Add post'
+                label: <Link href={`${ROUTE_PATH.DASHBOARD_POSTS}/${ROUTE_PATH.CREATE}`}>Add post</Link>    
             }
         ]
     },
     {
         key: ROUTE_PATH.DASHBOARD_USERS,
         icon: <TeamOutlined />,
-        label: 'Users',
+        label: <Link href={ROUTE_PATH.DASHBOARD_USERS}>Users</Link>,
     },
     {
         key: ROUTE_PATH.DASHBOARD_SETTING,
         icon: <SettingOutlined />,
-        label: 'Setting',
+        label: <Link href={ROUTE_PATH.DASHBOARD_SETTING}>Setting</Link>,
     },
 ];
 
-const getMenuItems = (navlinks: SubMenuType[]) => {
-    return navlinks.map((item, index) => {
-        const { label, key, icon, children } = item;
-        if (children && children.length > 0) {
-            return (
-                <Menu.SubMenu
-                    title={<span>{icon} <span>{label}</span></span>}
-                    key={`${key}_${index}`}>
-                    {getMenuItems(children as SubMenuType[])}
-                </Menu.SubMenu>
-            )
-        }
-        return (
-            <Menu.Item key={`${key}_${index}`} icon={icon}>
-                <Link href={key}>
-                    <span>{label}</span>
-                </Link>
-            </Menu.Item>)
-    })
-}
 
 const NavLinksDashboard = () => {
+    const pathname = usePathname();
+    const selectedKeys = useMemo(() => [pathname], [pathname]);
+
+
     return (
         <Menu
             mode="inline"
-            defaultSelectedKeys={[ROUTE_PATH.DASHBOARD]}
-        >
-            {getMenuItems(items as SubMenuType[])}
-        </Menu>
+            items={sidebarItems}
+            selectedKeys={selectedKeys}
+        />
     )
 }
 
