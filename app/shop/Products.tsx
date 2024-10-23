@@ -1,13 +1,12 @@
 'use client'
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import HeaderPart from "../components/header-part";
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH } from "../lib/constant";
 import { Filter, initialListParams, ListParams, DataTableState, Category, DataType } from "../lib/definitions";
 import { filterByText, mapNameFilters } from "../lib/utils";
 import ViewTable from "../components/view-table";
 import { fetchProducts } from "../lib/service/productService";
-import { fetchCategories } from "../lib/service/categoryService";
-import { useRouter } from "next/navigation";
 
 interface ProductsProps {
 	initialData: DataTableState	;
