@@ -7,11 +7,11 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { Button, Flex, Layout, theme } from 'antd';
 
+import { Button, Flex, Layout, theme } from 'antd';
 import { ROUTE_PATH, USER_ROLES } from '../lib/constant';
-import { signOut, useSession } from 'next-auth/react';
 import logo from '@/public/logo.png';
 import NavLinksDashboard from '../components/nav-link-dashboard';
 
@@ -23,9 +23,9 @@ const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const toggleCollapsed = useCallback(() => setCollapsed(prev => !prev), []);
 
     const { data: session, status } = useSession();
-
+    
     if (status === 'unauthenticated') {
-        signOut();
+        redirect(`${ROUTE_PATH.LOGIN}?callbackUrl=${ROUTE_PATH.DASHBOARD}`)
     }
 
     if (status === 'authenticated' && session?.user.role !== USER_ROLES.ADMIN) {
