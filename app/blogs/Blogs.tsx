@@ -61,7 +61,6 @@ const Blogs = () => {
 				type='success'
 				className="animation-alert"
 				message={t('message')}
-				description={t('description')}
 				showIcon
 			/>
 			<ViewTable
