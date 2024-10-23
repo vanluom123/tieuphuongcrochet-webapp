@@ -6,23 +6,6 @@ import { ThemeProvider } from "./components/theme-provider";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import AuthProvider from "./context/AuthProvider";
 
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
-
-// export const metadata: Metadata = {
-//   title: "Tieu Phuong Crochet",
-//   description: "The place collects free chart",
-// };
-
 export async function generateMetadata() {
   const t = await getTranslations("App");
 

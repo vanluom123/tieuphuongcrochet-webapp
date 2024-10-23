@@ -213,5 +213,15 @@
   "Dashboard": {
     "title": "Bảng điều khiển",
     "description": "Bảng điều khiển của website"
+  },
+  "NotFound": {
+    "title": "404",
+    "description": "Trang bạn đang tìm kiếm không tồn tại.",
+    "back_home": "Trở về trang chủ"
+  },
+  "Error": {
+    "title": "500",
+    "description": "Rất tiếc, đã có lỗi xảy ra.",
+    "back_home": "Trở về trang chủ"
   }
 }

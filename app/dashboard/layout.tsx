@@ -1,44 +1,46 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { Button, Flex, Layout, theme } from 'antd';
 
-import { ROUTE_PATH } from '../lib/constant';
+import { ROUTE_PATH, USER_ROLES } from '../lib/constant';
+import { signOut, useSession } from 'next-auth/react';
 import logo from '@/public/logo.png';
 import NavLinksDashboard from '../components/nav-link-dashboard';
-import { useSession } from 'next-auth/react';
 
-const LayoutAdmin = (
-    { children }: Readonly<{
-        children: React.ReactNode;
-    }>) => {
+const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+
     const { Header, Sider, Content } = Layout;
-
     const [collapsed, setCollapsed] = useState(true);
+    const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
+    const toggleCollapsed = useCallback(() => setCollapsed(prev => !prev), []);
 
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
     const { data: session, status } = useSession();
-    console.log("session dashboard layout", session);
-    console.log("status dashboard layout", status);
+
+    if (status === 'unauthenticated') {
+        signOut();
+    }
+
+    if (status === 'authenticated' && session?.user.role !== USER_ROLES.ADMIN) {
+        redirect(ROUTE_PATH.HOME);
+    }
 
     return (
         <Layout className='admin-layout'>
-
             <Sider
                 trigger={null}
                 collapsible
                 collapsed={collapsed}
                 theme='light'>
                 <div className="logo-sidebar">
-                    <Link key='/' href={ROUTE_PATH.HOME}>
+                    <Link href={ROUTE_PATH.HOME}>
                         <Image width={75} src={logo} alt='Tiệm len Tiểu Phương' />
                     </Link>
                 </div>
@@ -50,7 +52,7 @@ const LayoutAdmin = (
                         <Button
                             type="text"
                             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
+                            onClick={toggleCollapsed}
                             style={{
                                 fontSize: '16px',
                                 width: 64,
@@ -60,7 +62,6 @@ const LayoutAdmin = (
                         <span className='table-title'>Text</span>
                     </Flex>
                 </Header>
-
                 <Content
                     style={{
                         margin: '24px 16px',

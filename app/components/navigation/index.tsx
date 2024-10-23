@@ -13,7 +13,6 @@ import { ROUTE_PATH } from '@/app/lib/constant';
 import Languages from './Languages';
 import SidebarNav from './SibarNav';
 import MenuNav from './MenuNav';
-import UserAccount from './UserAccount';
 import '../../ui/navigation.scss';
 
 interface NavigationProps {
@@ -77,7 +76,7 @@ const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 						<Languages />
 
 						{/* user icon */}
-						<UserAccount />	
+						{/* <UserAccount />	 */}
 					</div>
 				</div>
 
