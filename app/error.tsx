@@ -10,7 +10,7 @@ const ErrorPage = () => {
 
   return (
     <Result
-      status="500"
+      status='500'
       title={t('title')}
       subTitle={t('description')}
       extra={
@@ -20,6 +20,6 @@ const ErrorPage = () => {
       }
     />
   );
-}
+};
 
 export default ErrorPage;
