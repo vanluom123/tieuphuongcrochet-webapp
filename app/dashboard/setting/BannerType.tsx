@@ -27,7 +27,7 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal }: TypeBannerModalProps) => {
 			}
 			form.setFieldsValue(formData);
 		}
-	}, [form, openCUModal.name, openCUModal.id]);
+	}, [form, openCUModal.name,openCUModal.id]);
 
 	const onSubmit = () => {
 		form.validateFields().then(async (values: IBannerType) => {

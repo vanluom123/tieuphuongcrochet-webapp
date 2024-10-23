@@ -7,7 +7,6 @@ import { Button, Spin } from "antd";
 const Dashboard = () => {
     const { data: session, status } = useSession()
 
-    console.log('session Dashboard', session);
     return (
         <Spin size='large' tip='Loading...' spinning={status === 'loading'}>
             <div>
