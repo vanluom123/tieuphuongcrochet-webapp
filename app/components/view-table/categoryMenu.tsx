@@ -1,5 +1,6 @@
 import { TabsItem } from "@/app/lib/definitions";
 import { Menu, MenuProps } from "antd";
+import { MenuItemType } from "antd/es/menu/interface";
 
 interface CategoryMenuProps {
     items: TabsItem[];
@@ -10,19 +11,19 @@ interface CategoryMenuProps {
 
 const CategoryMenu = ({ items, currentTab, onClickMenu, tabsProps }: CategoryMenuProps) => {
 
-    const renderMenuItem = ({ label, key, icon, children }: TabsItem) => {
-        if (children && children.length > 0) {
-            return (
-                <Menu.SubMenu onTitleClick={({ key }) => onClickMenu(key)} key={key} title={label} icon={icon} >
-                    {children.map(renderMenuItem)}
-                </Menu.SubMenu>
-            );
-        }
-        return (
-            <Menu.Item key={key} icon={icon}>
-                {label}
-            </Menu.Item>
-        );
+    const convertToMenuItems = (items: TabsItem[]): MenuItemType[] => {
+        return items.map(({ label, key, icon, children }) => {
+            if (children && children.length > 0) {
+                return {
+                    key,
+                    label,
+                    icon,
+                    children: convertToMenuItems(children),
+                    onTitleClick: () => onClickMenu(key.toString()),
+                };
+            }
+            return { key, label, icon };
+        });
     };
 
     return (
@@ -31,10 +32,9 @@ const CategoryMenu = ({ items, currentTab, onClickMenu, tabsProps }: CategoryMen
             selectedKeys={[currentTab]}
             mode="horizontal"
             onClick={({ key }) => onClickMenu(key)}
+            items={convertToMenuItems(items)}
             {...tabsProps}
-        >
-            {items.map(renderMenuItem)}
-        </Menu>
+        />
     );
 };
 

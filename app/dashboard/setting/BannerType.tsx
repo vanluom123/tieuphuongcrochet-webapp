@@ -27,18 +27,17 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal }: TypeBannerModalProps) => {
 			}
 			form.setFieldsValue(formData);
 		}
-	}, [form, openCUModal.name,openCUModal.id]);
+	}, [form, openCUModal.name, openCUModal.id]);
 
 	const onSubmit = () => {
 		form.validateFields().then(async (values: IBannerType) => {
 			const sendData = openCUModal.id ? { ...values, id: openCUModal.id } : values;
 			await createUpdateBannerType(sendData);
 			setOpenCUModal({ open: false, id: '' });
-			form.resetFields()
-		})
-			.catch((errorInfo: any) => {
-				console.log('Failed:', errorInfo);
-			});
+			form.resetFields();
+		}).catch((errorInfo: any) => {
+			console.log('Failed:', errorInfo);
+		});
 	}
 
 	const oncancel = () => {
@@ -99,7 +98,7 @@ const BannerType = ({ bannerTypes }: { bannerTypes: DataType[] }) => {
 	const [openCUModal, setOpenCUModal] = useState<ModalForm>({ open: false, id: '' });
 
 	const onDeleteRecord = async (id: React.Key) => {
-		await deleteBannerType(id as string	);
+		await deleteBannerType(id as string);
 	};
 
 	const onEditRecord = (id: React.Key, values: IBannerType) => {
@@ -120,6 +119,7 @@ const BannerType = ({ bannerTypes }: { bannerTypes: DataType[] }) => {
 					</Button>
 				</Flex>
 				<DataTable
+					loading={bannerTypes.length === 0}
 					dataSource={bannerTypes}
 					onDeleteRecord={onDeleteRecord}
 					onEditRecord={onEditRecord} />
