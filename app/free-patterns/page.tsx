@@ -6,6 +6,8 @@ import { ROUTE_PATH } from "../lib/constant";
 import { fetchFreePatterns } from "../lib/service/freePatternService";
 import { fetchCategories } from "../lib/service/categoryService";
 import { Category, initialListParams } from "../lib/definitions";
+import { JsonLd } from "react-schemaorg";
+import { WebPage } from "schema-dts";
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,7 +20,10 @@ export async function generateMetadata(): Promise<Metadata> {
 			title: t("title"),
 			description: t("description"),
 			url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
-		},
+		},  
+		  // Add these lines:
+		keywords: t("title"), // Add relevant keywords
+		robots: "index, follow", // Ensure the page is indexable
 	};
 }
 
@@ -38,11 +43,24 @@ const Page = async () => {
 	]);
 
 	return (
-		<FreePatterns initialData={{
+		<>
+		<JsonLd<WebPage>
+		  item={{
+			"@context": "https://schema.org",
+			"@type": "WebPage",
+			name: "Free Patterns",
+			description: "Browse our collection of free patterns",
+		  }}
+		/>
+		<FreePatterns
+		  initialData={{
 			loading: false,
 			data: freePatterns.data,
 			totalRecord: freePatterns.totalRecords,
-		}} categories={categories as Category[]} />
+		  }}
+		  categories={categories as Category[]}
+		/>
+	  </>
 	)
 }
 
