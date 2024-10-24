@@ -1,11 +1,12 @@
+import { Viewport } from "next";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import "./globals.scss";
 import LayoutPage from "./components/layout-page";
 import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "./components/theme-provider";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import AuthProvider from "./context/AuthProvider";
 import GoogleTag from "./components/GoogleTag";
+import "./globals.scss";
 
 export async function generateMetadata() {
   const t = await getTranslations("App");
@@ -46,9 +47,13 @@ export async function generateMetadata() {
       icon: "/favicon.ico",
       apple: "/opengraph-image.jpg",
     },
-    viewport: "width=device-width, initial-scale=1",
     charSet: "utf-8",
   };
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default async function RootLayout({
