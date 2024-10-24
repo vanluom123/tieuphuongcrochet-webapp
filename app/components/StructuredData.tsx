@@ -4,12 +4,13 @@ interface StructuredDataProps {
   title: string;
   description: string;
   url: string;
+  type?: string;
 }
 
-const StructuredData: React.FC<StructuredDataProps> = ({ title, description, url }) => {
+const StructuredData: React.FC<StructuredDataProps> = ({ title, description, url, type = "WebSite" }) => {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
+    "@type": type,
     "name": title,
     "description": description,
     "url": url,

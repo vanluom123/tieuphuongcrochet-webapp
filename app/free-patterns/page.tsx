@@ -20,9 +20,9 @@ export async function generateMetadata(): Promise<Metadata> {
 			title: t("title"),
 			description: t("description"),
 			url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
+			type: 'website', // Add this line
 		},  
-		  // Add these lines:
-		keywords: t("title"), // Add relevant keywords
+		keywords: [t("title"), t("Keywords.free_patterns"), t("Keywords.sewing_patterns"), t("Keywords.craft_patterns")], // Expand keywords
 		robots: {
 			index: true,
 			follow: true,
@@ -53,6 +53,7 @@ const Page = async () => {
 			"@type": "WebPage",
 			name: "Free Patterns",
 			description: "Browse our collection of free patterns",
+			url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
 		  }}
 		/>
 		<FreePatterns
