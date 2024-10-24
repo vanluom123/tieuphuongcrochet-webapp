@@ -115,7 +115,7 @@ const ViewTable = (
                         {/* Search */}
                         <Search
                             allowClear
-                            placeholder="Tìm kiếm/ Search"
+                            placeholder="Search by name, description, or author"
                             style={{ width: 304 }}
                             onSearch={onSearchBtn}
                         />
