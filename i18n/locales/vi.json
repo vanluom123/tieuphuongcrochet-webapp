@@ -80,6 +80,11 @@
     "Btn": {
       "submit": "Gửi",
       "cancel": "Hủy"
+    },
+    "Keywords": {
+      "free_patterns": "chart miễn phí",
+      "sewing_patterns": "chart móc len",
+      "craft_patterns": "chart móc len"
     }
   },
 

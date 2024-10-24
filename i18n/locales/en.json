@@ -80,6 +80,11 @@
     "Btn": {
       "submit": "Submit",
       "cancel": "Cancel"
+    },
+    "Keywords": {
+      "free_patterns": "free patterns",
+      "sewing_patterns": "sewing patterns",
+      "craft_patterns": "craft patterns"
     }
   },
   "Product": {

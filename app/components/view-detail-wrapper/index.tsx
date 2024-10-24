@@ -2,7 +2,7 @@ import { Alert, Space, Spin } from "antd"
 
 interface ViewDetailWrapperProps {
     children: React.ReactNode;
-    loading: boolean;
+    loading?: boolean;
     alertMessage?: string;
     alertDescription?: string;
     alertType?: 'info' | 'success' | 'warning' | 'error';
@@ -11,7 +11,7 @@ interface ViewDetailWrapperProps {
 
 const ViewDetailWrapper = ({
     children,
-    loading,
+    loading = false,
     alertMessage,
     alertDescription,
     alertType,
