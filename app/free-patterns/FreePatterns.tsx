@@ -46,7 +46,7 @@ const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
 	}, [params]);
 
 	const onSearchFreePatterns = (value: string) => {
-		const prodFilter: Filter = filterByText(value, 'name', 'description');
+		const prodFilter: Filter = filterByText(value, 'name', 'description', 'author');
 		const tempFilters = mapNameFilters(params.filters as Filter[], 'searchText', prodFilter);
 
 		const newParams = {
