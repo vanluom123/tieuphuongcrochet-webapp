@@ -22,8 +22,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
     const { TextArea } = Input;
     const { Item } = Form;
     const router = useRouter();
-    const categories = useRef<Category[]>([]);
-
+    const [categories, setCategories] = useState<Category[]>([]);
     const [state, setState] = useState({
         loading: false,
         product: {} as Product,
@@ -32,8 +31,8 @@ const ProductForm = ({ params }: ProductFormProps) => {
 
     useEffect(() => {
         fetchCategories().then((data) => {
-            categories.current = data as Category[];
-        });        
+            setCategories(data as Category[]);
+        });
     }, []);
 
     useEffect(() => {
@@ -115,7 +114,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
                                 rules={[{ required: true, message: 'Please select the category' }]}
                             >
                                 <TreeSelect
-                                    treeData={categories.current as DefaultOptionType[]}
+                                    treeData={categories as DefaultOptionType[]}
                                 />
                             </Item>
                         </Col>

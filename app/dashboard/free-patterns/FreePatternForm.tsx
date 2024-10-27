@@ -24,8 +24,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
     const { TextArea } = Input;
     const { Item } = Form;
     const router = useRouter();
-    const categories = useRef<Category[]>([]);
-
+    const [categories, setCategories] = useState<Category[]>([]);
     const [state, setState] = useState({
         loading: false,
         pattern: {} as Pattern,
@@ -34,7 +33,8 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
 
     useEffect(() => {
         fetchCategories().then((data) => {
-            categories.current = data as Category[];
+            console.log('fetchCategories', data);
+            setCategories(data as Category[]);
         });
     }, []);
 
@@ -72,8 +72,6 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
             }
         }
 
-        console.log("sendData", sendData);
-
         const res = await createUpdateFreePattern(sendData);
         if (res?.id) {
             form.resetFields();
@@ -85,7 +83,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
         form.resetFields();
         router.back();
     }
-
+    
     return (<>
         <div className="crupattern-page">
             <Flex justify="center">
@@ -106,6 +104,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                         <UploadFiles
                             files={state.pattern.images || []}
                             onChangeFile={(files: FileUpload[]) => {
+                                console.log('FreePatternForm files', files);
                                 form.setFieldsValue({ images: files });
                             }}
                         />
@@ -139,7 +138,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                                 rules={[{ required: true, message: t('Fields.error_msg_required_category') }]}
                             >
                                 <TreeSelect
-                                    treeData={categories.current as DefaultOptionType[]}
+                                    treeData={categories as DefaultOptionType[]}
                                 />
                             </Item>
                         </Col>
@@ -203,6 +202,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                             onChangeFile={(files: FileUpload[]) => {
                                 form.setFieldsValue({ files: files });
                             }}
+                            defaultImageMode="normal"
                         />
                     </Item>
                     <Item
