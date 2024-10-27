@@ -1,17 +1,17 @@
 'use client'
-import { useEffect, useRef, useState } from "react";
-import { Form, Input, TreeSelect, Button, Row, Col, Flex, Switch, Spin } from "antd";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import {useEffect, useState} from "react";
+import {Button, Col, Flex, Form, Input, Row, Spin, Switch, TreeSelect} from "antd";
+import {useTranslations} from "next-intl";
+import {useRouter} from "next/navigation";
 
-import { Category, FileUpload, Pattern } from "@/app/lib/definitions";
-import { ROUTE_PATH, TRANSLATION_STATUS } from "@/app/lib/constant";
-import { fetchCategories } from "@/app/lib/service/categoryService";
+import {Category, FileUpload, Pattern} from "@/app/lib/definitions";
+import {ROUTE_PATH, TRANSLATION_STATUS} from "@/app/lib/constant";
+import {fetchCategories} from "@/app/lib/service/categoryService";
 import FreePatternStatus from "@/app/components/free-pattern-status";
 import CustomEditor from "@/app/components/custom-editor";
 import UploadFiles from "@/app/components/upload-files";
-import { createUpdateFreePattern, fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
-import { DefaultOptionType } from "antd/es/select";
+import {createUpdateFreePattern, fetchFreePatternDetail} from "@/app/lib/service/freePatternService";
+import {DefaultOptionType} from "antd/es/select";
 
 interface FreePatternFormProps {
     params?: {
