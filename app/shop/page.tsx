@@ -39,6 +39,7 @@ export default async function Shop() {
 		<Products initialData={{
 			data: products.data,
 			totalRecord: products.totalRecords,
+			loading: false
 		}} categories={categories as Category[]} />
 	)
 }
