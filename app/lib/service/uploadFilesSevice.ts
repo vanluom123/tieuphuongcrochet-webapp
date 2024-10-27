@@ -1,22 +1,19 @@
-import { API_ROUTES } from "../constant";
-import { FileUpload } from "../definitions";
+import {API_ROUTES} from "../constant";
+import {FileUpload} from "../definitions";
 import apiJwtService from "./apiJwtService";
 
 const uploadFile = {
 	
 	async upload(formData: FormData) :Promise<any> {
-        const headers= { 'Content-Type': 'multipart/form-data' } 
         const url = `${API_ROUTES.UPLOAD_FILE}`;
-		const res = await apiJwtService({  
+		return await apiJwtService({
 			endpoint: url,
 			method: 'POST',
-			formData,
-			headers
+			formData: formData,
 		}).catch((err) => {
 			console.log("err", err);
 			return {} as FileUpload;
 		});
-		return res;
 	},
 
 	delete(fileNames: string[]) :Promise<any> {

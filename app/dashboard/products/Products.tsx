@@ -44,7 +44,17 @@ const Products = () => {
     }
 
     const onDeleteRecord = async (rd: React.Key) => {
-        await deleteProduct(rd as string)
+        try {
+            await deleteProduct(rd as string);
+            // Refresh the data after successful deletion
+            setState({ ...state, loading: true });
+            const { data, totalRecords } = await fetchProducts(params);
+            setState({ ...state, data, totalRecord: totalRecords });
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        } finally {
+            setState(prevState => ({ ...prevState, loading: false }));
+        }
     }
 
     const columns = [
