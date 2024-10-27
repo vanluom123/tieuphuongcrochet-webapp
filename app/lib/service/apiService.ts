@@ -30,21 +30,28 @@ async function apiService<T = unknown>({
     Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
 
     const options: RequestInit = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            ...headers, // Merge default headers with custom headers
-        },
+        method,
         signal,
     };
 
-    if (data) {
+    if(headers) {
+        options.headers = {
+            ...headers
+        };
+        if(data) {
+            options.headers['Content-Type'] = 'application/json';
+        }
+    }
+
+    // Handle headers based on whether we're sending FormData or JSON
+    if (formData) {
+        // Don't set Content-Type for FormData, browser will set it automatically
+        options.body = formData;
+    } else if (data) {
+        // For JSON data
         options.body = JSON.stringify(data);
     }
 
-    if (formData) {
-        options.body = formData;
-    }
 
     // Function to make the actual request with retry logic
     const makeRequest = async (attempt: number) => {

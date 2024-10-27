@@ -137,6 +137,10 @@
     }
   },
 
+  "ViewTable": {
+    "search_placeholder": "Search by name, description, or author"
+  },
+
   "Btn": {
     "readMore": "Read more",
     "btn_buy": "Buy",

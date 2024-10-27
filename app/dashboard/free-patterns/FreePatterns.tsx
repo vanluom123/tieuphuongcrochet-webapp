@@ -30,15 +30,16 @@ const FreePatterns = () => {
     const router = useRouter();
 
     useEffect(() => {
+        fetchCategories().then((data) => {
+            categories.current = data as Category[];
+        })
+    }, []);
+
+    useEffect(() => {
         setState({ ...state, loading: true });
-        Promise.all([
-            fetchCategories().then((data) => {
-                categories.current = data as Category[];
-            }),
-            fetchFreePatterns(params).then(({ data, totalRecords }) => {
-                setState({ ...state, data, totalRecord: totalRecords });
-            })
-        ]).finally(() => {
+        fetchFreePatterns(params).then(({ data, totalRecords }) => {
+            setState({ ...state, data, totalRecord: totalRecords });
+        }).finally(() => {
             setState(prevState => ({ ...prevState, loading: false }));
         });
     }, [params]);
@@ -48,7 +49,17 @@ const FreePatterns = () => {
     }
 
     const onDeleteRecord = async (rd: React.Key) => {
-        await deleteFreePattern(rd as string)
+        try {
+            await deleteFreePattern(rd as string);
+            // Refresh the data after successful deletion
+            setState({ ...state, loading: true });
+            const { data, totalRecords } = await fetchFreePatterns(params);
+            setState({ ...state, data, totalRecord: totalRecords });
+        } catch (error) {
+            console.error('Error deleting pattern:', error);
+        } finally {
+            setState(prevState => ({ ...prevState, loading: false }));
+        }
     }
 
     const columns = [

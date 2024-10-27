@@ -17,14 +17,15 @@ interface UploadFilesProps extends UploadProps {
 	imgsNumber?: number;
 	isMultiple?: boolean;
 	isShowDirectory?: boolean;
+	defaultImageMode?: 'crop' | 'normal';
 };
 
-const UploadFiles = ({ onChangeFile, files, imgsNumber = 20, isMultiple = true, isShowDirectory = true }: UploadFilesProps) => {
+const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumber = 20, isMultiple = true, isShowDirectory = true }: UploadFilesProps) => {
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const [previewTitle, setPreviewTitle] = useState('');
 	const [fileList, setFileList] = useState<any[]>([]);
-	const [imageMode, setImageMode] = useState<UploadMode>('crop');
+	const [imageMode, setImageMode] = useState<UploadMode>(defaultImageMode);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
@@ -32,6 +33,18 @@ const UploadFiles = ({ onChangeFile, files, imgsNumber = 20, isMultiple = true, 
 			setFileList(files);
 		}
 	}, [files])
+
+	// Add this effect near your other useEffects
+	useEffect(() => {
+		if (fileList.length > 0) {
+			onChangeFile(fileList);
+		}
+	}, [fileList, onChangeFile]);
+
+	// Then simplify updateImages to just update the state
+	const updateImages = (file: FileUpload) => {
+		setFileList((prevState) => [...prevState, file]);
+	};
 
 	const handleCancel = () => setPreviewOpen(false);
 
@@ -45,25 +58,11 @@ const UploadFiles = ({ onChangeFile, files, imgsNumber = 20, isMultiple = true, 
 		setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
 	};
 
-	const updateImages = (file: FileUpload) => {
-		let newFilesList = [] as FileUpload[];
-
-		setFileList((prevState) => {
-			if (prevState.length > 0) {
-				newFilesList = [...prevState];
-			}
-			newFilesList = [...newFilesList, file];
-
-			onChangeFile(newFilesList);
-			return newFilesList;
-		});
-	};
-
 	const getNewFile = (file: File) => {
 		const name = file.name.split('.');
 		const ext = name[name.length - 1];
 		const newName = `${name[0]}_${new Date().getTime()}.${ext}`;
-		
+
 		const blob = file.slice(0, file.size);
 		return new File([blob], newName, { type: file.type });
 	}
@@ -79,10 +78,11 @@ const UploadFiles = ({ onChangeFile, files, imgsNumber = 20, isMultiple = true, 
 		const formData = new FormData();
 		setLoading(true);
 
+		console.log('file', file);
+
 		formData.append('files', getNewFile(file));
 		const res: FileUpload[] = await uploadFile.upload(formData);
-		console.log('upload res', res);
-		
+
 		if (res) {
 			setLoading(false);
 		}

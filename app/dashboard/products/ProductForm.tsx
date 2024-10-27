@@ -1,15 +1,15 @@
 'use client'
-import { useEffect, useRef, useState } from "react";
-import { Form, Input, TreeSelect, Button, Row, Col, Flex, InputNumber, Spin, Space, Switch } from "antd";
-import { useRouter } from "next/navigation";
+import {useEffect, useState} from "react";
+import {Button, Col, Flex, Form, Input, InputNumber, Row, Space, Spin, Switch, TreeSelect} from "antd";
+import {useRouter} from "next/navigation";
 
-import { Category, FileUpload, Product } from "@/app/lib/definitions";
-import { CURRENCY_LIST, ROUTE_PATH } from "@/app/lib/constant";
-import { fetchCategories } from "@/app/lib/service/categoryService";
+import {Category, FileUpload, Product} from "@/app/lib/definitions";
+import {CURRENCY_LIST, ROUTE_PATH} from "@/app/lib/constant";
+import {fetchCategories} from "@/app/lib/service/categoryService";
 import CustomEditor from "@/app/components/custom-editor";
 import UploadFiles from "@/app/components/upload-files";
-import { createUpdateProduct, fetchProductDetail } from "@/app/lib/service/productService";
-import Select, { DefaultOptionType } from "antd/es/select";
+import {createUpdateProduct, fetchProductDetail} from "@/app/lib/service/productService";
+import Select, {DefaultOptionType} from "antd/es/select";
 
 interface ProductFormProps {
     params?: {
@@ -22,8 +22,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
     const { TextArea } = Input;
     const { Item } = Form;
     const router = useRouter();
-    const categories = useRef<Category[]>([]);
-
+    const [categories, setCategories] = useState<Category[]>([]);
     const [state, setState] = useState({
         loading: false,
         product: {} as Product,
@@ -32,8 +31,8 @@ const ProductForm = ({ params }: ProductFormProps) => {
 
     useEffect(() => {
         fetchCategories().then((data) => {
-            categories.current = data as Category[];
-        });        
+            setCategories(data as Category[]);
+        });
     }, []);
 
     useEffect(() => {
@@ -115,7 +114,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
                                 rules={[{ required: true, message: 'Please select the category' }]}
                             >
                                 <TreeSelect
-                                    treeData={categories.current as DefaultOptionType[]}
+                                    treeData={categories as DefaultOptionType[]}
                                 />
                             </Item>
                         </Col>
