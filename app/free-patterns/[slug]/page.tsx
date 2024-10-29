@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: { slug: string } }){
     return (
         <>
             <StructuredData
-                type='Pattern'
+                type='ItemList'
                 title={pattern.name}
                 description={pattern.description || ''}
                 url={`${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${params.slug}`}

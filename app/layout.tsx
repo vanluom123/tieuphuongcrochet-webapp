@@ -26,7 +26,7 @@ export async function generateMetadata() {
       siteName: t("title"),
       images: [
         {
-          url: 'https://www.tieuphuongcrochet.com/opengraph-image.jpg',
+					url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
           width: 1200,
           height: 630,
           alt: t("title"),
@@ -37,7 +37,7 @@ export async function generateMetadata() {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: ['https://www.tieuphuongcrochet.com/opengraph-image.jpg'],
+      url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
     },
     robots: {
       index: true,

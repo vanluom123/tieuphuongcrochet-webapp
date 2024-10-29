@@ -133,18 +133,18 @@ export interface SettingState {
 // ---------------------------------- Category ----------------------------------
 
 export interface Category {
-    id?: React.Key;
-    name: string;
-    children?: unknown[];
-    parentIds?: unknown[];
-    key?: string;
+	id?: React.Key;
+	name: string;
+	children?: unknown[];
+	parentIds?: unknown[];
+	key?: string;
 };
 
 // -------------------------- Pattern --------------------------
 export interface Menu {
-    key: string;
-    name: string;
-    path: string;
+	key: string;
+	name: string;
+	path: string;
 }
 
 export interface Pattern {
@@ -162,7 +162,7 @@ export interface Pattern {
 	currency_code?: string;
 	content?: string;
 	status?: TTranslationStatus;
-	home?:boolean
+	home?: boolean
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';
@@ -173,9 +173,9 @@ export interface TranslationStatus {
 }
 
 export interface DataTableState {
-    loading?: boolean;
-    data: DataType[];
-    totalRecord?: number;
+	loading?: boolean;
+	data: DataType[];
+	totalRecord?: number;
 }
 
 // -------------------------- Product --------------------------
@@ -206,10 +206,10 @@ export interface HomeData {
 // -------------------------- Tabs --------------------------
 
 export interface TabsItem {
-    label: string;
-    key: React.Key;
-    icon?: React.ReactNode;
-    children?: TabsItem[];
+	label: string;
+	key: React.Key;
+	icon?: React.ReactNode;
+	children?: TabsItem[];
 }
 
 
@@ -232,11 +232,11 @@ export interface User {
 //------------------------Blogs--------------------------
 
 export interface Post {
-    id?: React.Key,
-    title: string,
-    content: string,
-    createdDate: string,
-    files?: FileUpload[],
-    src?: string,
-    is_home?:boolean
+	id?: React.Key,
+	title: string,
+	content: string,
+	createdDate: string,
+	files?: FileUpload[],
+	src?: string,
+	is_home?: boolean
 }

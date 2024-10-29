@@ -1,42 +1,75 @@
 import type { MetadataRoute } from 'next'
- 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+import { fetchFreePatterns } from '@/app/lib/service/freePatternService' // Adjust import path as needed
+import { DataType, Product } from './lib/definitions'
+import { fetchProducts } from './lib/service/productService'
+import { ROUTE_PATH } from './lib/constant';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Fetch all free patterns
+  const freePatterns = await fetchFreePatterns({ pageNo: 1, pageSize: 1000 });
+
+  const products = await fetchProducts({ pageNo: 1, pageSize: 1000 });
+
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: 'https://www.tieuphuongcrochet.com',
+      url: `${process.env.NEXT_PUBLIC_URL}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1,
     },
     {
-      url: 'https://www.tieuphuongcrochet.com/free-patterns',
+      url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
-      url: 'https://www.tieuphuongcrochet.com/shop',
+      url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.SHOP}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.5,
     },
     {
-      url: 'https://www.tieuphuongcrochet.com/blogs',
+      url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.BLOG}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.5,
     },
     {
-      url: 'https://www.tieuphuongcrochet.com/contact',
+      url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.CONTACT}`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.5,
     },
     {
-      url: 'https://www.tieuphuongcrochet.com/about',
+      url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.ABOUT}`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
+      priority: 0.5,
+    },
+    {
+      url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.DASHBOARD}`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
       priority: 0.5,
     },
   ]
+
+
+  // Dynamic routes for free patterns
+  const patternRoutes = freePatterns.data.map((pattern: DataType) => ({
+    url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }))
+
+  const productRoutes = products.data.map((product: Product) => ({
+    url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.SHOP}/${product.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }));
+
+  return [...staticRoutes, ...patternRoutes, ...productRoutes]
 }
