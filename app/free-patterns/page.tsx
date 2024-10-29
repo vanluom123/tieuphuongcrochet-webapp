@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { ROUTE_PATH } from "../lib/constant";
 import { fetchFreePatterns } from "../lib/service/freePatternService";
 import { fetchCategories } from "../lib/service/categoryService";
-import { Category, initialListParams } from "../lib/definitions";
+import { Category, DataType, initialListParams } from "../lib/definitions";
 import { JsonLd } from "react-schemaorg";
 import { WebPage } from "schema-dts";
 
@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
 			type: 'website', // Add this line
 			images: [
 				{
-					url: `${process.env.NEXT_PUBLIC_URL}/og-image.jpg`, // Add a representative image
+					url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
 					width: 1200,
 					height: 630,
 					alt: t("title"),
@@ -95,13 +95,14 @@ const Page = async () => {
 					},
 					mainEntity: {
 						"@type": "ItemList",
-						itemListElement: freePatterns.data.map((pattern: any, index: number) => ({
+						itemListElement: freePatterns.data.map((pattern: DataType, index: number) => ({
 							"@type": "ListItem",
 							position: index + 1,
 							item: {
 								"@type": "Product",
 								name: pattern.title,
 								description: pattern.description,
+								url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
 							},
 						})),
 					},
