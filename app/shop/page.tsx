@@ -6,6 +6,8 @@ import { fetchProducts } from "../lib/service/productService";
 import { fetchCategories } from "../lib/service/categoryService";
 import { Category, initialListParams } from "../lib/definitions";
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("Shop");
 	return {
