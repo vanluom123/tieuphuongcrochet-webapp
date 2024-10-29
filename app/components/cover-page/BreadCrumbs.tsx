@@ -17,16 +17,21 @@ interface BreadCrumbsProps {
 
 const BreadCrumbs = ({ pathname = '', banners = [] }: BreadCrumbsProps) => {
     const t = useTranslations("MenuNav");
+    
 
     const { crumbs, titlePage, bannerType } = useMemo(() => {
         const pathSegments = pathname.split('/');
+        
         const crumbs = pathSegments.reduce((acc, crumb) => {
             if (crumb === '') {
                 acc.push({ path: ROUTE_PATH.HOME, title: 'home' });
             } else {
                 const link = BREADCRUMB.find(nav => nav.path.includes(crumb));
+                
                 if (link) {
                     acc.push({ path: link.path, title: link.name });
+                } else if(crumb){
+                    acc.push({ path: crumb, title: 'Breadcrumb.detail' });
                 }
             }
             return acc;
@@ -46,8 +51,7 @@ const BreadCrumbs = ({ pathname = '', banners = [] }: BreadCrumbsProps) => {
     const itemRender = useCallback((route: BreadCrumbItem, _: unknown, items: unknown[]) => {
         const last = items.indexOf(route) === items.length - 1;
         return last ? <span>{t(route.title)}</span> : <Link href={route.path}>{t(route.title)}</Link>;
-    }, [t]);
-
+    }, [t]); 
     
     return (
         <div className="bread-crumbs-wrap" style={{ backgroundImage: `url(${backgroundImage})` }}>
