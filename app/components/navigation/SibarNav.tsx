@@ -27,7 +27,7 @@ const SidebarNav = memo(({ isOpenSidebar, setIsOpenSidebar, children }: SidebarN
             extra={
                 <Link href={ROUTE_PATH.HOME} className='drawer-menu-header__logo'>
                     <Image width={50} height={50} src={logo} alt='Tiểu Phương crochet' />
-                    <span className='logo-text'>{t("title")}</span>
+                    <span className='logo-text'>{t("title_mobile")}</span>
                 </Link>
             }
         >
