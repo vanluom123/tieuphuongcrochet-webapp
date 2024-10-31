@@ -9,7 +9,7 @@ import { fetchFreePatterns } from "../lib/service/freePatternService";
 import { fetchCategories } from "../lib/service/categoryService";
 import { Category, DataType, initialListParams } from "../lib/definitions";
 
-export const revalidate = 36000;
+export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("FreePattern");
