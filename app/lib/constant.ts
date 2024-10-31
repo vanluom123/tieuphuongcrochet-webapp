@@ -2,7 +2,7 @@ import shopee from '@/public/shope.jpg';
 import { TBannerType, TranslationStatus } from './definitions';
 
 export const ROUTE_PATH = {
-  HOME: '',
+  HOME: '/',
   SHOP: '/shop',
   FREEPATTERNS: '/free-patterns',
   BLOG: '/blogs',
