@@ -3,12 +3,15 @@ import { getToken } from "next-auth/jwt";
 import { withAuth, NextRequestWithAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
 import { ROUTE_PATH, USER_ROLES } from "./app/lib/constant";
-import { JwtPayload } from "jsonwebtoken";
-import * as jwtDecode from 'jsonwebtoken';
 
 export default withAuth(
     // `withAuth` augments your `Request` with the user's token.
     async function middleware(request: NextRequestWithAuth) {
+        // Bỏ qua các request tới static files
+        if (request.nextUrl.pathname.startsWith('/_next/')) {
+            return NextResponse.next();
+        }
+
         // Lấy token từ session
         const token = await getToken({
             req: request,

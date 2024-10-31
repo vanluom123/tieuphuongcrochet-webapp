@@ -27,7 +27,7 @@ export async function generateMetadata(
       title: pattern.name,
       description: pattern.description,
       images: [...pattern.images || [], ...previousImages],
-      url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${slug}`,
+      url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${slug}`,
       authors: [pattern.author || ''],
     },
   };
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: { slug: string } }){
                 type='ItemList'
                 title={pattern.name}
                 description={pattern.description || ''}
-                url={`${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${params.slug}`}
+                url={`${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${params.slug}`}
             />
             <PatternDetail pattern={pattern} />
         </>
