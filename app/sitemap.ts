@@ -1,16 +1,10 @@
 import type { MetadataRoute } from 'next'
-import { fetchFreePatterns } from '@/app/lib/service/freePatternService' // Adjust import path as needed
-import { DataType, Product } from './lib/definitions'
-import { fetchProducts } from './lib/service/productService'
 import { ROUTE_PATH } from './lib/constant';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Fetch all free patterns
-    const freePatterns = await fetchFreePatterns({ pageNo: 1, pageSize: 1000 });
-
-    const products = await fetchProducts({ pageNo: 1, pageSize: 1000 });
 
     const staticRoutes: MetadataRoute.Sitemap = [
       {
@@ -52,21 +46,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]
 
 
-    // Dynamic routes for free patterns
-    const patternRoutes = freePatterns.data.map((pattern: DataType) => ({
-      url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    }))
+    // // Dynamic routes for free patterns
+    // const patternRoutes = freePatterns.data.map((pattern: DataType) => ({
+    //   url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
+    //   lastModified: new Date(),
+    //   changeFrequency: 'weekly' as const,
+    //   priority: 0.9,
+    // }))
 
-    const productRoutes = products.data.map((product: Product) => ({
-      url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${product.id}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    }));
-    return [...staticRoutes, ...patternRoutes, ...productRoutes]
+    // const productRoutes = products.data.map((product: Product) => ({
+    //   url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${product.id}`,
+    //   lastModified: new Date(),
+    //   changeFrequency: 'weekly' as const,
+    //   priority: 0.9,
+    // }));
+    return [...staticRoutes]
   } catch (error) {
     console.error('Error generating sitemap:', error);
     return [];
