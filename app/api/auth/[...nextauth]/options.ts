@@ -11,7 +11,6 @@ export const options: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: ROUTE_PATH.LOGIN,
-    error: ROUTE_PATH.HOME, // Thay đổi redirect khi có lỗi về trang chủ
   },
   providers: [
     CredentialsProvider({
