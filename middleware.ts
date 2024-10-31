@@ -62,7 +62,8 @@ export default withAuth(
 // Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 // Chỉ định các route cần được bảo vệ
 export const config = {
-    matcher: ['/dashboard/:path*', 
-        '/((?!sitemap.xml|api/auth).*)/*',
-    ]
+    // matcher: [
+    //     '/dashboard',
+
+    //     '/dashboard/:path*']
 }
