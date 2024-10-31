@@ -6,6 +6,7 @@ import Blogs from "./Blogs";
 import { fetchBlogs } from "../lib/service/blogsService";
 import { initialListParams } from "../lib/definitions";
 
+export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("Blog");

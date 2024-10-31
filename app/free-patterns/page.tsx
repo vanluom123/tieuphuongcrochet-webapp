@@ -1,15 +1,15 @@
-
+import { JsonLd } from "react-schemaorg";
+import { WebPage } from "schema-dts";
 import { Metadata } from "next";
+
 import FreePatterns from "./FreePatterns";
 import { getTranslations } from "next-intl/server";
 import { ROUTE_PATH } from "../lib/constant";
 import { fetchFreePatterns } from "../lib/service/freePatternService";
 import { fetchCategories } from "../lib/service/categoryService";
 import { Category, DataType, initialListParams } from "../lib/definitions";
-import { JsonLd } from "react-schemaorg";
-import { WebPage } from "schema-dts";
 
-export const revalidate = 86400;
+export const revalidate = 36000;
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("FreePattern");
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 			title: t("title"),
 			description: t("description"),
 			url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
-			type: 'website', // Add this line
+			type: 'website',
 			images: [
 				{
 					url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,

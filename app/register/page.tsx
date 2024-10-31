@@ -52,7 +52,7 @@ const RegisterPage = () => {
                 <Flex vertical align="center" className="auth-content">
                     <Flex justify='center' className='logo'>
                         <Link href={ROUTE_PATH.HOME} >
-                            <Image src={logo} alt='Tiểu Phương Crochet' width={150} height={150} />
+                            <Image src={logo} alt='Tiểu Phương Crochet' width={150} height={150} priority/>
                         </Link>
                     </Flex>
                     <Flex vertical className="header-title" align="center">

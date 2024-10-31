@@ -50,7 +50,7 @@ const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 theme='light'>
                 <div className="logo-sidebar">
                     <Link href={ROUTE_PATH.HOME}>
-                        <Image width={75} src={logo} alt='Tiệm len Tiểu Phương' />
+                        <Image priority width={75} src={logo} alt='Tiệm len Tiểu Phương' />
                     </Link>
                 </div>
                 <NavLinksDashboard />

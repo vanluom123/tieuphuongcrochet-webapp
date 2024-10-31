@@ -1,9 +1,9 @@
 'use client';
 
 import { Button, Result } from "antd";
-import { ROUTE_PATH } from "./lib/constant";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { ROUTE_PATH } from "./lib/constant";
 
 const ErrorPage = () => {
   const t = useTranslations('Error');
