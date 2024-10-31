@@ -25,13 +25,13 @@ const Products = () => {
     const router = useRouter();
 
     useEffect(() => {
-        setState({ ...state, loading: true });
+        setState(prevState => ({ ...prevState, loading: true }));
         Promise.all([
             fetchProducts(params),
             fetchCategories()
         ])
         .then(([{ data, totalRecords }, categoriesData]) => {
-            setState({ ...state, data, totalRecord: totalRecords });
+            setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
             categories.current = categoriesData as Category[];
         })
         .finally(() => {
@@ -47,9 +47,9 @@ const Products = () => {
         try {
             await deleteProduct(rd as string);
             // Refresh the data after successful deletion
-            setState({ ...state, loading: true });
+            setState(prevState => ({ ...prevState, loading: true }));
             const { data, totalRecords } = await fetchProducts(params);
-            setState({ ...state, data, totalRecord: totalRecords });
+            setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
         } catch (error) {
             console.error('Error deleting product:', error);
         } finally {

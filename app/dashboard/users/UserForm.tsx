@@ -26,7 +26,7 @@ const UserForm = ({ params }: UserFormProps) => {
 
     useEffect(() => {
         if (params?.id) {
-            setState({ ...state, loading: true });
+            setState(prevState => ({ ...prevState, loading: true }));
             fetchUserDetail(params.id).then((user) => {
                 if (user && user.email) {
                     const tempData = cloneDeep(user);
@@ -34,10 +34,10 @@ const UserForm = ({ params }: UserFormProps) => {
                         ...tempData,
                     };
                     form.setFieldsValue(newUser);
-                    setState({ ...state, user: newUser });
+                    setState(prevState => ({ ...prevState, user: newUser }));
                 }
             }).finally(() => {
-                setState({ ...state, loading: false });
+                setState(prevState => ({ ...prevState, loading: false }));
             });
         }
     }, [params?.id]);
