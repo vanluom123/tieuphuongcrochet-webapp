@@ -32,7 +32,7 @@ export default withAuth(
                 return NextResponse.redirect(new URL(ROUTE_PATH.LOGIN, request.url))
             }
 
-            // Kiểm tra role của user (giả sử role được lưu trong token)
+            // Kiểm tra role của user
             if (token.role !== USER_ROLES.ADMIN) {
                 // Nếu không phải admin, redirect về trang chủ
                 return NextResponse.redirect(new URL(ROUTE_PATH.HOME, request.url))
@@ -52,5 +52,5 @@ export default withAuth(
 // Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 // Chỉ định các route cần được bảo vệ
 export const config = {
-    matcher: ['/dashboard/:path*', '/api/:path*']
+    // matcher: ['/dashboard/:path*', '/api/:path*']
 }
