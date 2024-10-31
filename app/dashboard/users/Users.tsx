@@ -20,9 +20,9 @@ const Users = () => {
     const router = useRouter();
     const [state, setState] = useState(initialState);
     useEffect(() => {
-        setState({ ...state, loading: true });
+        setState(prevState => ({ ...prevState, loading: true }));
         fetchUsers(params).then(({ data, totalRecords }) => {
-            setState({ ...state, data: data as DataType[], totalRecord: totalRecords });
+            setState(prevState => ({ ...prevState, data: data as DataType[], totalRecord: totalRecords }));
         }).finally(() => {
             setState(prevState => ({ ...prevState, loading: false }));
         });

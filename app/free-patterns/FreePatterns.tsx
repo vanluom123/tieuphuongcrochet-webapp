@@ -36,9 +36,9 @@ const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
 
 	useEffect(() => {
 		if (params !== initialListParams) {
-			setState({ ...state, loading: true });
+			setState(prevState => ({ ...prevState, loading: true }));
 			fetchFreePatterns(params).then(({ data, totalRecords }) => {
-				setState({ ...state, data, totalRecord: totalRecords });
+				setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
 			}).finally(() => {
 				setState(prevState => ({ ...prevState, loading: false }));
 			});

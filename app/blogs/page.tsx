@@ -6,6 +6,7 @@ import Blogs from "./Blogs";
 import { fetchBlogs } from "../lib/service/blogsService";
 import { initialListParams } from "../lib/definitions";
 
+export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("Blog");
@@ -16,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 		openGraph: {
 			title: t("title"),
 			description: t("description"),
-			url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.BLOG}`,
+			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.BLOG}`,
 		},
 	};
 }

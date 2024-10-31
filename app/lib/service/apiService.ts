@@ -1,3 +1,5 @@
+import { signOut } from "next-auth/react";
+import { ROUTE_PATH } from "../constant";
 
 async function apiService<T = unknown>({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
@@ -67,6 +69,8 @@ async function apiService<T = unknown>({
             if (!response.ok) {
                 // Handle specific status codes differently if needed
                 if (response.status === 401) {
+                    // Token hết hạn hoặc không hợp lệ
+                    signOut({ redirect: true, callbackUrl: ROUTE_PATH.LOGIN });
                     throw new Error('Unauthorized. Please check your credentials.');
                 } else if (response.status >= 500) {
                     throw new Error('Server error. Retrying...');

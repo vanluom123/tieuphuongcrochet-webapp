@@ -37,18 +37,18 @@ const ProductForm = ({ params }: ProductFormProps) => {
 
     useEffect(() => {
         if (params?.id) {
-            setState({ ...state, loading: true });
+            setState(prevState => ({ ...prevState, loading: true }));
             fetchProductDetail(params.id).then(product => {
                 const newProduct = {
                     ...product,
                     category_id: product.category?.id,
                 }
                 form.setFieldsValue(newProduct);
-                setState({
-                    ...state,
+                setState(prevState => ({
+                    ...prevState,
                     product: newProduct,
                     editorContent: product.content || ''
-                });
+                }));
             }).finally(() => {
                 setState(prevState => ({ ...prevState, loading: false }));
             });

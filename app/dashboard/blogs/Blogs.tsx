@@ -22,10 +22,10 @@ const Blogs = () => {
     const router = useRouter();
 
     useEffect(() => {
-        setState({ ...state, loading: true });
+        setState(prevState => ({ ...prevState, loading: true }));
         fetchBlogs(params)
             .then(({ data, totalRecords }) => {
-                setState({ ...state, data, totalRecord: totalRecords });
+                setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
             })
             .finally(() => {
                 setState(prevState => ({ ...prevState, loading: false }));

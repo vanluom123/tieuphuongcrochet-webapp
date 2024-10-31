@@ -36,9 +36,9 @@ const FreePatterns = () => {
     }, []);
 
     useEffect(() => {
-        setState({ ...state, loading: true });
+        setState(prevState => ({ ...prevState, loading: true }));
         fetchFreePatterns(params).then(({ data, totalRecords }) => {
-            setState({ ...state, data, totalRecord: totalRecords });
+            setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
         }).finally(() => {
             setState(prevState => ({ ...prevState, loading: false }));
         });
@@ -52,9 +52,9 @@ const FreePatterns = () => {
         try {
             await deleteFreePattern(rd as string);
             // Refresh the data after successful deletion
-            setState({ ...state, loading: true });
+            setState(prevState => ({ ...prevState, loading: true }));
             const { data, totalRecords } = await fetchFreePatterns(params);
-            setState({ ...state, data, totalRecord: totalRecords });
+            setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
         } catch (error) {
             console.error('Error deleting pattern:', error);
         } finally {

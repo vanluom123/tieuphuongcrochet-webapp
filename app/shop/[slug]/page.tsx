@@ -23,7 +23,7 @@ export async function generateMetadata(
       title: product.name,
       description: product.description,
       images: [product.src || ''  , ...previousImages],
-      url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${slug}`,
+      url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${slug}`,
       authors: [product.author || ''],
     },
   };
@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 type='Product'
                 title={product.name}
                 description={product.description || ''}
-                url={`${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.SHOP}/${params.slug}`}
+                url={`${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${params.slug}`}
             />
             <ProductDetail product={product} />
         </>

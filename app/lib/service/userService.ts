@@ -2,6 +2,7 @@ import { User } from '@/app/lib/definitions';
 import { ListParams } from '@/app/lib/definitions';
 import { API_ROUTES } from '../constant';
 import apiJwtService from './apiJwtService';
+import { map } from 'lodash';
 
 export async function fetchUsers(params: ListParams): Promise<{ data: User[], totalRecords: number }> {
     try {
@@ -20,7 +21,10 @@ export async function fetchUsers(params: ListParams): Promise<{ data: User[], to
             return {} as User;
         });
         return {
-            data: response.contents,
+            data: map(response.contents, (item: User) => ({
+                ...item,
+                key: item.id
+            })),
             totalRecords: response.totalElements || 0
         };
     } catch (error) {

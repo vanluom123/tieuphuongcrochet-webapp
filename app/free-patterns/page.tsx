@@ -1,15 +1,15 @@
-
+import { JsonLd } from "react-schemaorg";
+import { WebPage } from "schema-dts";
 import { Metadata } from "next";
+
 import FreePatterns from "./FreePatterns";
 import { getTranslations } from "next-intl/server";
 import { ROUTE_PATH } from "../lib/constant";
 import { fetchFreePatterns } from "../lib/service/freePatternService";
 import { fetchCategories } from "../lib/service/categoryService";
 import { Category, DataType, initialListParams } from "../lib/definitions";
-import { JsonLd } from "react-schemaorg";
-import { WebPage } from "schema-dts";
 
-export const revalidate = 86400;
+export const revalidate = 36000;
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("FreePattern");
@@ -20,8 +20,8 @@ export async function generateMetadata(): Promise<Metadata> {
 		openGraph: {
 			title: t("title"),
 			description: t("description"),
-			url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
-			type: 'website', // Add this line
+			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,
+			type: 'website',
 			images: [
 				{
 					url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
@@ -41,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
 			'DIY patterns'
 		],
 		alternates: {
-			canonical: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
+			canonical: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,
 		},
 		robots: {
 			index: true,
@@ -75,7 +75,7 @@ const Page = async () => {
 					"@type": "WebPage",
 					name: t("title"),
 					description: t("description"),
-					url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
+					url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,
 					breadcrumb: {
 						"@type": "BreadcrumbList",
 						itemListElement: [
@@ -89,7 +89,7 @@ const Page = async () => {
 								"@type": "ListItem",
 								position: 2,
 								name: t("title"),
-								item: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}`,
+								item: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,
 							},
 						],
 					},
@@ -102,7 +102,7 @@ const Page = async () => {
 								"@type": "Product",
 								name: pattern.title,
 								description: pattern.description,
-								url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
+								url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
 							},
 						})),
 					},

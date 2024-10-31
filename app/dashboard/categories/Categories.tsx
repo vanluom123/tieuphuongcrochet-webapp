@@ -230,7 +230,7 @@ const CategoriesList = () => {
 		let isMounted = true;
 
 		const loadCategories = async () => {
-			setState({ ...state, loading: true });
+			setState(prevState => ({ ...prevState, loading: true }));
 			try {
 				fetchCategories().then((data) => {
 					if (isMounted) {
