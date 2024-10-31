@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Col, Flex, Form, Input, Row, TreeSelect } from 'antd';
+import { Button, Col, Flex, Form, Input, Row, Spin, TreeSelect } from 'antd';
 
 import { User } from '@/app/lib/definitions';
 import { useEffect, useState } from 'react';
@@ -18,15 +18,11 @@ const UserForm = ({ params }: UserFormProps) => {
     const [form] = Form.useForm();
     const { Item } = Form;
     const router = useRouter();
-
-    const [state, setState] = useState({
-        loading: false,
-        user: {} as User,
-    })
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (params?.id) {
-            setState({ ...state, loading: true });
+            setLoading(true);
             fetchUserDetail(params.id).then((user) => {
                 if (user && user.email) {
                     const tempData = cloneDeep(user);
@@ -34,10 +30,9 @@ const UserForm = ({ params }: UserFormProps) => {
                         ...tempData,
                     };
                     form.setFieldsValue(newUser);
-                    setState({ ...state, user: newUser });
                 }
             }).finally(() => {
-                setState({ ...state, loading: false });
+                setLoading(false);
             });
         }
     }, [params?.id]);
@@ -76,7 +71,7 @@ const UserForm = ({ params }: UserFormProps) => {
     ];
 
     return (
-        <div>
+        <Spin spinning={loading} tip="Loading...">
             <Flex justify="center">
                 <h1>{params?.id ? 'Update the user' : 'Create a new user'}</h1>
             </Flex>
@@ -120,7 +115,7 @@ const UserForm = ({ params }: UserFormProps) => {
                     <Button className="btn-form" onClick={onCancel}>Cancel</Button>
                 </Flex>
             </Form>
-        </div>
+        </Spin>
     );
 };
 

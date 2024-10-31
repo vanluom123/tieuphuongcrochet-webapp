@@ -11,7 +11,7 @@ import logo from '@/public/logo.png';
 import { ROUTE_PATH } from '@/app/lib/constant';
 
 import Languages from './Languages';
-import SidebarNav from './SibarNav';
+import SidebarNav from './Sidebar';
 import MenuNav from './MenuNav';
 import '../../ui/navigation.scss';
 

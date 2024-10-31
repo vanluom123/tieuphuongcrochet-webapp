@@ -24,7 +24,7 @@ const FooterPage: React.FC<FooterProps> = ({ currentNav }) => {
     return (
         <footer className='footer-wrap'>
             <Flex vertical align='center'>
-                <Image className='footer-logo' src={logo} alt="Logo" width={300} height={360} />
+                <Image className='footer-logo' priority src={logo} alt="Logo" width={300} height={360} />
                 <Row className='footer-link-wrap' gutter={[48, 12]}>
                     {FOOTER_LINK.map(({ name, path }, index) =>
                         <Col className={getActiveClass(path)} key={`${name}_${index}`} md={8} xs={12}>

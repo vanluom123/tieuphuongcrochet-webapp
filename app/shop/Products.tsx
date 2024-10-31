@@ -30,9 +30,9 @@ const Products = ({ initialData, categories }: ProductsProps) => {
 
 	useEffect(() => {
 		if (params !== initialListParams) {
-			setState({ ...state, loading: true });
+			setState(prevState => ({ ...prevState, loading: true }));
 			fetchProducts(params).then(({ data, totalRecords }) => {
-				setState({ ...state, data, totalRecord: totalRecords });
+				setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
 			}).finally(() => {
 				setState(prevState => ({ ...prevState, loading: false }));
 			});

@@ -232,5 +232,9 @@
     "title": "500",
     "description": "Rất tiếc, đã có lỗi xảy ra.",
     "back_home": "Trở về trang chủ"
+  },
+  "User": {
+    "title": "Người dùng",
+    "description": "Người dùng của website"
   }
 }

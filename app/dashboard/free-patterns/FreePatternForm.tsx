@@ -40,7 +40,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
 
     useEffect(() => {
         if (params?.id) {
-            setState({ ...state, loading: true });
+            setState(prevState => ({ ...prevState, loading: true }));
 
             fetchFreePatternDetail(params.id).then(pattern => {
                 const newPattern = {
@@ -50,11 +50,11 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                     status: pattern.status || TRANSLATION_STATUS.NONE
                 }
                 form.setFieldsValue(newPattern);
-                setState({
-                    ...state,
+                setState(prevState => ({
+                    ...prevState,
                     pattern,
                     editorContent: pattern.content || ''
-                });
+                }));
             }).finally(() => {
                 setState(prevState => ({ ...prevState, loading: false }));
             });

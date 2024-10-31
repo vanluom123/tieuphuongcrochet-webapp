@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
 		openGraph: {
 			title: t("title"),
 			description: t("description"),
-			url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.DASHBOARD_CATEGORY}`,
+			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.DASHBOARD_CATEGORY}`,
 		},
 	};
 }

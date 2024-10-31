@@ -51,7 +51,7 @@ export const deleteCategory = async (id: string) => {
         endpoint: url,
         method: 'DELETE',
     }).then(() => {
-            notification.success({ message: 'Success', description: 'Delete category successfully' })
+        notification.success({ message: 'Success', description: 'Delete category successfully' })
     }).catch((err) => {
         console.log("err", err);
         notification.error({ message: 'Failed', description: err.message })

@@ -26,17 +26,17 @@ const BlogForm = ({ params }: BlogFormProps) => {
 
     useEffect(() => {
         if (params?.id) {
-            setState({ ...state, loading: true });
+            setState(prevState => ({ ...prevState, loading: true }));
             fetchPostDetail(params.id).then((data) => {
                 const newPost = {
                     ...data
                 }
                 form.setFieldsValue(newPost);
-                setState({
-                    ...state,
+                setState(prevState => ({
+                    ...prevState,
                     post: newPost,
                     editorContent: newPost.content || ''
-                });
+                }));
             }).finally(() => {
                 setState(prevState => ({ ...prevState, loading: false }));
             });

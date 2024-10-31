@@ -23,7 +23,7 @@ export async function generateMetadata(
 		openGraph: {
 			title: blog.title,
 			images: [blog.src || '', ...previousImages],
-			url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${slug}`,
+			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${slug}`,
 		},
 	};
 }
@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 				type='Blog'
 				title={post?.title}
 				description={post?.content || ''}
-				url={`${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.BLOG}/${params.slug}`}
+				url={`${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.BLOG}/${params.slug}`}
 				
 			/>
 			<PostDetail post={post} />

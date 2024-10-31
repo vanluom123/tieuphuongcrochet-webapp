@@ -20,6 +20,7 @@ const PatternDetail = ({pattern}: {pattern: Pattern}) => {
             <IntroductionCard isPreviewAvatar={false} data={pattern} isShowThumbnail />
             <Divider />
             <ViewImagesList
+                isPattern
                 name='free-patterns'
                 contentTitle={t("detail")}
                 content={pattern?.content}

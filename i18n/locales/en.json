@@ -235,5 +235,9 @@
     "title": "500",
     "description": "Sorry, something went wrong.",
     "back_home": "Back Home"
+  },
+  "User": {
+    "title": "Users",
+    "description": "Users of website"
   }
 }
