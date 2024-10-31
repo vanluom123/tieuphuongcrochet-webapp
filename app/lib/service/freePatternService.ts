@@ -16,10 +16,6 @@ export const fetchFreePatterns = async (params: ListParams): Promise<{data: Data
             'sortBy': params.sortBy as string,
             'sortDir': params.sortDir as string,
         },
-        // next: {
-        //     revalidate: 36000,
-        //     tags: ['free-patterns']
-        // },
         data: params.filters,
     }).catch((err) => {
         console.log("err", err);
