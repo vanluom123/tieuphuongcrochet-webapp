@@ -1,14 +1,14 @@
 import type { MetadataRoute } from 'next'
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService' // Adjust import path as needed
-import { DataType, Product } from './lib/definitions'
+import { DataType, initialListParams, Product } from './lib/definitions'
 import { fetchProducts } from './lib/service/productService'
 import { ROUTE_PATH } from './lib/constant';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch all free patterns
-  const freePatterns = await fetchFreePatterns({ pageNo: 1, pageSize: 1000 });
+  const freePatterns = await fetchFreePatterns(initialListParams);
 
-  const products = await fetchProducts({ pageNo: 1, pageSize: 1000 });
+  const products = await fetchProducts(initialListParams);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
