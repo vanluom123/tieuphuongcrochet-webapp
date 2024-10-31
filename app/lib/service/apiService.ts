@@ -11,7 +11,8 @@ async function apiService<T = unknown>({
     queryParams = {},
     retries = 3,
     logRequests = false,
-    formData
+    formData,
+    next
 }: {
     baseUrl?: string;
     endpoint?: string;
@@ -23,6 +24,7 @@ async function apiService<T = unknown>({
     retries?: number;
     logRequests?: boolean;
     formData?: FormData;
+    next?: NextFetchRequestConfig;
 }) {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -34,6 +36,7 @@ async function apiService<T = unknown>({
     const options: RequestInit = {
         method,
         signal,
+        next
     };
 
     if(headers) {
