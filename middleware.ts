@@ -11,6 +11,10 @@ export default withAuth(
         if (request.nextUrl.pathname.startsWith('/_next/')) {
             return NextResponse.next();
         }
+        // Bỏ qua sitemap.xml
+        if (request.nextUrl.pathname === '/sitemap.xml') {
+            return NextResponse.next();
+        }
 
         // Lấy token từ session
         const token = await getToken({
@@ -27,14 +31,20 @@ export default withAuth(
 
         // Kiểm tra nếu route bắt đầu bằng /dashboard
         if (request.nextUrl.pathname.startsWith(ROUTE_PATH.DASHBOARD)) {
+            console.log('Dashboard route detected');
+
             if (!token) {
+                console.log('No token found, redirecting to login');
+
                 // Nếu chưa đăng nhập, redirect về trang login
                 return NextResponse.redirect(new URL(ROUTE_PATH.LOGIN, request.url))
             }
+            console.log('Checking role:', token?.role);
 
             // Kiểm tra role của user (giả sử role được lưu trong token)
             if (token.role !== USER_ROLES.ADMIN) {
                 // Nếu không phải admin, redirect về trang chủ
+                console.log('Not admin, redirecting to home');
                 return NextResponse.redirect(new URL(ROUTE_PATH.HOME, request.url))
             }
         }
@@ -52,5 +62,7 @@ export default withAuth(
 // Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 // Chỉ định các route cần được bảo vệ
 export const config = {
-    matcher: ['/dashboard/:path*', '/api/:path*']
+    matcher: ['/dashboard/:path*', 
+        '/((?!sitemap.xml|api/auth).*)/*',
+    ]
 }
