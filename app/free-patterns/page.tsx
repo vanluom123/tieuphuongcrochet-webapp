@@ -9,8 +9,9 @@ import { fetchFreePatterns } from "../lib/service/freePatternService";
 import { fetchCategories } from "../lib/service/categoryService";
 import { Category, DataType, initialListParams } from "../lib/definitions";
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
+export const revalidate = 0; // 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("FreePattern");
 	return {
@@ -51,7 +52,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getFreePatterns() {
-	const { data, totalRecords } = await fetchFreePatterns(initialListParams);
+	const { data, totalRecords } = await fetchFreePatterns(initialListParams, {
+		revalidate: 0,
+		tags: ['free-patterns']
+	});
 	return { data, totalRecords };
 }
 
