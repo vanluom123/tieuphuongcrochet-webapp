@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
       disallow: ROUTE_PATH.DASHBOARD
     },
     sitemap: [
-      `${baseUrl}/sitemap.xml`,
+      `${baseUrl}/sitemap_index.xml`,
     ],
   }
 }
