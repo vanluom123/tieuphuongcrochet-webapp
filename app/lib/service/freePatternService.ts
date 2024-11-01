@@ -6,7 +6,7 @@ import apiService from "./apiService";
 import { notification } from "../notify";
 import apiJwtService from "./apiJwtService";
 
-export const fetchFreePatterns = async (params: ListParams): Promise<{data: DataType[], totalRecords: number}> => {
+export const fetchFreePatterns = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{data: DataType[], totalRecords: number}> => {
     const res = await apiService({
         endpoint: `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.PAGINATION}`,
         method: 'POST',
@@ -16,10 +16,7 @@ export const fetchFreePatterns = async (params: ListParams): Promise<{data: Data
             'sortBy': params.sortBy as string,
             'sortDir': params.sortDir as string,
         },
-        next: {
-            revalidate: 36000,
-            tags: ['free-patterns']
-        },
+        next,
         data: params.filters,
     }).catch((err) => {
         console.log("err", err);

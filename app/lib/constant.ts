@@ -1,5 +1,5 @@
 import shopee from '@/public/shope.jpg';
-import { TBannerType, TranslationStatus } from './definitions';
+import { ListParams, TBannerType, TranslationStatus } from './definitions';
 
 export const ROUTE_PATH = {
   HOME: '/',
@@ -20,7 +20,8 @@ export const ROUTE_PATH = {
   DASHBOARD_POSTS: '/dashboard/blogs',
   DASHBOARD_CATEGORY: '/dashboard/categories',
   CREATE: 'create',
-  DETAIL: 'detail'
+  DETAIL: 'detail',
+  SITEMAP: 'sitemap'
 };
 
 export const SOCIAL_LINKS = {
@@ -250,3 +251,11 @@ export const API_ROUTES = {
 	CU_BANNER: '/banner/batchInsertOrUpdate',
 	GETT_ALL_BANNER: '/banner/getAll',
 }
+
+export const PARAMS_FOR_SITEMAP: ListParams = {
+	pageNo: 0,
+	pageSize: parseInt(process.env.NEXT_PUBLIC_RECORDS_PER_SITEMAP || '300'),
+	sortBy: 'createdDate',
+	sortDir: 'desc',
+	filters: []
+};
