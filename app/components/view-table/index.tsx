@@ -12,6 +12,7 @@ import BlogCard from '../blog-card';
 import FreePatternCard from '../free-pattern-card';
 import CategoryMenu from './categoryMenu';
 import DirectionGroup from './DirectionGroup';
+import ListViewItem from '../list-view-item';
 import '../../ui/components/viewTable.scss';
 
 
@@ -166,11 +167,10 @@ const ViewTable = (
                             {
                                 dataSource && dataSource.map((item, index) =>
                                     <div className='list-view-item' key={`list-view-item-${index}`}>
-                                        test
-                                        {/* <ListViewItem
+                                        <ListViewItem
                                             data={item}
                                             onReadDetail={() => onReadDetail(item.key)}
-                                        /> */}
+                                        />
                                     </div>
                                 )
                             }
