@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { SegmentedValue } from "antd/es/segmented";
 import { useRouter } from "next/navigation";
 
-import HeaderPart from "../components/header-part";
-import ViewTable from "../components/view-table";
-import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH, TRANSLATION_STATUS } from "../lib/constant";
-import { initialListParams, Filter, ListParams, DataTableState, Category, DataType } from "../lib/definitions";
-import { filterByText, mapNameFilters } from "../lib/utils";
-import { fetchFreePatterns } from "../lib/service/freePatternService";
+import HeaderPart from '@/app/components/header-part';
+import ViewTable from '@/app/components/view-table';
+import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH, TRANSLATION_STATUS } from '@/app/lib/constant';
+import { initialListParams, Filter, ListParams, DataTableState, Category, DataType } from '@/app/lib/definitions';
+import { filterByText, mapNameFilters } from '@/app/lib/utils';
+import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
 
 interface FreePatternProps {
 	initialData: DataTableState

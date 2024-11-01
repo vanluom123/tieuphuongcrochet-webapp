@@ -1,10 +1,10 @@
 
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { ROUTE_PATH } from "../lib/constant";
+import { ROUTE_PATH } from '@/app/lib/constant';
 import Blogs from "./Blogs";
-import { fetchBlogs } from "../lib/service/blogsService";
-import { initialListParams } from "../lib/definitions";
+import { fetchBlogs } from '@/app/lib/service/blogsService';
+import { initialListParams } from '@/app/lib/definitions';
 
 export const revalidate = 86400;
 

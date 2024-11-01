@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 
-import ViewTable from "../components/view-table";
-import { Filter, DataTableState, initialListParams } from "../lib/definitions";
-import { filterByText } from "../lib/utils";
-import { fetchBlogs } from "../lib/service/blogsService";
-import { ROUTE_PATH } from "../lib/constant";
+import ViewTable from '@/app/components/view-table';
+import { Filter, DataTableState, initialListParams } from '@/app/lib/definitions';
+import { filterByText } from '@/app/lib/utils';
+import { fetchBlogs } from '@/app/lib/service/blogsService';
+import { ROUTE_PATH } from '@/app/lib/constant';
 
 interface BlogsProps {
     initialData: DataTableState

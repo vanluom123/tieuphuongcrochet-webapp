@@ -1,8 +1,8 @@
 import { Row, Col, Image } from "antd";
 import { getTranslations } from "next-intl/server";
-import coverImg from '@/public/about.jpg';
-import { ROUTE_PATH } from "../lib/constant";
 import { Metadata } from "next";
+import coverImg from '@/public/about.jpg';
+import { ROUTE_PATH } from "@/app/lib/constant";
 
 
 export async function generateMetadata(): Promise<Metadata> {

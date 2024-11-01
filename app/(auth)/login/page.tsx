@@ -9,11 +9,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
-import { User } from '../lib/definitions';
+import { User } from '@/app/lib/definitions';
 import logo from '@/public/logo.png';
-import { ROUTE_PATH, REGEX } from '../lib/constant';
-import '../ui/components/login.scss';
-import { notification } from '../lib/notify';
+import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
+import { notification } from '@/app/lib/notify';
+import '../../ui/components/login.scss';   
 
 const Login = () => {
     const [form] = Form.useForm();

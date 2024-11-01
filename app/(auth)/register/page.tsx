@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import logo from '@/public/logo.png';
-import { User } from "../lib/definitions";
+import { User } from '@/app/lib/definitions';
 import Link from "next/link";
-import { ROUTE_PATH, REGEX, API_ROUTES } from "../lib/constant";
-import apiService from "../lib/service/apiService";
-import '../ui/components/register.scss';
+import { ROUTE_PATH, REGEX, API_ROUTES } from '@/app/lib/constant';
+import apiService from '@/app/lib/service/apiService';
+import '../../ui/components/register.scss';
 
 const RegisterPage = () => {
 
