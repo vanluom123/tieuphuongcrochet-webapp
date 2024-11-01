@@ -4,12 +4,11 @@ import { Metadata } from "next";
 
 import FreePatterns from "./FreePatterns";
 import { getTranslations } from "next-intl/server";
-import { ROUTE_PATH } from "../lib/constant";
-import { fetchFreePatterns } from "../lib/service/freePatternService";
-import { fetchCategories } from "../lib/service/categoryService";
-import { Category, DataType, initialListParams } from "../lib/definitions";
+import { ROUTE_PATH } from '@/app/lib/constant';
+import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
+import { fetchCategories } from '@/app/lib/service/categoryService';
+import { Category, DataType, initialListParams } from '@/app/lib/definitions';
 
-// export const dynamic = 'force-dynamic';
 
 export const revalidate = 0; // 
 export async function generateMetadata(): Promise<Metadata> {

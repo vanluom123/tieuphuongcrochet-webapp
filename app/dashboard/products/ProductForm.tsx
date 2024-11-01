@@ -17,17 +17,19 @@ interface ProductFormProps {
     }
 }
 
+const initialState = {
+    loading: false,
+    product: {} as Product,
+    editorContent: ''
+}
+
 const ProductForm = ({ params }: ProductFormProps) => {
     const [form] = Form.useForm();
     const { TextArea } = Input;
     const { Item } = Form;
     const router = useRouter();
     const [categories, setCategories] = useState<Category[]>([]);
-    const [state, setState] = useState({
-        loading: false,
-        product: {} as Product,
-        editorContent: ''
-    })
+    const [state, setState] = useState(initialState);
 
     useEffect(() => {
         fetchCategories().then((data) => {
@@ -56,6 +58,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
     }, [params?.id])
 
     const onSubmitForm = async (values: Product) => {
+        setState(prevState => ({ ...prevState, loading: true }));
         let sendData = { ...values }
         if (params?.id) {
             sendData = {
@@ -65,6 +68,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
         }
         
         const res = await createUpdateProduct(sendData);
+        setState(initialState);
         if(res?.id) {
             form.resetFields();
             router.push(ROUTE_PATH.DASHBOARD_PRODUCTS);

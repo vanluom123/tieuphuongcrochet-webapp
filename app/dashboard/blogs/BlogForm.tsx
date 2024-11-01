@@ -12,17 +12,18 @@ interface BlogFormProps {
         id: string
     }
 }
+const initialState = {
+    loading: false,
+    post: {} as Post,
+    editorContent: ''
+}
 
 const BlogForm = ({ params }: BlogFormProps) => {
     const [form] = Form.useForm();
     const { Item } = Form;
     const router = useRouter();
 
-    const [state, setState] = useState({
-        loading: false,
-        post: {} as Post,
-        editorContent: ''
-    })
+    const [state, setState] = useState(initialState);
 
     useEffect(() => {
         if (params?.id) {
@@ -50,6 +51,7 @@ const BlogForm = ({ params }: BlogFormProps) => {
     }, [state.post]);
 
     const onSubmitForm = (values: Post) => {
+        setState(prevState => ({ ...prevState, loading: true }));
         let sendData = { ...values }
         if (params?.id) {
             sendData = {
@@ -63,6 +65,8 @@ const BlogForm = ({ params }: BlogFormProps) => {
                 form.resetFields();
                 router.back();
             }
+        }).finally(() => {
+            setState(prevState => ({ ...prevState, loading: false }));
         });
     }
 

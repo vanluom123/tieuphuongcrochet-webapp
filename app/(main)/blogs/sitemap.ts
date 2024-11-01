@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next"
-import { PARAMS_FOR_SITEMAP, ROUTE_PATH } from "../lib/constant"
-import { DataType } from "../lib/definitions"
-import { fetchBlogs } from "../lib/service/blogsService";
+import { PARAMS_FOR_SITEMAP, ROUTE_PATH } from '@/app/lib/constant';
+import { DataType } from '@/app/lib/definitions';
+import { fetchBlogs } from '@/app/lib/service/blogsService';
 
 export const revalidate = 86400; // revalidate at most every day
 

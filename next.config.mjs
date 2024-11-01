@@ -5,7 +5,7 @@ const nextConfig = {
     poweredByHeader: false,
     reactStrictMode: true,
     images: {
-      domains: ['your-domain.com'],
+      domains: ['https://firebasestorage.googleapis.com/v0/b/littlecrochet.appspot.com'],
     },
     // Thêm config cho static files
     async headers() {
@@ -16,12 +16,12 @@ const nextConfig = {
           headers: [
             {
               key: 'Cache-Control',
-              value: 'public, max-age=31536000, immutable',
+              value: 'public, max-age=2592000, immutable',
             },
           ],
         },
       ]
     }
   }
-  
+
 export default withNextIntl()(nextConfig);

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { ROUTE_PATH } from "../lib/constant";
+import { ROUTE_PATH } from '@/app/lib/constant';
 import Contact from "./Contact";
 
 

@@ -1,22 +1,27 @@
 'use client'
-import {useEffect, useState} from "react";
-import {Button, Col, Flex, Form, Input, Row, Spin, Switch, TreeSelect} from "antd";
-import {useTranslations} from "next-intl";
-import {useRouter} from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button, Col, Flex, Form, Input, Row, Spin, Switch, TreeSelect } from "antd";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
-import {Category, FileUpload, Pattern} from "@/app/lib/definitions";
-import {ROUTE_PATH, TRANSLATION_STATUS} from "@/app/lib/constant";
-import {fetchCategories} from "@/app/lib/service/categoryService";
+import { Category, FileUpload, Pattern } from "@/app/lib/definitions";
+import { ROUTE_PATH, TRANSLATION_STATUS } from "@/app/lib/constant";
+import { fetchCategories } from "@/app/lib/service/categoryService";
 import FreePatternStatus from "@/app/components/free-pattern-status";
 import CustomEditor from "@/app/components/custom-editor";
 import UploadFiles from "@/app/components/upload-files";
-import {createUpdateFreePattern, fetchFreePatternDetail} from "@/app/lib/service/freePatternService";
-import {DefaultOptionType} from "antd/es/select";
+import { createUpdateFreePattern, fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
+import { DefaultOptionType } from "antd/es/select";
 
 interface FreePatternFormProps {
     params?: {
         id: string
     }
+}
+const initialState = {
+    loading: false,
+    pattern: {} as Pattern,
+    editorContent: ''
 }
 
 const FreePatternForm = ({ params }: FreePatternFormProps) => {
@@ -25,11 +30,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
     const { Item } = Form;
     const router = useRouter();
     const [categories, setCategories] = useState<Category[]>([]);
-    const [state, setState] = useState({
-        loading: false,
-        pattern: {} as Pattern,
-        editorContent: ''
-    })
+    const [state, setState] = useState(initialState);
 
     useEffect(() => {
         fetchCategories().then((data) => {
@@ -64,6 +65,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
     const t = useTranslations('FreePattern');
 
     const onSubmitForm = async (values: Pattern) => {
+        setState(prevState => ({ ...prevState, loading: true }));
         let sendData = { ...values }
         if (params?.id) {
             sendData = {
@@ -75,6 +77,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
         const res = await createUpdateFreePattern(sendData);
         if (res?.id) {
             form.resetFields();
+            setState(initialState);
             router.push(ROUTE_PATH.DASHBOARD_FREE_PATTERNS);
         }
     }
@@ -83,13 +86,13 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
         form.resetFields();
         router.back();
     }
-    
+
     return (<>
-        <div className="crupattern-page">
-            <Flex justify="center">
-                <h1>{params?.id ? t('updatePattern') : t('createPattern')}</h1>
-            </Flex>
-            <Spin spinning={state.loading} tip="Loading...">
+        <Spin spinning={state.loading} tip="Loading...">
+            <div className="crupattern-page">
+                <Flex justify="center">
+                    <h1>{params?.id ? t('updatePattern') : t('createPattern')}</h1>
+                </Flex>
                 <Form layout="vertical"
                     name='cUPatternForm'
                     form={form}
@@ -225,8 +228,8 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                         <Button className="btn-form" onClick={onCancel} disabled={state.loading}>{t('Btn.cancel')}</Button>
                     </Flex>
                 </Form>
-            </Spin>
-        </div>
+            </div>
+        </Spin>
     </>)
 }
 
