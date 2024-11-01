@@ -239,5 +239,9 @@
   "User": {
     "title": "Users",
     "description": "Users of website"
+  },
+  "ListViewItem": {
+    "btn_buy": "Buy",
+    "intro_author": "Author"
   }
 }

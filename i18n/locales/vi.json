@@ -236,5 +236,9 @@
   "User": {
     "title": "Người dùng",
     "description": "Người dùng của website"
+  },
+  "ListViewItem": {
+    "btn_buy": "Mua hàng",
+    "intro_author": "Tác giả"
   }
 }
