@@ -2,10 +2,10 @@
 import React from 'react';
 import { Button, Col, Divider, Form, Input, notification, Row, Space } from 'antd';
 import emailjs from '@emailjs/browser';
-import SocialBox from '../components/social-box';
-import { REGEX, SOCIALS } from '../lib/constant';
+import SocialBox from '@/app/components/social-box';
+import { REGEX, SOCIALS } from '@/app/lib/constant';
 import { useTranslations } from 'next-intl';
-import '../ui/contact.scss';
+import '../../ui/contact.scss';
 
 const Contact = () => {
   const service_ID = 'service_7v8jlqr';
