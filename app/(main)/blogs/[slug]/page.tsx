@@ -5,6 +5,8 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import PostDetail from "./PostDetail";
 import StructuredData from '@/app/components/StructuredData';
 
+export const revalidate = 0;
+
 type Props = {
 	params: { slug: string }
 	searchParams: { [key: string]: string | string[] | undefined }
@@ -22,8 +24,8 @@ export async function generateMetadata(
 		title: blog.title,
 		openGraph: {
 			title: blog.title,
-			images: [blog.src || '', ...previousImages],
-			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${slug}`,
+			images: [...(blog.files || []), ...previousImages],
+			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.BLOG}/${slug}`,
 		},
 	};
 }

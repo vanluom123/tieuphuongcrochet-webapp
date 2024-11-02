@@ -2,8 +2,8 @@
 import { getTranslations } from 'next-intl/server';
 import Home from './components/home/Home';
 import { fetchHomeData } from './lib/service/homeService';
-import './ui/home.scss';
 import StructuredData from './components/StructuredData';
+import './ui/home.scss';
 
 export const revalidate = 86400;
 
@@ -16,11 +16,11 @@ export async function generateMetadata() {
 		openGraph: {
 			title: t("title"),
 			description: t("description"),
-			url: 'https://www.tieuphuongcrochet.com',
+			url: `${process.env.NEXT_PUBLIC_URL}`,
 			siteName: t("title"),
 			images: [
 				{
-					url: 'https://www.tieuphuongcrochet.com/home-og-image.jpg',
+					url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
 					width: 1200,
 					height: 630,
 					alt: t("title"),

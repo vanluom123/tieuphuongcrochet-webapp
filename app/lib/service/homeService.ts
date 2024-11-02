@@ -8,6 +8,10 @@ export const fetchHomeData = async (): Promise<HomeData> => {
     const data = await apiService({
         endpoint: API_ROUTES.HOME,
         method: 'GET',
+        next: {
+            revalidate: 86400, // 24 hours
+            tags: ['home'],
+        }
     }).catch((err) => {
         console.log("err", err);
         return {} as HomeData;
