@@ -4,7 +4,7 @@ import { fetchProductDetail } from '@/app/lib/service/productService';
 import StructuredData from '@/app/components/StructuredData';
 import ProductDetail from "./ProductDetail";
 
-export const revalidate = 0;
+export const revalidate = 86400;
 
 type Props = {
   params: { slug: string }
