@@ -6,7 +6,7 @@ import apiService from "./apiService";
 import { notification } from "antd";
 import apiJwtService from "./apiJwtService";
 
-export const fetchProducts = async (params: ListParams): Promise<{ data: DataType[], totalRecords: number }> => {
+export const fetchProducts = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{ data: DataType[], totalRecords: number }> => {
     const res = await apiService({
         endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.PAGINATION}`,
         method: 'POST',
@@ -17,6 +17,7 @@ export const fetchProducts = async (params: ListParams): Promise<{ data: DataTyp
             'sortDir': params.sortDir as string,
         },
         data: params.filters,
+        next,
     }).catch((err) => {
         console.log("err", err);
         return {} as Product;

@@ -4,6 +4,8 @@ import { fetchProductDetail } from '@/app/lib/service/productService';
 import StructuredData from '@/app/components/StructuredData';
 import ProductDetail from "./ProductDetail";
 
+export const revalidate = 0;
+
 type Props = {
   params: { slug: string }
   searchParams: { [key: string]: string | string[] | undefined }
@@ -22,8 +24,8 @@ export async function generateMetadata(
     openGraph: {
       title: product.name,
       description: product.description,
-      images: [product.src || ''  , ...previousImages],
-      url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${slug}`,
+      images: [...(product.images || []), ...previousImages],
+      url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${slug}`,
       authors: [product.author || ''],
     },
   };

@@ -4,7 +4,7 @@ import apiService from "./apiService";
 import { getAvatar } from "../utils";
 import apiJwtService from "./apiJwtService";
 
-export const fetchBlogs = async (params: ListParams): Promise<{data: DataType[], totalRecords: number}> => {
+export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{data: DataType[], totalRecords: number}> => {
     try {
         const res: ListResponse<Post> = await apiService({
             endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.PAGINATION}`,
@@ -16,6 +16,7 @@ export const fetchBlogs = async (params: ListParams): Promise<{data: DataType[],
                 sortDir: params.sortDir as string,
             },
             data: params.filters,
+            next,
         });
 
         const newData = res.contents?.map(item => ({
@@ -35,11 +36,12 @@ export const fetchBlogs = async (params: ListParams): Promise<{data: DataType[],
     }
 };
 
-export const fetchPostDetail = async (id: string): Promise<Post> => {
+export const fetchPostDetail = async (id: string, next?: NextFetchRequestConfig): Promise<Post> => {
     try {
         const res: Post = await apiService({
             endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.DETAIL}?id=${id}`,
             method: 'GET',
+            next,
         });
 
         return {

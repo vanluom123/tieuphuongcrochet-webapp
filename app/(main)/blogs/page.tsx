@@ -6,7 +6,7 @@ import Blogs from "./Blogs";
 import { fetchBlogs } from '@/app/lib/service/blogsService';
 import { initialListParams } from '@/app/lib/definitions';
 
-export const revalidate = 86400;
+export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("Blog");
@@ -23,7 +23,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getBlogs() {
-	const { data, totalRecords } = await fetchBlogs(initialListParams);
+	const { data, totalRecords } = await fetchBlogs(initialListParams, {
+		revalidate: 0,
+		tags: ['blogs'],
+	});
 	return { data, totalRecords };
 }
 
