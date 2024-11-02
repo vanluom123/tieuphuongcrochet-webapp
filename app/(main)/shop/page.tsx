@@ -6,7 +6,7 @@ import { fetchProducts } from '@/app/lib/service/productService';
 import { fetchCategories } from '@/app/lib/service/categoryService';
 import { Category, initialListParams } from '@/app/lib/definitions';
 
-export const revalidate = 86400;
+export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("Shop");
@@ -23,7 +23,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getProducts() {
-	const { data, totalRecords } = await fetchProducts(initialListParams);
+	const { data, totalRecords } = await fetchProducts(initialListParams, {
+		revalidate: 0,
+		tags: ['products'],
+	});
 	return { data, totalRecords };
 }
 
