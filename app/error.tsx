@@ -4,14 +4,6 @@ import { useTranslations } from "next-intl";
 
 import { useEffect } from "react";
 
-export const generateMetadata = async () => {
-  const t = useTranslations('Error');
-
-  return {
-    title: t('title'),
-  }
-}
-
 const Error = async ({ error, reset }: {error: Error, reset: () => void }) => {
     const t = useTranslations('Error');
     useEffect(() => {
