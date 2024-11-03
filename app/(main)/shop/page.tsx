@@ -6,9 +6,6 @@ import { fetchProducts } from '@/app/lib/service/productService';
 import { fetchCategories } from '@/app/lib/service/categoryService';
 import { Category, initialListParams } from '@/app/lib/definitions';
 
-// Revalidate at 24 hours
-export const revalidate = 86400;
-
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("Shop");
 	return {
@@ -25,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function getProducts() {
 	const { data, totalRecords } = await fetchProducts(initialListParams, {
-		revalidate: 86400,
+		revalidate: 3600,
 		tags: ['products'],
 	});
 	return { data, totalRecords };
