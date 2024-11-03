@@ -1,11 +1,11 @@
 'use client'
 import { Button, Result } from "antd";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
 import { useEffect } from "react";
 
 export const generateMetadata = async () => {
-  const t = await getTranslations('Error');
+  const t = useTranslations('Error');
 
   return {
     title: t('title'),
@@ -13,7 +13,7 @@ export const generateMetadata = async () => {
 }
 
 const Error = async ({ error, reset }: {error: Error, reset: () => void }) => {
-    const t = await getTranslations('Error');
+    const t = useTranslations('Error');
     useEffect(() => {
       // Log the error to an error reporting service
       console.error(error)
