@@ -42,13 +42,13 @@ const BlogForm = ({ params }: BlogFormProps) => {
                 setState(prevState => ({ ...prevState, loading: false }));
             });
         }
-    }, [params?.id]);
+    }, [params?.id, form]);
 
     useEffect(() => {
         if (params?.id && state.post?.title) {
             form.setFieldsValue(state.post);
         }
-    }, [state.post]);
+    }, [state.post, form, params?.id]);
 
     const onSubmitForm = (values: Post) => {
         setState(prevState => ({ ...prevState, loading: true }));

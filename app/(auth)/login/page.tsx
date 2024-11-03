@@ -27,7 +27,7 @@ const Login = () => {
         if (session?.user?.email && status === 'authenticated') {
             router.push(ROUTE_PATH.DASHBOARD);
         }
-    }, [session, router]);
+    }, [session, router, status]);
 
     const onFinish = async (values: User) => {
         setIsLoading(true);

@@ -36,7 +36,7 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 			}
 			form.setFieldsValue(formData);
 		}
-	}, [categorySelected]);
+	}, [categorySelected, isEditing, form]);
 
 	const handleOk = async () => {
 		setLoading(true);

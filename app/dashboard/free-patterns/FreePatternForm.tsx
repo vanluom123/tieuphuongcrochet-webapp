@@ -60,7 +60,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                 setState(prevState => ({ ...prevState, loading: false }));
             });
         }
-    }, [params?.id])
+    }, [params?.id, form]);
 
     const t = useTranslations('FreePattern');
 

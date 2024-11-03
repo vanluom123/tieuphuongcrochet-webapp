@@ -5,8 +5,6 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import PostDetail from "./PostDetail";
 import StructuredData from '@/app/components/StructuredData';
 
-export const revalidate = 86400;
-
 type Props = {
 	params: { slug: string }
 	searchParams: { [key: string]: string | string[] | undefined }

@@ -231,7 +231,8 @@
   "Error": {
     "title": "500",
     "description": "Rất tiếc, đã có lỗi xảy ra.",
-    "back_home": "Trở về trang chủ"
+    "back_home": "Trở về trang chủ",
+    "try_again": "Thử lại"
   },
   "User": {
     "title": "Người dùng",

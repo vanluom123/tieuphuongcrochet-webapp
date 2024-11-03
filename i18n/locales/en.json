@@ -234,7 +234,8 @@
   "Error": {
     "title": "500",
     "description": "Sorry, something went wrong.",
-    "back_home": "Back Home"
+    "back_home": "Back Home",
+    "try_again": "Try again"
   },
   "User": {
     "title": "Users",

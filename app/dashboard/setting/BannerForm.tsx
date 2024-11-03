@@ -56,7 +56,7 @@ const BannerForm = ({
 				textColor: banner.textColor
 			})
 		}
-	}, [edittingBanner.banner]);
+	}, [edittingBanner, form]);
 
 	const onAddBanner = (values: any) => {
 		const { title, content, url, bannerImage, bannerTypeId, active, textColor } = values;

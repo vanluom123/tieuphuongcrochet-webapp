@@ -4,8 +4,6 @@ import PatternDetail from "./PatternDetail";
 import StructuredData from "@/app/components/StructuredData";
 import { ROUTE_PATH } from '@/app/lib/constant';
 
-export const revalidate = 86400;
-
 // Define metadata props
 type Props = {
   params: { slug: string }

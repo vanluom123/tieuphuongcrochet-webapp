@@ -35,7 +35,7 @@ const UserForm = ({ params }: UserFormProps) => {
                 setLoading(false);
             });
         }
-    }, [params?.id]);
+    }, [params?.id, form]);
 
     const onSubmitForm = (values: User) => {
         let sendData = { ...values }

@@ -5,8 +5,6 @@ import { fetchHomeData } from './lib/service/homeService';
 import StructuredData from './components/StructuredData';
 import './ui/home.scss';
 
-export const revalidate = 86400;
-
 export async function generateMetadata() {
 	const t = await getTranslations("App");
 
