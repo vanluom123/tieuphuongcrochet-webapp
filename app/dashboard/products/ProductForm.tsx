@@ -55,7 +55,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
                 setState(prevState => ({ ...prevState, loading: false }));
             });
         }
-    }, [params?.id])
+    }, [params?.id, form]);
 
     const onSubmitForm = async (values: Product) => {
         setState(prevState => ({ ...prevState, loading: true }));

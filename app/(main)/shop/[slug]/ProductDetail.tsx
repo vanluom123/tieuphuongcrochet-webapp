@@ -4,8 +4,14 @@ import { useTranslations } from "next-intl";
 
 import IntroductionCard from "@/app/components/introduction-card";
 import ViewDetailWrapper from "@/app/components/view-detail-wrapper";
-import ViewImagesList from "@/app/components/view-image-list";
 import { Product } from "@/app/lib/definitions";
+import dynamic from "next/dynamic";
+
+// Lazy load ViewImagesList component
+const ViewImagesList = dynamic(
+    () => import("@/app/components/view-image-list"),
+    { ssr: false } // Disable server-side rendering
+);
 
 export default function ProductDetail({ product }: { product: Product }) {
 

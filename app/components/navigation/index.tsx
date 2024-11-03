@@ -29,7 +29,7 @@ const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 	useEffect(() => {
 		const nav = pathname.split('/')[1] || '';
 		setCurrentNav(`/${nav}`);
-	}, [pathname]);
+	}, [pathname, setCurrentNav]);
 
 
 	// const context = useContext(Context);

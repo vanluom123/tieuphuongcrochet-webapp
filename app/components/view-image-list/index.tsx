@@ -55,9 +55,9 @@ const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }:
 				<div
 					className={`${name}-detail-content`}
 				>
-					<h1 className="align-center mt-0">
+					<p className="align-center mt-0 text-lg">
 						{contentTitle}
-					</h1>
+					</p>
 					{(!content && !images) &&
 						<Empty
 							imageStyle={{ height: 80 }}
