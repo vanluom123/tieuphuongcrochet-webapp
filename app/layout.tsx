@@ -12,6 +12,7 @@ export async function generateMetadata() {
   const t = await getTranslations("App");
 
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://www.tieuphuongcrochet.com"),
     title: {
       template: `%s | ${t("title")}`,
       default: t("title"),
