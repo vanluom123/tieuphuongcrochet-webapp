@@ -5,7 +5,13 @@ const nextConfig = {
     poweredByHeader: false,
     reactStrictMode: true,
     images: {
-      domains: ['https://firebasestorage.googleapis.com/v0/b/littlecrochet.appspot.com'],
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'firebasestorage.googleapis.com',
+          pathname: '/v0/b/littlecrochet.appspot.com/**',
+        },
+      ],
     },
     // Thêm config cho static files
     async headers() {
