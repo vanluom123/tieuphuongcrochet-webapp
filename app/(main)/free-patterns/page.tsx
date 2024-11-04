@@ -67,7 +67,7 @@ const Page = async () => {
 		getCategories(),
 	]);
 
-	const t = await getTranslations("FreePattern");
+	const t = await getTranslations();
 
 	return (
 		<>
@@ -75,8 +75,8 @@ const Page = async () => {
 				item={{
 					"@context": "https://schema.org",
 					"@type": "WebPage",
-					name: t("title"),
-					description: t("description"),
+					name: t("FreePattern.title"),
+					description: t("FreePattern.description"),
 					url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,
 					breadcrumb: {
 						"@type": "BreadcrumbList",
@@ -84,13 +84,13 @@ const Page = async () => {
 							{
 								"@type": "ListItem",
 								position: 1,
-								name: "Home",
+								name: t("MenuNav.home"),
 								item: process.env.NEXT_PUBLIC_URL,
 							},
 							{
 								"@type": "ListItem",
 								position: 2,
-								name: t("title"),
+								name: t("FreePattern.title"),
 								item: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,
 							},
 						],
@@ -98,11 +98,11 @@ const Page = async () => {
 					mainEntity: {
 						"@type": "ItemList",
 						itemListElement: freePatterns.data.map((pattern: DataType, index: number) => ({
-							"@type": "ListItem",
+							"@type": "ItemList",
 							position: index + 1,
 							item: {
-								"@type": "Product",
-								name: pattern.title,
+								"@type": "FreePattern",
+								name: pattern.name,
 								description: pattern.description,
 								url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
 							},
