@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { useEffect } from "react";
 
-const Error = async ({ error, reset }: {error: Error, reset: () => void }) => {
+const Error = ({ error, reset }: {error: Error, reset: () => void }) => {
     const t = useTranslations('Error');
     useEffect(() => {
       // Log the error to an error reporting service
