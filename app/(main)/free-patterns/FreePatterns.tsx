@@ -18,10 +18,13 @@ interface FreePatternProps {
 const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
 	const [state, setState] = useState<DataTableState>({
 		loading: false,
-		data: initialData.data,
-		totalRecord: initialData.totalRecord,
+		data: [],
+		totalRecord: 0,
 	});
 
+	useEffect(() => {
+		setState(initialData);
+	}, [initialData]);
 	const [params, setParams] = useState(initialListParams);
 
 	const router = useRouter();

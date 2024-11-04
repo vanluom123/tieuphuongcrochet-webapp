@@ -39,7 +39,7 @@ export default async function Page() {
 			<StructuredData
 				title={t("title")}
 				description={t("description")}
-				url="https://www.tieuphuongcrochet.com"
+				url={process.env.NEXT_PUBLIC_URL || "https://www.tieuphuongcrochet.com"}
 			/>
 			<Home blogs={blogs} freePatterns={freePatterns} products={products} />
 		</>
