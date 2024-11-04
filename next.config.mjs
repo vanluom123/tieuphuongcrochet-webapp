@@ -26,6 +26,15 @@ const nextConfig = {
             },
           ],
         },
+        {
+          source: '/:path*',
+          headers: [
+            {
+              key: 'Access-Control-Allow-Origin',
+              value: 'https://fonts.gstatic.com',
+            },
+          ],
+        },
       ]
     }
   }
