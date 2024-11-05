@@ -15,7 +15,10 @@ export async function generateMetadata(
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	const slug = params.slug;
-	const blog = await fetchPostDetail(slug).then((res) => res);
+	const blog = await fetchPostDetail(slug, {
+		revalidate: 86400,
+		tags: [`blog-${slug}`],
+	}).then((res) => res);
 	const previousImages = (await parent).openGraph?.images || [];
 
 	return {
@@ -30,7 +33,10 @@ export async function generateMetadata(
 
 export default async function Page({ params }: { params: { slug: string } }) {
 
-	const post = await fetchPostDetail(params.slug);
+	const post = await fetchPostDetail(params.slug, {
+		revalidate: 86400,
+		tags: [`blog-${params.slug}`],
+	});
 
 	return (
 		<>

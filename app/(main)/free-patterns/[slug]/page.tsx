@@ -16,7 +16,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const slug = params.slug;
-  const pattern = await fetchFreePatternDetail(slug).then((res) => res);
+  const pattern = await fetchFreePatternDetail(slug, 3600).then((res) => res);
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
@@ -34,7 +34,7 @@ export async function generateMetadata(
 // Generate Pattern Detail Page
 export default async function Page({ params }: { params: { slug: string } }){
 
-    const pattern = await fetchFreePatternDetail(params.slug);
+    const pattern = await fetchFreePatternDetail(params.slug, 3600);
 
     return (
         <>
