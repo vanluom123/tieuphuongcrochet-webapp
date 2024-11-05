@@ -41,10 +41,11 @@ export const fetchProducts = async (params: ListParams, next?: NextFetchRequestC
     }
 };
 
-export const fetchProductDetail = async (id: string): Promise<Product> => {
+export const fetchProductDetail = async (id: string, revalidate?: number): Promise<Product> => {
     const res = await apiService({
         endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.DETAIL}?id=${id}`,
         method: 'GET',
+        next: { revalidate: revalidate || 0, tags: [`product-${id}`] },
     }).catch((err) => {
         console.log("err", err);
         return {} as Product;
