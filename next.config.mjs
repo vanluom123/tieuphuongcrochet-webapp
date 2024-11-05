@@ -11,6 +11,11 @@ const nextConfig = {
           hostname: 'firebasestorage.googleapis.com',
           pathname: '/v0/b/littlecrochet.appspot.com/**',
         },
+        {
+          protocol: 'https',
+          hostname: 'tieuphuongcrochet.com',
+          pathname: '/**',
+        }
       ],
     },
     // Thêm config cho static files
