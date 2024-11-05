@@ -9,7 +9,7 @@ export const fetchHomeData = async (): Promise<HomeData> => {
         endpoint: API_ROUTES.HOME,
         method: 'GET',
         next: {
-            revalidate: 86400, // 24 hours
+            revalidate: 60, // 1 minute
             tags: ['home'],
         }
     }).catch((err) => {

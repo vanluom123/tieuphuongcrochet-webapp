@@ -37,10 +37,11 @@ export const fetchFreePatterns = async (params: ListParams, next?: NextFetchRequ
     }
 };
 
-export const fetchFreePatternDetail = async (id: string): Promise<Pattern> => {
+export const fetchFreePatternDetail = async (id: string, revalidate?: number): Promise<Pattern> => {
     const data = await apiService({
         endpoint: `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.DETAIL}?id=${id}`,
         method: 'GET',
+        next: { revalidate: revalidate || 0, tags: [`free-pattern-${id}`] },
     }).catch((err) => {
         console.log("err", err);
         return {} as Pattern;
