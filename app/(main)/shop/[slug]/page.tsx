@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 offers={{
                     price: product.price || 0,
                     priceCurrency: product.currency_code || 'VND',
-                    availability: "https://schema.org/PreOrder" || 'https://schema.org/InStock',
+                    availability: "https://schema.org/PreOrder",
                     url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${params.slug}`
                 }}
             />
