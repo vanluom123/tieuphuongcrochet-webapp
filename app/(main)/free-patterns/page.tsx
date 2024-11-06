@@ -7,7 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { ROUTE_PATH } from '@/app/lib/constant';
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
 import { fetchCategories } from '@/app/lib/service/categoryService';
-import { Category, DataType, initialListParams } from '@/app/lib/definitions';
+import { Category, DataType, FileUpload, initialListParams } from '@/app/lib/definitions';
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -80,6 +80,7 @@ const Page = async () => {
 					url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,
 					breadcrumb: {
 						"@type": "BreadcrumbList",
+						name: t("FreePattern.title"),
 						itemListElement: [
 							{
 								"@type": "ListItem",
@@ -90,24 +91,19 @@ const Page = async () => {
 							{
 								"@type": "ListItem",
 								position: 2,
-								name: t("FreePattern.title"),
+								name: t("MenuNav.freePattern"),
 								item: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,
 							},
 						],
 					},
-					mainEntity: {
-						"@type": "ItemList",
-						itemListElement: freePatterns.data.map((pattern: DataType, index: number) => ({
-							"@type": "ItemList",
-							position: index + 1,
-							item: {
-								"@type": "FreePattern",
-								name: pattern.name,
-								description: pattern.description,
-								url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
-							},
-						})),
-					},
+					// huộc tính phù hợp hơn để chỉ định các phần tử trong bộ sưu tập CollectionPage là type phù hợp hơn vì:
+					hasPart: freePatterns.data.map((pattern: DataType) => ({
+						"@type": "CreativeWork",
+						name: pattern.name,
+						image: pattern.images?.map((image: FileUpload) => image.fileContent),
+						description: pattern.description,
+						url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${pattern.key}`,
+					})),
 				}}
 			/>
 			<FreePatterns

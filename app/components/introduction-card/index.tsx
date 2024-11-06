@@ -139,7 +139,7 @@ const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: Introducti
 						{price && <FormattedCurrency price={price} currency_code={currency_code} />}
 						{(price || link) && <Link href={link || SOCIAL_LINKS.FACEBOOK} target="_blank">
 							<Button className="btn-border" type="primary">
-								{t('btn_buy')}
+								{t('btn_order')}
 							</Button>
 						</Link>}
 					</Space>

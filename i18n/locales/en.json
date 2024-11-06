@@ -168,7 +168,7 @@
 
   "IntroductionCard": {
     "author": "Author",
-    "btn_buy": "Order"
+    "btn_order": "Message"
   },
   "UserAccount": {
     "sign_in": "Sign in",

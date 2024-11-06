@@ -166,7 +166,7 @@
 
   "IntroductionCard": {
     "author": "Tác giả",
-    "btn_buy": "Đặt hàng"
+    "btn_order": "Nhắn tin Shop"
   },
   "UserAccount": {
     "sign_in": "Đăng nhập",
