@@ -24,7 +24,7 @@ export async function generateMetadata(
     openGraph: {
       title: pattern.name,
       description: pattern.description,
-      images: [...pattern.images || [], ...previousImages],
+      images: [...(pattern.images?.map(image => image.fileContent) || []), ...previousImages],
       url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${slug}`,
       authors: [pattern.author || ''],
     },
@@ -39,10 +39,11 @@ export default async function Page({ params }: { params: { slug: string } }){
     return (
         <>
             <StructuredData
-                type='ItemList'
+                type='CreativeWork'
                 title={pattern.name}
                 description={pattern.description || ''}
                 url={`${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${params.slug}`}
+                image={pattern.src}
             />
             <PatternDetail pattern={pattern} />
         </>

@@ -41,11 +41,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
 	return (
 		<>
 			<StructuredData
-				type='Blog'
+				type='Article'
 				title={post?.title}
 				description={post?.content || ''}
 				url={`${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.BLOG}/${params.slug}`}
-				
+				image={post.src}
 			/>
 			<PostDetail post={post} />
 		</>
