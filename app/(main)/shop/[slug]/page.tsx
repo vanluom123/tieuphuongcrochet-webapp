@@ -22,7 +22,7 @@ export async function generateMetadata(
     openGraph: {
       title: product.name,
       description: product.description,
-      images: [...(product.images || []), ...previousImages],
+      images: [...(product.images?.map(image => image.fileContent) || []), ...previousImages],
       url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${slug}`,
       authors: [product.author || ''],
     },
@@ -41,6 +41,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 title={product.name}
                 description={product.description || ''}
                 url={`${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${params.slug}`}
+                image={product.src}
                 offers={{
                     price: product.price || 0,
                     priceCurrency: product.currency_code || 'VND',
