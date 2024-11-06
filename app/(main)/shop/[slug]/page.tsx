@@ -41,6 +41,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 title={product.name}
                 description={product.description || ''}
                 url={`${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${params.slug}`}
+                offers={{
+                    price: product.price || 0,
+                    priceCurrency: product.currency_code || 'VND',
+                    availability: "https://schema.org/PreOrder",
+                    url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${params.slug}`
+                }}
             />
             <ProductDetail product={product} />
         </>
