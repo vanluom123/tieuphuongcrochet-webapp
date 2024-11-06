@@ -10,7 +10,8 @@ interface StructuredDataProps {
     priceCurrency: string;
     availability: string;
     url: string;
-  };
+    };
+  image?: string;
   review?: {
     reviewRating: {
       ratingValue: number;
@@ -23,7 +24,7 @@ interface StructuredDataProps {
   };
 }
 
-const StructuredData: React.FC<StructuredDataProps> = ({ title, description, url, type = "WebSite", offers, ...restProps }) => {
+const StructuredData: React.FC<StructuredDataProps> = ({ title, description, url, type = "WebSite", offers, image, ...restProps }) => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": type,
@@ -31,6 +32,7 @@ const StructuredData: React.FC<StructuredDataProps> = ({ title, description, url
     "description": description,
     "url": url,
     "offers": offers,
+    "image": image,
     ...restProps
   };
 
