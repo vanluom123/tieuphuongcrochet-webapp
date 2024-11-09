@@ -50,13 +50,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getFreePatterns() {
-	const { data, totalRecords } = await fetchFreePatterns(initialListParams, {
-		revalidate: 60,
-		tags: ['free-patterns'],
-	},
-	30000
-);
-	return { data, totalRecords };
+	// const { data, totalRecords } = await fetchFreePatterns(initialListParams, {
+	// 	revalidate: 60,
+	// 	tags: ['free-patterns'],
+	// },
+	// 	30000
+	// );
+	return { data: [], totalRecords: 0 };
 }
 
 async function getCategories() {
