@@ -11,20 +11,17 @@ import { filterByText, mapNameFilters } from '@/app/lib/utils';
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
 
 interface FreePatternProps {
-	initialData: DataTableState
+	// initial	Data: DataTableState
 	categories: Category[];
 }
 
-const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
+const FreePatterns = ({ categories }: FreePatternProps) => {
 	const [state, setState] = useState<DataTableState>({
 		loading: false,
 		data: [],
 		totalRecord: 0,
 	});
 
-	useEffect(() => {
-		setState(initialData);
-	}, [initialData]);
 	const [params, setParams] = useState(initialListParams);
 
 	const router = useRouter();
@@ -38,14 +35,29 @@ const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
 	}
 
 	useEffect(() => {
-		if (params !== initialListParams) {
-			setState(prevState => ({ ...prevState, loading: true }));
-			fetchFreePatterns(params).then(({ data, totalRecords }) => {
-				setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
-			}).finally(() => {
+		setState(prevState => ({ ...prevState, loading: true, data: [] }));
+		fetchFreePatterns(params)
+			.then((response) => {
+				if (!response) {
+					throw new Error('No response from server');
+				}
+				setState(prevState => ({
+					...prevState,
+					data: Array.isArray(response.data) ? response.data : [],
+					totalRecord: response.totalRecords || 0
+				}));
+			})
+			.catch((error) => {
+				console.error('Error fetching free patterns:', error);
+				setState(prevState => ({
+					...prevState,
+					data: [],
+					totalRecord: 0
+				}));
+			})
+			.finally(() => {
 				setState(prevState => ({ ...prevState, loading: false }));
 			});
-		}
 	}, [params]);
 
 	const onSearchFreePatterns = (value: string) => {
@@ -118,10 +130,10 @@ const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
 			<HeaderPart titleId='FreePattern.title' descriptionId='FreePattern.description' />
 			<ViewTable
 				mode='Pattern'
-				onReadDetail={(id) => onViewFreePattern(id)}
-				dataSource={state.data}
-				total={state.totalRecord}
-				loading={state.loading}
+				onReadDetail={onViewFreePattern}
+				dataSource={state?.data ?? []}
+				total={state?.totalRecord ?? 0}
+				loading={!!state?.loading}
 				isShowTabs
 				itemsTabs={categories as DataType[]}
 				pageIndex={params.pageNo}

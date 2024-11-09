@@ -88,13 +88,25 @@ async function apiService<T = unknown>({
             } else {
                 return await response.text();
             }
-        } catch (error: unknown) {            
-            if (attempt <= retries && (error instanceof Error && (error.name === 'AbortError' || error.message.includes('Server error')))) {
-                console.warn(`Retrying request... Attempt ${attempt} failed`);
-                return makeRequest(attempt + 1);
-            } else {
-                throw error;
+        } catch (error: unknown) {
+            clearTimeout(timeoutId); // Also clear timeout on error
+            if (error instanceof Error) {
+                if (error.name === 'AbortError') {
+                    throw new Error(`Request timed out after ${timeout}ms`);
+                }
+                
+                if (attempt <= retries && (
+                    error.message.includes('Server error') ||
+                    error.message.includes('Connection closed') ||
+                    error.message.includes('network')
+                )) {
+                    console.warn(`Retrying request... Attempt ${attempt} failed`);
+                    // Đợi một chút trước khi retry
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    return makeRequest(attempt + 1);
+                }
             }
+            throw error;
         }
     };
 

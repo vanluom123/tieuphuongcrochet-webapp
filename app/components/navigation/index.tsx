@@ -37,8 +37,6 @@ const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 	const onClickNav = (e: { key: string }) => {
 		const key = e.key;
 		if (key) {
-			console.log('key', key);
-			
 			setCurrentNav(key);
 			if (isOpenSidebar) {
 				setIsOpenSidebar(false);
@@ -60,7 +58,7 @@ const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 					</div>
 					<div className='header-logo'>
 						<Link href={ROUTE_PATH.HOME} onClick={onHome}>
-							<Image width={120} height={120} src={logo.src} alt='Tiệm len Tiểu Phương' />
+							<Image priority width={120} height={120} src={logo.src} alt='Tiệm len Tiểu Phương' />
 						</Link>
 					</div>
 					<div className='header-right'>
