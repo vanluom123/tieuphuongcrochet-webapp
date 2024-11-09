@@ -5,9 +5,8 @@ import { Metadata } from "next";
 import FreePatterns from "./FreePatterns";
 import { getTranslations } from "next-intl/server";
 import { ROUTE_PATH } from '@/app/lib/constant';
-import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
 import { fetchCategories } from '@/app/lib/service/categoryService';
-import { Category, DataType, FileUpload, initialListParams } from '@/app/lib/definitions';
+import { Category, DataType, FileUpload } from '@/app/lib/definitions';
 
 
 export async function generateMetadata(): Promise<Metadata> {
