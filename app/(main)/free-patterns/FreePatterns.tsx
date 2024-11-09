@@ -11,20 +11,17 @@ import { filterByText, mapNameFilters } from '@/app/lib/utils';
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
 
 interface FreePatternProps {
-	initialData: DataTableState
+	// initial	Data: DataTableState
 	categories: Category[];
 }
 
-const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
+const FreePatterns = ({ categories }: FreePatternProps) => {
 	const [state, setState] = useState<DataTableState>({
 		loading: false,
 		data: [],
 		totalRecord: 0,
 	});
 
-	useEffect(() => {
-		setState(initialData);
-	}, [initialData]);
 	const [params, setParams] = useState(initialListParams);
 
 	const router = useRouter();
@@ -38,14 +35,12 @@ const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
 	}
 
 	useEffect(() => {
-		if (params !== initialListParams) {
-			setState(prevState => ({ ...prevState, loading: true }));
-			fetchFreePatterns(params).then(({ data, totalRecords }) => {
-				setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
-			}).finally(() => {
-				setState(prevState => ({ ...prevState, loading: false }));
-			});
-		}
+		setState(prevState => ({ ...prevState, loading: true }));
+		fetchFreePatterns(params).then(({ data, totalRecords }) => {
+			setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
+		}).finally(() => {
+			setState(prevState => ({ ...prevState, loading: false }));
+		});
 	}, [params]);
 
 	const onSearchFreePatterns = (value: string) => {

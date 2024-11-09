@@ -109,11 +109,11 @@ const Page = async () => {
 				}}
 			/>
 			<FreePatterns
-				initialData={{
-					loading: false,
-					data: freePatterns.data,
-					totalRecord: freePatterns.totalRecords,
-				}}
+				// initialData={{
+				// 	loading: false,
+				// 	data: freePatterns.data,
+				// 	totalRecord: freePatterns.totalRecords,
+				// }}
 				categories={categories as Category[]}
 			/>
 		</>
