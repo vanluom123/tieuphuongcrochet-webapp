@@ -27,7 +27,7 @@ export interface ListParams {
 
 export const initialListParams: ListParams = {
 	pageNo: 0,
-	pageSize: 48,
+	pageSize: Number(process.env.NEXT_PUBLIC_PAGE_SIZE),
 	sortBy: 'createdDate',
 	sortDir: 'desc',
 	filters: []
