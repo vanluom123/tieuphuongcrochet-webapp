@@ -52,8 +52,10 @@ export async function generateMetadata(): Promise<Metadata> {
 async function getFreePatterns() {
 	const { data, totalRecords } = await fetchFreePatterns(initialListParams, {
 		revalidate: 0,
-		tags: ['free-patterns']
-	});
+		tags: ['free-patterns'],
+	},
+	30000
+);
 	return { data, totalRecords };
 }
 
