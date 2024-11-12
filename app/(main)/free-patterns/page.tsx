@@ -8,6 +8,7 @@ import { ROUTE_PATH } from '@/app/lib/constant';
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
 import { fetchCategories } from '@/app/lib/service/categoryService';
 import { Category, DataType, FileUpload, initialListParams } from '@/app/lib/definitions';
+import { requestQueue } from "@/app/lib/requestQueue";
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -50,15 +51,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getFreePatterns() {
-	const { data, totalRecords } = await fetchFreePatterns(initialListParams, {
+	const { data, totalRecords } = await requestQueue.add(() => fetchFreePatterns(initialListParams, {
 		revalidate: 0,
 		tags: ['free-patterns']
-	});
+	}));
 	return { data, totalRecords };
 }
 
 async function getCategories() {
-	return await fetchCategories();
+	return await requestQueue.add(() => fetchCategories());
 }
 
 const Page = async () => {

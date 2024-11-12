@@ -3,6 +3,7 @@ import { fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
 import PatternDetail from "./PatternDetail";
 import StructuredData from "@/app/components/StructuredData";
 import { ROUTE_PATH } from '@/app/lib/constant';
+import { requestQueue } from '@/app/lib/requestQueue';
 
 // Define metadata props
 type Props = {
@@ -16,7 +17,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const slug = params.slug;
-  const pattern = await fetchFreePatternDetail(slug, 3600).then((res) => res);
+  const pattern = await requestQueue.add(() => fetchFreePatternDetail(slug, 3600));
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
@@ -34,7 +35,7 @@ export async function generateMetadata(
 // Generate Pattern Detail Page
 export default async function Page({ params }: { params: { slug: string } }){
 
-    const pattern = await fetchFreePatternDetail(params.slug, 3600);
+    const pattern = await requestQueue.add(() => fetchFreePatternDetail(params.slug, 3600));
 
     return (
         <>

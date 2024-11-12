@@ -7,7 +7,7 @@ import { Filter, initialListParams, ListParams, DataTableState, Category, DataTy
 import { filterByText, mapNameFilters } from '@/app/lib/utils';
 import ViewTable from '@/app/components/view-table';
 import { fetchProducts } from '@/app/lib/service/productService';
-
+import { requestQueue } from "@/app/lib/requestQueue";
 interface ProductsProps {
 	initialData: DataTableState	;
 	categories: Category[];
@@ -31,7 +31,7 @@ const Products = ({ initialData, categories }: ProductsProps) => {
 	useEffect(() => {
 		if (params !== initialListParams) {
 			setState(prevState => ({ ...prevState, loading: true }));
-			fetchProducts(params).then(({ data, totalRecords }) => {
+			requestQueue.add(() => fetchProducts(params)).then(({ data, totalRecords }) => {
 				setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
 			}).finally(() => {
 				setState(prevState => ({ ...prevState, loading: false }));

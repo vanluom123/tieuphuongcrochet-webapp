@@ -9,6 +9,7 @@ import { Filter, DataTableState, initialListParams } from '@/app/lib/definitions
 import { filterByText } from '@/app/lib/utils';
 import { fetchBlogs } from '@/app/lib/service/blogsService';
 import { ROUTE_PATH } from '@/app/lib/constant';
+import { requestQueue } from "@/app/lib/requestQueue";
 
 interface BlogsProps {
     initialData: DataTableState
@@ -33,7 +34,7 @@ const Blogs = ({ initialData }: BlogsProps) => {
 
 	useEffect(() => {
 		setState(prevState => ({ ...prevState, loading: true }));
-		fetchBlogs(params).then(({ data, totalRecords }) => {
+		requestQueue.add(() => fetchBlogs(params)).then(({ data, totalRecords }) => {
 			setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
 		}).finally(() => {
 			setState(prevState => ({ ...prevState, loading: false }));

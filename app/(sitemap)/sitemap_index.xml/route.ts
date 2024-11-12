@@ -3,6 +3,7 @@ import { fetchProducts } from '@/app/lib/service/productService';
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
 import { PARAMS_FOR_SITEMAP, ROUTE_PATH } from '@/app/lib/constant';
 import { fetchBlogs } from '@/app/lib/service/blogsService';
+import { requestQueue } from '@/app/lib/requestQueue';
 
 // Calculate and output sitemap URLs ex sitemap/1.xml
 async function generateSitemaps({ totalRecords, pathname }: { totalRecords: number, pathname: string }) {
@@ -22,17 +23,17 @@ async function generateSitemaps({ totalRecords, pathname }: { totalRecords: numb
 }
 
 const generateProductSitemaps = async () => {
-    const { totalRecords } = await fetchProducts(PARAMS_FOR_SITEMAP);
+    const { totalRecords } = await requestQueue.add(() => fetchProducts(PARAMS_FOR_SITEMAP));
     return generateSitemaps({ totalRecords, pathname: ROUTE_PATH.SHOP });
 }
 
 const generateFreePatternSitemaps = async () => {
-    const { totalRecords } = await fetchFreePatterns(PARAMS_FOR_SITEMAP);
+    const { totalRecords } = await requestQueue.add(() => fetchFreePatterns(PARAMS_FOR_SITEMAP));
     return generateSitemaps({ totalRecords, pathname: ROUTE_PATH.FREEPATTERNS });
 }
 
 const generateBlogSitemaps = async () => {
-    const { totalRecords } = await fetchBlogs(PARAMS_FOR_SITEMAP);
+    const { totalRecords } = await requestQueue.add(() => fetchBlogs(PARAMS_FOR_SITEMAP));
     return generateSitemaps({ totalRecords, pathname: ROUTE_PATH.BLOG });
 }
 

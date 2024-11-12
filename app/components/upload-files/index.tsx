@@ -10,6 +10,7 @@ import { getBase64, showConfirmDelete } from "@/app/lib/utils";
 import uploadFile from "@/app/lib/service/uploadFilesSevice";
 import { notification } from "@/app/lib/notify";
 import Image from "next/image";
+import { requestQueue } from "@/app/lib/requestQueue";
 
 interface UploadFilesProps extends UploadProps {
 	onChangeFile: (files: FileUpload[]) => void;
@@ -68,38 +69,29 @@ const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumbe
 	}
 
 	const customUploadFiles = async ({ file, onSuccess, onError }: any) => {
-		const isLimit5Mb = file?.size / 1024 / 1024 < 5;
-		if (!isLimit5Mb) {
-			onError('fail');
-			notification.error({ message: 'Error', description: 'Allowed maxium size is 5Mb' });
-			return;
-		}
-
-		const formData = new FormData();
-		setLoading(true);
-
-		console.log('file', file);
-
-		formData.append('files', getNewFile(file));
-		const res: FileUpload[] = await uploadFile.upload(formData);
-
-		if (res) {
+		try {
+			const formData = new FormData();
+			setLoading(true);
+			formData.append('files', getNewFile(file));
+			
+			const res = await requestQueue.add(() => uploadFile.upload(formData));
+			
+			if (res?.length > 0) {
+				updateImages({
+					fileContent: res[0].fileContent,
+					fileName: res[0].fileName,
+					url: res[0].fileContent
+				});
+				onSuccess('ok');
+				notification.success({ message: 'Successful!', description: 'Upload file successfully!' });
+			} else {
+				throw new Error('Upload failed');
+			}
+		} catch {
+			onError('error');
+			notification.error({ message: 'Error', description: 'Upload file failed!' });
+		} finally {
 			setLoading(false);
-		}
-
-		if (res.length > 0) {
-			const newFiles = {
-				fileContent: res[0].fileContent,
-				fileName: res[0].fileName,
-				url: res[0].fileContent
-			};
-
-			updateImages(newFiles);
-			onSuccess('ok');
-			notification.success({ message: 'Successful!', description: 'Upload file successfully!' });
-		} else {
-			onError('fail');
-			notification.error({ message: '!Error', description: 'Allowed maxium size is 5Mb' });
 		}
 	};
 

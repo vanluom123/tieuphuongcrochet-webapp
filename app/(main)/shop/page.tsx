@@ -8,6 +8,7 @@ import { ROUTE_PATH } from '@/app/lib/constant';
 import { fetchProducts } from '@/app/lib/service/productService';
 import { fetchCategories } from '@/app/lib/service/categoryService';
 import { Category, DataType, FileUpload, initialListParams } from '@/app/lib/definitions';
+import { requestQueue } from "@/app/lib/requestQueue";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("Shop");
@@ -24,15 +25,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getProducts() {
-	const { data, totalRecords } = await fetchProducts(initialListParams, {
+	const { data, totalRecords } = await requestQueue.add(() => fetchProducts(initialListParams, {
 		revalidate: 3600,
 		tags: ['products'],
-	});
+	}));
 	return { data, totalRecords };
 }
 
 async function getCategories() {
-	return await fetchCategories();
+	return await requestQueue.add(() => fetchCategories());
 }
 
 export default async function Shop() {

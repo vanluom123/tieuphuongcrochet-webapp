@@ -3,6 +3,7 @@ import { ROUTE_PATH } from '@/app/lib/constant';
 import { fetchProductDetail } from '@/app/lib/service/productService';
 import StructuredData from '@/app/components/StructuredData';
 import ProductDetail from "./ProductDetail";
+import { requestQueue } from '@/app/lib/requestQueue';
 
 type Props = {
   params: { slug: string }
@@ -14,7 +15,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const slug = params.slug;
-  const product = await fetchProductDetail(slug, 3600).then((res) => res);
+  const product = await requestQueue.add(() => fetchProductDetail(slug, 3600));
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
@@ -32,7 +33,7 @@ export async function generateMetadata(
 // Generate Product Detail Page
 export default async function Page({ params }: { params: { slug: string } }) {
 
-    const product = await fetchProductDetail(params.slug, 3600);
+    const product = await requestQueue.add(() => fetchProductDetail(params.slug, 3600));
 
     return (
         <>

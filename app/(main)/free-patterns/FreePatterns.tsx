@@ -9,6 +9,7 @@ import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH, TRANSLATION_STATU
 import { initialListParams, Filter, ListParams, DataTableState, Category, DataType } from '@/app/lib/definitions';
 import { filterByText, mapNameFilters } from '@/app/lib/utils';
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
+import { requestQueue } from "@/app/lib/requestQueue";
 
 interface FreePatternProps {
 	initialData: DataTableState
@@ -40,7 +41,7 @@ const FreePatterns = ({ initialData, categories }: FreePatternProps) => {
 	useEffect(() => {
 		if (params !== initialListParams) {
 			setState(prevState => ({ ...prevState, loading: true }));
-			fetchFreePatterns(params).then(({ data, totalRecords }) => {
+			requestQueue.add(() => fetchFreePatterns(params)).then(({ data, totalRecords }) => {
 				setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
 			}).finally(() => {
 				setState(prevState => ({ ...prevState, loading: false }));

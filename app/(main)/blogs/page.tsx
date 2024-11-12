@@ -5,6 +5,7 @@ import { ROUTE_PATH } from '@/app/lib/constant';
 import Blogs from "./Blogs";
 import { fetchBlogs } from '@/app/lib/service/blogsService';
 import { initialListParams } from '@/app/lib/definitions';
+import { requestQueue } from "@/app/lib/requestQueue";
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -22,11 +23,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getBlogs() {
-	const { data, totalRecords } = await fetchBlogs(initialListParams, {
+	const { data, totalRecords } = await requestQueue.add(() => fetchBlogs(initialListParams, {
 		// Revalidate at 24 hours
 		revalidate: 86400,
 		tags: ['blogs'],
-	});
+	}));
 	return { data, totalRecords };
 }
 

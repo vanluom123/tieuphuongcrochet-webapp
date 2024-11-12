@@ -4,6 +4,7 @@ import { fetchPostDetail } from '@/app/lib/service/blogsService';
 import type { Metadata, ResolvingMetadata } from 'next';
 import PostDetail from "./PostDetail";
 import StructuredData from '@/app/components/StructuredData';
+import { requestQueue } from '@/app/lib/requestQueue';
 
 type Props = {
 	params: { slug: string }
@@ -15,10 +16,10 @@ export async function generateMetadata(
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	const slug = params.slug;
-	const blog = await fetchPostDetail(slug, {
+	const blog = await requestQueue.add(() => fetchPostDetail(slug, {
 		revalidate: 86400,
 		tags: [`blog-${slug}`],
-	}).then((res) => res);
+	}));
 	const previousImages = (await parent).openGraph?.images || [];
 
 	return {
@@ -33,10 +34,10 @@ export async function generateMetadata(
 
 export default async function Page({ params }: { params: { slug: string } }) {
 
-	const post = await fetchPostDetail(params.slug, {
+	const post = await requestQueue.add(() => fetchPostDetail(params.slug, {
 		revalidate: 86400,
 		tags: [`blog-${params.slug}`],
-	});
+	}));
 
 	return (
 		<>
