@@ -193,6 +193,7 @@ export interface Product {
 	imagesPreview?: { src: string, alt: string }[];
 	link?: string;
 	content?: string;
+	fileContent?: string;
 }
 
 export interface HomeData {
@@ -238,5 +239,6 @@ export interface Post {
 	createdDate: string,
 	files?: FileUpload[],
 	src?: string,
-	is_home?: boolean
+	is_home?: boolean,
+	fileContent?: string
 }

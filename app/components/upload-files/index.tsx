@@ -89,8 +89,7 @@ const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumbe
 
 		if (res.length > 0) {
 			const newFiles = {
-				fileContent: res[0].fileContent,
-				fileName: res[0].fileName,
+				...res[0],
 				url: res[0].fileContent
 			};
 

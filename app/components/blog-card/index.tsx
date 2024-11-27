@@ -2,17 +2,18 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Card, Image } from 'antd';
+import { Card } from 'antd';
 
 import { ROUTE_PATH } from '@/app/lib/constant';
 import { Post } from '@/app/lib/definitions';
 import ReadMoreBtn from '../read-more';
+import CustomNextImage from '../next-image';
 import '../../ui/components/blogCard.scss';
 
 interface BlogCardProps {
-		item: Post,
-		onReadDetail?: () => void;
-	}
+	item: Post,
+	onReadDetail?: () => void;
+}
 
 const BlogCard = ({ item, onReadDetail }: BlogCardProps) => {
 	const { Meta } = Card;
@@ -29,7 +30,7 @@ const BlogCard = ({ item, onReadDetail }: BlogCardProps) => {
 			bordered={false}
 			cover={
 				<div className='artice-image'>
-					<Image src={src} alt={title} />
+					<CustomNextImage src={src} alt={title} />
 					<div className='artice-date'>
 						{/* <time > */}
 						<time >
@@ -39,6 +40,7 @@ const BlogCard = ({ item, onReadDetail }: BlogCardProps) => {
 					</div>
 				</div>
 			}
+			onClick={onReadDetail}
 		>
 			<Meta title={<Link href={detailPath} tabIndex={1} className='card-title' onClick={onReadDetail}>{title}</Link>}
 
