@@ -64,11 +64,11 @@ const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }:
 							image={Empty.PRESENTED_IMAGE_SIMPLE}
 						/>
 					}
-					{images && images.length > 0 && renderImage()}
 
 					{/* crochet symbols default  */}
 					{isPattern && <div className='editor-view disable-select text-box' dangerouslySetInnerHTML={{ __html: DEFAULT_CHART_EDITOR || '' }} />}
 
+					{images && images.length > 0 && renderImage()}
 					{content &&
 						<>
 							<div className='editor-view disable-select text-box' dangerouslySetInnerHTML={{ __html: content || '' }} />

@@ -1,14 +1,15 @@
 'use client'
 
 import React from 'react';
-import {  Card, Image, Skeleton, Tooltip } from 'antd';
+import { Card, Skeleton, Tooltip } from 'antd';
 import { useTranslations } from 'next-intl';
 import { EditOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import Link from 'next/link'
 
-import { IMAGE_FALLBACK, ROUTE_PATH } from '@/app/lib/constant';
+import { ROUTE_PATH } from '@/app/lib/constant';
 import { Product } from '@/app/lib/definitions';
 import FormattedCurrency from '../forrmat-currency';
+import CustomNextImage from '../next-image';
 
 import '../../ui/components/productCard.scss';
 
@@ -34,7 +35,7 @@ const ProductCard = (
 	}: ProductCardProps) => {
 	const t = useTranslations("Btn");
 	const { Meta } = Card;
-	const { currency_code, price, name, src, link, id, imagesPreview } = product;
+	const { currency_code, price, name, src, link, id } = product;
 
 	const onClickBtn = () => {
 		if (onReadDetail instanceof Function) {
@@ -61,19 +62,11 @@ const ProductCard = (
 			}}
 			cover={
 				<>
-				{src && loading ?
-					<Skeleton.Image active /> :
-					<Image.PreviewGroup
-						items={imagesPreview}
-					>
-						<Image
-							alt={name}
-							src={src}
-							fallback={IMAGE_FALLBACK}
-						/>
-					</Image.PreviewGroup>
-				}
-			</>
+					{src && loading ?
+						<Skeleton.Image active /> :
+						<CustomNextImage src={src} alt={name} />
+					}
+				</>
 			}
 			actions={[
 				<Tooltip key="buy-tooltip" color='#fc8282' title="Buy">
@@ -87,6 +80,7 @@ const ProductCard = (
 					</Link>
 				</Tooltip>
 			]}
+			onClick={onClickBtn}
 		>
 			{name &&
 				<Meta

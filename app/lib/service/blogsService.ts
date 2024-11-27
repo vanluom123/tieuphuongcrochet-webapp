@@ -23,7 +23,7 @@ export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConf
             ...item,
             key: item.id,
             name: item.title,
-            src: item.files?.[0]?.fileContent,
+            src: item?.fileContent || item.files?.[0]?.fileContent,
         }));
         
         return {
