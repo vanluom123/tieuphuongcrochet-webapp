@@ -2,10 +2,11 @@
 
 import ViewDetailWrapper from "@/app/components/view-detail-wrapper";
 import { Post } from "@/app/lib/definitions";
-import { Col, Flex, Row, Image } from "antd";
+import { Col, Flex, Row } from "antd";
 import { getDateFormatted } from "@/app/lib/utils";
 import { useLocale } from "use-intl";
 import { LANGUAGES } from "@/app/lib/constant";
+import CustomNextImage from "@/app/components/next-image";
 
 export default function PostDetail({ post }: { post: Post }) {
 
@@ -25,7 +26,7 @@ export default function PostDetail({ post }: { post: Post }) {
 					}
 				</Col>
 				<Col xs={24} sm={12}>
-					<Image preview={false} src={src} alt={title} />
+					<CustomNextImage src={src} alt={title} />
 				</Col>
 				<Flex style={{ width: '100%' }} justify="center">
 					<hr />

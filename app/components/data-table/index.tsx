@@ -3,7 +3,8 @@ import { TableProps } from 'antd';
 import { filter } from 'lodash';
 import { ColumnsType } from 'antd/es/table';
 import { useTranslations } from 'next-intl';
-import { Button, Image, Space, Table } from 'antd';
+import { Button, Space, Table } from 'antd';
+import Image from 'next/image';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { computePaging, getCurrentDate, showConfirmDelete } from '@/app/lib/utils';
@@ -100,8 +101,11 @@ const DataTable = ({
             render: (_: any, rd: DataType) =>
               <Image
                 width={88}
-                src={rd.src}
-                fallback={IMAGE_FALLBACK}
+                height={88}
+                src={rd.src || IMAGE_FALLBACK}
+                onError={(e: any) => {
+                  e.target.src = IMAGE_FALLBACK;
+                }}
                 alt={rd.name || 'image fallback'}
               />
           } : {}),

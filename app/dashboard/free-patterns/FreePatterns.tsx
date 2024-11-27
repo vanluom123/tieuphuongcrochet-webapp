@@ -105,7 +105,6 @@ const FreePatterns = () => {
             pageNo: current - 1,
             pageSize: pageSize,
         }
-        console.log("newParams", newParams);
         setParams(newParams)
     }
 

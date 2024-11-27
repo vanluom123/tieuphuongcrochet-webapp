@@ -1,7 +1,7 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
 import { FileUpload, ListParams, DataType, Pattern } from "../definitions";
-import { getAvatar, mapImagesPreview } from "../utils";
+import { getAvatar } from "../utils";
 import apiService from "./apiService";
 import { notification } from "../notify";
 import apiJwtService from "./apiJwtService";
@@ -27,9 +27,7 @@ export const fetchFreePatterns = async (params: ListParams, next?: NextFetchRequ
     const newData = map(res.contents, item => ({
         ...item,
         key: item.id,
-        files: item.files ? map(item.files, f => ({...f,url: f?.fileContent})) : [],
-        src: getAvatar(item.images as FileUpload[]),
-        imagesPreview: mapImagesPreview(item.images || [])
+        src: item.fileContent || getAvatar(item?.images as FileUpload[]),
     }));
     
     return {

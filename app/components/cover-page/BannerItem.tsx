@@ -1,7 +1,8 @@
-import { Button, Image } from "antd";
+import { Button } from "antd";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Banner } from "@/app/lib/definitions";
+import CustomNextImage from "../next-image";
 
 
 interface BannerItemProps {
@@ -15,7 +16,7 @@ const BannerItem = ({ banner, classNames }: BannerItemProps) => {
     
 	return (
 		<div className={`banner-item ${classNames ? classNames : ''}`}>
-			{fileContent && <Image preview={false} src={fileContent} alt='Banner 1' />}
+			{fileContent && <CustomNextImage src={fileContent} alt={title} />}
 			<div className='banner-item__infor'>
 				<h4 style={{ color: textColor ? textColor : '#FFFFFF' }} className='title'>
 					{title}

@@ -1,7 +1,7 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
 import { Product, FileUpload, ListParams, DataType } from "../definitions";
-import { getAvatar, mapImagesPreview } from "../utils";
+import { getAvatar } from "../utils";
 import apiService from "./apiService";
 import { notification } from "antd";
 import apiJwtService from "./apiJwtService";
@@ -29,11 +29,7 @@ export const fetchProducts = async (params: ListParams, next?: NextFetchRequestC
         name: item.name,
         price: item.price,
         currency_code: item.currency_code,
-        category: item.category,
-        images: item.images?.map(f => ({ ...f, url: f?.fileContent })),
-        src: getAvatar(item.images as FileUpload[]),
-        imagesPreview: mapImagesPreview(item.images || [])
-
+        src: item?.fileContent || getAvatar(item.images as FileUpload[]),
     }));
     return {
         data: newData as DataType[],

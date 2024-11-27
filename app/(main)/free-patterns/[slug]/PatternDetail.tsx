@@ -23,7 +23,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
             alertType="warning">
 
             {/* Introducing the free pattern */}
-            <IntroductionCard isPreviewAvatar={false} data={pattern} isShowThumbnail />
+            <IntroductionCard isPreviewAvatar data={pattern} isShowThumbnail />
             <Divider />
 
             {/* ViewImagesList sẽ chỉ được render ở client side */}

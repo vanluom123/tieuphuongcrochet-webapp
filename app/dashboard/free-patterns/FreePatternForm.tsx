@@ -79,6 +79,8 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
             form.resetFields();
             setState(initialState);
             router.push(ROUTE_PATH.DASHBOARD_FREE_PATTERNS);
+        } else {
+            setState(prevState => ({ ...prevState, loading: false }));
         }
     }
 

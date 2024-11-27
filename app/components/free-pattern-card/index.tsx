@@ -1,13 +1,14 @@
 'use client'
 
 import React from 'react';
-import { Card, Flex, Image, Skeleton, Tag } from 'antd';
+import { Card, Flex, Skeleton, Tag } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 
-import { IMAGE_FALLBACK, TRANSLATION_STATUS } from '@/app/lib/constant';
+import { TRANSLATION_STATUS } from '@/app/lib/constant';
 import { Pattern } from '@/app/lib/definitions';
 import { getStatusColor } from '@/app/lib/utils';
+import CustomNextImage from '../next-image';
 
 import '../../ui/components/freePatternCard.scss';
 
@@ -29,7 +30,7 @@ const FreePatternCard = (
 	}: FreePatternCardProps) => {
 
 	const { Meta } = Card;
-	const { name, src, author, imagesPreview, status } = pattern;
+	const { name, src, author, status } = pattern;
 	const t = useTranslations("FreePattern");
 
 	return (
@@ -47,18 +48,11 @@ const FreePatternCard = (
 				<>
 					{src && loading ?
 						<Skeleton.Image active /> :
-						<Image.PreviewGroup
-							items={imagesPreview}
-						>
-							<Image
-								alt={name}
-								src={src}
-								fallback={IMAGE_FALLBACK}
-							/>
-						</Image.PreviewGroup>
+						<CustomNextImage src={src} alt={name} />
 					}
 				</>
 			}
+			onClick={onReadDetail}
 		>
 			<Skeleton loading={!name} active>
 				{name &&
