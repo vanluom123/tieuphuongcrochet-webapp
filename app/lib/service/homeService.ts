@@ -1,7 +1,7 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
 import { Product, Pattern, Post, HomeData } from "../definitions";
-import { getAvatar, mapImagesPreview } from "../utils";
+import { getAvatar } from "../utils";
 import apiService from "./apiService";
 
 export const fetchHomeData = async (): Promise<HomeData> => {
