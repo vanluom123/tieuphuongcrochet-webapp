@@ -21,7 +21,8 @@ export const ROUTE_PATH = {
   DASHBOARD_CATEGORY: '/dashboard/categories',
   CREATE: 'create',
   DETAIL: 'detail',
-  SITEMAP: 'sitemap'
+  SITEMAP: 'sitemap',
+  PROFILE: '/profile',
 };
 
 export const SOCIAL_LINKS = {
@@ -250,6 +251,9 @@ export const API_ROUTES = {
 	BANNER_TYPE : '/bannerType/getAll',
 	CU_BANNER: '/banner/batchInsertOrUpdate',
 	GETT_ALL_BANNER: '/banner/getAll',
+
+  // Profile
+  COLLECTIONS: '/collections',
 }
 
 export const PARAMS_FOR_SITEMAP: ListParams = {

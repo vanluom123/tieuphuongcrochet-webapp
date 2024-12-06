@@ -242,3 +242,12 @@ export interface Post {
 	is_home?: boolean,
 	fileContent?: string
 }
+
+export interface Collection {
+	id: string;
+	name: string;
+	description?: string;
+	itemCount: number;
+	thumbnail?: string;
+	createdDate?: string;
+}

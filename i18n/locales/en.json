@@ -17,7 +17,6 @@
       "detail": "Detail"
     }
   },
-
   "Home": {
     "Product": {
       "title": "Products",
@@ -36,19 +35,15 @@
       "description": "Fanpage and my sales channels!"
     }
   },
-
   "Tab": {
     "all": "All"
   },
-
   "Shop": {
     "title": "Products",
     "description": "Below are the products I made! If you want me to follow your order, please inbox me! In the future, I will update new products and add an ordering function to make it easier for you to order.",
     "detail": "Product images",
     "note": "If you want to order this product according to your requirements, please contact me. I will try my best to bring you the best products. Thank you!"
-
   },
-
   "FreePattern": {
     "title": "Free crochet patterns",
     "description": "Below are the crochet patterns that I have collected (I will translate gradually). In the near future, I will continue to update many other beautiful crochet patterns and patterns that I create myself. Please refer and choose for yourself a satisfactory model!",
@@ -104,26 +99,22 @@
       "content": "Content"
     }
   },
-
   "DataTable": {
     "name": "Name",
     "created_date": "Created date",
     "image": "Image",
     "action": "Action"
   },
-
   "Blog": {
     "title": "Blogs",
     "message": "A place to share good things!!",
     "description": "A place to share good things!!"
   },
-
   "About": {
     "title": "About us",
     "message": "Well comte to my website!",
     "content": "Thank you for visiting my website. Hope you will find good things here. I love crocheting and creating beautiful and unique patterns. Hope you will like the products I make. On my website, there are many beautiful crochet patterns that I have collected. In the future, I will update many more beautiful crochet patterns and patterns that I have created myself. Please refer and choose a model that suits you. In addition to crochet patterns, I also sell pre-crocheted products. For pre-order products, you can also ask me to crochet according to the pattern you want by sending a request via email or via message on my Facebook page. I will try my best to bring you the best products. Thank you for supporting me!"
   },
-
   "Contact": {
     "title": "Get in touch with me",
     "description": "Are you having problems placing an order or requesting crochet in the pattern you want? Please contact me via email or message on my facebook page. I will try my best to help you!",
@@ -140,11 +131,9 @@
       "error_msg_incorrect_email": "Email format is incorrect!"
     }
   },
-
   "ViewTable": {
     "search_placeholder": "Search by name, description, or author"
   },
-
   "Btn": {
     "readMore": "Read more",
     "btn_buy": "Buy",
@@ -154,18 +143,15 @@
     "btn_list": "List",
     "all": "All"
   },
-
   "Notification": {
     "success": "Successfully!",
     "error": "Error!"
   },
-
   "Form": {
     "name": "Full name",
     "email": "Email",
     "error_msg_incorrect_email": "Email format is incorrect!"
   },
-
   "IntroductionCard": {
     "author": "Author",
     "btn_order": "Message"
@@ -195,7 +181,6 @@
     "error_login_401_description": "Invalid email or password",
     "error_login_title": "Login failed",
     "error_login_unknown_error": "An unknown error occurred"
-
   },
   "Register": {
     "title": "Register account",
@@ -244,5 +229,24 @@
   "ListViewItem": {
     "btn_buy": "Buy",
     "intro_author": "Author"
+  },
+  "Profile": {
+    "tabs": {
+      "collections": "Collections",
+      "patterns": "Free patterns",
+      "info": "User info"
+    },
+    "collections": {
+      "empty": "No collections yet"
+    },
+    "patterns": {
+      "empty": "No patterns yet"
+    },
+    "info": {
+      "change_avatar": "Change avatar",
+      "name": "Full name",
+      "email": "Email",
+      "save": "Save changes"
+    }
   }
 }

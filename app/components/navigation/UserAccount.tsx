@@ -15,6 +15,9 @@ const UserAccount = () => {
             key: 'user_profile',
             label: t('profile'),
             icon: <UserOutlined />,
+            onClick: () => {
+                router.push(ROUTE_PATH.PROFILE);
+            }
         },
         ...(session?.user?.role === USER_ROLES.ADMIN ? [
             {

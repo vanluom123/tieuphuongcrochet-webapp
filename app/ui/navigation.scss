@@ -31,6 +31,20 @@
       }
 
       .header-right {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        .ant-dropdown-trigger {
+          margin-left: 20px;
+        }
+
+        @media screen and (max-width: $md) {
+          .ant-dropdown-trigger {
+            margin-left: 10px;
+          }
+        }
+
         .btn-search {
           border: none;
           box-shadow: none;
@@ -61,6 +75,7 @@
           font-size: 12px;
           text-transform: uppercase;
         }
+
         &::before {
           content: "";
           position: absolute;
@@ -121,6 +136,7 @@
     }
   }
 }
+
 .drawer-menu {
   .ant-drawer-header {
     border-bottom: none;
