@@ -162,7 +162,8 @@ export interface Pattern {
 	currency_code?: string;
 	content?: string;
 	status?: TTranslationStatus;
-	home?: boolean
+	home?: boolean;
+	fileContent?: string;
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';

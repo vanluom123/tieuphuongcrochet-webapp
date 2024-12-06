@@ -16,6 +16,7 @@ const UserAccount = () => {
             label: t('profile'),
             icon: <UserOutlined />,
             onClick: () => {
+                console.log('Navigating to profile:', ROUTE_PATH.PROFILE);
                 router.push(ROUTE_PATH.PROFILE);
             }
         },

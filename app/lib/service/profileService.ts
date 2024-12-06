@@ -7,15 +7,15 @@ export async function fetchUserCollections(): Promise<Collection[]> {
         endpoint: `${API_ROUTES.COLLECTIONS}/my-collections`,
         method: 'GET'
     });
-    return response?.data || [];
+    return response || [];
 }
 
 export async function fetchUserPatterns(): Promise<Pattern[]> {
     const response = await apiJwtService({
-        endpoint: API_ROUTES.FREE_PATTERN,
-        method: 'GET'
+        endpoint: `${API_ROUTES.FREE_PATTERN}/create-by`,
+        method: 'GET',
     });
-    return response?.data || [];
+    return response || [];
 }
 
 export async function updateUserProfile(data: any) {

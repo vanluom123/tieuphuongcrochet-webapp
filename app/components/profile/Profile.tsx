@@ -15,6 +15,11 @@ const Profile = ({ user }: ProfileProps) => {
 
     const items: TabsProps['items'] = [
         {
+            key: 'info',
+            label: t('tabs.info'),
+            children: <UserInfo user={user} />,
+        },
+        {
             key: 'collections',
             label: t('tabs.collections'),
             children: <Collections />,
@@ -24,17 +29,12 @@ const Profile = ({ user }: ProfileProps) => {
             label: t('tabs.patterns'),
             children: <FreePatterns />,
         },
-        {
-            key: 'info',
-            label: t('tabs.info'),
-            children: <UserInfo user={user} />,
-        },
     ];
 
     return (
         <div className="profile-page">
             <Tabs
-                defaultActiveKey="collections"
+                defaultActiveKey="info"
                 items={items}
                 className="profile-tabs"
             />

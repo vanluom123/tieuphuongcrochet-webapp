@@ -8,7 +8,7 @@ import { AdapterUser } from "next-auth/adapters";
 import apiService from "./apiService";
 import { options as authOptions } from '@/app/api/auth/[...nextauth]/options';
 
-async function apiJwtService<T = unknown>({
+async function apiJwtService({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
     endpoint = '',
     method = 'GET',
@@ -21,7 +21,7 @@ async function apiJwtService<T = unknown>({
     baseUrl?: string;
     endpoint?: string;
     method?: string;
-    data?: T | null;
+    data?: any | null;
     headers?: Record<string, string>;
     timeout?: number;
     queryParams?: Record<string, string>;
@@ -29,13 +29,13 @@ async function apiJwtService<T = unknown>({
 }) {
     const session = await getSession();
     let accessToken = session?.user?.accessToken;
-    
+
     // Decode the access token
     const decoded = jwtDecode.decode(accessToken as string) as JwtPayload;
     if (decoded && Date.now() >= (decoded.exp as number) * 1000) {
         const refreshToken = session?.user.refreshToken;
 
-        if(authOptions.callbacks?.jwt) {
+        if (authOptions.callbacks?.jwt) {
             const updatedToken = await authOptions.callbacks.jwt({
                 token: {
                     ...session?.user,
@@ -64,7 +64,7 @@ async function apiJwtService<T = unknown>({
                 });
                 // The session is now updated with the new access token
             }
-            accessToken = updatedToken.accessToken;            
+            accessToken = updatedToken.accessToken;
         }
     }
 
