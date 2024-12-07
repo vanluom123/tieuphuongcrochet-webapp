@@ -247,6 +247,7 @@
       "name": "Full name",
       "email": "Email",
       "save": "Save changes"
-    }
+    },
+    "back": "Back"
   }
 }
