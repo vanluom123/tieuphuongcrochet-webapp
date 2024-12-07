@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import { Col, Flex, Form, Input, Modal, Row, Spin, Switch, TreeSelect } from "antd";
+import { Col, Flex, Form, Input, Modal, Row, Spin, TreeSelect } from "antd";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +20,7 @@ interface FreePatternFormProps {
     },
     setModalData: (modalData: { open: boolean, id: string }) => void
 }
+
 const initialState = {
     loading: false,
     pattern: {} as Pattern,
@@ -35,13 +36,20 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
     const [state, setState] = useState(initialState);
 
     useEffect(() => {
+        if (!modalData.open) {
+            form.resetFields();
+            setState(initialState);
+        }
+    }, [modalData.open, form]);
+
+    useEffect(() => {
         fetchCategories().then((data) => {
             setCategories(data as Category[]);
         });
     }, []);
 
     useEffect(() => {
-        if (modalData.id) {
+        if (modalData.id && modalData.open) {
             setState(prevState => ({ ...prevState, loading: true }));
 
             fetchFreePatternDetail(modalData.id).then(pattern => {
@@ -61,7 +69,7 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                 setState(prevState => ({ ...prevState, loading: false }));
             });
         }
-    }, [modalData.id, form]);
+    }, [modalData.id, modalData.open, form]);
 
     const t = useTranslations('FreePattern');
 
@@ -87,6 +95,7 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
 
     const onHandleCancel = () => {
         form.resetFields();
+        setState(initialState);
         setModalData({ open: false, id: '' });
     }
 
@@ -103,6 +112,7 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                 onOk={onHandleOk}
                 onCancel={onHandleCancel}
                 width='auto'
+                destroyOnClose={true}
             >
                 <div className="crupattern-page">
                     <Flex justify="center">
