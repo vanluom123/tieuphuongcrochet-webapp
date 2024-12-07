@@ -255,7 +255,8 @@
       "change_avatar": "Change avatar",
       "name": "Full name",
       "email": "Email",
-      "save": "Save changes"
+      "save": "Save changes",
+      "update_success": "Update user info successfully"
     },
     "back": "Back"
   }

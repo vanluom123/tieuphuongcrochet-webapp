@@ -255,7 +255,8 @@
       "change_avatar": "Đổi ảnh đại diện",
       "name": "Họ tên",
       "email": "Email",
-      "save": "Lưu thay đổi"
+      "save": "Lưu thay đổi",
+      "update_success": "Cập nhật thông tin thành công"
     },
     "back": "Quay lại"
   }

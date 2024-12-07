@@ -7,12 +7,14 @@ import { User } from '@/app/lib/definitions';
 import '../../ui/components/profile.scss';
 import { useRouter } from 'next/navigation';
 import { LeftOutlined } from '@ant-design/icons';
+import { useSession } from "next-auth/react";
 
 interface ProfileProps {
     user: User;
 }
 
 const Profile = ({ user }: ProfileProps) => {
+    const { data: session } = useSession();
     const t = useTranslations('Profile');
     const router = useRouter();
 
@@ -20,7 +22,7 @@ const Profile = ({ user }: ProfileProps) => {
         {
             key: 'info',
             label: t('tabs.info'),
-            children: <UserInfo user={user} />,
+            children: <UserInfo user={session?.user as User} />,
         },
         {
             key: 'collections',

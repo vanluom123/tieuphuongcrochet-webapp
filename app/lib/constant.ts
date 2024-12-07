@@ -221,7 +221,8 @@ export const API_ROUTES = {
 	FREE_PATTERN: '/free-pattern',
 	BLOG: '/blog',
 	USER: '/users',
-
+	UPDATE_INFO: 'update-info',
+  
 	// Category
 	CATEGORY: '/category',
 	// Get sub categories

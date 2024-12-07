@@ -229,6 +229,7 @@ export interface User {
 	password?: string;
 	createdDate?: string;
 	lastModifiedDate?: string;
+	imageUrl?: string;
 }
 
 //------------------------Blogs--------------------------

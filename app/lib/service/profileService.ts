@@ -28,7 +28,7 @@ export async function deleteUserPattern(id: string) {
 
 export async function updateUserProfile(data: any) {
     return await apiJwtService({
-        endpoint: API_ROUTES.USER,
+        endpoint: `${API_ROUTES.USER}/${API_ROUTES.UPDATE_INFO}`,
         method: 'PUT',
         data
     });
