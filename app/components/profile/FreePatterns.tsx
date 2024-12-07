@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Row, Col, FloatButton, Button, Modal } from 'antd';
 import { useTranslations } from 'next-intl';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Pattern } from '@/app/lib/definitions';
 import { fetchUserPatterns } from '@/app/lib/service/profileService';
 import { ROUTE_PATH } from '@/app/lib/constant';
 import { useRouter } from 'next/navigation';
 import FreePatternCard from './FreePatternCard';
 import FreePatternFormModal from './FreePatternFormModal';
+
+const { confirm } = Modal;
 
 const FreePatterns = () => {
     const t = useTranslations('Profile');
@@ -26,6 +28,20 @@ const FreePatterns = () => {
 
     const onViewPattern = (id: React.Key) => {
         router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`);
+    };
+
+    const showDeleteConfirm = (id: React.Key) => {
+        confirm({
+            title: t('patterns.delete_confirm_title'),
+            icon: <ExclamationCircleFilled />,
+            content: t('patterns.delete_confirm_content'),
+            okText: t('patterns.yes'),
+            okType: 'danger',
+            cancelText: t('patterns.no'),
+            onOk() {
+                onDeletePattern(id);
+            },
+        });
     };
 
     const onDeletePattern = (id: React.Key) => {
@@ -48,10 +64,12 @@ const FreePatterns = () => {
                         {patterns.map((pattern, index) => (
                             <Col xs={24} sm={12} lg={6} key={index}>
                                 <FreePatternCard
-                                    isShowActions pattern={{ ...pattern, src: pattern.fileContent || '' }}
+                                    isShowActions
+                                    pattern={{ ...pattern, src: pattern.fileContent || '' }}
                                     onReadDetail={() => onViewPattern(pattern.id || '')}
-                                    onDelete={() => onDeletePattern(pattern.id || '')}
-                                    onEdit={() => onEditPattern(pattern.id || '')} />
+                                    onDelete={() => showDeleteConfirm(pattern.id || '')}
+                                    onEdit={() => onEditPattern(pattern.id || '')}
+                                />
                             </Col>
                         ))}
                     </Row>

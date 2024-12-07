@@ -38,7 +38,7 @@ const FreePatternCard = (
 
 	const { Meta } = Card;
 	const { name, src, author, status, id } = pattern;
-	const t = useTranslations("FreePattern");
+	const t = useTranslations("Profile.patterns");
 
 	return (
 		<Card

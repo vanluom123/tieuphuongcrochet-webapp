@@ -1,12 +1,13 @@
 import { Button, Tabs, TabsProps } from 'antd';
 import { useTranslations } from 'next-intl';
-import Collections from './Collections';
-import FreePatterns from './FreePatterns';
-import UserInfo from './UserInfo';
+import Collections from '../../components/profile/Collections';
+import FreePatterns from '../../components/profile/FreePatterns';
+import UserInfo from '../../components/profile/UserInfo';
 import { User } from '@/app/lib/definitions';
 import '../../ui/components/profile.scss';
 import { useRouter } from 'next/navigation';
 import { LeftOutlined } from '@ant-design/icons';
+
 interface ProfileProps {
     user: User;
 }

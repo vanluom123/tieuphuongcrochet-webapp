@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { ROUTE_PATH } from "@/app/lib/constant";
-import Profile from "@/app/components/profile/Profile";
+import Profile from "@/app/(main)/profile/Profile";
 import { User } from "@/app/lib/definitions";
 
 export default function ProfilePage() {

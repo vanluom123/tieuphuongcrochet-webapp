@@ -240,7 +240,14 @@
       "empty": "No collections yet"
     },
     "patterns": {
-      "empty": "No patterns yet"
+      "empty": "No patterns yet",
+      "add": "Add pattern",
+      "edit": "Edit pattern",
+      "delete": "Delete pattern",
+      "delete_confirm_title": "Delete pattern",
+      "delete_confirm_content": "Are you sure you want to delete this pattern?",
+      "yes": "Yes",
+      "no": "No"
     },
     "info": {
       "change_avatar": "Change avatar",

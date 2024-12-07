@@ -240,7 +240,14 @@
       "empty": "Chưa có bộ sưu tập nào"
     },
     "patterns": {
-      "empty": "Chưa có mẫu nào"
+      "empty": "Chưa có mẫu nào",
+      "add": "Thêm mẫu",
+      "edit": "Sửa mẫu",
+      "delete": "Xóa mẫu",
+      "delete_confirm_title": "Xóa mẫu",
+      "delete_confirm_content": "Bạn có chắc chắn muốn xóa mẫu này không?",
+      "yes": "Có",
+      "no": "Không"
     },
     "info": {
       "change_avatar": "Đổi ảnh đại diện",
