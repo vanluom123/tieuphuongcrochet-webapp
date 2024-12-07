@@ -22,6 +22,7 @@ interface FreePatternCardProps {
 	loading?: boolean;
 	isShowActions?: boolean;
 	onDelete?: () => void;
+	onEdit?: () => void;
 };
 
 const FreePatternCard = (
@@ -32,6 +33,7 @@ const FreePatternCard = (
 		loading,
 		isShowActions = false,
 		onDelete,
+		onEdit,
 	}: FreePatternCardProps) => {
 
 	const { Meta } = Card;
@@ -59,9 +61,9 @@ const FreePatternCard = (
 			}
 			actions={isShowActions ?[
 				<Tooltip key="edit-tooltip" color='#fc8282' title={t('edit')}>
-					<Link key="edit" href={`${ROUTE_PATH.FREEPATTERNS}/${id}`}>
+					<span key="edit" onClick={onEdit}>
 						<EditOutlined style={{ fontSize: 18 }} />
-					</Link>
+					</span>
 				</Tooltip>,
 				<Tooltip key="delete-tooltip" color='#fc8282' title={t('delete')}>
 					<span key='delete' onClick={onDelete}>
