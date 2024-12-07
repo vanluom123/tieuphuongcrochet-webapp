@@ -20,7 +20,6 @@ export const fetchFreePatterns = async (params: ListParams, next?: NextFetchRequ
         timeout,
         data: params.filters,
     }).catch((err) => {
-        console.log("err", err);
         return { data: [], totalElements: 0 }
     });
 
@@ -42,7 +41,6 @@ export const fetchFreePatternDetail = async (id: string, revalidate?: number): P
         method: 'GET',
         next: { revalidate: revalidate || 0, tags: [`free-pattern-${id}`] },
     }).catch((err) => {
-        console.log("err", err);
         return {} as Pattern;
     });
 
@@ -85,7 +83,6 @@ export const deleteFreePattern = async (id: string) => {
     }).then(() => {
         notification.success({ message: 'Success', description: 'Delete free pattern successfully' })
     }).catch((err) => {
-        console.log("err", err);
         notification.error({ message: 'Failed', description: err.message })
     })
 }

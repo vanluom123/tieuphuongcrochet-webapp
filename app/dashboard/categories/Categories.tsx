@@ -66,7 +66,6 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 				setLoading(false);
 			})
 			.catch((errorInfo) => {
-				console.log(errorInfo);
 				setLoading(false);
 			});
 	};
@@ -103,7 +102,6 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 			})
 
 			.catch((errorInfo) => {
-				console.log(errorInfo);
 				setLoading(false);
 			});
 	};
@@ -223,8 +221,6 @@ const CategoriesList = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [categorySelected, setCategorySelected] = useState({} as DataType);
 	const { data: session, status } = useSession();
-
-	console.log('session CategoriesList', session, status);
 
 	useEffect(() => {
 		let isMounted = true;

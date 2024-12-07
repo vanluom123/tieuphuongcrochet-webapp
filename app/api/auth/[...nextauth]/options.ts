@@ -39,7 +39,6 @@ export const options: NextAuthOptions = {
           method: 'POST',
           data: credentials,
         }).catch((error) => {
-          console.log("error", error);
           return null;
         });
 

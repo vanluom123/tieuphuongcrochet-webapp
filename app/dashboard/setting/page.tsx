@@ -37,7 +37,6 @@ const Setting = () => {
     }, [])
 
     const onSubmitForm = async () => {
-        console.log('submit bannersList', bannersList);
         await createUpdateBanners(bannersList);
         setIsUpdatedBList(false);
     }

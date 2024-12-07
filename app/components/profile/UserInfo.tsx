@@ -14,7 +14,6 @@ const UserInfo = ({ user }: UserInfoProps) => {
 
     const onFinish = (values: any) => {
         updateUserProfile(values).then(data => {
-            console.log('Updated values:', data);
         });
     };
 

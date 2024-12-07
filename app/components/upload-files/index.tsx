@@ -78,8 +78,6 @@ const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumbe
 		const formData = new FormData();
 		setLoading(true);
 
-		console.log('file', file);
-
 		formData.append('files', getNewFile(file));
 		const res: FileUpload[] = await uploadFile.upload(formData);
 

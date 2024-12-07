@@ -25,7 +25,6 @@ const RegisterPage = () => {
     }
 
     const onSubmitRegister = async (values: User) => {
-        console.log("values", values);
         setIsDisable(true);
         const res = await apiService({
             baseUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -33,7 +32,6 @@ const RegisterPage = () => {
             method: 'POST',
             data: values,
         }).catch((error) => {
-            console.log("error", error);
             setIsDisable(false);
             return;
         });

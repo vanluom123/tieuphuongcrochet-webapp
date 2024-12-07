@@ -34,7 +34,6 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
 
     useEffect(() => {
         fetchCategories().then((data) => {
-            console.log('fetchCategories', data);
             setCategories(data as Category[]);
         });
     }, []);
@@ -109,7 +108,6 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                         <UploadFiles
                             files={state.pattern.images || []}
                             onChangeFile={(files: FileUpload[]) => {
-                                console.log('FreePatternForm files', files);
                                 form.setFieldsValue({ images: files });
                             }}
                         />

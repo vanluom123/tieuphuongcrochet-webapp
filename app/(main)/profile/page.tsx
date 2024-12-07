@@ -9,9 +9,6 @@ import { User } from "@/app/lib/definitions";
 export default function ProfilePage() {
     const { data: session, status } = useSession();
 
-    console.log('Profile page - Session:', session);
-    console.log('Profile page - Status:', status);
-    
     if (status === 'unauthenticated') {
         redirect(`${ROUTE_PATH.LOGIN}?callbackUrl=${ROUTE_PATH.PROFILE}`);
     }
