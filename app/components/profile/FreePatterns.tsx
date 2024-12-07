@@ -37,7 +37,6 @@ const FreePatterns = () => {
     };
 
     const onEditPattern = (id: React.Key) => {
-        console.log('edit', id);
         setModalData({ open: true, id: `${id}` })
     };
 

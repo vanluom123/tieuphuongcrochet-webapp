@@ -1,5 +1,5 @@
 .profile-page {
-    padding: 24px;
+    padding: 16px 24px 24px;
 
     .profile-tabs {
         background: #fff;
@@ -73,5 +73,24 @@
     .collection-count {
         margin-top: auto;
         color: rgba(0, 0, 0, 0.65);
+    }
+}
+
+.profile-back-button {
+    margin: 16px 24px 0;
+    font-size: 14px;
+    height: 40px;
+    padding: 4px 15px;
+    transition: all 0.3s ease;
+    color: rgba(0, 0, 0, 0.65);
+
+    &:hover {
+        color: #1890ff;
+        background: rgba(24, 144, 255, 0.1);
+    }
+
+    .anticon {
+        font-size: 14px;
+        margin-right: 8px;
     }
 }

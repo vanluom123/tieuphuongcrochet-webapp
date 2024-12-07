@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import { Button, Col, Flex, Form, Input, Modal, Row, Spin, Switch, TreeSelect } from "antd";
+import { Col, Flex, Form, Input, Modal, Row, Spin, Switch, TreeSelect } from "antd";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
@@ -36,7 +36,6 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
 
     useEffect(() => {
         fetchCategories().then((data) => {
-            console.log('fetchCategories', data);
             setCategories(data as Category[]);
         });
     }, []);
@@ -99,7 +98,6 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
     return (<>
         <Spin spinning={state.loading} tip="Loading...">
             <Modal
-                title={t('patterns.add')}
                 centered
                 open={modalData.open}
                 onOk={onHandleOk}
@@ -124,7 +122,6 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                             <UploadFiles
                                 files={state.pattern.images || []}
                                 onChangeFile={(files: FileUpload[]) => {
-                                    console.log('FreePatternForm files', files);
                                     form.setFieldsValue({ images: files });
                                 }}
                             />
@@ -162,15 +159,6 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                                     />
                                 </Item>
                             </Col>
-
-                            <Col md={12} xs={24}>
-                                <Item
-                                    name="is_home"
-                                    label={t('Fields.is_home')}
-                                >
-                                    <Switch />
-                                </Item>
-                            </Col>
                         </Row>
                         <Row gutter={48}>
                             <Col xs={24} lg={12}>
@@ -196,14 +184,6 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                                             },
                                         ]}
                                     />
-                                </Item>
-                            </Col>
-                            <Col xs={24} lg={12}>
-                                <Item
-                                    name="link"
-                                    label={t('Fields.link')}
-                                >
-                                    <Input placeholder={t('Fields.link')} />
                                 </Item>
                             </Col>
                         </Row>
@@ -238,12 +218,6 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                                 }}
                             />
                         </Item>
-                        {/* <Flex justify="center" gap={10} wrap="wrap">
-                        <Button className="btn-form" type="primary" htmlType="submit" disabled={state.loading}>
-                            {t('Btn.submit')}
-                        </Button>
-                        <Button className="btn-form" onClick={onCancel} disabled={state.loading}>{t('Btn.cancel')}</Button>
-                    </Flex> */}
                     </Form>
                 </div>
             </Modal>

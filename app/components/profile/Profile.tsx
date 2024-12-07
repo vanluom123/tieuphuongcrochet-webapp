@@ -1,17 +1,19 @@
-import { Tabs, TabsProps } from 'antd';
+import { Button, Tabs, TabsProps } from 'antd';
 import { useTranslations } from 'next-intl';
 import Collections from './Collections';
 import FreePatterns from './FreePatterns';
 import UserInfo from './UserInfo';
 import { User } from '@/app/lib/definitions';
 import '../../ui/components/profile.scss';
-
+import { useRouter } from 'next/navigation';
+import { LeftOutlined } from '@ant-design/icons';
 interface ProfileProps {
     user: User;
 }
 
 const Profile = ({ user }: ProfileProps) => {
     const t = useTranslations('Profile');
+    const router = useRouter();
 
     const items: TabsProps['items'] = [
         {
@@ -32,13 +34,22 @@ const Profile = ({ user }: ProfileProps) => {
     ];
 
     return (
-        <div className="profile-page">
-            <Tabs
-                defaultActiveKey="info"
-                items={items}
-                className="profile-tabs"
-            />
-        </div>
+        <>
+            <Button type="text" 
+                onClick={() => router.back()}
+                icon={<LeftOutlined />}
+                className="profile-back-button"
+            >
+                {t('back')}
+            </Button>
+            <div className="profile-page">
+                <Tabs
+                    defaultActiveKey="info"
+                    items={items}
+                    className="profile-tabs"
+                />
+            </div>
+        </>
     );
 };
 
