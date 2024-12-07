@@ -247,7 +247,9 @@
       "delete_confirm_title": "Xóa mẫu",
       "delete_confirm_content": "Bạn có chắc chắn muốn xóa mẫu này không?",
       "yes": "Có",
-      "no": "Không"
+      "no": "Không",
+      "delete_success": "Xóa mẫu thành công",
+      "delete_error": "Xóa mẫu thất bại"
     },
     "info": {
       "change_avatar": "Đổi ảnh đại diện",

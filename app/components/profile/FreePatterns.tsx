@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Row, Col, FloatButton, Button, Modal } from 'antd';
+import { Row, Col, FloatButton, Button, Modal, notification } from 'antd';
 import { useTranslations } from 'next-intl';
 import { PlusOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Pattern } from '@/app/lib/definitions';
-import { fetchUserPatterns } from '@/app/lib/service/profileService';
+import { deleteUserPattern, fetchUserPatterns } from '@/app/lib/service/profileService';
 import { ROUTE_PATH } from '@/app/lib/constant';
 import { useRouter } from 'next/navigation';
 import FreePatternCard from './FreePatternCard';
@@ -45,7 +45,21 @@ const FreePatterns = () => {
     };
 
     const onDeletePattern = (id: React.Key) => {
-        console.log('delete', id);
+        deleteUserPattern(id.toString())
+            .then(() => {
+                notification.success({
+                    message: t('patterns.delete_success')
+                });
+                fetchUserPatterns().then(data => {
+                    setPatterns(data);
+                });
+            })
+            .catch((error) => {
+                notification.error({
+                    message: t('patterns.delete_error'),
+                    description: error.message
+                });
+            });
     };
 
     const onAddPattern = () => {

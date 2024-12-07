@@ -247,7 +247,9 @@
       "delete_confirm_title": "Delete pattern",
       "delete_confirm_content": "Are you sure you want to delete this pattern?",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "delete_success": "Delete pattern successfully",
+      "delete_error": "Delete pattern failed"
     },
     "info": {
       "change_avatar": "Change avatar",

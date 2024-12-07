@@ -18,6 +18,14 @@ export async function fetchUserPatterns(): Promise<Pattern[]> {
     return response || [];
 }
 
+export async function deleteUserPattern(id: string) {
+    return await apiJwtService({
+        endpoint: `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.DELETE}`,
+        method: 'DELETE',
+        queryParams: { id }
+    });
+}
+
 export async function updateUserProfile(data: any) {
     return await apiJwtService({
         endpoint: API_ROUTES.USER,

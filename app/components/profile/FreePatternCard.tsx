@@ -5,13 +5,12 @@ import { Card, Flex, Skeleton, Tag, Tooltip } from 'antd';
 import { UserOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 
-import { ROUTE_PATH, TRANSLATION_STATUS } from '@/app/lib/constant';
+import { TRANSLATION_STATUS } from '@/app/lib/constant';
 import { Pattern } from '@/app/lib/definitions';
 import { getStatusColor } from '@/app/lib/utils';
 import CustomNextImage from '../next-image';
 
 import '../../ui/components/freePatternCard.scss';
-import Link from 'next/link';
 
 interface FreePatternCardProps {
 	width?: string | number;
