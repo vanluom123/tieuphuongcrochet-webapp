@@ -5,6 +5,7 @@ import CollectionCard from './CollectionCard';
 import { useRouter } from 'next/navigation';
 import { Collection } from '@/app/lib/definitions';
 import { fetchUserCollections } from '@/app/lib/service/profileService';
+import { ROUTE_PATH } from '@/app/lib/constant';
 
 const Collections = () => {
     const t = useTranslations('Profile');
@@ -12,7 +13,7 @@ const Collections = () => {
     const router = useRouter();
 
     const onViewCollection = (id: string) => {
-        router.push(`/profile/collections/${id}`);
+        router.push(`${ROUTE_PATH.COLLECTIONS}/${id}`);
     };
 
     useEffect(() => {

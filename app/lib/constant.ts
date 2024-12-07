@@ -23,6 +23,7 @@ export const ROUTE_PATH = {
   DETAIL: 'detail',
   SITEMAP: 'sitemap',
   PROFILE: '/profile',
+  COLLECTIONS: '/collections',
 };
 
 export const SOCIAL_LINKS = {
