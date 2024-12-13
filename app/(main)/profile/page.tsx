@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { ROUTE_PATH } from "@/app/lib/constant";
 import Profile from "@/app/(main)/profile/Profile";
-import { User } from "@/app/lib/definitions";
 
 export default function ProfilePage() {
     const { data: session, status } = useSession();
@@ -19,7 +18,7 @@ export default function ProfilePage() {
 
     return (
         <div className="profile-container">
-            <Profile user={session?.user as User} />
+            <Profile />
         </div>
     );
 } 

@@ -237,7 +237,10 @@
       "info": "Thông tin cá nhân"
     },
     "collections": {
-      "empty": "Chưa có bộ sưu tập nào"
+      "empty": "Chưa có bộ sưu tập nào",
+      "add": "Thêm bộ sưu tập",
+      "name": "Tên bộ sưu tập",
+      "nameRequired": "Vui lòng nhập tên bộ sưu tập"
     },
     "patterns": {
       "empty": "Chưa có mẫu nào",

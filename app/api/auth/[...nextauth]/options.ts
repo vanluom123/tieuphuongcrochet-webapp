@@ -1,11 +1,10 @@
-
 import CredentialsProvider from 'next-auth/providers/credentials'
-import * as jwtDecode from 'jsonwebtoken';
 import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
-import { JwtPayload } from 'jsonwebtoken';
 import { NextAuthOptions } from 'next-auth';
 import apiService from '../../../lib/service/apiService';
 import refreshAccessToken from '../../refreshToken';
+import * as jwtDecode from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 
 export const options: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -53,29 +52,31 @@ export const options: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      if ( user) {
-        token.role = user.role
-        token.accessToken = user.accessToken
-        token.refreshToken = user.refreshToken
+      if (user) {
+        // Copy all user properties to token on initial sign in
+        return {
+          ...token,
+          ...user
+        };
+      }
 
-        // Decode the access token
-        const decoded = jwtDecode.decode(user.accessToken) as JwtPayload;
-        if (decoded && Date.now() >= (decoded.exp as number) * 1000) {
-          return await refreshAccessToken(token);
-        }
+      // On subsequent calls, check token expiration
+      const decoded = jwtDecode.decode(token.accessToken as string) as JwtPayload;
+      if (decoded && Date.now() >= (decoded.exp as number) * 1000) {
+        return await refreshAccessToken(token);
       }
 
       return token;
     },
-    // If you want to use the role in client components
     async session({ session, token }) {
       if (session?.user) {
-        session.user.role = token.role;
-        session.user.email = token.email as string;
-        session.user.accessToken = token.accessToken as string;
-        session.user.refreshToken = token.refreshToken as string;
+        // Copy all token properties to session.user
+        session.user.accessToken = token.accessToken;
+        session.user.refreshToken = token.refreshToken;
+        session.user.name = token.name;
+        session.user.email = token.email;
       }
-      return session
+      return session;
     },
   }
 }

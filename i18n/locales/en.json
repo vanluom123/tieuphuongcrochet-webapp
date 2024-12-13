@@ -237,7 +237,10 @@
       "info": "User info"
     },
     "collections": {
-      "empty": "No collections yet"
+      "empty": "No collections yet",
+      "add": "Add collection",
+      "name": "Collection name",
+      "nameRequired": "Please enter the collection name"
     },
     "patterns": {
       "empty": "No patterns yet",

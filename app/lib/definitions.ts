@@ -225,11 +225,19 @@ export interface User {
 	id?: number | string;
 	name?: string;
 	email: string;
+	imageUrl?: string;
+	provider?: string;
+	emailVerified?: boolean;
 	role?: string;
+	phone?: string;
+	birthDate?: string;
+	gender?: string;
+	backgroundImageUrl?: string;
+	collections?: Collection[];
+	recentComments?: Comment[];
 	password?: string;
 	createdDate?: string;
 	lastModifiedDate?: string;
-	imageUrl?: string;
 }
 
 //------------------------Blogs--------------------------
@@ -245,11 +253,21 @@ export interface Post {
 	fileContent?: string
 }
 
+// -------------------------- Collection --------------------------
+
 export interface Collection {
 	id: string;
-	name: string;
+	name?: string;
 	description?: string;
-	itemCount: number;
+	itemCount?: number;
 	thumbnail?: string;
 	createdDate?: string;
+}
+
+// -------------------------- Comment --------------------------
+
+export interface Comment {
+	id: string;
+	content: string;
+	createdDate: string;
 }

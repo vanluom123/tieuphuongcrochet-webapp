@@ -1,13 +1,15 @@
-import { Collection, Pattern } from "../definitions";
+import {Collection, Pattern} from "../definitions";
 import apiJwtService from "./apiJwtService";
-import { API_ROUTES } from "../constant";
+import {API_ROUTES} from "../constant";
 
 export async function fetchUserCollections(): Promise<Collection[]> {
+    const endpoint = `${API_ROUTES.COLLECTIONS}/my-collections`;
     const response = await apiJwtService({
-        endpoint: `${API_ROUTES.COLLECTIONS}/my-collections`,
-        method: 'GET'
+        endpoint,
+        method: 'GET',
     });
-    return response || [];
+
+    return response ?? [];
 }
 
 export async function fetchUserPatterns(): Promise<Pattern[]> {
@@ -15,7 +17,7 @@ export async function fetchUserPatterns(): Promise<Pattern[]> {
         endpoint: `${API_ROUTES.FREE_PATTERN}/create-by`,
         method: 'GET',
     });
-    return response || [];
+    return response ?? [];
 }
 
 export async function deleteUserPattern(id: string) {
@@ -33,3 +35,22 @@ export async function updateUserProfile(data: any) {
         data
     });
 }
+
+export async function fetchCollectionDetail(id: string) {
+    return await apiJwtService({
+        endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
+        method: 'GET'
+    });
+}
+
+export async function createUpdateCollection(name: string) {
+    const endpoint = `${API_ROUTES.COLLECTIONS}/${API_ROUTES.CREATE}`;
+    const options = {
+        endpoint,
+        method: 'POST',
+        queryParams: { name },
+    };
+
+    return apiJwtService(options);
+}
+

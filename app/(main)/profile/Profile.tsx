@@ -1,20 +1,17 @@
-import { Button, Tabs, TabsProps } from 'antd';
-import { useTranslations } from 'next-intl';
-import Collections from '../../components/profile/Collections';
-import FreePatterns from '../../components/profile/FreePatterns';
+'use client'
+
+import {Button, Tabs, TabsProps} from 'antd';
+import {useTranslations} from 'next-intl';
+import dynamic from 'next/dynamic';
 import UserInfo from '../../components/profile/UserInfo';
-import { User } from '@/app/lib/definitions';
 import '../../ui/components/profile.scss';
-import { useRouter } from 'next/navigation';
-import { LeftOutlined } from '@ant-design/icons';
-import { useSession } from "next-auth/react";
+import {useRouter} from 'next/navigation';
+import {LeftOutlined} from '@ant-design/icons';
 
-interface ProfileProps {
-    user: User;
-}
+const Collections = dynamic(() => import('../../components/profile/Collections'), { ssr: false });
+const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
 
-const Profile = ({ user }: ProfileProps) => {
-    const { data: session } = useSession();
+const Profile = () => {
     const t = useTranslations('Profile');
     const router = useRouter();
 
@@ -22,26 +19,26 @@ const Profile = ({ user }: ProfileProps) => {
         {
             key: 'info',
             label: t('tabs.info'),
-            children: <UserInfo user={session?.user as User} />,
+            children: <UserInfo/>,
         },
         {
             key: 'collections',
             label: t('tabs.collections'),
-            children: <Collections />,
+            children: <Collections/>,
         },
         {
             key: 'patterns',
             label: t('tabs.patterns'),
-            children: <FreePatterns />,
+            children: <FreePatterns/>,
         },
     ];
 
     return (
         <>
-            <Button type="text" 
-                onClick={() => router.back()}
-                icon={<LeftOutlined />}
-                className="profile-back-button"
+            <Button type="text"
+                    onClick={() => router.back()}
+                    icon={<LeftOutlined/>}
+                    className="profile-back-button"
             >
                 {t('back')}
             </Button>

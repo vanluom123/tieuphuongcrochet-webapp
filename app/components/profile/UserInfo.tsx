@@ -1,24 +1,35 @@
-import { Form, Input, Button, Upload, Avatar, message } from 'antd';
+import { Form, Input, Button, Upload, Avatar, DatePicker, Select, message } from 'antd';
 import { UserOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 import { User } from '@/app/lib/definitions';
 import { updateUserProfile } from '@/app/lib/service/profileService';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import uploadFile from '@/app/lib/service/uploadFilesSevice';
 import { notification } from '@/app/lib/notify';
 import { useSession } from 'next-auth/react';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile } from 'antd/es/upload/interface';
+import dayjs from 'dayjs';
 
-interface UserInfoProps {
-    user: User;
-}
-
-const UserInfo = ({ user }: UserInfoProps) => {
+const UserInfo = () => {
     const t = useTranslations('Profile');
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string>(user?.imageUrl || '');
-    const { update } = useSession();
+    const { data: session, update } = useSession();
+    const [imageUrl, setImageUrl] = useState<string>('');
+
+    useEffect(() => {
+        if (session?.user) {
+            setImageUrl(session.user.imageUrl || '');
+            form.setFieldsValue({
+                name: session.user.name,
+                email: session.user.email,
+                avatar: session.user.imageUrl,
+                phone: session.user.phone,
+                birthDate: session.user.birthDate ? dayjs(session.user.birthDate) : null,
+                gender: session.user.gender
+            });
+        }
+    }, [session, form]);
 
     const beforeUpload = (file: RcFile) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -62,30 +73,28 @@ const UserInfo = ({ user }: UserInfoProps) => {
             setLoading(false);
         }
     };
-
     const onFinish = async (values: User) => {
         try {
             const updatedUser = await updateUserProfile({
                 ...values,
-                imageUrl: imageUrl || user?.imageUrl
+                imageUrl: imageUrl || session?.user?.imageUrl,
+                birthDate: typeof values.birthDate === 'string' ? values.birthDate : dayjs(values.birthDate).format('YYYY-MM-DD')
             });
 
-            if (updatedUser) {
+            if (updatedUser && session?.user) {
                 await update({
-                    ...user,
-                    name: values.name,
-                    imageUrl: imageUrl || user?.imageUrl
+                    ...session.user,
+                    ...values,
+                    imageUrl: imageUrl || session?.user?.imageUrl
                 });
 
                 notification.success({
-                    message: t('info.update_success'),
-                    description: t('info.profile_updated')
+                    message: t('info.update_success')
                 });
             }
         } catch (error) {
             notification.error({
-                message: t('info.update_error'),
-                description: t('info.profile_update_failed')
+                message: t('info.update_error')
             });
         }
     };
@@ -103,8 +112,9 @@ const UserInfo = ({ user }: UserInfoProps) => {
                 form={form}
                 layout="vertical"
                 initialValues={{
-                    ...user,
-                    imageUrl: imageUrl || user?.imageUrl
+                    ...session?.user,
+                    imageUrl: imageUrl || session?.user?.imageUrl,
+                    birthDate: session?.user?.birthDate ? dayjs(session.user.birthDate) : null
                 }}
                 onFinish={onFinish}
             >
@@ -144,6 +154,31 @@ const UserInfo = ({ user }: UserInfoProps) => {
                     <Input disabled />
                 </Form.Item>
 
+                <Form.Item
+                    name="phone"
+                    label={t('info.phone')}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    name="birthDate"
+                    label={t('info.birthDate')}
+                >
+                    <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item
+                    name="gender"
+                    label={t('info.gender')}
+                >
+                    <Select>
+                        <Select.Option value="male">{t('info.gender_male')}</Select.Option>
+                        <Select.Option value="female">{t('info.gender_female')}</Select.Option>
+                        <Select.Option value="other">{t('info.gender_other')}</Select.Option>
+                    </Select>
+                </Form.Item>
+
                 <Button type="primary" htmlType="submit">
                     {t('info.save')}
                 </Button>
@@ -152,4 +187,4 @@ const UserInfo = ({ user }: UserInfoProps) => {
     );
 };
 
-export default UserInfo; 
+export default UserInfo;
