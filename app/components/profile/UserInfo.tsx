@@ -2,34 +2,57 @@ import { Form, Input, Button, Upload, Avatar, DatePicker, Select, message } from
 import { UserOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 import { User } from '@/app/lib/definitions';
-import { updateUserProfile } from '@/app/lib/service/profileService';
+import { updateUserProfile, loadUserInfo } from '@/app/lib/service/profileService';
 import { useState, useEffect } from 'react';
 import uploadFile from '@/app/lib/service/uploadFilesSevice';
 import { notification } from '@/app/lib/notify';
-import { useSession } from 'next-auth/react';
-import type { RcFile } from 'antd/es/upload/interface';
 import dayjs from 'dayjs';
+import { RcFile } from 'antd/es/upload';
+
+interface UserState {
+    loading: boolean;
+    error: string | null;
+    imageUrl: string | null;
+    data: User | null;
+}
 
 const UserInfo = () => {
     const t = useTranslations('Profile');
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false);
-    const { data: session, update } = useSession();
-    const [imageUrl, setImageUrl] = useState<string>('');
+    const [userData, setUserData] = useState<UserState>({
+        loading: false,
+        error: null,
+        imageUrl: null,
+        data: null
+    });
 
     useEffect(() => {
-        if (session?.user) {
-            setImageUrl(session.user.imageUrl || '');
-            form.setFieldsValue({
-                name: session.user.name,
-                email: session.user.email,
-                avatar: session.user.imageUrl,
-                phone: session.user.phone,
-                birthDate: session.user.birthDate ? dayjs(session.user.birthDate) : null,
-                gender: session.user.gender
-            });
-        }
-    }, [session, form]);
+        const fetchUserData = async () => {
+            try {
+                const data = await loadUserInfo();
+                console.log('data', data);
+                setUserData({
+                    loading: false,
+                    error: null,
+                    imageUrl: data.imageUrl,
+                    data: data
+                });
+                form.setFieldsValue({
+                    name: data.name,
+                    email: data.email,
+                    avatar: data.imageUrl,
+                    phone: data.phone,
+                    birthDate: data.birthDate ? dayjs(data.birthDate) : null,
+                    gender: data.gender
+                });
+            } catch (error) {
+                notification.error({
+                    message: t('info.load_error')
+                });
+            }
+        };
+        fetchUserData();
+    }, [form]);
 
     const beforeUpload = (file: RcFile) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -45,7 +68,7 @@ const UserInfo = () => {
 
     const customUpload = async ({ file, onSuccess, onError }: any) => {
         try {
-            setLoading(true);
+            setUserData(prev => ({ ...prev, loading: true }));
             const formData = new FormData();
             formData.append('files', file);
 
@@ -53,7 +76,7 @@ const UserInfo = () => {
 
             if (res && res.length > 0) {
                 const avatarUrl = res[0].fileContent;
-                setImageUrl(avatarUrl);
+                setUserData(prev => ({ ...prev, imageUrl: avatarUrl }));
                 form.setFieldValue('avatar', avatarUrl);
                 onSuccess('ok');
                 notification.success({
@@ -70,24 +93,22 @@ const UserInfo = () => {
                 description: 'Failed to upload avatar'
             });
         } finally {
-            setLoading(false);
+            setUserData(prev => ({ ...prev, loading: false }));
         }
     };
     const onFinish = async (values: User) => {
         try {
             const updatedUser = await updateUserProfile({
-                ...values,
-                imageUrl: imageUrl || session?.user?.imageUrl,
-                birthDate: typeof values.birthDate === 'string' ? values.birthDate : dayjs(values.birthDate).format('YYYY-MM-DD')
+                name: values.name,
+                imageUrl: userData?.imageUrl,
+                phone: values.phone,
+                birthDate: typeof values.birthDate === 'string' ? values.birthDate : dayjs(values.birthDate).format('YYYY-MM-DD'),
+                gender: values.gender,
+                backgroundImageUrl: values.backgroundImageUrl
             });
 
-            if (updatedUser && session?.user) {
-                await update({
-                    ...session.user,
-                    ...values,
-                    imageUrl: imageUrl || session?.user?.imageUrl
-                });
-
+            if (updatedUser) {
+                setUserData(updatedUser);
                 notification.success({
                     message: t('info.update_success')
                 });
@@ -101,7 +122,7 @@ const UserInfo = () => {
 
     const uploadButton = (
         <div>
-            {loading ? <LoadingOutlined /> : <UserOutlined />}
+            {userData.loading ? <LoadingOutlined /> : <UserOutlined />}
             <div style={{ marginTop: 8 }}>{t('info.change_avatar')}</div>
         </div>
     );
@@ -112,9 +133,9 @@ const UserInfo = () => {
                 form={form}
                 layout="vertical"
                 initialValues={{
-                    ...session?.user,
-                    imageUrl: imageUrl || session?.user?.imageUrl,
-                    birthDate: session?.user?.birthDate ? dayjs(session.user.birthDate) : null
+                    ...userData,
+                    imageUrl: userData?.imageUrl,
+                    birthDate: userData?.data?.birthDate ? dayjs(userData.data.birthDate) : null
                 }}
                 onFinish={onFinish}
             >
@@ -126,10 +147,10 @@ const UserInfo = () => {
                         customRequest={customUpload}
                         beforeUpload={beforeUpload}
                     >
-                        {imageUrl ? (
+                        {userData.imageUrl ? (
                             <Avatar
                                 size={100}
-                                src={imageUrl}
+                                src={userData.imageUrl}
                                 alt="avatar"
                             />
                         ) : (

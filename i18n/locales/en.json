@@ -240,7 +240,8 @@
       "empty": "No collections yet",
       "add": "Add collection",
       "name": "Collection name",
-      "nameRequired": "Please enter the collection name"
+      "nameRequired": "Please enter the collection name",
+      "itemCount": "Item count"
     },
     "patterns": {
       "empty": "No patterns yet",
@@ -259,7 +260,14 @@
       "name": "Full name",
       "email": "Email",
       "save": "Save changes",
-      "update_success": "Update user info successfully"
+      "update_success": "Update user info successfully",
+      "update_error": "Update user info failed",
+      "phone": "Phone",
+      "birthDate": "Birth date",
+      "gender": "Gender",
+      "gender_male": "Male",
+      "gender_female": "Female",
+      "gender_other": "Other"
     },
     "back": "Back"
   }

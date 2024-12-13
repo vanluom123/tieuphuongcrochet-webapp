@@ -6,7 +6,7 @@ import { ROUTE_PATH } from "@/app/lib/constant";
 import Profile from "@/app/(main)/profile/Profile";
 
 export default function ProfilePage() {
-    const { data: session, status } = useSession();
+    const { status } = useSession();
 
     if (status === 'unauthenticated') {
         redirect(`${ROUTE_PATH.LOGIN}?callbackUrl=${ROUTE_PATH.PROFILE}`);

@@ -12,8 +12,6 @@ const WARNING_TIME = 5 * 60 * 1000; // Warning 5 minutes before expiration
 export const useSessionExpiration = () => {
   const { data: session, update } = useSession()
 
-  const hasShownWarning = useRef(false);
-
   useEffect(() => {
     if (session?.user?.accessToken) {
       const decoded = jwtDecode.decode(session.user.accessToken) as JwtPayload
@@ -33,8 +31,7 @@ export const useSessionExpiration = () => {
         }
 
         // Warning about to expire
-        if (timeUntilExpiration <= WARNING_TIME && !hasShownWarning.current) {
-          hasShownWarning.current = true;
+        if (timeUntilExpiration <= WARNING_TIME) {
           notification.warning({
             message: 'Session is about to expire',
             description: 'Please save your work and login again'
@@ -43,34 +40,32 @@ export const useSessionExpiration = () => {
 
         // Auto refresh token
         const refreshTimer = setTimeout(async () => {
-          if (timeUntilExpiration <= REFRESH_TIME) {
-            try {
-              const newToken = await refreshAccessToken({
-                ...session.user,
-                accessToken: session.user.accessToken,
-                refreshToken: session.user.refreshToken
-              })
+          try {
+            const newToken = await refreshAccessToken({
+              ...session.user,
+              accessToken: session.user.accessToken,
+              refreshToken: session.user.refreshToken
+            })
 
-              // Update session with new token
-              if (!newToken.error) {
-                await update({
-                  ...session,
-                  user: {
-                    ...session.user,
-                    accessToken: newToken.accessToken,
-                    refreshToken: newToken.refreshToken
-                  }
-                })
-              } else {
-                throw new Error('Cannot refresh token')
-              }
-            } catch (error) {
-              signOut({ redirect: true, callbackUrl: ROUTE_PATH.LOGIN })
-              notification.error({
-                message: 'Session expired',
-                description: 'Please login again'
+            // Update session with new token
+            if (!newToken.error) {
+              await update({
+                ...session,
+                user: {
+                  ...session.user,
+                  accessToken: newToken.accessToken,
+                  refreshToken: newToken.refreshToken
+                }
               })
+            } else {
+              throw new Error('Cannot refresh token')
             }
+          } catch (error) {
+            signOut({ redirect: true, callbackUrl: ROUTE_PATH.LOGIN })
+            notification.error({
+              message: 'Session expired',
+              description: 'Please login again'
+            })
           }
         }, timeUntilExpiration - REFRESH_TIME)
 
@@ -89,5 +84,5 @@ export const useSessionExpiration = () => {
         }
       }
     }
-  }, [session, update])
+  }, [session?.user?.accessToken])
 } 

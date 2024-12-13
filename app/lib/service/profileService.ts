@@ -1,6 +1,6 @@
-import {Collection, Pattern} from "../definitions";
+import { Collection, Pattern } from "../definitions";
 import apiJwtService from "./apiJwtService";
-import {API_ROUTES} from "../constant";
+import { API_ROUTES } from "../constant";
 
 export async function fetchUserCollections(): Promise<Collection[]> {
     const endpoint = `${API_ROUTES.COLLECTIONS}/my-collections`;
@@ -28,14 +28,6 @@ export async function deleteUserPattern(id: string) {
     });
 }
 
-export async function updateUserProfile(data: any) {
-    return await apiJwtService({
-        endpoint: `${API_ROUTES.USER}/${API_ROUTES.UPDATE_INFO}`,
-        method: 'PUT',
-        data
-    });
-}
-
 export async function fetchCollectionDetail(id: string) {
     return await apiJwtService({
         endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
@@ -54,3 +46,25 @@ export async function createUpdateCollection(name: string) {
     return apiJwtService(options);
 }
 
+export async function updateUserProfile(data: any) {
+    return await apiJwtService({
+        endpoint: `/user-profile/update`,
+        method: 'PUT',
+        data
+    });
+}
+
+export async function loadUserInfo() {
+    const res = await apiJwtService({
+        endpoint: `/user-profile`,
+        method: 'GET'
+    });
+    return {
+        name: res?.name,
+        imageUrl: res?.imageUrl,
+        email: res?.email, 
+        phone: res?.phone,
+        birthDate: res?.birthDate,
+        gender: res?.gender
+    };
+}

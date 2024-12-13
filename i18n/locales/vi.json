@@ -240,7 +240,8 @@
       "empty": "Chưa có bộ sưu tập nào",
       "add": "Thêm bộ sưu tập",
       "name": "Tên bộ sưu tập",
-      "nameRequired": "Vui lòng nhập tên bộ sưu tập"
+      "nameRequired": "Vui lòng nhập tên bộ sưu tập",
+      "itemCount": "Số lượng mẫu"
     },
     "patterns": {
       "empty": "Chưa có mẫu nào",
@@ -259,7 +260,14 @@
       "name": "Họ tên",
       "email": "Email",
       "save": "Lưu thay đổi",
-      "update_success": "Cập nhật thông tin thành công"
+      "update_success": "Cập nhật thông tin thành công",
+      "update_error": "Cập nhật thông tin thất bại",
+      "phone": "Số điện thoại",
+      "birthDate": "Ngày sinh",
+      "gender": "Giới tính",
+      "gender_male": "Nam",
+      "gender_female": "Nữ",
+      "gender_other": "Khác"
     },
     "back": "Quay lại"
   }
