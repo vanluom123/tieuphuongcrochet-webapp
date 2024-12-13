@@ -253,7 +253,12 @@
       "yes": "Yes",
       "no": "No",
       "delete_success": "Delete pattern successfully",
-      "delete_error": "Delete pattern failed"
+      "delete_error": "Delete pattern failed",
+      "status": {
+        "success": "SUCCESS",
+        "pending": "PENDING",
+        "none": "NONE"
+      }
     },
     "info": {
       "change_avatar": "Change avatar",

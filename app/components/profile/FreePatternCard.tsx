@@ -37,7 +37,7 @@ const FreePatternCard = (
 
 	const { Meta } = Card;
 	const { name, src, author, status, id } = pattern;
-	const t = useTranslations("Profile.patterns");
+	const t = useTranslations("Profile");
 
 	return (
 		<Card
@@ -59,12 +59,12 @@ const FreePatternCard = (
 				</>
 			}
 			actions={isShowActions ?[
-				<Tooltip key="edit-tooltip" color='#fc8282' title={t('edit')}>
+				<Tooltip key="edit-tooltip" color='#fc8282' title={t('patterns.edit')}>
 					<span key="edit" onClick={onEdit}>
 						<EditOutlined style={{ fontSize: 18 }} />
 					</span>
 				</Tooltip>,
-				<Tooltip key="delete-tooltip" color='#fc8282' title={t('delete')}>
+				<Tooltip key="delete-tooltip" color='#fc8282' title={t('patterns.delete')}>
 					<span key='delete' onClick={onDelete}>
 						<DeleteOutlined style={{ fontSize: 18 }} />
 					</span>
@@ -82,7 +82,7 @@ const FreePatternCard = (
 								</div>
 								{
 									(status && status !== TRANSLATION_STATUS.NONE) &&
-									<Tag className='status-tag' color={getStatusColor(status)}>{t(`status.${status}`)}</Tag>
+									<Tag className='status-tag' color={getStatusColor(status)}>{t(`patterns.status.${status.toLowerCase()}`)}</Tag>
 								}
 
 							</Flex>

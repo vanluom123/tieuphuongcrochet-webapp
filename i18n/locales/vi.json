@@ -253,7 +253,12 @@
       "yes": "Có",
       "no": "Không",
       "delete_success": "Xóa mẫu thành công",
-      "delete_error": "Xóa mẫu thất bại"
+      "delete_error": "Xóa mẫu thất bại",
+      "status": {
+        "success": "ĐÃ DỊCH",
+        "pending": "ĐANG DỊCH",
+        "none": "CHƯA DỊCH"
+      }
     },
     "info": {
       "change_avatar": "Đổi ảnh đại diện",
