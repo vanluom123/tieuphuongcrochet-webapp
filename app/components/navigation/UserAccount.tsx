@@ -1,14 +1,20 @@
-import { Button, MenuProps, Dropdown, Modal } from "antd";
+import { Button, MenuProps, Dropdown, Modal, Avatar } from "antd";
 import { UserOutlined, LogoutOutlined, DashboardOutlined } from '@ant-design/icons';
 import { signOut, useSession } from "next-auth/react";
 import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import '../../ui/navigation.scss';
+
 
 const UserAccount = () => {
     const { data: session } = useSession();
     const t = useTranslations('UserAccount');
     const router = useRouter();
+
+    console.log('session', session?.user);
+
+    const userAvatar = session?.user?.imageUrl;
 
     const items: MenuProps['items'] = [
         {
@@ -45,14 +51,20 @@ const UserAccount = () => {
     ]
 
     return (
-        <span>
-            {session?.user?.email ?
+        <span className="user-menu">
+            {session?.user?.email ? (
                 <Dropdown arrow menu={{ items }}>
-                    <Button shape='circle' icon={<UserOutlined />} />
+                    {userAvatar ? (
+                        <Avatar src={userAvatar} size={32} />
+                    ) : (
+                        <Avatar icon={<UserOutlined />} size={32} />
+                    )}
                 </Dropdown>
-                :
-                <Button type="primary" onClick={() => router.push(ROUTE_PATH.LOGIN)}>{t("sign_in")}</Button>
-            }
+            ) : (
+                <Button type="primary" onClick={() => router.push(ROUTE_PATH.LOGIN)}>
+                    {t("sign_in")}
+                </Button>
+            )}
         </span>
     )
 }

@@ -7,6 +7,7 @@ import UserInfo from '../../components/profile/UserInfo';
 import '../../ui/components/profile.scss';
 import {useRouter} from 'next/navigation';
 import {LeftOutlined} from '@ant-design/icons';
+import Image from 'next/image';
 
 const Collections = dynamic(() => import('../../components/profile/Collections'), { ssr: false });
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
@@ -34,22 +35,42 @@ const Profile = () => {
     ];
 
     return (
-        <>
-            <Button type="text"
-                    onClick={() => router.back()}
-                    icon={<LeftOutlined/>}
-                    className="profile-back-button"
-            >
-                {t('back')}
-            </Button>
+        <div className="profile-container">
+            <div className="profile-header">
+                <Button type="text"
+                        onClick={() => router.back()}
+                        icon={<LeftOutlined/>}
+                        className="profile-back-button"
+                >
+                    {t('back')}
+                </Button>
+                <div className="profile-cover-image">
+                    <Image 
+                        src="https://thumbs.dreamstime.com/z/gentle-nature-background-butterfly-blurred-324410107.jpg?ct=jpeg"
+                        alt="Cover"
+                        layout="fill"
+                        objectFit="cover"
+                    />
+                </div>
+            </div>
+
             <div className="profile-page">
+                <div className="profile-avatar">
+                    <Image 
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLZzaI3evVeum8z-v96EK2iW4WpyDHfGR0Mg&s"
+                        alt="Avatar"
+                        width={120}
+                        height={120}
+                    />
+                </div>
+
                 <Tabs
                     defaultActiveKey="info"
                     items={items}
                     className="profile-tabs"
                 />
             </div>
-        </>
+        </div>
     );
 };
 
