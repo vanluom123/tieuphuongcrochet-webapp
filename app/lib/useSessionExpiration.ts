@@ -1,5 +1,5 @@
 import { useSession, signOut } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import * as jwtDecode from 'jsonwebtoken'
 import { JwtPayload } from 'jsonwebtoken'
 import { ROUTE_PATH } from './constant'
@@ -11,6 +11,8 @@ const WARNING_TIME = 5 * 60 * 1000; // Warning 5 minutes before expiration
 
 export const useSessionExpiration = () => {
   const { data: session, update } = useSession()
+
+  const hasShownWarning = useRef(false);
 
   useEffect(() => {
     if (session?.user?.accessToken) {
@@ -31,7 +33,8 @@ export const useSessionExpiration = () => {
         }
 
         // Warning about to expire
-        if (timeUntilExpiration <= WARNING_TIME) {
+        if (timeUntilExpiration <= WARNING_TIME && !hasShownWarning.current) {
+          hasShownWarning.current = true;
           notification.warning({
             message: 'Session is about to expire',
             description: 'Please save your work and login again'
