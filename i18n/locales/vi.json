@@ -166,6 +166,7 @@
   },
   "Login": {
     "title": "Đăng nhập",
+    "description": "Đăng nhập vào tài khoản của bạn",
     "email": "Email",
     "password": "Mật khẩu",
     "btn_login": "Đăng nhập",
@@ -231,6 +232,8 @@
     "intro_author": "Tác giả"
   },
   "Profile": {
+    "title": "Hồ sơ",
+    "description": "Hồ sơ cá nhân",
     "tabs": {
       "collections": "Bộ sưu tập",
       "patterns": "Mẫu miễn phí",

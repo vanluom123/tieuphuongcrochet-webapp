@@ -76,7 +76,7 @@ const FreePatterns = () => {
                 <>
                     <Row gutter={[16, 16]}>
                         {patterns.map((pattern, index) => (
-                            <Col xs={24} sm={12} lg={6} key={index}>
+                            <Col xs={12} sm={12} lg={6} key={index}>
                                 <FreePatternCard
                                     isShowActions
                                     pattern={{ ...pattern, src: pattern.fileContent || '' }}

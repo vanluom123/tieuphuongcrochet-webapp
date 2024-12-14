@@ -48,7 +48,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
                pathname === ROUTE_PATH.PROFILE;
     }, [pathname]);
         
-    useSessionExpiration()
+    // useSessionExpiration()
 
     if (isSpecialRoute) {
         return (

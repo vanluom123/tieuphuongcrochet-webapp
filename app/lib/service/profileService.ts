@@ -65,6 +65,7 @@ export async function loadUserInfo() {
         email: res?.email, 
         phone: res?.phone,
         birthDate: res?.birthDate,
-        gender: res?.gender
+        gender: res?.gender,
+        backgroundImageUrl: res?.backgroundImageUrl
     };
 }

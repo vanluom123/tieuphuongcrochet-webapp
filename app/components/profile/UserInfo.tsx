@@ -9,104 +9,40 @@ import { notification } from '@/app/lib/notify';
 import dayjs from 'dayjs';
 import { RcFile } from 'antd/es/upload';
 
-interface UserState {
-    loading: boolean;
-    error: string | null;
-    imageUrl: string | null;
-    data: User | null;
+interface UserInfoProps {
+    userData: User | null;
+    setUserData: (user: User) => void;
 }
 
-const UserInfo = () => {
+const UserInfo = ({ userData, setUserData }: UserInfoProps) => {
     const t = useTranslations('Profile');
     const [form] = Form.useForm();
-    const [userData, setUserData] = useState<UserState>({
-        loading: false,
-        error: null,
-        imageUrl: null,
-        data: null
-    });
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const data = await loadUserInfo();
-                console.log('data', data);
-                setUserData({
-                    loading: false,
-                    error: null,
-                    imageUrl: data.imageUrl,
-                    data: data
-                });
-                form.setFieldsValue({
-                    name: data.name,
-                    email: data.email,
-                    avatar: data.imageUrl,
-                    phone: data.phone,
-                    birthDate: data.birthDate ? dayjs(data.birthDate) : null,
-                    gender: data.gender
-                });
-            } catch (error) {
-                notification.error({
-                    message: t('info.load_error')
-                });
-            }
-        };
-        fetchUserData();
-    }, [form]);
-
-    const beforeUpload = (file: RcFile) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return isJpgOrPng && isLt2M;
-    };
-
-    const customUpload = async ({ file, onSuccess, onError }: any) => {
-        try {
-            setUserData(prev => ({ ...prev, loading: true }));
-            const formData = new FormData();
-            formData.append('files', file);
-
-            const res = await uploadFile.upload(formData);
-
-            if (res && res.length > 0) {
-                const avatarUrl = res[0].fileContent;
-                setUserData(prev => ({ ...prev, imageUrl: avatarUrl }));
-                form.setFieldValue('avatar', avatarUrl);
-                onSuccess('ok');
-                notification.success({
-                    message: 'Success',
-                    description: 'Avatar uploaded successfully!'
-                });
-            } else {
-                throw new Error('Upload failed');
-            }
-        } catch (error) {
-            onError('Upload failed');
-            notification.error({
-                message: 'Error',
-                description: 'Failed to upload avatar'
+        console.log('UserInfo - Received userData:', userData);
+        if (userData) {
+            form.setFieldsValue({
+                name: userData.name,
+                email: userData.email,
+                phone: userData.phone,
+                birthDate: userData.birthDate ? dayjs(userData.birthDate) : null,
+                gender: userData.gender
             });
-        } finally {
-            setUserData(prev => ({ ...prev, loading: false }));
         }
-    };
+    }, [userData, form]);
+
     const onFinish = async (values: User) => {
+        console.log('UserInfo - Form values on submit:', values);
         try {
             const updatedUser = await updateUserProfile({
                 name: values.name,
-                imageUrl: userData?.imageUrl,
                 phone: values.phone,
                 birthDate: typeof values.birthDate === 'string' ? values.birthDate : dayjs(values.birthDate).format('YYYY-MM-DD'),
                 gender: values.gender,
                 backgroundImageUrl: values.backgroundImageUrl
             });
 
+            console.log('UserInfo - Updated user data:', updatedUser);
             if (updatedUser) {
                 setUserData(updatedUser);
                 notification.success({
@@ -114,18 +50,13 @@ const UserInfo = () => {
                 });
             }
         } catch (error) {
+            console.error('UserInfo - Error updating user:', error);
             notification.error({
                 message: t('info.update_error')
             });
         }
     };
 
-    const uploadButton = (
-        <div>
-            {userData.loading ? <LoadingOutlined /> : <UserOutlined />}
-            <div style={{ marginTop: 8 }}>{t('info.change_avatar')}</div>
-        </div>
-    );
 
     return (
         <div className="user-info-tab">
@@ -135,30 +66,10 @@ const UserInfo = () => {
                 initialValues={{
                     ...userData,
                     imageUrl: userData?.imageUrl,
-                    birthDate: userData?.data?.birthDate ? dayjs(userData.data.birthDate) : null
+                    birthDate: userData?.birthDate ? dayjs(userData.birthDate) : null
                 }}
                 onFinish={onFinish}
             >
-                <Form.Item name="avatar" className="avatar-section">
-                    <Upload
-                        name="avatar"
-                        listType="picture-circle"
-                        showUploadList={false}
-                        customRequest={customUpload}
-                        beforeUpload={beforeUpload}
-                    >
-                        {userData.imageUrl ? (
-                            <Avatar
-                                size={100}
-                                src={userData.imageUrl}
-                                alt="avatar"
-                            />
-                        ) : (
-                            uploadButton
-                        )}
-                    </Upload>
-                </Form.Item>
-
                 <Form.Item
                     name="name"
                     label={t('info.name')}

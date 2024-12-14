@@ -30,13 +30,22 @@ export async function generateMetadata(): Promise<Metadata> {
 			],
 		},
 		keywords: [
+			'Chart móc len miễn phí',
 			t("title"),
 			t("Keywords.free_patterns"),
 			t("Keywords.sewing_patterns"),
 			t("Keywords.craft_patterns"),
 			'downloadable patterns',
 			'free sewing templates',
-			'DIY patterns'
+			'DIY patterns',
+			'free patterns',
+			'free sewing patterns',
+			'free sewing templates',
+			'free sewing patterns',
+			'free sewing templates',
+			'free sewing patterns',
+			'free sewing templates',
+			'free sewing patterns',
 		],
 		alternates: {
 			canonical: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}`,

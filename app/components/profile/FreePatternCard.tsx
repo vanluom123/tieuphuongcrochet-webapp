@@ -58,7 +58,7 @@ const FreePatternCard = (
 					}
 				</>
 			}
-			actions={isShowActions ?[
+			actions={isShowActions ? [
 				<Tooltip key="edit-tooltip" color='#fc8282' title={t('patterns.edit')}>
 					<span key="edit" onClick={onEdit}>
 						<EditOutlined style={{ fontSize: 18 }} />
@@ -69,7 +69,7 @@ const FreePatternCard = (
 						<DeleteOutlined style={{ fontSize: 18 }} />
 					</span>
 				</Tooltip>
-			]: []}
+			] : []}
 		>
 			<Skeleton loading={!name} active>
 				{name &&

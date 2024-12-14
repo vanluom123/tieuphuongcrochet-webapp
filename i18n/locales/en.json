@@ -165,7 +165,8 @@
     "dashboard": "Dashboard"
   },
   "Login": {
-    "title": "Login",
+    "title": "Login", 
+    "description": "Login to your account",
     "email": "Email",
     "password": "Password",
     "btn_login": "Login",
@@ -231,6 +232,8 @@
     "intro_author": "Author"
   },
   "Profile": {
+    "title": "Profile",
+    "description": "Profile page",
     "tabs": {
       "collections": "Collections",
       "patterns": "Free patterns",

@@ -1,24 +1,27 @@
-'use client'
-
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { ROUTE_PATH } from "@/app/lib/constant";
 import Profile from "@/app/(main)/profile/Profile";
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export default function ProfilePage() {
-    const { status } = useSession();
+export async function generateMetadata(): Promise<Metadata> {
+	const t = await getTranslations("Profile");
+	return {
+		title: t("title"),
+		description: t("description"),
 
-    if (status === 'unauthenticated') {
-        redirect(`${ROUTE_PATH.LOGIN}?callbackUrl=${ROUTE_PATH.PROFILE}`);
-    }
+		openGraph: {
+			title: t("title"),
+			description: t("description"),
+			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.PROFILE}`,
+		},
+	};
+}
 
-    if (status === 'loading') {
-        return <div>Loading...</div>;
-    }
+export default async function ProfilePage() {
 
     return (
         <div className="profile-container">
-            <Profile />
+            <Profile/>
         </div>
     );
-} 
+}
