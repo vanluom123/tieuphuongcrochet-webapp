@@ -22,6 +22,7 @@ declare module "next-auth" {
         role?: string | null,
         accessToken?: string | null,
         refreshToken?: string | null,
+        imageUrl?: string | null
     }
 }
 
@@ -29,6 +30,6 @@ declare module "next-auth/jwt" {
     interface JWT extends DefaultJWT {
         role?: string | null,
         accessToken?: string | null,
-        refreshToken?: string | null,
+        refreshToken?: string | null
     }
 }

@@ -54,9 +54,12 @@ export const options: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         // Copy all user properties to token on initial sign in
+        const copyAllUserProperties = { ...token, ...user, picture: user.imageUrl };
+        console.log('copyAllUserProperties', copyAllUserProperties);
         return {
           ...token,
-          ...user
+          ...user,
+          picture: user.imageUrl
         };
       }
 
@@ -75,6 +78,7 @@ export const options: NextAuthOptions = {
         session.user.refreshToken = token.refreshToken;
         session.user.name = token.name;
         session.user.email = token.email;
+        session.user.imageUrl = token.picture;
       }
       return session;
     },
