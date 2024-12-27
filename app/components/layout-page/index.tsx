@@ -10,7 +10,6 @@ import FooterPage from "../footer-page";
 import CoverPage from "../cover-page";
 import { animationHeader, onScrollBody } from "@/app/lib/utils";
 import Notify from "@/app/lib/notify";
-import { useSessionExpiration } from '@/app/lib/useSessionExpiration'
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -48,8 +47,6 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
                pathname === ROUTE_PATH.PROFILE;
     }, [pathname]);
         
-    // useSessionExpiration()
-
     if (isSpecialRoute) {
         return (
             <Layout className='layout-wrap'>

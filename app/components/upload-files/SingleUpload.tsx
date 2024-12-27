@@ -21,13 +21,11 @@ const SingleUpload = ({ onUpload, className, icon, isCrop = false }: SingleUploa
             formData.append('files', file);
 
             const res = await uploadFile.upload(formData);
-            console.log('SingleUpload file', res);
 
             if (res && res.length > 0) {
                 avatarUrl = res[0].fileContent;
             }
         } catch (error) {
-            console.error('Error uploading avatar:', error);
             notification.error({
                 message: t('Failed to upload avatar')
             });

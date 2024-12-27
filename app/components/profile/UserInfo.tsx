@@ -1,25 +1,21 @@
-import { Form, Input, Button, Upload, Avatar, DatePicker, Select, message } from 'antd';
-import { UserOutlined, LoadingOutlined } from '@ant-design/icons';
-import { useTranslations } from 'next-intl';
-import { User } from '@/app/lib/definitions';
-import { updateUserProfile, loadUserInfo } from '@/app/lib/service/profileService';
-import { useState, useEffect } from 'react';
-import uploadFile from '@/app/lib/service/uploadFilesSevice';
-import { notification } from '@/app/lib/notify';
+import {Form, Input, Button, DatePicker, Select} from 'antd';
+import {useTranslations} from 'next-intl';
+import {User} from '@/app/lib/definitions';
+import {updateUserProfile} from '@/app/lib/service/profileService';
+import {useEffect} from 'react';
+import {notification} from '@/app/lib/notify';
 import dayjs from 'dayjs';
-import { RcFile } from 'antd/es/upload';
 
 interface UserInfoProps {
     userData: User | null;
     setUserData: (user: User) => void;
 }
 
-const UserInfo = ({ userData, setUserData }: UserInfoProps) => {
+const UserInfo = ({userData, setUserData}: UserInfoProps) => {
     const t = useTranslations('Profile');
     const [form] = Form.useForm();
 
     useEffect(() => {
-        console.log('UserInfo - Received userData:', userData);
         if (userData) {
             form.setFieldsValue({
                 name: userData.name,
@@ -32,7 +28,6 @@ const UserInfo = ({ userData, setUserData }: UserInfoProps) => {
     }, [userData, form]);
 
     const onFinish = async (values: User) => {
-        console.log('UserInfo - Form values on submit:', values);
         try {
             const updatedUser = await updateUserProfile({
                 name: values.name,
@@ -42,7 +37,6 @@ const UserInfo = ({ userData, setUserData }: UserInfoProps) => {
                 backgroundImageUrl: values.backgroundImageUrl
             });
 
-            console.log('UserInfo - Updated user data:', updatedUser);
             if (updatedUser) {
                 setUserData(updatedUser);
                 notification.success({
@@ -50,7 +44,6 @@ const UserInfo = ({ userData, setUserData }: UserInfoProps) => {
                 });
             }
         } catch (error) {
-            console.error('UserInfo - Error updating user:', error);
             notification.error({
                 message: t('info.update_error')
             });
@@ -73,31 +66,31 @@ const UserInfo = ({ userData, setUserData }: UserInfoProps) => {
                 <Form.Item
                     name="name"
                     label={t('info.name')}
-                    rules={[{ required: true }]}
+                    rules={[{required: true}]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
 
                 <Form.Item
                     name="email"
                     label={t('info.email')}
-                    rules={[{ required: true, type: 'email' }]}
+                    rules={[{required: true, type: 'email'}]}
                 >
-                    <Input disabled />
+                    <Input disabled/>
                 </Form.Item>
 
                 <Form.Item
                     name="phone"
                     label={t('info.phone')}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
 
                 <Form.Item
                     name="birthDate"
                     label={t('info.birthDate')}
                 >
-                    <DatePicker style={{ width: '100%' }} />
+                    <DatePicker style={{width: '100%'}}/>
                 </Form.Item>
 
                 <Form.Item
