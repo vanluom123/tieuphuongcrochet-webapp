@@ -14,7 +14,6 @@ async function apiJwtService({
                                  method = 'GET',
                                  data = null,
                                  headers = {},
-                                 timeout = 20000,
                                  queryParams = {},
                                  formData
                              }: {
@@ -65,7 +64,6 @@ async function apiJwtService({
         method,
         data,
         headers: options.headers as Record<string, string>,
-        timeout,
         queryParams,
         formData
     });
