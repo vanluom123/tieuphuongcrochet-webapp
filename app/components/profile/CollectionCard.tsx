@@ -15,7 +15,7 @@ interface CollectionCardProps {
 
 const CollectionCard = ({ collection, onViewDetail }: CollectionCardProps) => {
     const t = useTranslations('Profile');
-    const { name, description, itemCount, thumbnail } = collection;
+    const { name, description, itemCount, avatar } = collection;
 
     return (
         <Card
@@ -23,9 +23,9 @@ const CollectionCard = ({ collection, onViewDetail }: CollectionCardProps) => {
             className="collection-card"
             onClick={onViewDetail}
             cover={
-                thumbnail ? (
+                avatar ? (
                     <CustomNextImage
-                        src={thumbnail}
+                        src={avatar}
                         alt={name}
                         className="collection-thumbnail"
                     />

@@ -36,13 +36,6 @@ async function apiJwtService({
         (decoded.exp &&
             Date.now() >= ((decoded.exp as number) - EXPIRATION_BUFFER_SECONDS) * 1000);
 
-    console.log('Current time (ms):', new Date(Date.now()).toLocaleString());
-    console.log('Token expires in:',
-        new Date((decoded.exp as number) * 1000).toLocaleString()
-    );
-
-    console.log('Token expired: ', isTokenExpired);
-
     if (isTokenExpired) {
         try {
             if (session == null) {

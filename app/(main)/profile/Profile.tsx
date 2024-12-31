@@ -25,6 +25,7 @@ const Profile = () => {
     const router = useRouter();
 
     useEffect(() => {
+        setLoading(true);
         const fetchUserData = async () => {
             try {
                 const data = await loadUserInfo();
@@ -48,11 +49,12 @@ const Profile = () => {
             key: 'patterns',
             label: t('tabs.patterns'),
             children: <FreePatterns />,
-        }, {
-            key: 'collections',
-            label: t('tabs.collections'),
-            children: <Collections />,
         },
+        //  {
+        //     key: 'collections',
+        //     label: t('tabs.collections'),
+        //     children: <Collections />,
+        // },
         {
             key: 'info',
             label: t('tabs.info'),
@@ -142,7 +144,7 @@ const Profile = () => {
                 <Tabs
                     defaultActiveKey="patterns"
                     items={items}
-                    className="profile-tabs "
+                    className="profile-tabs"
                 />
             </div>
         </div>

@@ -1,3 +1,4 @@
+import { UploadFile } from "antd";
 import React, { ReactNode } from "react";
 
 export interface Pagination {
@@ -33,10 +34,8 @@ export const initialListParams: ListParams = {
 	filters: []
 };
 
-export interface FileUpload {
+export interface FileUpload extends UploadFile {
 	fileContent: string;
-	fileName: string;
-	url: string;
 };
 
 export interface Filter {
@@ -260,7 +259,7 @@ export interface Collection {
 	name?: string;
 	description?: string;
 	itemCount?: number;
-	thumbnail?: string;
+	avatar?: string;
 	createdDate?: string;
 }
 

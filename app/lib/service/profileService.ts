@@ -3,9 +3,8 @@ import apiJwtService from "./apiJwtService";
 import { API_ROUTES } from "../constant";
 
 export async function fetchUserCollections(): Promise<Collection[]> {
-    const endpoint = `${API_ROUTES.COLLECTIONS}/my-collections`;
     const response = await apiJwtService({
-        endpoint,
+        endpoint: `${API_ROUTES.COLLECTIONS}/my-collections`,
         method: 'GET',
     });
 
