@@ -265,3 +265,8 @@ export const PARAMS_FOR_SITEMAP: ListParams = {
 	sortDir: 'desc',
 	filters: []
 };
+
+export const GENDER ={
+  male: 'male',
+  feMale: 'female'
+}

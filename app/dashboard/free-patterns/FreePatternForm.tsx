@@ -3,15 +3,21 @@ import { useEffect, useState } from "react";
 import { Button, Col, Flex, Form, Input, Row, Spin, Switch, TreeSelect } from "antd";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+import { DefaultOptionType } from "antd/es/select";
 
 import { Category, FileUpload, Pattern } from "@/app/lib/definitions";
 import { ROUTE_PATH, TRANSLATION_STATUS } from "@/app/lib/constant";
 import { fetchCategories } from "@/app/lib/service/categoryService";
 import FreePatternStatus from "@/app/components/free-pattern-status";
-import CustomEditor from "@/app/components/custom-editor";
 import UploadFiles from "@/app/components/upload-files";
+import { uploadImageToServer } from "@/app/lib/utils";
 import { createUpdateFreePattern, fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
-import { DefaultOptionType } from "antd/es/select";
+
+const CustomEditor = dynamic(
+    () => import('@/app/components/custom-editor'),
+    { ssr: false }
+);
 
 interface FreePatternFormProps {
     params?: {
@@ -46,7 +52,6 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                 const newPattern = {
                     ...pattern,
                     category_id: pattern.category?.id,
-                    is_home: pattern.home,
                     status: pattern.status || TRANSLATION_STATUS.NONE
                 }
                 form.setFieldsValue(newPattern);
@@ -73,10 +78,21 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
             }
         }
 
+        // Use Promise.all to handle concurrent uploads
+        const [uploadedImages, uploadedFiles] = await Promise.all([
+            uploadImageToServer(sendData.images, state.pattern.images),
+            uploadImageToServer(sendData.files, state.pattern.files)
+        ]);
+
+        sendData.images = uploadedImages;
+        sendData.files = uploadedFiles;
         const res = await createUpdateFreePattern(sendData);
         if (res?.id) {
             form.resetFields();
-            setState(initialState);
+            setState({
+                ...initialState,
+                pattern: { name: '', src: '', images: [], files: [] }
+            });
             router.push(ROUTE_PATH.DASHBOARD_FREE_PATTERNS);
         } else {
             setState(prevState => ({ ...prevState, loading: false }));
@@ -162,7 +178,6 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                                 label={t('Fields.status')}
                             >
                                 <FreePatternStatus
-                                    defaultValue={TRANSLATION_STATUS.NONE}
                                     value={state.pattern.status}
                                     options={[
                                         {
@@ -213,6 +228,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                         label={t('Fields.content')}
                     >
                         <CustomEditor
+                            key='editor-form-free-pattern'
                             initialData={state.editorContent}
                             onBlur={(_, editor) => {
                                 const content = editor.getData();

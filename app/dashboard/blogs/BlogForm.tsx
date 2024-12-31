@@ -1,11 +1,19 @@
 'use client'
-import CustomEditor from "@/app/components/custom-editor";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { Form, Input, Button, Flex, Row, Col, Switch, Spin } from "antd";
+
 import UploadFiles from "@/app/components/upload-files";
 import { FileUpload, Post } from "@/app/lib/definitions";
 import { createUpdatePost, fetchPostDetail } from "@/app/lib/service/blogsService";
-import { Form, Input, Button, Flex, Row, Col, Switch, Spin } from "antd";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { uploadImageToServer } from "@/app/lib/utils";
+import { ROUTE_PATH } from "@/app/lib/constant";
+
+const CustomEditor = dynamic(
+    () => import('@/app/components/custom-editor'),
+    { ssr: false }
+);
 
 interface BlogFormProps {
     params?: {
@@ -50,7 +58,7 @@ const BlogForm = ({ params }: BlogFormProps) => {
         }
     }, [state.post, form, params?.id]);
 
-    const onSubmitForm = (values: Post) => {
+    const onSubmitForm = async (values: Post) => {
         setState(prevState => ({ ...prevState, loading: true }));
         let sendData = { ...values }
         if (params?.id) {
@@ -60,10 +68,13 @@ const BlogForm = ({ params }: BlogFormProps) => {
             }
         }
 
+        // Handle upload, delete images
+        sendData.files = await uploadImageToServer(sendData.files, state.post.files);
+
         createUpdatePost(sendData).then((res) => {
             if (res?.id) {
                 form.resetFields();
-                router.back();
+                router.push(ROUTE_PATH.DASHBOARD_POSTS);
             }
         }).finally(() => {
             setState(prevState => ({ ...prevState, loading: false }));
@@ -120,6 +131,7 @@ const BlogForm = ({ params }: BlogFormProps) => {
                         label='Pattern text'
                     >
                         <CustomEditor
+                            key='editor-form-blog'
                             initialData={state.editorContent}
                             onBlur={(_, editor) => {
                                 const content = editor.getData();

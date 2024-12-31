@@ -234,6 +234,11 @@
   "Profile": {
     "title": "Hồ sơ",
     "description": "Hồ sơ cá nhân",
+    "message": {
+      "upload_avatar_success": "Tải ảnh đại diện thành công",
+      "upload_cover_success": "Tải ảnh bìa thành công",
+      "info_load_error": "Tải thông tin thất bại"
+    },
     "tabs": {
       "collections": "Bộ sưu tập",
       "patterns": "Mẫu miễn phí",
@@ -275,7 +280,8 @@
       "gender": "Giới tính",
       "gender_male": "Nam",
       "gender_female": "Nữ",
-      "gender_other": "Khác"
+      "gender_other": "Khác",
+      "load_error": "Tải thông tin thất bại"
     },
     "back": "Quay lại"
   }

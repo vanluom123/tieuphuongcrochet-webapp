@@ -2,23 +2,24 @@
 import { useEffect, useState } from "react";
 import { Col, Flex, Form, Input, Modal, Row, Spin, TreeSelect } from "antd";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { DefaultOptionType } from "antd/es/select";
 
 import { Category, FileUpload, Pattern } from "@/app/lib/definitions";
-import { ROUTE_PATH, TRANSLATION_STATUS } from "@/app/lib/constant";
+import { TRANSLATION_STATUS } from "@/app/lib/constant";
 import { fetchCategories } from "@/app/lib/service/categoryService";
 import FreePatternStatus from "@/app/components/free-pattern-status";
-import CustomEditor from "@/app/components/custom-editor";
 import UploadFiles from "@/app/components/upload-files";
 import { createUpdateFreePattern, fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
-import { DefaultOptionType } from "antd/es/select";
+import { UploadFile } from "antd/es/upload";
+import { uploadImageToServer } from "@/app/lib/utils";
 
 interface FreePatternFormProps {
     modalData: {
         open: boolean,
         id: string
     },
-    setModalData: (modalData: { open: boolean, id: string }) => void
+    setModalData: (modalData: { open: boolean, id: string }) => void;
+    onRefreshData: () => void;
 }
 
 const initialState = {
@@ -27,11 +28,10 @@ const initialState = {
     editorContent: ''
 }
 
-const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps) => {
+const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePatternFormProps) => {
     const [form] = Form.useForm();
     const { TextArea } = Input;
     const { Item } = Form;
-    const router = useRouter();
     const [categories, setCategories] = useState<Category[]>([]);
     const [state, setState] = useState(initialState);
 
@@ -83,11 +83,19 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
             }
         }
 
+        // Use Promise.all to handle concurrent uploads
+        const [uploadedImages, uploadedFiles] = await Promise.all([
+            uploadImageToServer(sendData.images, state.pattern.images),
+            uploadImageToServer(sendData.files, state.pattern.files)
+        ]);
+
+        sendData.images = uploadedImages;
+        sendData.files = uploadedFiles;
+
         const res = await createUpdateFreePattern(sendData);
         if (res?.id) {
-            form.resetFields();
-            setState(initialState);
-            router.push(ROUTE_PATH.DASHBOARD_FREE_PATTERNS);
+            onHandleCancel();
+            onRefreshData();
         } else {
             setState(prevState => ({ ...prevState, loading: false }));
         }
@@ -95,25 +103,27 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
 
     const onHandleCancel = () => {
         form.resetFields();
-        setState(initialState);
+        setState({
+            ...initialState,
+            pattern: { name: '', src: '', images: [], files: [] }
+        });
         setModalData({ open: false, id: '' });
     }
 
     const onHandleOk = () => {
         form.submit();
-        setModalData({ open: false, id: '' });
     }
 
-    return (<>
-        <Spin spinning={state.loading} tip="Loading...">
-            <Modal
-                centered
-                open={modalData.open}
-                onOk={onHandleOk}
-                onCancel={onHandleCancel}
-                width='auto'
-                destroyOnClose={true}
-            >
+    return (
+        <Modal
+            centered
+            open={modalData.open}
+            onOk={onHandleOk}
+            onCancel={onHandleCancel}
+            destroyOnClose={true}
+            confirmLoading={state.loading}
+        >
+            <Spin spinning={state.loading}>
                 <div className="crupattern-page">
                     <Flex justify="center">
                         <h1>{modalData.id ? t('updatePattern') : t('createPattern')}</h1>
@@ -131,9 +141,10 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                         >
                             <UploadFiles
                                 files={state.pattern.images || []}
-                                onChangeFile={(files: FileUpload[]) => {
+                                onChangeFile={(files: UploadFile[]) => {
                                     form.setFieldsValue({ images: files });
                                 }}
+                                isShowDirectory={false}
                             />
                         </Item>
                         <Row gutter={48}>
@@ -177,7 +188,7 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                                     label={t('Fields.status')}
                                 >
                                     <FreePatternStatus
-                                        defaultValue={TRANSLATION_STATUS.NONE}
+                                        // defaultValue={TRANSLATION_STATUS.NONE}
                                         value={state.pattern.status}
                                         options={[
                                             {
@@ -215,11 +226,12 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                                 defaultImageMode="normal"
                             />
                         </Item>
-                        <Item
+                        {/* <Item
                             name='content'
                             label={t('Fields.content')}
                         >
                             <CustomEditor
+                                key="ckeditor-freepattern-form-use"  // Add unique key
                                 initialData={state.editorContent}
                                 onBlur={(_, editor) => {
                                     const content = editor.getData();
@@ -227,12 +239,12 @@ const FreePatternFormModal = ({ modalData, setModalData }: FreePatternFormProps)
                                     setState(prevState => ({ ...prevState, editorContent: content }));
                                 }}
                             />
-                        </Item>
+                        </Item> */}
                     </Form>
                 </div>
-            </Modal>
-        </Spin>
-    </>)
+            </Spin>
+        </Modal>
+    )
 }
 
 export default FreePatternFormModal;

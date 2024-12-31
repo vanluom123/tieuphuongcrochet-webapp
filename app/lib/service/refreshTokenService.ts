@@ -15,3 +15,15 @@ export default async function refreshAccessToken(token: string) {
         refreshToken: res.refreshToken as string,
     }
 }
+
+export async function getRefreshTokenExpired(token: string) {
+    const res = await apiService({
+        baseUrl: process.env.NEXT_PUBLIC_API_URL,
+        endpoint: `${API_ROUTES.REFRESH_TOKEN}/expired?refreshToken=${token}`,
+        method: 'GET'
+    }).catch((err: Error) => {
+        console.error(err);
+    })
+
+    return res;
+}

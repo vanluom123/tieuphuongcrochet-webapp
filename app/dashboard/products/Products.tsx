@@ -45,9 +45,9 @@ const Products = () => {
 
     const onDeleteRecord = async (rd: React.Key) => {
         try {
+            setState(prevState => ({ ...prevState, loading: true }));
             await deleteProduct(rd as string);
             // Refresh the data after successful deletion
-            setState(prevState => ({ ...prevState, loading: true }));
             const { data, totalRecords } = await fetchProducts(params);
             setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
         } catch (error) {
@@ -68,7 +68,7 @@ const Products = () => {
         },
         {
             title: t('Fields.currency_code'),
-            dataIndex: 'currency_code',
+            dataIndex: 'currencyCode',
         },
     ]
 

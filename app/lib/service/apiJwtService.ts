@@ -1,6 +1,6 @@
-import {getSession, signOut} from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import * as jwtDecode from "jsonwebtoken";
-import {JwtPayload} from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 
 import apiService from "./apiService";
 import refreshAccessToken from "@/app/lib/service/refreshTokenService";
@@ -9,14 +9,14 @@ import refreshAccessToken from "@/app/lib/service/refreshTokenService";
 const EXPIRATION_BUFFER_SECONDS = 30; // 30 seconds before actual expiration
 
 async function apiJwtService({
-                                 baseUrl = process.env.NEXT_PUBLIC_API_URL,
-                                 endpoint = '',
-                                 method = 'GET',
-                                 data = null,
-                                 headers = {},
-                                 queryParams = {},
-                                 formData
-                             }: {
+    baseUrl = process.env.NEXT_PUBLIC_API_URL,
+    endpoint = '',
+    method = 'GET',
+    data = null,
+    headers = {},
+    queryParams = {},
+    formData
+}: {
     baseUrl?: string;
     endpoint?: string;
     method?: string;

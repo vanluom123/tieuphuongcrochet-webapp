@@ -234,6 +234,11 @@
   "Profile": {
     "title": "Profile",
     "description": "Profile page",
+    "message": {
+      "upload_avatar_success": "Upload avatar successfully",
+      "upload_cover_success": "Upload cover successfully",
+      "info_load_error": "Load user info failed"
+    },
     "tabs": {
       "collections": "Collections",
       "patterns": "Free patterns",
@@ -275,7 +280,8 @@
       "gender": "Gender",
       "gender_male": "Male",
       "gender_female": "Female",
-      "gender_other": "Other"
+      "gender_other": "Other",
+      "load_error": "Load user info failed"
     },
     "back": "Back"
   }

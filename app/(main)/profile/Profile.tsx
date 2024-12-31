@@ -12,10 +12,10 @@ import { User } from '@/app/lib/definitions';
 import { loadUserInfo, updateUserProfile } from '@/app/lib/service/profileService';
 import { notification } from '@/app/lib/notify';
 import SingleUpload from '@/app/components/upload-files/SingleUpload';
+import { GENDER } from '@/app/lib/constant';
 import UserInfo from '../../components/profile/UserInfo';
 import '../../ui/components/profile.scss';
 
-const Collections = dynamic(() => import('../../components/profile/Collections'), { ssr: false });
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
 
 const Profile = () => {
@@ -34,9 +34,6 @@ const Profile = () => {
                 }
             } catch (error) {
                 console.error('Profile - Error loading user data:', error);
-                notification.error({
-                    message: t('info.load_error')
-                });
             } finally {
                 setLoading(false);
             }
@@ -78,7 +75,7 @@ const Profile = () => {
 
             setUserData(updatedUser);
             notification.success({
-                message: t('Avatar updated successfully')
+                message: t('message.upload_avatar_success')
             });
         }
     }
@@ -90,7 +87,7 @@ const Profile = () => {
             });
             setUserData(updatedUser);
             notification.success({
-                message: t('Cover updated successfully')
+                message: t('message.upload_cover_success')
             });
         }
     }
@@ -129,7 +126,10 @@ const Profile = () => {
                         </span>
                         <span className="profile-info">
                             <div className="profile-info-name">{userData?.name}</div>
-                            <div className="profile-info-gender"><UserOutlined />: {userData?.gender}</div>
+                            <div className="profile-info-gender">
+                                <UserOutlined />:&nbsp;
+                                <span>{userData?.gender === GENDER.male ? t('info.gender_male') : t('info.gender_female')}</span>
+                            </div>
                         </span>
                     </Flex>
                     <SingleUpload

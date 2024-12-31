@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 
 interface PatternStatusProps {
     options: TranslationStatus[];
-    defaultValue: string;
+    defaultValue?: string;
     size?: 'large' | 'middle' | 'small';
     onChange?: (value: SegmentedValue) => void;
     className?: string;
