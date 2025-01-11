@@ -14,6 +14,8 @@ import { notification } from '@/app/lib/notify';
 import SingleUpload from '@/app/components/upload-files/SingleUpload';
 import { GENDER } from '@/app/lib/constant';
 import UserInfo from '../../components/profile/UserInfo';
+import defaultUser from '../../../public/default-user.png';
+import defaultBackground from '../../../public/default-background.jpg';
 import '../../ui/components/profile.scss';
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
@@ -104,7 +106,7 @@ const Profile = () => {
                         className="profile-back-button"
                     />
                     <Image
-                        src={userData?.backgroundImageUrl || ''}
+                        src={userData?.backgroundImageUrl || defaultBackground}
                         alt="Cover"
                         layout="fill"
                         objectFit="cover"
@@ -112,7 +114,7 @@ const Profile = () => {
                     <Flex className="profile-avatar container" align="center" justify="start" gap="10px">
                         <span className="profile-avatar-image">
                             <Image
-                                src={userData?.imageUrl || ''}
+                                src={userData?.imageUrl || defaultUser}
                                 alt="Avatar"
                                 width={120}
                                 height={120}
