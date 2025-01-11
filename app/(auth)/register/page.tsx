@@ -33,7 +33,7 @@ const RegisterPage = () => {
         if (res?.status) {
             setIsModalVisible(true);
 
-        } else {
+        } else if (res?.statusCode) {
             notification.error({ message: t('error_register_title'), description: t(`error_register_${res.statusCode}`) });
         }
         setIsDisable(false);
