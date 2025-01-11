@@ -9,13 +9,16 @@ import Image from "next/image";
 import logo from '@/public/logo.png';
 import { User } from '@/app/lib/definitions';
 import Link from "next/link";
-import { ROUTE_PATH, REGEX, API_ROUTES } from '@/app/lib/constant';
-import apiService from '@/app/lib/service/apiService';
+import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
+import { registerService } from "@/app/lib/service/registerService";
+import { notification } from "@/app/lib/notify";
 import '../../ui/components/register.scss';
+import ActiveAccountModal from "./ActiveAccountModal";
 
 const RegisterPage = () => {
 
     const [isDisable, setIsDisable] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [form] = Form.useForm();
     const router = useRouter();
     const t = useTranslations('Register');
@@ -26,21 +29,19 @@ const RegisterPage = () => {
 
     const onSubmitRegister = async (values: User) => {
         setIsDisable(true);
-        const res = await apiService({
-            baseUrl: process.env.NEXT_PUBLIC_API_URL,
-            endpoint: API_ROUTES.SIGNUP,
-            method: 'POST',
-            data: values,
-        }).catch((error) => {
-            setIsDisable(false);
-            return;
-        });
+        const res = await registerService(values);
+        if (res?.status) {
+            setIsModalVisible(true);
 
-        if (res == null) {
-            setIsDisable(false);
-            return;
+        } else {
+            notification.error({ message: t('error_register_title'), description: t(`error_register_${res.statusCode}`) });
         }
+        setIsDisable(false);
+    }
 
+    const onSignIn = () => {
+        setIsModalVisible(false);
+        form.resetFields();
         router.push(ROUTE_PATH.LOGIN);
     }
 
@@ -50,7 +51,7 @@ const RegisterPage = () => {
                 <Flex vertical align="center" className="auth-content">
                     <Flex justify='center' className='logo'>
                         <Link href={ROUTE_PATH.HOME} >
-                            <Image src={logo} alt='Tiểu Phương Crochet' width={150} height={150} priority/>
+                            <Image src={logo} alt='Tiểu Phương Crochet' width={150} height={150} priority />
                         </Link>
                     </Flex>
                     <Flex vertical className="header-title" align="center">
@@ -103,7 +104,7 @@ const RegisterPage = () => {
                                     rules={[
                                         {
                                             required: true,
-                                                message: t('error_msg_required_password')
+                                            message: t('error_msg_required_password')
                                         },
                                         {
                                             pattern: new RegExp(REGEX.PASSWORD),
@@ -129,7 +130,7 @@ const RegisterPage = () => {
                                                 if (!value || form.getFieldValue('password') === value) {
                                                     return Promise.resolve();
                                                 }
-                                                    throw new Error(t('error_msg_not_match_confirm_password'))
+                                                throw new Error(t('error_msg_not_match_confirm_password'))
                                             }
                                         },
                                     ]}
@@ -147,7 +148,7 @@ const RegisterPage = () => {
                                 </div>
                                 <div>
                                     <Button className='btn-border' type="primary" htmlType="submit" style={{ width: '100%', marginBottom: 8 }} disabled={isDisable}>
-                                                {t('btn_register')}
+                                        {t('btn_register')}
                                     </Button>
                                     <Button className='btn-border' type="default" style={{ width: '100%' }} onClick={() => onCancel()} disabled={isDisable}>
                                         {t('btn_cancel')}
@@ -158,6 +159,11 @@ const RegisterPage = () => {
                     </Row>
                 </Flex>
             </div>
+            <ActiveAccountModal
+                isOpen={isModalVisible}
+                onClick={onSignIn}
+                onCancel={() => setIsModalVisible(false)}
+            />
         </div>
     )
 }

@@ -35,16 +35,6 @@
         align-items: center;
         position: relative;
 
-        .ant-dropdown-trigger {
-          margin-left: 20px;
-        }
-
-        @media screen and (max-width: $md) {
-          .ant-dropdown-trigger {
-            margin-left: 10px;
-          }
-        }
-
         .btn-search {
           border: none;
           box-shadow: none;

@@ -202,7 +202,16 @@
     "error_msg_incorrect_password": "Password format is incorrect!",
     "note_title": "Note",
     "note_content_1": "required fields",
-    "note_content_2": "Password must contain at least 8 characters, including at least 1 uppercase letter, 1 special character, lowercase letter and number."
+    "note_content_2": "Password must contain at least 8 characters, including at least 1 uppercase letter, 1 special character, lowercase letter and number.",
+    "error_register_400": "Email already exists",
+    "success_register_msg": "Account registration successful!",
+    "error_register_title": "Register failed!",
+    "success_register_title": "Successfully!",
+    "ActiveModal": {
+      "title": "Active your account",
+      "description": "An email has been sent to your inbox with an activation link. Please click the link to verify your account.",
+      "btn_sign_in": "Sign in"
+    }
   },
   "Category": {
     "title": "Category",
