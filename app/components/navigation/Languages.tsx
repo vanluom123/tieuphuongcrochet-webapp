@@ -37,7 +37,6 @@ const Languages = () => {
 
     return (
         <Dropdown
-            trigger={['click']}
             menu={menuItems}
             onOpenChange={onOpenChange}
         >

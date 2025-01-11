@@ -62,7 +62,6 @@ export const createUpdateFreePattern = async (data: Pattern): Promise<Pattern> =
     }).catch((err) => {
         notification.error({message: 'Failed', description: err.message});
    });
-    
 
     if (res?.id && !data.id) {
         notification.success({ message: 'Success', description: 'Create free pattern successfully' })

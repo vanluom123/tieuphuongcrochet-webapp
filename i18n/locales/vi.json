@@ -202,7 +202,16 @@
     "error_msg_incorrect_password": "Định dạng mật khẩu không chính xác!",
     "note_title": "Lưu ý",
     "note_content_1": "Các trường bắt buộc",
-    "note_content_2": "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 ký tự đặc biệt, chữ thường và số."
+    "note_content_2": "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 ký tự đặc biệt, chữ thường và số.",
+    "error_register_400": "Email đã tồn tại!",
+    "success_register_msg": "Đăng ký tài khoản thành công!",
+    "error_register_title": "Đăng ký thất bại",
+    "success_register_title": "Thành công!",
+    "ActiveModal": {
+      "title": "Kích hoạt tài khoản",
+      "description": "Hệ thống đã gửi email kích hoạt đến bạn. Bạn vui lòng kiểm tra email và kích hoạt tài khoản của bạn, và quay lại đăng nhập nha!!!",
+      "btn_sign_in": "Đăng nhập"
+    }
   },
   "Category": {
     "title": "Danh mục",
