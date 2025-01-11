@@ -1,3 +1,4 @@
+'use client'
 import { Button, Modal } from "antd";
 import { useTranslations } from "next-intl";
 import React from "react";
@@ -9,8 +10,11 @@ interface ActiveAccountModalProps {
 }
 
 const ActiveAccountModal: React.FC<ActiveAccountModalProps> = ({ isOpen, onClick, onCancel }) => {
-    if (!isOpen) return null;
     const t = useTranslations('Register.ActiveModal');
+
+    if (!isOpen) {
+        return null;
+    }
 
     return (
 
