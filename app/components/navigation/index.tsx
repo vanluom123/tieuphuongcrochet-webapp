@@ -14,6 +14,7 @@ import Languages from './Languages';
 import SidebarNav from './Sidebar';
 import MenuNav from './MenuNav';
 import '../../ui/navigation.scss';
+import UserAccount from './UserAccount';
 
 interface NavigationProps {
     currentNav: string;
@@ -74,7 +75,7 @@ const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 						<Languages />
 
 						{/* user icon */}
-						{/* <UserAccount />	 */}
+						<UserAccount />	
 					</div>
 				</div>
 

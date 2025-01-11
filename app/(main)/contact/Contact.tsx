@@ -49,7 +49,6 @@ const Contact = () => {
           form.resetFields();
         },
         (error) => {
-          console.log('error send contact mail', error);
           notification.success({
             message: t('Form.error'),
             description: t('Form.error'),

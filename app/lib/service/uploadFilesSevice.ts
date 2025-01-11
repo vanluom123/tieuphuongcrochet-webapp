@@ -11,7 +11,6 @@ const uploadFile = {
 			method: 'POST',
 			formData: formData,
 		}).catch((err) => {
-			console.log("err", err);
 			return {} as FileUpload;
 		});
 	},

@@ -19,7 +19,6 @@ export const fetchProducts = async (params: ListParams, next?: NextFetchRequestC
         data: params.filters,
         next,
     }).catch((err) => {
-        console.log("err", err);
         return {} as Product;
     });
 
@@ -43,7 +42,6 @@ export const fetchProductDetail = async (id: string, revalidate?: number): Promi
         method: 'GET',
         next: { revalidate: revalidate || 0, tags: [`product-${id}`] },
     }).catch((err) => {
-        console.log("err", err);
         return {} as Product;
     });
 
@@ -64,7 +62,6 @@ export const deleteProduct = async (id: string) => {
     }).then(() => {
         notification.success({ message: 'Success', description: 'Delete product successfully' })
     }).catch((err) => {
-        console.log("err", err);
         notification.error({ message: 'Failed', description: err.message })
     })
 };

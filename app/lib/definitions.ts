@@ -1,3 +1,4 @@
+import { UploadFile } from "antd";
 import React, { ReactNode } from "react";
 
 export interface Pagination {
@@ -33,10 +34,8 @@ export const initialListParams: ListParams = {
 	filters: []
 };
 
-export interface FileUpload {
+export interface FileUpload extends UploadFile {
 	fileContent: string;
-	fileName: string;
-	url: string;
 };
 
 export interface Filter {
@@ -162,7 +161,8 @@ export interface Pattern {
 	currency_code?: string;
 	content?: string;
 	status?: TTranslationStatus;
-	home?: boolean
+	home?: boolean;
+	fileContent?: string;
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';
@@ -224,7 +224,16 @@ export interface User {
 	id?: number | string;
 	name?: string;
 	email: string;
+	imageUrl?: string;
+	provider?: string;
+	emailVerified?: boolean;
 	role?: string;
+	phone?: string;
+	birthDate?: string;
+	gender?: string;
+	backgroundImageUrl?: string;
+	collections?: Collection[];
+	recentComments?: Comment[];
 	password?: string;
 	createdDate?: string;
 	lastModifiedDate?: string;
@@ -241,4 +250,23 @@ export interface Post {
 	src?: string,
 	is_home?: boolean,
 	fileContent?: string
+}
+
+// -------------------------- Collection --------------------------
+
+export interface Collection {
+	id: string;
+	name?: string;
+	description?: string;
+	itemCount?: number;
+	avatar?: string;
+	createdDate?: string;
+}
+
+// -------------------------- Comment --------------------------
+
+export interface Comment {
+	id: string;
+	content: string;
+	createdDate: string;
 }

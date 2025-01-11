@@ -20,7 +20,6 @@ export const createCategory = async (data: Category) => {
         method: 'POST',
         data: data,
     }).catch((err) => {
-        console.log("err", err);
         notification.error({message: 'Failed', description: err.message})
     });
     if (res?.id || res?.length > 0) {
@@ -35,7 +34,6 @@ export const updateCategory = async (data: Category) => {
         method: 'PUT',
         data: data,
     }).catch((err) => {
-        console.log("err", err);
         notification.error({message: 'Failed', description: err.message})
     });
     if (res?.id) {
@@ -53,7 +51,6 @@ export const deleteCategory = async (id: string) => {
     }).then(() => {
         notification.success({ message: 'Success', description: 'Delete category successfully' })
     }).catch((err) => {
-        console.log("err", err);
         notification.error({ message: 'Failed', description: err.message })
     })
 }

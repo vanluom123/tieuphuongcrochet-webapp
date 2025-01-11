@@ -4,7 +4,6 @@
     "title": "Tiểu Phương Crochet - Hướng dẫn móc len và Chart miễn phí",
     "description": "Khám phá thế giới móc len cùng Tiểu Phương Crochet. Cung cấp hướng dẫn chi tiết, chart miễn phí và mẫu móc búp bê dễ thương."
   },
-
   "MenuNav": {
     "home": "Trang chủ",
     "about": "Giới thiệu",
@@ -18,7 +17,6 @@
       "detail": "Chi tiết"
     }
   },
-
   "Home": {
     "Product": {
       "title": "Sản phẩm",
@@ -37,18 +35,15 @@
       "description": "Fanpage và những kênh bán hàng của mình ạ!"
     }
   },
-
   "Tab": {
     "all": "Tất cả"
   },
-
   "Shop": {
     "title": "Sản phẩm",
     "description": "Dưới đây là những sản phẩm mà mình đã làm nè! Nếu các bạn muốn mình làm theo yêu cầu của bạn thì hãy inbox cho mình nhé! Tương lai, mình sẽ cập nhật thêm những sản phẩm mới và có thêm chức năng đặt hàng để các bạn dễ đặt hàng hơn nè. Hãy ủng hộ cho mình nhé!",
     "detail": "Hình ảnh sản phẩm",
     "note": "Nếu bạn muốn đặt mua sản phẩm này theo yêu cầu của bạn, hãy liên hệ với mình nhé. Mình sẽ cố gắng hết sức để mang đến cho bạn những sản phẩm tốt nhất. Cảm ơn bạn!"
   },
-
   "FreePattern": {
     "title": "Chart miễn phí",
     "description": "Dưới đây là những mẫu móc mà mình đã sưu tầm được ( Mình sẽ dịch dần dần nhé). Trong thời gian sắp tới, mình sẽ tiếp tục cập nhật thêm nhiều mẫu móc len đẹp khác và những mẫu mà mình tự sáng tạo nữa đấy. Hãy tham khảo và lựa chọn cho mình một mẫu ưng ý nhé!",
@@ -70,8 +65,8 @@
       "is_home": "Hiển thị trang chủ",
       "status": "Trạng thái dịch",
       "created_date": "Ngày tạo",
-      "images": "Hình ảnh",
-      "files": "Chart files",
+      "images": "Hình ảnh (ảnh sản phẩm)",
+      "files": "Chart files (chart bằng hình ảnh)",
       "content": "Nội dung chart",
       "description": "Mô tả",
       "link": "Link",
@@ -91,7 +86,6 @@
       "craft_patterns": "chart móc len"
     }
   },
-
   "Product": {
     "title": "Sản phẩm",
     "description": "Dưới đây là những sản phẩm mà mình đã làm nè! Nếu các bạn muốn mình làm theo yêu cầu của bạn thì hãy inbox cho mình nhé! Tương lai, mình sẽ cập nhật thêm những sản phẩm mới và có thêm chức năng đặt hàng để các bạn dễ đặt hàng hơn nè. Hãy ủng hộ cho mình nhé!",
@@ -109,26 +103,22 @@
       "content": "Nội dung"
     }
   },
-
   "DataTable": {
     "name": "Tên",
     "created_date": "Ngày tạo",
     "image": "Hình ảnh",
     "action": "Hành động"
   },
-
   "Blog": {
     "title": "Blogs",
     "message": "Nơi chia sẻ những điều tốt đẹp!!",
     "description": "Nơi chia sẻ những điều tốt đẹp!!"
   },
-
   "About": {
     "title": "Về chúng tôi",
     "message": "Chào mừng bạn đến website của tôi!",
     "content": "Cảm ơn bạn đã ghé thăm website của mình nhé. Hy vọng bạn sẽ tìm thấy những điều tốt đẹp ở đây. Mình rất thích móc len và tạo ra những mẫu đồ đẹp và độc đáo. Mong bạn sẽ thích những sản phẩm mình làm ra. Trên trang web của mình có rất nhiều mẫu móc len đẹp mà mình đã sưu tầm và dịch, tương lai mình sẽ cập nhật thêm nhiều mẫu móc len đẹp khác nữa và những mấu mà tự mình sáng tạo ra nè, bạn hãy tham khảo và chọn cho mình một mẫu ưng ý nhé. Ngoài những mẫu móc len đẹp ra mình cũng có bán những sản phẩm mình đã móc sẵn. Đối với những sản phẩm mình đặt trước, bạn có thể yêu cầu mình móc theo mẫu bạn muốn bằng cách gửi yêu cầu qua email của mình hoặc qua tin nhắn trên trang facebook của mình. Mình sẽ cố gắng hết sức để mang đến cho bạn những sản phẩm tốt nhất. Cảm ơn bạn đã ủng hộ mình!"
   },
-
   "Contact": {
     "title": "Liên lạc với tôi",
     "description": "Bạn đang gặp vấn đề với đặt hàng hoặc yêu cầu móc theo mẫu bạn muốn? Hãy liên lạc với mình qua email hoặc tin nhắn trên trang facebook của mình nhé. Mình sẽ cố gắng hết sức để giúp bạn!",
@@ -145,7 +135,6 @@
       "btn_send": "Gửi"
     }
   },
-
   "Btn": {
     "readMore": "Xem thêm",
     "btn_buy": "Mua hàng",
@@ -163,7 +152,6 @@
     "name": "Họ và tên",
     "email": "Email"
   },
-
   "IntroductionCard": {
     "author": "Tác giả",
     "btn_order": "Nhắn tin Shop"
@@ -178,6 +166,7 @@
   },
   "Login": {
     "title": "Đăng nhập",
+    "description": "Đăng nhập vào tài khoản của bạn",
     "email": "Email",
     "password": "Mật khẩu",
     "btn_login": "Đăng nhập",
@@ -241,5 +230,59 @@
   "ListViewItem": {
     "btn_buy": "Mua hàng",
     "intro_author": "Tác giả"
+  },
+  "Profile": {
+    "title": "Hồ sơ",
+    "description": "Hồ sơ cá nhân",
+    "message": {
+      "upload_avatar_success": "Tải ảnh đại diện thành công",
+      "upload_cover_success": "Tải ảnh bìa thành công",
+      "info_load_error": "Tải thông tin thất bại"
+    },
+    "tabs": {
+      "collections": "Bộ sưu tập",
+      "patterns": "Mẫu miễn phí",
+      "info": "Thông tin cá nhân"
+    },
+    "collections": {
+      "empty": "Chưa có bộ sưu tập nào",
+      "add": "Thêm bộ sưu tập",
+      "name": "Tên bộ sưu tập",
+      "nameRequired": "Vui lòng nhập tên bộ sưu tập",
+      "itemCount": "Số lượng mẫu"
+    },
+    "patterns": {
+      "empty": "Chưa có mẫu nào",
+      "add": "Thêm mẫu",
+      "edit": "Sửa mẫu",
+      "delete": "Xóa mẫu",
+      "delete_confirm_title": "Xóa mẫu",
+      "delete_confirm_content": "Bạn có chắc chắn muốn xóa mẫu này không?",
+      "yes": "Có",
+      "no": "Không",
+      "delete_success": "Xóa mẫu thành công",
+      "delete_error": "Xóa mẫu thất bại",
+      "status": {
+        "success": "ĐÃ DỊCH",
+        "pending": "ĐANG DỊCH",
+        "none": "CHƯA DỊCH"
+      }
+    },
+    "info": {
+      "change_avatar": "Đổi ảnh đại diện",
+      "name": "Họ tên",
+      "email": "Email",
+      "save": "Lưu thay đổi",
+      "update_success": "Cập nhật thông tin thành công",
+      "update_error": "Cập nhật thông tin thất bại",
+      "phone": "Số điện thoại",
+      "birthDate": "Ngày sinh",
+      "gender": "Giới tính",
+      "gender_male": "Nam",
+      "gender_female": "Nữ",
+      "gender_other": "Khác",
+      "load_error": "Tải thông tin thất bại"
+    },
+    "back": "Quay lại"
   }
 }

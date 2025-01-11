@@ -111,7 +111,7 @@ const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: Introducti
 								{
 									images && map(images, (image, index) => (
 										<DownloadImage
-											onClick={() => onClickThumbnail(index, image.url)}
+											onClick={() => onClickThumbnail(index, image.url || image.fileContent)}
 											className={`${activeThumbnail.index === index ? 'active-thumbnail thumbnail-item' : 'thumbnail-item'}`}
 											key={`intro_img_${index}`}
 											src={image?.fileContent}

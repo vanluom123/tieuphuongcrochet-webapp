@@ -4,9 +4,10 @@ import { SegmentedValue } from 'antd/es/segmented';
 import { RadioChangeEvent } from 'antd';
 import { filter, findIndex, forEach, isEmpty, map } from 'lodash';
 
-import { modal } from './notify';
+import { modal, notification } from './notify';
 import { Banner, Category, DataType, FileUpload, Filter, Paging, TabsItem, TBannerType, TTranslationStatus } from './definitions';
 import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, TRANSLATION_STATUS, TRANSLATION_STATUS_COLOR } from './constant';
+import uploadFile from './service/uploadFilesSevice';
 
 export const checkMobile = () => {
     let check = false;
@@ -133,7 +134,7 @@ export const DragScroll = (name: string) => {
     });
 }
 
-export const mapDataToSelectOption = (data: {name: string, id: string}[]) => {
+export const mapDataToSelectOption = (data: { name: string, id: string }[]) => {
     return map(data, (item) => {
         return {
             label: item.name,
@@ -431,3 +432,47 @@ export const mapTabsData = (data: DataType[]): TabsItem[] => {
 
     return result;
 }
+
+export const uploadImageToServer = async (currentImages: FileUpload[] = [], prevImages: FileUpload[] = []) => {
+
+    // Filter out images that are removed
+    const deletedImages = prevImages.filter(item => currentImages.findIndex(img => img.fileName === item.fileName) < 0) || [];
+    // Delete images that are removed
+    if (deletedImages.length > 0) {
+        const res: string[] = await uploadFile.delete(deletedImages.map(img => img.fileName || ''));
+        console.log('delete images', res);
+
+        if (res.length > 0) {
+            notification.error({ message: 'Error!', description: 'Delete file failed!' });
+            return;
+        }
+    }
+
+    // Filter out images that was uploaded
+    const uploadedImages = [];
+    // Filter out images that are already uploaded
+    let filesRes: FileUpload[] = [];
+
+    const formData = new FormData();
+
+    for (let i = 0; i < currentImages.length; i++) {
+        const image = currentImages[i];
+        if (image.fileContent || !image.originFileObj) {
+            uploadedImages.push(image);
+            continue;
+        }
+
+        formData.append('files', image.originFileObj as File);
+        const res: FileUpload[] = await uploadFile.upload(formData);
+        if (res?.length > 0) {
+            filesRes = [...res];
+        } else {
+            notification.error({ message: '!Error', description: 'Upload image failed' });
+            break;
+        }
+    }
+
+    return [...uploadedImages, ...filesRes];
+}
+
+export const uid = () => new Date().getTime().toString(36) + Math.random().toString(36).substring(2);

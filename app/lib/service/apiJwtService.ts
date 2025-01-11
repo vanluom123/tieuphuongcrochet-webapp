@@ -1,70 +1,52 @@
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
+import * as jwtDecode from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
-import * as jwtDecode from 'jsonwebtoken';
-import { JWT } from "next-auth/jwt";
-import { Session, User } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
 
 import apiService from "./apiService";
-import { options as authOptions } from '@/app/api/auth/[...nextauth]/options';
+import refreshAccessToken from "@/app/lib/service/refreshTokenService";
 
-async function apiJwtService<T = unknown>({
+// With expiration buffer
+const EXPIRATION_BUFFER_SECONDS = 30; // 30 seconds before actual expiration
+
+async function apiJwtService({
     baseUrl = process.env.NEXT_PUBLIC_API_URL,
     endpoint = '',
     method = 'GET',
     data = null,
     headers = {},
-    timeout = 20000,
     queryParams = {},
     formData
 }: {
     baseUrl?: string;
     endpoint?: string;
     method?: string;
-    data?: T | null;
+    data?: any | null;
     headers?: Record<string, string>;
     timeout?: number;
     queryParams?: Record<string, string>;
     formData?: FormData;
 }) {
     const session = await getSession();
-    let accessToken = session?.user?.accessToken;
-    
+    let accessToken = session?.user.accessToken;
+
     // Decode the access token
     const decoded = jwtDecode.decode(accessToken as string) as JwtPayload;
-    if (decoded && Date.now() >= (decoded.exp as number) * 1000) {
-        const refreshToken = session?.user.refreshToken;
+    const isTokenExpired = !decoded ||
+        (decoded.exp &&
+            Date.now() >= ((decoded.exp as number) - EXPIRATION_BUFFER_SECONDS) * 1000);
 
-        if(authOptions.callbacks?.jwt) {
-            const updatedToken = await authOptions.callbacks.jwt({
-                token: {
-                    ...session?.user,
-                    accessToken: accessToken,
-                    refreshToken: refreshToken
-                } as JWT,
-                user: {
-                    ...session?.user,
-                    accessToken: accessToken,
-                    refreshToken: refreshToken
-                } as User,
-                account: null,
-            });
-
-            if (authOptions.callbacks?.session) {
-                await authOptions.callbacks.session({
-                    session: session as Session,
-                    token: updatedToken,
-                    user: {
-                        ...session?.user,
-                        accessToken: updatedToken.accessToken,
-                        refreshToken: updatedToken.refreshToken
-                    } as AdapterUser,
-                    newSession: null,
-                    trigger: "update"
-                });
-                // The session is now updated with the new access token
+    if (isTokenExpired) {
+        try {
+            if (session == null) {
+                throw new Error('Session is not null');
             }
-            accessToken = updatedToken.accessToken;            
+            const refreshToken = session.user.refreshToken;
+            const tokenResponse = await refreshAccessToken(refreshToken as string);
+            accessToken = tokenResponse.accessToken;
+            session.user.accessToken = tokenResponse.accessToken;
+            session.user.refreshToken = tokenResponse.refreshToken;
+        } catch (e) {
+            await handleTokenRefreshFailure();
         }
     }
 
@@ -82,9 +64,16 @@ async function apiJwtService<T = unknown>({
         method,
         data,
         headers: options.headers as Record<string, string>,
-        timeout,
         queryParams,
         formData
+    });
+}
+
+async function handleTokenRefreshFailure() {
+    // Logout the user and redirect to login page
+    await signOut({
+        redirect: true,
+        callbackUrl: '/login'
     });
 }
 

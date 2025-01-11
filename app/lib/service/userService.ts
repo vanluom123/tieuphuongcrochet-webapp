@@ -17,7 +17,6 @@ export async function fetchUsers(params: ListParams): Promise<{ data: User[], to
             },
             data: params.filters
         }).catch((err) => {
-            console.log("err", err);
             return {} as User;
         });
         return {
@@ -40,7 +39,6 @@ export async function fetchUserDetail(id: string): Promise<User> {
             method: 'GET',
             queryParams: { 'id': id }
         }).catch((err) => {
-            console.log("err", err);
             return {} as User;
         });
         return response;
@@ -58,7 +56,6 @@ export async function updateUser(id: string, userData: User): Promise<User> {
             data: userData,
             queryParams: { 'id': id }
         }).catch((err) => {
-            console.log("err", err);
             return {} as User;
         });
         return response;

@@ -62,12 +62,12 @@ export const sidebarItems = [
         label: 'Posts',
         children: [
             {
-                key: ROUTE_PATH.DASHBOARD_POSTS,
-                label: <Link href={ROUTE_PATH.DASHBOARD_POSTS}>Posts</Link>
-            },
-            {
                 key: `${ROUTE_PATH.DASHBOARD_POSTS}/${ROUTE_PATH.CREATE}`,
                 label: <Link href={`${ROUTE_PATH.DASHBOARD_POSTS}/${ROUTE_PATH.CREATE}`}>Add post</Link>    
+            },
+            {
+                key: ROUTE_PATH.DASHBOARD_POSTS,
+                label: <Link href={ROUTE_PATH.DASHBOARD_POSTS}>Posts</Link>
             }
         ]
     },

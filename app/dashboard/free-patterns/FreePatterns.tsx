@@ -75,11 +75,11 @@ const FreePatterns = () => {
             dataIndex: 'author',
             width: '25%',
         },
-        {
-            title: t('Fields.is_home'),
-            dataIndex: 'is_home',
-            render: (value: boolean) => value ? 'Yes' : 'No'
-        },
+        // {
+        //     title: t('Fields.is_home'),
+        //     dataIndex: 'is_home',
+        //     render: (value: boolean) => value ? 'Yes' : 'No'
+        // },
         {
             title: t('Fields.status'),
             dataIndex: 'status',

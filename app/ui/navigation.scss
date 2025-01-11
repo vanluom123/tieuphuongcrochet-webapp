@@ -31,6 +31,20 @@
       }
 
       .header-right {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        .ant-dropdown-trigger {
+          margin-left: 20px;
+        }
+
+        @media screen and (max-width: $md) {
+          .ant-dropdown-trigger {
+            margin-left: 10px;
+          }
+        }
+
         .btn-search {
           border: none;
           box-shadow: none;
@@ -61,6 +75,7 @@
           font-size: 12px;
           text-transform: uppercase;
         }
+
         &::before {
           content: "";
           position: absolute;
@@ -121,6 +136,7 @@
     }
   }
 }
+
 .drawer-menu {
   .ant-drawer-header {
     border-bottom: none;
@@ -162,5 +178,20 @@
         font-weight: $fontWeight_semibold;
       }
     }
+  }
+}
+
+.user-menu {
+  cursor: pointer;
+  
+  .ant-avatar {
+      background: #fff;
+      border: 1px solid #f0f0f0;
+      transition: all 0.3s ease;
+      
+      &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
   }
 }

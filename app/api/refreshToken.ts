@@ -9,7 +9,6 @@ export default async function refreshAccessToken(token: JWT): Promise<JWT> {
         method: 'POST',
         data: { refreshedToken: token.refreshToken },
     }).catch((error) => {
-        console.log("error", error);
         return {
             ...token,
             error: "RefreshAccessTokenError",
