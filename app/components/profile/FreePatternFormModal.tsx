@@ -12,6 +12,7 @@ import UploadFiles from "@/app/components/upload-files";
 import { createUpdateFreePattern, fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
 import { UploadFile } from "antd/es/upload";
 import { uploadImageToServer } from "@/app/lib/utils";
+import CustomEditor from "../custom-editor";
 
 interface FreePatternFormProps {
     modalData: {
@@ -226,7 +227,7 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
                                 defaultImageMode="normal"
                             />
                         </Item>
-                        {/* <Item
+                        <Item
                             name='content'
                             label={t('Fields.content')}
                         >
@@ -239,7 +240,7 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
                                     setState(prevState => ({ ...prevState, editorContent: content }));
                                 }}
                             />
-                        </Item> */}
+                        </Item>
                     </Form>
                 </div>
             </Spin>
