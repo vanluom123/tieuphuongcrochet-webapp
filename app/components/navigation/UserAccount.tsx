@@ -6,6 +6,8 @@ import {useRouter} from "next/navigation";
 import {useTranslations} from "next-intl";
 import '../../ui/navigation.scss';
 
+import defaultUserIcon from '../../../public/default-user.png';
+
 
 const UserAccount = () => {
     const {data: session} = useSession();
@@ -53,7 +55,7 @@ const UserAccount = () => {
             {session?.user?.email ? (
                 <Dropdown arrow menu={{items}}>
                     {userAvatar ? (
-                        <Avatar src={userAvatar} size={32}/>
+                        <Avatar src={userAvatar || defaultUserIcon.src} size={32}/>
                     ) : (
                         <Avatar icon={<UserOutlined/>} size={32}/>
                     )}
