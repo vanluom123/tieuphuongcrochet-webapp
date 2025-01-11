@@ -34,7 +34,7 @@ const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }:
 							)) :
 							<Col md={22} key={`${name}`}>
 								{
-									checkPdfFile(images[0]?.fileName) ?
+									checkPdfFile(images[0]?.fileName || '') ?
 										<PdfViewer pdfFile={images[0]?.fileContent} /> :
 										<DownloadImage
 											key={`${name}_only`}

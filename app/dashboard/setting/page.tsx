@@ -3,9 +3,10 @@ import { Form, Button, Space, Divider, List, Collapse } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { filter, find } from "lodash";
+import { useRouter } from "next/navigation";
 import BannerItem from "@/app/components/cover-page/BannerItem";
 import { Banner, FileUpload, IBannerType, DataType } from "@/app/lib/definitions";
-import { useRouter } from "next/navigation";
+import { uid } from "@/app/lib/utils";
 import BannerType from "./BannerType";
 import BannerForm, { EdittingBanner, initialEdittingBanner } from "./BannerForm";
 import { createUpdateBanners, fetchBanners, fetchBannerTypes } from "@/app/lib/service/settingService";
@@ -50,7 +51,9 @@ const Setting = () => {
         const bannerImage: FileUpload[] = [{
             fileContent: banner.fileContent,
             fileName: banner.fileName,
-            url: banner.fileContent
+            url: banner.fileContent,
+            name: banner.fileName,
+            uid: banner.id || uid()
         }];
 
         setEdittingBanner({

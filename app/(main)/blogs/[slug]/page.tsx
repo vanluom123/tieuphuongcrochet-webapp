@@ -25,7 +25,7 @@ export async function generateMetadata(
 		title: blog.title,
 		openGraph: {
 			title: blog.title,
-			images: [...(blog.files || []), ...previousImages],
+			images: [blog.src || '', ...previousImages],
 			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.BLOG}/${slug}`,
 		},
 	};
