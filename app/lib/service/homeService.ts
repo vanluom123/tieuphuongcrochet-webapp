@@ -13,7 +13,6 @@ export const fetchHomeData = async (): Promise<HomeData> => {
             tags: ['home'],
         }
     }).catch((err) => {
-        console.log("err", err);
         return {} as HomeData;
     });
 

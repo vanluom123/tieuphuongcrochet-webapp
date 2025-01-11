@@ -36,7 +36,6 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal }: TypeBannerModalProps) => {
 			setOpenCUModal({ open: false, id: '' });
 			form.resetFields();
 		}).catch((errorInfo: any) => {
-			console.log('Failed:', errorInfo);
 		});
 	}
 

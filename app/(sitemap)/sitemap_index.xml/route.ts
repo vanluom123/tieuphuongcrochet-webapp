@@ -52,8 +52,6 @@ export async function GET() {
             ...blogSitemaps.map(sitemap => sitemap.url)
         ];
 
-        console.log('Generated sitemaps:', sitemaps);
-
         const sitemapIndexXML = await buildSitemapIndex(sitemaps);
 
         return new NextResponse(sitemapIndexXML, {

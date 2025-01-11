@@ -1,15 +1,16 @@
 'use client'
-import {useEffect, useState} from "react";
-import {Button, Col, Flex, Form, Input, InputNumber, Row, Space, Spin, Switch, TreeSelect} from "antd";
-import {useRouter} from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button, Col, Flex, Form, Input, InputNumber, Row, Space, Spin, Switch, TreeSelect } from "antd";
+import { useRouter } from "next/navigation";
 
-import {Category, FileUpload, Product} from "@/app/lib/definitions";
-import {CURRENCY_LIST, ROUTE_PATH} from "@/app/lib/constant";
-import {fetchCategories} from "@/app/lib/service/categoryService";
-import CustomEditor from "@/app/components/custom-editor";
+import { Category, FileUpload, Product } from "@/app/lib/definitions";
+import { CURRENCY_LIST, ROUTE_PATH } from "@/app/lib/constant";
+import { fetchCategories } from "@/app/lib/service/categoryService";
 import UploadFiles from "@/app/components/upload-files";
 import {createUpdateProduct, fetchProductDetail} from "@/app/lib/service/productService";
 import Select, {DefaultOptionType} from "antd/es/select";
+import CustomEditor from "@/app/components/custom-editor";
+import { uploadImageToServer } from "@/app/lib/utils";
 
 interface ProductFormProps {
     params?: {
@@ -66,10 +67,13 @@ const ProductForm = ({ params }: ProductFormProps) => {
                 id: params.id
             }
         }
+
+        // Handle upload, delete images
+        sendData.images = await uploadImageToServer(sendData.images, state.product.images);
         
         const res = await createUpdateProduct(sendData);
         setState(initialState);
-        if(res?.id) {
+        if (res?.id) {
             form.resetFields();
             router.push(ROUTE_PATH.DASHBOARD_PRODUCTS);
         }
@@ -95,6 +99,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
                         name='images'
                         label='Images:'>
                         <UploadFiles
+                            defaultImageMode="normal"
                             files={state.product.images || []}
                             onChangeFile={(files: FileUpload[]) => {
                                 form.setFieldsValue({ images: files });
@@ -178,6 +183,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
                         label='Pattern text'
                     >
                         <CustomEditor
+                            key='editor-form-product'
                             initialData={state.editorContent}
                             onBlur={(_, editor) => {
                                 const content = editor.getData();

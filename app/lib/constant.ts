@@ -21,7 +21,9 @@ export const ROUTE_PATH = {
   DASHBOARD_CATEGORY: '/dashboard/categories',
   CREATE: 'create',
   DETAIL: 'detail',
-  SITEMAP: 'sitemap'
+  SITEMAP: 'sitemap',
+  PROFILE: '/profile',
+  COLLECTIONS: '/collections',
 };
 
 export const SOCIAL_LINKS = {
@@ -219,7 +221,8 @@ export const API_ROUTES = {
 	FREE_PATTERN: '/free-pattern',
 	BLOG: '/blog',
 	USER: '/users',
-
+	UPDATE_INFO: 'update-info',
+  
 	// Category
 	CATEGORY: '/category',
 	// Get sub categories
@@ -250,6 +253,9 @@ export const API_ROUTES = {
 	BANNER_TYPE : '/bannerType/getAll',
 	CU_BANNER: '/banner/batchInsertOrUpdate',
 	GETT_ALL_BANNER: '/banner/getAll',
+
+  // Profile
+  COLLECTIONS: '/collections',
 }
 
 export const PARAMS_FOR_SITEMAP: ListParams = {
@@ -259,3 +265,8 @@ export const PARAMS_FOR_SITEMAP: ListParams = {
 	sortDir: 'desc',
 	filters: []
 };
+
+export const GENDER ={
+  male: 'male',
+  feMale: 'female'
+}

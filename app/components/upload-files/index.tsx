@@ -2,12 +2,11 @@ import { memo, useEffect, useState } from "react";
 import ImgCrop from "antd-img-crop"
 import { filter, map } from "lodash";
 import { UploadOutlined } from '@ant-design/icons';
-import { Modal, Radio, Spin, Upload, UploadFile, UploadProps, message } from "antd"
+import { Modal, Radio, Upload, UploadFile, UploadProps, message } from "antd"
 
 import { FileUpload, UPLOAD_MODES } from "@/app/lib/definitions";
 import { UploadMode } from "@/app/lib/definitions";
-import { getBase64, showConfirmDelete } from "@/app/lib/utils";
-import uploadFile from "@/app/lib/service/uploadFilesSevice";
+import { getBase64, showConfirmDelete, uid } from "@/app/lib/utils";
 import { notification } from "@/app/lib/notify";
 import Image from "next/image";
 
@@ -20,13 +19,18 @@ interface UploadFilesProps extends UploadProps {
 	defaultImageMode?: 'crop' | 'normal';
 };
 
-const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumber = 20, isMultiple = true, isShowDirectory = true }: UploadFilesProps) => {
+const UploadFiles = ({
+	defaultImageMode = 'crop',
+	onChangeFile,
+	files,
+	imgsNumber = 20,
+	isMultiple = true,
+	isShowDirectory = true }: UploadFilesProps) => {
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const [previewTitle, setPreviewTitle] = useState('');
 	const [fileList, setFileList] = useState<any[]>([]);
 	const [imageMode, setImageMode] = useState<UploadMode>(defaultImageMode);
-	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		if (files && files.length > 0) {
@@ -36,15 +40,10 @@ const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumbe
 
 	// Add this effect near your other useEffects
 	useEffect(() => {
-		if (fileList.length > 0) {
+		if (fileList.length > 0) {			
 			onChangeFile(fileList);
 		}
 	}, [fileList, onChangeFile]);
-
-	// Then simplify updateImages to just update the state
-	const updateImages = (file: FileUpload) => {
-		setFileList((prevState) => [...prevState, file]);
-	};
 
 	const handleCancel = () => setPreviewOpen(false);
 
@@ -58,16 +57,8 @@ const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumbe
 		setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
 	};
 
-	const getNewFile = (file: File) => {
-		const name = file.name.split('.');
-		const ext = name[name.length - 1];
-		const newName = `${name[0]}_${new Date().getTime()}.${ext}`;
 
-		const blob = file.slice(0, file.size);
-		return new File([blob], newName, { type: file.type });
-	}
-
-	const customUploadFiles = async ({ file, onSuccess, onError }: any) => {
+	const customUploadFiles = async ({ file, onError }: any) => {
 		const isLimit5Mb = file?.size / 1024 / 1024 < 5;
 		if (!isLimit5Mb) {
 			onError('fail');
@@ -75,47 +66,21 @@ const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumbe
 			return;
 		}
 
-		const formData = new FormData();
-		setLoading(true);
-
-		console.log('file', file);
-
-		formData.append('files', getNewFile(file));
-		const res: FileUpload[] = await uploadFile.upload(formData);
-
-		if (res) {
-			setLoading(false);
+		const newFile: UploadFile = {
+			uid: uid(),
+			name: file.name,
+			url: URL.createObjectURL(file),
+			originFileObj: file,
 		}
 
-		if (res.length > 0) {
-			const newFiles = {
-				...res[0],
-				url: res[0].fileContent
-			};
-
-			updateImages(newFiles);
-			onSuccess('ok');
-			notification.success({ message: 'Successful!', description: 'Upload file successfully!' });
-		} else {
-			onError('fail');
-			notification.error({ message: '!Error', description: 'Allowed maxium size is 5Mb' });
-		}
+		setFileList((prevState) => [...prevState, newFile]);
 	};
 
 	const onDelete = async (file: UploadFile) => {
-		const res: string[] = await uploadFile.delete([file?.fileName as string]);
-		if (res.length > 0) {
-			notification.error({ message: 'Error!', description: 'Delete file failed!' });
-			return;
-		}
-		notification.success({ message: 'Successfully!', description: 'Delete successfully!' });
-
 		const newFileList = filter(fileList, f => f.url !== file.url);
-
 		setFileList(newFileList);
 		onChangeFile(newFileList);
 	}
-
 
 	const beforeUpload = (file: File) => {
 		const isLt2M = file.size / 1024 / 1024 < 5;
@@ -135,10 +100,10 @@ const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumbe
 			beforeUpload={beforeUpload}
 			fileList={fileList}
 			directory={imageMode === UPLOAD_MODES.DIRECTORY}
-			multiple={imageMode === UPLOAD_MODES.DIRECTORY ? false : isMultiple}
+			multiple={imageMode === UPLOAD_MODES.NORMAL ? isMultiple : false}
 		>
 			{fileList.length < imgsNumber &&
-				<Spin spinning={loading}><UploadOutlined /> Upload</Spin>
+				<span><UploadOutlined /> Upload</span>
 			}
 		</Upload>
 	);
@@ -177,7 +142,14 @@ const UploadFiles = ({ defaultImageMode = 'crop', onChangeFile, files, imgsNumbe
 				footer={null}
 				onCancel={handleCancel}
 			>
-				<Image alt="example" style={{ width: '100%' }} src={previewImage} />
+				<Image
+					alt="example"
+					style={{ maxWidth: '100%', height: 'auto' }}
+					src={previewImage}
+					width={800}
+					height={600}
+					layout="responsive"
+				/>
 			</Modal>
 		</>
 	)

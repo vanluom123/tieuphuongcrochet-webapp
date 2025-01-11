@@ -43,7 +43,6 @@ export const createUpdateBanners = async (banners: Banner[]): Promise<void> => {
             method: 'POST',
             data: banners,
         });
-        console.log('res createUpdateBanner', res);
     } catch (err) {
         handleApiError(err);
     }
@@ -68,7 +67,6 @@ export const createUpdateBannerType = async (data: IBannerType): Promise<void> =
             method: 'POST',
             data,
         });
-        console.log('res createUpdateBannerType', res);
         notification.success({ message: 'Success', description: 'Create banner type successfully' });
     } catch (err) {
         handleApiError(err);
