@@ -17,6 +17,7 @@ import UserInfo from '../../components/profile/UserInfo';
 import defaultUser from '../../../public/default-user.png';
 import defaultBackground from '../../../public/default-background.jpg';
 import '../../ui/components/profile.scss';
+import { useSession } from 'next-auth/react';
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
 
@@ -25,12 +26,17 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState<User | null>(null);
     const router = useRouter();
+    const { data: session } = useSession();
 
     useEffect(() => {
         setLoading(true);
         const fetchUserData = async () => {
             try {
-                const data = await loadUserInfo();
+                const userId = session?.user?.id;
+                if (!userId) {
+                    throw new Error('Profile - User ID not found');
+                }
+                const data = await loadUserInfo(userId);
                 if (data.email) {
                     setUserData(data);
                 }

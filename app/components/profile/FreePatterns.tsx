@@ -10,6 +10,7 @@ import { ROUTE_PATH } from '@/app/lib/constant';
 import FreePatternCard from './FreePatternCard';
 import FreePatternFormModal from './FreePatternFormModal';
 import { modal, notification } from '@/app/lib/notify';
+import { useSession } from 'next-auth/react';
 
 const FreePatterns = () => {
     const t = useTranslations('Profile');
@@ -20,10 +21,15 @@ const FreePatterns = () => {
         open: false,
         id: ''
     });
+    const {data: session} = useSession();
 
     const onRefreshData = () => {
         setLoading(true);
-        fetchUserPatterns().then(data => {
+        const userId = session?.user?.id;
+        if (!userId) {
+            throw new Error('Profile - User ID not found');
+        }
+        fetchUserPatterns(userId).then(data => {
             setPatterns(data);
         }).finally(() => {
             setLoading(false);
