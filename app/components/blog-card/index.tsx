@@ -28,6 +28,7 @@ const BlogCard = ({ item, onReadDetail }: BlogCardProps) => {
 		<Card
 			className='card-article card-item'
 			bordered={false}
+			hoverable
 			cover={
 				<div className='artice-image'>
 					<CustomNextImage src={src} alt={title} />

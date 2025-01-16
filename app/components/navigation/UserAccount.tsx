@@ -12,6 +12,7 @@ const UserAccount = () => {
     const router = useRouter();
 
     const userAvatar = session?.user.imageUrl;
+    const userId = session?.user.id;
 
     const items: MenuProps['items'] = [
         {
@@ -19,7 +20,7 @@ const UserAccount = () => {
             label: t('profile'),
             icon: <UserOutlined />,
             onClick: () => {
-                router.push(ROUTE_PATH.PROFILE);
+                router.push(`${ROUTE_PATH.PROFILE}/${userId}`);
             }
         },
         ...(session?.user?.role === USER_ROLES.ADMIN ? [

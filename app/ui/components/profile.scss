@@ -1,11 +1,10 @@
-
 @import "../../variables.module.scss";
 
 .profile-container {
     position: relative;
     width: 100%;
 
-    .container{
+    .container {
         padding-top: unset;
     }
 }
@@ -14,6 +13,15 @@
     position: relative;
     width: 100%;
     height: 300px;
+
+    .profile-dark {
+        position: absolute;
+        background: #000;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        opacity: 0.5;
+    }
 }
 
 .profile-cover-image {
@@ -21,6 +29,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+
     .profile-cover-image-upload {
         position: absolute;
         bottom: 50px;
@@ -36,6 +45,11 @@
     color: #fff;
     font-size: 24px;
     width: 100%;
+
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+        left: 0;
+    }
 
     img {
         border-radius: 50%;
@@ -53,12 +67,17 @@
         }
     }
 
-    .profile-info{
-        .profile-info-name{
+    .profile-info {
+        .profile-info-name {
             font-size: 24px;
             font-weight: 600;
+
+            @media screen and (max-width: 767px) {
+                font-size: 20px;
+            }
         }
-        .profile-info-gender{
+
+        .profile-info-gender {
             font-size: 16px;
         }
     }
@@ -68,12 +87,13 @@
 
     .profile-tabs {
         background: #fff;
-        
+
         border-radius: 8px;
 
         .ant-tabs-nav {
             margin-bottom: 24px;
         }
+
         @media screen and (max-width: 767px) {
             margin-top: 16px;
         }

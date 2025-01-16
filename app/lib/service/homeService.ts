@@ -22,6 +22,9 @@ export const fetchHomeData = async (): Promise<HomeData> => {
         author: pt.author,
         name: pt.name,
         src: pt.fileContent || pt.images?.[0]?.fileContent,
+        username: pt.username,
+        userAvatar: pt.userAvatar,
+        userId: pt.userId,
     }));
 
     const products: Product[] = map(data.products, prod => ({
