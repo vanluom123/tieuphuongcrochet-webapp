@@ -7,6 +7,7 @@ import {useRouter} from 'next/navigation';
 import Image from 'next/image';
 import { useEffect, useState, useMemo } from 'react';
 import { CameraOutlined, LeftOutlined, UserOutlined } from '@ant-design/icons';
+import {useSession} from 'next-auth/react';
 
 import {User} from '@/app/lib/definitions';
 import {loadUserInfo, updateUserProfile} from '@/app/lib/service/profileService';
@@ -17,7 +18,6 @@ import UserInfo from '../../components/profile/UserInfo';
 import defaultUser from '../../../public/default-user.png';
 import defaultBackground from '../../../public/default-background.jpg';
 import '../../ui/components/profile.scss';
-import {useSession} from 'next-auth/react';
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), {ssr: false});
 
@@ -141,8 +141,6 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                             {
                                 loading.avatar ? <Skeleton.Image
                                     active
-                                    size='large'
-                                    shape='circle'
                                     style={{ width: 120, height: 120, lineHeight: '120px', borderRadius: '50%' }}
                                     className='skeleton-avatar'
                                 /> :
