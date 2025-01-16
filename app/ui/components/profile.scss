@@ -31,9 +31,18 @@
     overflow: hidden;
 
     .profile-cover-image-upload {
+        z-index: 999;
         position: absolute;
         bottom: 50px;
         right: 40px;
+    }
+
+    .skeleton-cover {
+        position: absolute;
+        width: 100%!important;
+        height: 100%;
+        top: 0;
+        left: 0;
     }
 }
 
@@ -59,11 +68,19 @@
 
     .profile-avatar-image {
         position: relative;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
 
         .profile-avatar-image-upload {
             position: absolute;
-            bottom: 10px;
+            bottom: 0;
             right: 10px;
+        }
+
+        .skeleton-avatar {
+            position: absolute;
+            top: 0;
         }
     }
 
