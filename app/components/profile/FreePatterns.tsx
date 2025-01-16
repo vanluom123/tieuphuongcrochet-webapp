@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, FloatButton, Button, Spin } from 'antd';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -10,9 +10,13 @@ import { ROUTE_PATH } from '@/app/lib/constant';
 import FreePatternCard from './FreePatternCard';
 import FreePatternFormModal from './FreePatternFormModal';
 import { modal, notification } from '@/app/lib/notify';
-import { useSession } from 'next-auth/react';
 
-const FreePatterns = () => {
+interface FreePatternsProps {
+    isCreator: boolean;
+    userId: string;
+}
+
+const FreePatterns = ({isCreator, userId}: FreePatternsProps) => {
     const t = useTranslations('Profile');
     const [patterns, setPatterns] = useState<Pattern[]>([]);
     const [loading, setLoading] = useState(false);
@@ -21,14 +25,9 @@ const FreePatterns = () => {
         open: false,
         id: ''
     });
-    const {data: session} = useSession();
 
     const onRefreshData = () => {
         setLoading(true);
-        const userId = session?.user?.id;
-        if (!userId) {
-            throw new Error('Profile - User ID not found');
-        }
         fetchUserPatterns(userId).then(data => {
             setPatterns(data);
         }).finally(() => {
@@ -92,7 +91,7 @@ const FreePatterns = () => {
                             {patterns.map((pattern, index) => (
                                 <Col xs={12} sm={12} lg={6} key={index}>
                                     <FreePatternCard
-                                        isShowActions
+                                        isShowActions={isCreator}
                                         pattern={{ ...pattern, src: pattern.fileContent || '' }}
                                         onReadDetail={() => onViewPattern(pattern.id || '')}
                                         onDelete={() => showDeleteConfirm(pattern.id || '')}

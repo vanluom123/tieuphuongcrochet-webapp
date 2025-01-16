@@ -1,26 +1,28 @@
+@import "../../variables.module.scss";
+
 .free-pattern-card {
-	&.ant-card {
-		.ant-card-cover{
-			// height: 270px;
-			// width: 270px;
-			overflow: hidden;
-		}
-	}
+  &.ant-card {
+    .ant-card-cover {
+      overflow: hidden;
+    }
+  }
 
-	.status-tag {
-		text-transform: lowercase;
-		margin: 0;
-		margin-bottom: 5px;
-	}
+  .status-tag {
+    text-transform: lowercase;
+    margin: 0 0 5px;
+  }
 
-	.creator {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	
-		.creator-name {
-		  font-size: 14px;
-		  color: rgba(0, 0, 0, 0.65);
-		}
-	  }
+  .creator {
+    font-size: 14px;
+    color: $textPrimaryColor;
+
+    .creator-link {
+      font-size: 14px;
+      color: $textPrimaryColor;
+
+      &:hover {
+        color: $colorPrimary;
+      }
+    }
+  }
 }

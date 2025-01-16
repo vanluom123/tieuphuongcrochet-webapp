@@ -1,6 +1,6 @@
 'use client'
 
-import { Tabs, TabsProps, Spin, Flex, Button } from 'antd';
+import { Tabs, TabsProps, Flex, Button } from 'antd';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -21,31 +21,36 @@ import { useSession } from 'next-auth/react';
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
 
-const Profile = () => {
+interface ProfileDetailProps {
+    params: {
+        slug: string;
+    }
+}
+
+const ProfileDetail = ({params}: ProfileDetailProps) => {
     const t = useTranslations('Profile');
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState<User | null>(null);
     const router = useRouter();
     const { data: session } = useSession();
+    const userId = params?.slug;
 
+    const fetchUserData = async () => {
+
+        try {
+            const data = await loadUserInfo(userId);
+            if (data?.email) {
+                setUserData(data);
+            }
+        } catch (error) {
+            console.error('Profile - Error loading user data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
         setLoading(true);
-        const fetchUserData = async () => {
-            try {
-                const userId = session?.user?.id;
-                if (!userId) {
-                    throw new Error('Profile - User ID not found');
-                }
-                const data = await loadUserInfo(userId);
-                if (data.email) {
-                    setUserData(data);
-                }
-            } catch (error) {
-                console.error('Profile - Error loading user data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+
         fetchUserData();
     }, []);
 
@@ -53,7 +58,7 @@ const Profile = () => {
         {
             key: 'patterns',
             label: t('tabs.patterns'),
-            children: <FreePatterns />,
+            children: <FreePatterns userId={userId} isCreator={params?.slug === session?.user?.id}/>,
         },
         //  {
         //     key: 'collections',
@@ -66,14 +71,6 @@ const Profile = () => {
             children: <UserInfo userData={userData} setUserData={setUserData} />,
         },
     ];
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <Spin size="large" />
-            </div>
-        );
-    }
 
     const onUploadAvatar = async (file: string) => {
         if (file) {
@@ -116,6 +113,7 @@ const Profile = () => {
                         alt="Cover"
                         layout="fill"
                         objectFit="cover"
+                        
                     />
                     <Flex className="profile-avatar container" align="center" justify="start" gap="10px">
                         <span className="profile-avatar-image">
@@ -159,4 +157,4 @@ const Profile = () => {
     );
 };
 
-export default Profile; 
+export default ProfileDetail;

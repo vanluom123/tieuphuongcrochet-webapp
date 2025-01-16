@@ -56,7 +56,10 @@ export async function updateUserProfile(data: any) {
     });
 }
 
-export async function loadUserInfo(id: string) {
+export async function loadUserInfo(id: string = '') {
+    if(!id) {
+        return;
+    }
     const res = await apiJwtService({
         endpoint: `/user-profile`,
         method: 'GET',
