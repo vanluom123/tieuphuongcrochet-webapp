@@ -104,7 +104,7 @@ const UserInfo = ({userData, setUserData}: UserInfoProps) => {
                     </Select>
                 </Form.Item>
 
-                <Button type="primary" htmlType="submit">
+                <Button className='btn-border' type="primary" htmlType="submit">
                     {t('info.save')}
                 </Button>
             </Form>
