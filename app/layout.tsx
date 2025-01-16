@@ -27,7 +27,7 @@ export async function generateMetadata() {
       siteName: t("title"),
       images: [
         {
-					url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
+          url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
           width: 1200,
           height: 630,
           alt: t("title"),
