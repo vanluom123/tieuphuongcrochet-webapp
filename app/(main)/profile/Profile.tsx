@@ -1,12 +1,12 @@
 'use client'
 
-import {Button, Flex, Tabs, TabsProps} from 'antd';
-import {useTranslations} from 'next-intl';
+import { Button, Flex, Skeleton, Tabs, TabsProps } from 'antd';
+import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/navigation';
 import Image from 'next/image';
-import {useEffect, useState} from 'react';
-import {CameraOutlined, LeftOutlined, UserOutlined} from '@ant-design/icons';
+import { useEffect, useState, useMemo } from 'react';
+import { CameraOutlined, LeftOutlined, UserOutlined } from '@ant-design/icons';
 
 import {User} from '@/app/lib/definitions';
 import {loadUserInfo, updateUserProfile} from '@/app/lib/service/profileService';
@@ -27,16 +27,30 @@ interface ProfileDetailProps {
     }
 }
 
-const ProfileDetail = ({params}: ProfileDetailProps) => {
-    const t = useTranslations('Profile');
-    const [loading, setLoading] = useState(true);
+interface ProfileDetailProps {
+    params: {
+        slug: string;
+    }
+}
+
+const ProfileDetail = ({ params }: ProfileDetailProps) => {
+    const [loading, setLoading] = useState({
+        avatar: false,
+        cover: false
+    });
     const [userData, setUserData] = useState<User | null>(null);
+
+    const t = useTranslations('Profile');
     const router = useRouter();
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const userId = params?.slug;
-    const isCreator = params?.slug === session?.user?.id;
+
+    const isCreator = useMemo(() => {
+        return params?.slug === session?.user?.id;
+    }, [session?.user?.id, params?.slug]);
 
     const fetchUserData = async () => {
+        setLoading({ avatar: true, cover: true });
         try {
             const data = await loadUserInfo(userId);
             if (data?.email) {
@@ -45,12 +59,11 @@ const ProfileDetail = ({params}: ProfileDetailProps) => {
         } catch (error) {
             console.error('Profile - Error loading user data:', error);
         } finally {
-            setLoading(false);
+            setLoading({ avatar: false, cover: false });
         }
     };
-    useEffect(() => {
-        setLoading(true);
 
+    useEffect(() => {
         fetchUserData();
     }, []);
 
@@ -75,11 +88,13 @@ const ProfileDetail = ({params}: ProfileDetailProps) => {
 
     const onUploadAvatar = async (file: string) => {
         if (file) {
+            setLoading({ ...loading, avatar: true });
             const updatedUser = await updateUserProfile({
                 imageUrl: file
             });
 
             setUserData(updatedUser);
+            setLoading({ ...loading, avatar: false });
             notification.success({
                 message: t('message.upload_avatar_success')
             });
@@ -88,10 +103,12 @@ const ProfileDetail = ({params}: ProfileDetailProps) => {
 
     const onUploadCover = async (file: string) => {
         if (file) {
+            setLoading({ ...loading, cover: true });
             const updatedUser = await updateUserProfile({
                 backgroundImageUrl: file
             });
             setUserData(updatedUser);
+            setLoading({ ...loading, cover: false });
             notification.success({
                 message: t('message.upload_cover_success')
             });
@@ -109,37 +126,60 @@ const ProfileDetail = ({params}: ProfileDetailProps) => {
                         icon={<LeftOutlined/>}
                         className="profile-back-button"
                     />
-                    <Image
-                        src={userData?.backgroundImageUrl || defaultBackground}
-                        alt="Cover"
-                        layout="fill"
-                        objectFit="cover"
+                    {
+                        loading.cover ? <Skeleton.Node className='skeleton-cover' style={{ width: '100%', height: '100%' }} active={loading.cover} /> :
+                            <Image
+                                src={userData?.backgroundImageUrl || defaultBackground}
+                                alt="User cover image"
+                                layout="fill"
+                                objectFit="cover"
+                            />
+                    }
 
-                    />
                     <Flex className="profile-avatar container" align="center" justify="start" gap="10px">
                         <span className="profile-avatar-image">
-                            <Image
-                                src={userData?.imageUrl || defaultUser}
-                                alt="Avatar"
-                                width={120}
-                                height={120}
-                            />
+                            {
+                                loading.avatar ? <Skeleton.Image
+                                    active
+                                    size='large'
+                                    shape='circle'
+                                    style={{ width: 120, height: 120, lineHeight: '120px', borderRadius: '50%' }}
+                                    className='skeleton-avatar'
+                                /> :
+                                    <Image
+                                        src={userData?.imageUrl || defaultUser}
+                                        alt="User Avatar"
+                                        width={120}
+                                        height={120}
+                                        priority
+                                    />
+                            }
                             {
                                 isCreator && (
                                     <SingleUpload
                                         className="profile-avatar-image-upload"
                                         onUpload={onUploadAvatar}
-                                        icon={<CameraOutlined/>}
+                                        icon={<CameraOutlined />}
                                     />
                                 )
                             }
                         </span>
                         <span className="profile-info">
-                            <div className="profile-info-name">{userData?.name}</div>
-                            <div className="profile-info-gender">
-                                <UserOutlined/>:&nbsp;
-                                <span>{userData?.gender === GENDER.male ? t('info.gender_male') : t('info.gender_female')}</span>
-                            </div>
+                            {
+                                !userData?.name ? <Skeleton active title={{ width: '240px' }} paragraph={{ rows: 1 }} /> :
+
+                                    <>
+                                        <div className="profile-info-name">{userData?.name}</div>
+
+                                        {
+                                            userData?.gender &&
+                                            <div className="profile-info-gender">
+                                                <UserOutlined />:&nbsp;
+                                                <span>{userData?.gender === GENDER.male ? t('info.gender_male') : t('info.gender_female')}</span>
+                                            </div>
+                                        }
+                                    </>
+                            }
                         </span>
                     </Flex>
                     {
