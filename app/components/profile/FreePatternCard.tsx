@@ -77,9 +77,6 @@ const FreePatternCard = (
 						title={<span tabIndex={1} className='card-title' onClick={onReadDetail}>{name}</span>}
 						description={
 							<Flex justify='space-between' align='center'>
-								<div className='author'>
-									<UserOutlined />&nbsp;{author}
-								</div>
 								{
 									(status && status !== TRANSLATION_STATUS.NONE) &&
 									<Tag className='status-tag' color={getStatusColor(status)}>{t(`patterns.status.${status.toLowerCase()}`)}</Tag>

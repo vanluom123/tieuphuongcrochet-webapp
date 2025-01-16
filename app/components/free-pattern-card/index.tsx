@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react';
-import { Card, Flex, Skeleton, Tag } from 'antd';
+import { Avatar, Card, Flex, Skeleton, Tag } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 import { TRANSLATION_STATUS } from '@/app/lib/constant';
 import { Pattern } from '@/app/lib/definitions';
@@ -30,9 +31,9 @@ const FreePatternCard = (
 	}: FreePatternCardProps) => {
 
 	const { Meta } = Card;
-	const { name, src, author, status } = pattern;
+	const { name, src, status, username, userAvatar, userId } = pattern;
 	const t = useTranslations("FreePattern");
-
+	
 	return (
 		<Card
 			loading={loading}
@@ -60,8 +61,18 @@ const FreePatternCard = (
 						title={<span tabIndex={1} className='card-title' onClick={onReadDetail}>{name}</span>}
 						description={
 							<Flex justify='space-between' align='center'>
-								<div className='author'>
-									<UserOutlined />&nbsp;{author}
+								<div className='creator'>
+									{
+										userAvatar ?
+											<Avatar
+												size='small'
+												src={userAvatar}
+											/>
+											:
+											<UserOutlined />
+
+									}
+									<Link href={`/profile/${userId}`}><span className="creator-name">&nbsp;{username}</span></Link>
 								</div>
 								{
 									(status && status !== TRANSLATION_STATUS.NONE) &&
