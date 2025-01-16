@@ -163,6 +163,9 @@ export interface Pattern {
 	status?: TTranslationStatus;
 	home?: boolean;
 	fileContent?: string;
+	username?: string;
+	userAvatar?: string;
+	userId?: string;
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';

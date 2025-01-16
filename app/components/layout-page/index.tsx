@@ -44,7 +44,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
         return pathname === ROUTE_PATH.LOGIN || 
                pathname.includes(ROUTE_PATH.DASHBOARD) || 
                pathname === ROUTE_PATH.REGISTER ||
-               pathname === ROUTE_PATH.PROFILE;
+               pathname.includes(ROUTE_PATH.PROFILE);
     }, [pathname]);
         
     if (isSpecialRoute) {

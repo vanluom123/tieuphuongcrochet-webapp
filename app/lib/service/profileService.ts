@@ -11,10 +11,13 @@ export async function fetchUserCollections(): Promise<Collection[]> {
     return response ?? [];
 }
 
-export async function fetchUserPatterns(): Promise<Pattern[]> {
+export async function fetchUserPatterns(userId: string): Promise<Pattern[]> {
     const response = await apiJwtService({
         endpoint: `${API_ROUTES.FREE_PATTERN}/create-by`,
         method: 'GET',
+        queryParams: {
+            'userId': userId
+        }
     });
     return response ?? [];
 }
@@ -53,10 +56,16 @@ export async function updateUserProfile(data: any) {
     });
 }
 
-export async function loadUserInfo() {
+export async function loadUserInfo(id: string = '') {
+    if(!id) {
+        return;
+    }
     const res = await apiJwtService({
         endpoint: `/user-profile`,
-        method: 'GET'
+        method: 'GET',
+        queryParams: {
+            'userId': id
+        }
     });
     return {
         name: res?.name,

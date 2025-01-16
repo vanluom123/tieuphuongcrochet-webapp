@@ -2,9 +2,6 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import {API_ROUTES, ROUTE_PATH} from '@/app/lib/constant';
 import {NextAuthOptions} from 'next-auth';
 import apiService from '../../../lib/service/apiService';
-import refreshAccessToken from '../../refreshToken';
-import * as jwtDecode from 'jsonwebtoken';
-import {JwtPayload} from 'jsonwebtoken';
 
 export const options: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
@@ -60,12 +57,6 @@ export const options: NextAuthOptions = {
                 };
             }
 
-            // On subsequent calls, check token expiration
-            const decoded = jwtDecode.decode(token.accessToken as string) as JwtPayload;
-            if (decoded && Date.now() >= (decoded.exp as number) * 1000) {
-                return await refreshAccessToken(token);
-            }
-
             return token;
         },
         async session({session, token}) {
@@ -76,6 +67,7 @@ export const options: NextAuthOptions = {
                 session.user.email = token.email;
                 session.user.imageUrl = token.picture;
                 session.user.role = token.role;
+                session.user.id = token.userId;
             }
             return session;
         },

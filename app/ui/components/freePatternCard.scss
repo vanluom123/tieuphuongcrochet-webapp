@@ -1,15 +1,28 @@
-.free-pattern-card {
-	&.ant-card {
-		.ant-card-cover{
-			// height: 270px;
-			// width: 270px;
-			overflow: hidden;
-		}
-	}
+@import "../../variables.module.scss";
 
-	.status-tag {
-		text-transform: lowercase;
-		margin: 0;
-		margin-bottom: 5px;
-	}
+.free-pattern-card {
+  &.ant-card {
+    .ant-card-cover {
+      overflow: hidden;
+    }
+  }
+
+  .status-tag {
+    text-transform: lowercase;
+    margin: 0 0 5px;
+  }
+
+  .creator {
+    font-size: 14px;
+    color: $textPrimaryColor;
+
+    .creator-link {
+      font-size: 14px;
+      color: $textPrimaryColor;
+
+      &:hover {
+        color: $colorPrimary;
+      }
+    }
+  }
 }
