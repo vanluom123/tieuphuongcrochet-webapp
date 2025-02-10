@@ -4,7 +4,7 @@ import { Col, Flex, Form, Input, Modal, Row, Spin, TreeSelect } from "antd";
 import { useTranslations } from "next-intl";
 import { DefaultOptionType } from "antd/es/select";
 
-import { Category, FileUpload, Pattern } from "@/app/lib/definitions";
+import { Category, CUResponse, FileUpload, Pattern } from "@/app/lib/definitions";
 import { TRANSLATION_STATUS } from "@/app/lib/constant";
 import { fetchCategories } from "@/app/lib/service/categoryService";
 import FreePatternStatus from "@/app/components/free-pattern-status";
@@ -93,8 +93,8 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
         sendData.images = uploadedImages;
         sendData.files = uploadedFiles;
 
-        const res = await createUpdateFreePattern(sendData);
-        if (res?.id) {
+        const res: CUResponse = await createUpdateFreePattern(sendData);
+        if (res?.success) {
             onHandleCancel();
             onRefreshData();
         } else {
