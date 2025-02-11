@@ -273,3 +273,11 @@ export interface Comment {
 	content: string;
 	createdDate: string;
 }
+
+export interface CUResponse {
+	code: number,
+	data: any,
+	success: boolean,
+	message: string,
+	error: string
+}

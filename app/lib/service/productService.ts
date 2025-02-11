@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
-import { Product, FileUpload, ListParams, DataType } from "../definitions";
+import { Product, FileUpload, ListParams, DataType, CUResponse } from "../definitions";
 import { getAvatar } from "../utils";
 import apiService from "./apiService";
 import { notification } from "antd";
@@ -66,21 +66,20 @@ export const deleteProduct = async (id: string) => {
     })
 };
 
-export const createUpdateProduct = async (data: Product): Promise<Product> => {
+export const createUpdateProduct = async (data: Product): Promise<CUResponse> => {
     const endpoint = `${API_ROUTES.PRODUCT}/${API_ROUTES.CREATE}`
-    const res = await apiJwtService({
+    const res: CUResponse = await apiJwtService({
         endpoint,
         method: 'POST',
         data,
     }).catch((err) => {
         notification.error({message: 'Failed', description: err.message});
    });
-    
 
-    if (res?.id && !data.id) {
+    if (res?.success && !data.id) {
         notification.success({ message: 'Success', description: 'Create product successfully' })
     }
-    if(res?.id && data.id) {
+    if(res?.success && data.id) {
         notification.success({ message: 'Success', description: 'Update product successfully' })
     }
 
