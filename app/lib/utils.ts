@@ -178,20 +178,6 @@ export const getDateFormatted = (dateString: string | number | Date, locale: 'en
     return `${day} ${month}, ${year} - ${hour}:${minute}`
 }
 
-export const getBaseUrl = () => {
-    let url;
-    switch (process.env.NODE_ENV) {
-        case 'production':
-            url = 'https://tieuphuongcrochet-90b41ee4488a.herokuapp.com/';
-            break;
-        case 'development':
-        default:
-            url = 'http://localhost:8080/';
-    }
-
-    return url;
-}
-
 /**
  * Get the document's vertical scroll position
  */

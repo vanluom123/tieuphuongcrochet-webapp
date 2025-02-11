@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
-import { FileUpload, ListParams, DataType, Pattern } from "../definitions";
+import { FileUpload, ListParams, DataType, Pattern, CUResponse } from "../definitions";
 import { getAvatar } from "../utils";
 import apiService from "./apiService";
 import { notification } from "../notify";
@@ -53,9 +53,9 @@ export const fetchFreePatternDetail = async (id: string, revalidate?: number): P
     return newData;
 };
 
-export const createUpdateFreePattern = async (data: Pattern): Promise<Pattern> => {
+export const createUpdateFreePattern = async (data: Pattern): Promise<CUResponse> => {
     const endpoint = `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.CREATE}`
-    const res = await apiJwtService({
+    const res: CUResponse = await apiJwtService({
         endpoint,
         method: 'POST',
         data,
@@ -63,10 +63,10 @@ export const createUpdateFreePattern = async (data: Pattern): Promise<Pattern> =
         notification.error({message: 'Failed', description: err.message});
    });
 
-    if (res?.id && !data.id) {
+    if (res?.success && !data.id) {
         notification.success({ message: 'Success', description: 'Create free pattern successfully' })
     }
-    if(res?.id && data.id) {
+    if(res?.success && data.id) {
         notification.success({ message: 'Success', description: 'Update free pattern successfully' })
     }
 
