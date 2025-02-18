@@ -20,6 +20,7 @@
 
     &.show-prev-next {
       &:hover {
+
         .prev,
         .next {
           transform: scale(1);
@@ -67,7 +68,7 @@
             &:hover {
               opacity: .7;
             }
-          
+
             &.active-thumbnail {
               opacity: 1;
             }
@@ -89,6 +90,22 @@
         // @media screen and (min-width: $xxl) {
         // 	width: 1000px;
         // }
+      }
+    }
+  }
+
+  .creator {
+    display: flex;
+    align-items: center;
+
+    .creator-link {
+      font-size: $fontSize_middle;
+      color: $textPrimaryColor;
+      margin-left: 5px;
+      font-weight: $fontWeight_semibold;
+
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
