@@ -154,7 +154,13 @@
   },
   "IntroductionCard": {
     "author": "Tác giả",
-    "btn_order": "Nhắn tin Shop"
+    "btn_order": "Nhắn tin Shop",
+    "status": {
+      "ALL": "Tất cả",
+      "SUCCESS": "Đã dịch",
+      "PENDING": "Đang dịch",
+      "NONE": "Chưa dịch"
+    }
   },
   "UserAccount": {
     "sign_in": "Đăng nhập",

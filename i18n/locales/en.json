@@ -154,7 +154,13 @@
   },
   "IntroductionCard": {
     "author": "Author",
-    "btn_order": "Message"
+    "btn_order": "Message",
+    "status": {
+      "ALL": "ALL",
+      "SUCCESS": "TRANSLATED",
+      "PENDING": "PENDING",
+      "NONE": "NONE"
+    }
   },
   "UserAccount": {
     "sign_in": "Sign in",

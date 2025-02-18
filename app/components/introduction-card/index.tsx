@@ -1,17 +1,18 @@
 'use client'
 import { memo, useEffect, useRef, useState } from "react";
-import { Button, Col, Divider, Flex, Row, Space } from "antd"
+import { Avatar, Button, Col, Divider, Flex, Row, Space, Tag } from "antd"
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Link from "next/link";
 import { findIndex, map } from "lodash";
 import { useTranslations } from "next-intl";
+import { UserOutlined } from '@ant-design/icons';
 
 import { FileUpload, Product } from "@/app/lib/definitions";
 import { Pattern } from "@/app/lib/definitions";
-import { getElement } from "@/app/lib/utils";
+import { getElement, getStatusColor } from "@/app/lib/utils";
 import { DragScroll } from "@/app/lib/utils";
 import DownloadImage from "../custom-image";
-import { SOCIAL_LINKS } from "@/app/lib/constant";
+import { ROUTE_PATH, SOCIAL_LINKS, TRANSLATION_STATUS } from "@/app/lib/constant";
 import FormattedCurrency from "../forrmat-currency";
 import '../../ui/components/introduction-card.scss';
 
@@ -26,6 +27,7 @@ const IMAGE_AMOUNT = 4;
 
 const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: IntroductionCardProps) => {
 	const { src, name, author, description, images, link, price, currency_code } = data;
+	const { status, userId, userAvatar, username } = data as Pattern;
 	const [activeThumbnail, setActiveThumbnail] = useState({ index: 0, src });
 	const t = useTranslations("IntroductionCard");
 	const sliderRef = useRef(null);
@@ -97,6 +99,26 @@ const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: Introducti
 
 	return (
 		<Row className="introduction-card" gutter={[30, 30]}>
+			<Col span={24}>
+				<div className='creator'>
+					{
+						userAvatar ?
+							<Avatar
+								size='small'
+								src={userAvatar}
+							/>
+							:
+							<UserOutlined />
+					}
+					{
+						username && <Link href={`${ROUTE_PATH.PROFILE}/${userId}`}
+							className='creator-link'
+						>
+							{username}
+						</Link>
+					}
+				</div>
+			</Col>
 			<Col xs={24} md={12}>
 				<DownloadImage
 					width='100%'
@@ -132,17 +154,29 @@ const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: Introducti
 			<Col xs={24} md={12}>
 				<div className="text-box">
 					<h1 className="card-title mt-0">{name}</h1><br />
+					{
+						(status && status !== TRANSLATION_STATUS.NONE) &&
+						<div>
+							<Tag className='status-tag'
+								color={getStatusColor(status || 'NONE')}>{t(`status.${status}`)}</Tag>
+						</div>
+					}
 					{author && <span className="author">{t('author')}:&nbsp;<i>{author}</i></span>}
 					<p className="description">{description}</p>
-					<Divider />
-					<Space direction="vertical" size='middle'>
-						{price && <FormattedCurrency price={price} currency_code={currency_code} />}
-						{(price || link) && <Link href={link || SOCIAL_LINKS.FACEBOOK} target="_blank">
-							<Button className="btn-border" type="primary">
-								{t('btn_order')}
-							</Button>
-						</Link>}
-					</Space>
+					{
+						price && <>
+							<Divider />
+							<Space direction="vertical" size='middle'>
+								{price && <FormattedCurrency price={price} currency_code={currency_code} />}
+								{(price || link) && <Link href={link || SOCIAL_LINKS.FACEBOOK} target="_blank">
+									<Button className="btn-border" type="primary">
+										{t('btn_order')}
+									</Button>
+								</Link>}
+							</Space>
+						</>
+					}
+
 				</div>
 			</Col>
 		</Row>
