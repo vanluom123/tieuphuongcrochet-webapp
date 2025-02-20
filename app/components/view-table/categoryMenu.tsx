@@ -1,41 +1,76 @@
+import { ALL_ITEM } from "@/app/lib/constant";
 import { TabsItem } from "@/app/lib/definitions";
-import { Menu, MenuProps } from "antd";
-import { MenuItemType } from "antd/es/menu/interface";
+import { scrollHorizional } from "@/app/lib/utils";
+import { Dropdown, MenuProps } from "antd";
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface CategoryMenuProps {
     items: TabsItem[];
-    currentTab: string;
-    onClickMenu: (key: string) => void;
-    tabsProps: MenuProps;
+    onClickMenu: (key: React.Key) => void;
 }
 
-const CategoryMenu = ({ items, currentTab, onClickMenu, tabsProps }: CategoryMenuProps) => {
+const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
 
-    const convertToMenuItems = (items: TabsItem[]): MenuItemType[] => {
-        return items.map(({ label, key, icon, children }) => {
-            if (children && children.length > 0) {
-                return {
-                    key,
-                    label,
-                    icon,
-                    children: convertToMenuItems(children),
-                    onTitleClick: () => onClickMenu(key.toString()),
-                };
-            }
-            return { key, label, icon };
-        });
-    };
+    const scrollHorizionalRef = useRef(scrollHorizional);
+    const [itemSelected, setItemSelected] = useState({
+        key: '' as React.Key,
+        childKey: '' as React.Key,
+    });
+
+    useEffect(() => {
+        setItemSelected({ key: ALL_ITEM.key, childKey: '' });
+        scrollHorizionalRef.current();
+    }, [])
+
+    const onClickItem = useCallback((key: React.Key, childKey?: React.Key) => {
+        setItemSelected({ key, childKey: childKey || '' });
+        onClickMenu(childKey || key);
+    }, [onClickMenu]);
 
     return (
-        <Menu
-            className='tabs-menu'
-            selectedKeys={[currentTab]}
-            mode="horizontal"
-            onClick={({ key }) => onClickMenu(key)}
-            items={convertToMenuItems(items)}
-            {...tabsProps}
-        />
+        <ul className="tabs-menu menu-horizional ul-menu-overflow horizontal-scroll">
+            {
+                items.map((c) => {
+                    if (c?.children && c.children.length > 0) {
+                        const menuItems = useMemo(() =>
+                            c.children?.map((i) => ({
+                                key: i.key,
+                                label: (
+                                    <a onClick={() => onClickItem(c.key, i.key)} className="menu-title-content">
+                                        {i.label}
+                                    </a>
+                                )
+                            })) || [],
+                            [c.children]);
+
+                        return (
+                            <li key={c.key}
+
+                                className={`menu-overflow-item menu-submenu ${c.key === itemSelected.key && 'menu-item-selected'}`}
+                            >
+                                <Dropdown menu={{
+                                    items: menuItems,
+                                    selectable: true,
+                                }}>
+                                    <a onClick={() => onClickItem(c.key)}>
+                                        <span className="menu-title-content">{c.label}</span>
+                                    </a>
+                                </Dropdown>
+                            </li>
+                        )
+                    }
+                    return (
+                        <li key={c.key}
+                            onClick={() => onClickItem(c.key)}
+                            className={`menu-overflow-item menu-item-only-child ${c.key === itemSelected.key && 'menu-item-selected'}`}
+                        >
+                            <span className="menu-title-content">{c.label}</span>
+                        </li>
+                    )
+                })
+            }
+        </ul>
     );
 };
 
-export default CategoryMenu;
+export default memo(CategoryMenu);

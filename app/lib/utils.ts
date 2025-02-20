@@ -462,3 +462,36 @@ export const uploadImageToServer = async (currentImages: FileUpload[] = [], prev
 }
 
 export const uid = () => new Date().getTime().toString(36) + Math.random().toString(36).substring(2);
+
+export const scrollHorizional = () => {
+    const scrollContainer = document.querySelector(".horizontal-scroll") as HTMLElement;
+    if (scrollContainer) {
+        let isDown = false;
+        let startX: number;
+        let scrollLeft: number;
+        scrollContainer.addEventListener("mousedown", (e) => {
+            isDown = true;
+            scrollContainer.classList.add("active");
+            startX = e.pageX - scrollContainer.offsetLeft;
+            scrollLeft = scrollContainer.scrollLeft;
+        });
+
+        scrollContainer.addEventListener("mouseleave", () => {
+            isDown = false;
+            scrollContainer.classList.remove("active");
+        });
+
+        scrollContainer.addEventListener("mouseup", () => {
+            isDown = false;
+            scrollContainer.classList.remove("active");
+        });
+
+        scrollContainer.addEventListener("mousemove", (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - scrollContainer.offsetLeft;
+            const walk = (x - startX) * 2; // Adjust scroll speed
+            scrollContainer.scrollLeft = scrollLeft - walk;
+        });
+    }
+}
