@@ -1329,3 +1329,23 @@ body {
 .horizontal-scroll.active {
   cursor: grabbing;
 }
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light gray track */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fecdcd; /* Darker gray scrollbar */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $colorPrimary; /* Darker on hover */
+}

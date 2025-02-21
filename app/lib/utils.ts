@@ -396,13 +396,12 @@ export const getStatusColor = (status: TTranslationStatus) => {
     return status ? TRANSLATION_STATUS_COLOR[status] : TRANSLATION_STATUS_COLOR.NONE;
 }
 
-
 export const mapTabsData = (data: DataType[]): TabsItem[] => {
     const result = map(data, c => {
         const { children, name, key, icon } = c;
 
         let newTab: TabsItem = {
-            label: name,
+            label: name.toLowerCase(),
             key: key || 'N/A',
             icon: icon,
         };

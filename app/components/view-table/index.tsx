@@ -83,7 +83,7 @@ const ViewTable = (
 
     const items = useMemo(() => [
         {
-            label: t("all"),
+            label: ALL_ITEM.key,
             key: ALL_ITEM.key
         },
         ...mapTabsData(itemsTabs || [])
