@@ -1,22 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Col, FloatButton, Row, Spin} from 'antd';
-import {useTranslations} from 'next-intl';
-import {useRouter} from 'next/navigation';
+import React, { memo, useCallback, useEffect, useState } from 'react';
+import { Button, Col, FloatButton, Row, Spin } from 'antd';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
-import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
-import {Pattern} from '@/app/lib/definitions';
-import {deleteUserPattern, fetchUserPatterns} from '@/app/lib/service/profileService';
-import {ROUTE_PATH} from '@/app/lib/constant';
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
+import { Pattern } from '@/app/lib/definitions';
+import { deleteUserPattern, fetchUserPatterns } from '@/app/lib/service/profileService';
+import { ROUTE_PATH } from '@/app/lib/constant';
 import FreePatternCard from './FreePatternCard';
 import FreePatternFormModal from './FreePatternFormModal';
-import {modal, notification} from '@/app/lib/notify';
+import { modal, notification } from '@/app/lib/notify';
 
 interface FreePatternsProps {
     isCreator: boolean;
     userId: string;
 }
 
-const FreePatterns = ({isCreator, userId}: FreePatternsProps) => {
+const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {    
     const t = useTranslations('Profile');
     const [patterns, setPatterns] = useState<Pattern[]>([]);
     const [loading, setLoading] = useState(false);
@@ -26,18 +26,16 @@ const FreePatterns = ({isCreator, userId}: FreePatternsProps) => {
         id: ''
     });
 
-    const onRefreshData = () => {
+    const onRefreshData = useCallback(() => {
         setLoading(true);
-        fetchUserPatterns(userId).then(data => {
-            setPatterns(data);
-        }).finally(() => {
-            setLoading(false);
-        });
-    };
+        fetchUserPatterns(userId)
+            .then(data => setPatterns(data))
+            .finally(() => setLoading(false));
+    }, [userId]);  // ✅ Chỉ thay đổi khi userId thay đổi
 
     useEffect(() => {
         onRefreshData();
-    }, []);
+    }, [onRefreshData]);
 
     const onViewPattern = (id: React.Key) => {
         router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`);
@@ -46,7 +44,7 @@ const FreePatterns = ({isCreator, userId}: FreePatternsProps) => {
     const showDeleteConfirm = (id: React.Key) => {
         modal.confirm({
             title: t('patterns.delete_confirm_title'),
-            icon: <ExclamationCircleFilled/>,
+            icon: <ExclamationCircleFilled />,
             content: t('patterns.delete_confirm_content'),
             okText: t('patterns.yes'),
             okType: 'danger',
@@ -75,11 +73,11 @@ const FreePatterns = ({isCreator, userId}: FreePatternsProps) => {
     };
 
     const onAddPattern = () => {
-        setModalData({open: true, id: ''})
+        setModalData({ open: true, id: '' })
     };
 
     const onEditPattern = (id: React.Key) => {
-        setModalData({open: true, id: `${id}`})
+        setModalData({ open: true, id: `${id}` })
     };
 
     return (
@@ -92,7 +90,7 @@ const FreePatterns = ({isCreator, userId}: FreePatternsProps) => {
                                 <Col xs={12} sm={12} lg={6} key={index}>
                                     <FreePatternCard
                                         isShowActions={isCreator}
-                                        pattern={{...pattern, src: pattern.fileContent || ''}}
+                                        pattern={{ ...pattern, src: pattern.fileContent || '' }}
                                         onReadDetail={() => onViewPattern(pattern.id || '')}
                                         onDelete={() => showDeleteConfirm(pattern.id || '')}
                                         onEdit={() => onEditPattern(pattern.id || '')}
@@ -102,15 +100,15 @@ const FreePatterns = ({isCreator, userId}: FreePatternsProps) => {
                         </Row>
                         {isCreator && (
                             <FloatButton type='primary'
-                                         tooltip={<div>{t('patterns.add')}</div>}
-                                         icon={<PlusOutlined/>}
-                                         onClick={() => onAddPattern()}/>
+                                tooltip={<div>{t('patterns.add')}</div>}
+                                icon={<PlusOutlined />}
+                                onClick={() => onAddPattern()} />
                         )}
                     </>
                 ) : (
                     isCreator && (
-                        <Button type="primary" shape="circle" icon={<PlusOutlined/>} size='large'
-                                onClick={() => onAddPattern()}/>
+                        <Button type="primary" shape="circle" icon={<PlusOutlined />} size='large'
+                            onClick={() => onAddPattern()} />
                     )
                 )}
             </div>
@@ -123,4 +121,4 @@ const FreePatterns = ({isCreator, userId}: FreePatternsProps) => {
     );
 };
 
-export default FreePatterns;
+export default memo(FreePatterns);
