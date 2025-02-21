@@ -585,7 +585,7 @@ body {
       .tabs-menu {
         padding: 10px 0;
 
-        .ant-menu-title-content {
+        .menu-title-content {
           font-size: $fontSize_middle;
         }
       }
@@ -794,7 +794,7 @@ body {
       .tabs-menu {
         padding: 20px 0;
 
-        .ant-menu-title-content {
+        .menu-title-content {
           font-size: $fontSize_large;
         }
       }
@@ -1308,4 +1308,44 @@ body {
     font-weight: 300;
     font-size: $fontSize_middle;
   }
+}
+
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari */
+}
+
+.horizontal-scroll {
+  cursor: grab;
+}
+.horizontal-scroll.active {
+  cursor: grabbing;
+}
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light gray track */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fecdcd; /* Darker gray scrollbar */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $colorPrimary; /* Darker on hover */
 }

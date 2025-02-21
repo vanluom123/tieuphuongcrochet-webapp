@@ -1,6 +1,6 @@
 'use client'
 import { Input, Flex, Col, Pagination, MenuProps, Empty, Row, Spin, Affix } from 'antd';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { SegmentedValue } from 'antd/es/segmented';
 import { useTranslations } from 'next-intl';
 import { ALL_ITEM, TRANSLATION_STATUS, TRANSLATION_OPTIONS } from '@/app/lib/constant';
@@ -28,7 +28,6 @@ export interface ViewTableProps {
     onReadDetail: (key: React.Key) => void;
     isShowTabs?: boolean;
     itemsTabs?: DataType[];
-    tabsProps?: MenuProps;
     onTabChange?: (key: React.Key) => void;
     onStatusFilter?: (value: SegmentedValue) => void;
     isShowStatusFilter?: boolean;
@@ -42,7 +41,6 @@ const ViewTable = (
         onSearch,
         pageIndex = 0,
         itemsTabs = [],
-        tabsProps,
         isShowTabs,
         mode,
         loading,
@@ -54,7 +52,6 @@ const ViewTable = (
 
     const [direction, setDirection] = useState<TDirection>('horizontal');
     const { Search } = Input;
-    const [currentTab, setCurrentNav] = useState('all');
 
     const t = useTranslations("Btn");
 
@@ -72,38 +69,34 @@ const ViewTable = (
     };
 
     const onChange = (page: number, pageSize: number) => {
-        if (onChange instanceof Function) {
+        if (onPageChange instanceof Function) {
             onPageChange(page, pageSize);
             onScrollBody('.data-list');
         }
     };
 
-
-    const onClickMenu = (key: string) => {
-        setCurrentNav(key);
+    const memoizedOnClickMenu = useCallback((key: React.Key) => {
         if (onTabChange instanceof Function) {
             onTabChange(key);
         }
-    };
+    }, []);
 
-    const items =
-        [
-            {
-                label: t("all"),
-                key: ALL_ITEM.key
-            },
-            ...mapTabsData(itemsTabs)
-        ];
+    const items = useMemo(() => [
+        {
+            label: ALL_ITEM.key,
+            key: ALL_ITEM.key
+        },
+        ...mapTabsData(itemsTabs || [])
+    ], [t, itemsTabs]);
 
-
-    const getCardItem = useCallback((item: DataType) => {
+    const getCardItem = useMemo(() => (item: DataType) => {
         switch (mode) {
             case 'Product':
                 return <ProductCard loading={loading} product={item as Product} onReadDetail={() => onReadDetail(item.key)} />;
             case 'Pattern':
                 return <FreePatternCard loading={loading} pattern={item as Pattern} onReadDetail={() => onReadDetail(item.key)} />;
             default:
-                return <BlogCard item={{ ...item } as Post} onReadDetail={() => onReadDetail(item.key)} />;
+                return <BlogCard item={item as Post} onReadDetail={() => onReadDetail(item.key)} />;
         }
     }, [mode, loading, onReadDetail]);
 
@@ -150,14 +143,11 @@ const ViewTable = (
                     {isShowTabs && items &&
                         <CategoryMenu
                             items={items as TabsItem[]}
-                            currentTab={currentTab}
-                            onClickMenu={(key) => onClickMenu(key)}
-                            tabsProps={tabsProps as MenuProps}
+                            onClickMenu={(key) => memoizedOnClickMenu(key)}
                         />
                     }
                 </div>
             </Affix>
-
 
             <Spin spinning={loading} tip="Loading...">
                 {/* Data source */}
