@@ -37,7 +37,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
         <ul className="tabs-menu menu-horizional ul-menu-overflow horizontal-scroll">
             {items.map((c) => {
                 if (c?.children && c.children.length > 0) {
-                    const menuItems = useMemo(() => c.children?.map((i) => ({
+                    const menuItems = c.children?.map((i) => ({
                         key: i.key,
                         label: (
                             <a
@@ -46,8 +46,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                                 {t(`${c.label}.${i.label}`)}
                             </a>
                         )
-                    })) || [],
-                        [c.children]);
+                    })) || [];
 
                     return (
                         <li key={c.key}

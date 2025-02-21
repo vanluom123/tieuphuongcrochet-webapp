@@ -24,9 +24,9 @@ interface CategoryDrawerProps {
 const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: CategoryDrawerProps) => {
     const t = useTranslations('CategoryMenu');
 
-    const onClose = () => {
+    const onClose = useCallback(() => {
         setOpen(false);
-    };
+    }, [setOpen]);
 
     const onClickItemBtn = useCallback(
         (key: React.Key, childKey?: React.Key) => {
@@ -47,18 +47,14 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
         >
             <Row gutter={[10, 10]}>
                 {items?.length > 0 && items.map((item, index) => {
-                    const menuItems = useMemo(
-                        () =>
-                            item.children?.map((i) => ({
-                                key: i.key,
-                                label: (
-                                    <a onClick={() => onClickItemBtn(item.key, i.key)}>
-                                        {t(`${item.label}.${i.label}`)}
-                                    </a>
-                                ),
-                            })) || [],
-                        [item.children]
-                    );
+                    const menuItems = item.children?.map((i) => ({
+                        key: i.key,
+                        label: (
+                            <a onClick={() => onClickItemBtn(item.key, i.key)}>
+                                {t(`${item.label}.${i.label}`)}
+                            </a>
+                        ),
+                    })) || [];
 
                     return (
                         <Col key={`${item.key}_index_${index}`} lg={6} md={8} xs={12}>

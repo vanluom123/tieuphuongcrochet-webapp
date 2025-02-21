@@ -3,23 +3,23 @@
 import { Button, Flex, Skeleton, Tabs, TabsProps } from 'antd';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { CameraOutlined, LeftOutlined, UserOutlined } from '@ant-design/icons';
-import {useSession} from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
-import {User} from '@/app/lib/definitions';
-import {loadUserInfo, updateUserProfile} from '@/app/lib/service/profileService';
-import {notification} from '@/app/lib/notify';
+import { User } from '@/app/lib/definitions';
+import { loadUserInfo, updateUserProfile } from '@/app/lib/service/profileService';
+import { notification } from '@/app/lib/notify';
 import SingleUpload from '@/app/components/upload-files/SingleUpload';
-import {GENDER} from '@/app/lib/constant';
+import { GENDER } from '@/app/lib/constant';
 import UserInfo from '../../components/profile/UserInfo';
 import defaultUser from '../../../public/default-user.png';
 import defaultBackground from '../../../public/default-background.jpg';
 import '../../ui/components/profile.scss';
 
-const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), {ssr: false});
+const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
 
 interface ProfileDetailProps {
     params: {
@@ -49,7 +49,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
         return params?.slug === session?.user?.id;
     }, [session?.user?.id, params?.slug]);
 
-    const fetchUserData = async () => {
+    const fetchUserData = useCallback(async () => {
         setLoading({ avatar: true, cover: true });
         try {
             const data = await loadUserInfo(userId);
@@ -61,28 +61,28 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
         } finally {
             setLoading({ avatar: false, cover: false });
         }
-    };
+    }, [userId]);
 
     useEffect(() => {
         fetchUserData();
-    }, []);
+    }, [fetchUserData]);
 
     const items: TabsProps['items'] = isCreator ? [
         {
             key: 'patterns',
             label: t('tabs.patterns'),
-            children: <FreePatterns userId={userId} isCreator={isCreator}/>,
+            children: <FreePatterns userId={userId} isCreator={isCreator} />,
         },
         {
             key: 'info',
             label: t('tabs.info'),
-            children: <UserInfo userData={userData} setUserData={setUserData}/>,
+            children: <UserInfo userData={userData} setUserData={setUserData} />,
         },
     ] : [
         {
             key: 'patterns',
             label: t('tabs.patterns'),
-            children: <FreePatterns userId={userId} isCreator={isCreator}/>,
+            children: <FreePatterns userId={userId} isCreator={isCreator} />,
         },
     ];
 
@@ -123,7 +123,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                         type='primary'
                         shape='circle'
                         onClick={() => router.back()}
-                        icon={<LeftOutlined/>}
+                        icon={<LeftOutlined />}
                         className="profile-back-button"
                     />
                     {
@@ -132,7 +132,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                                 src={userData?.backgroundImageUrl || defaultBackground}
                                 alt="User cover image"
                                 layout="fill"
-                                objectFit="cover"
+                                style={{ objectFit: 'cover' }} 
                             />
                     }
 
@@ -185,7 +185,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                             <SingleUpload
                                 className="profile-cover-image-upload"
                                 onUpload={onUploadCover}
-                                icon={<CameraOutlined/>}
+                                icon={<CameraOutlined />}
                             />
                         )
                     }
