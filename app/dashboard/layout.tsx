@@ -55,7 +55,7 @@ const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <Header className='admin-page-layout__header' style={{ display: 'flex', alignItems: 'center', padding: 0, background: colorBgContainer, height: 76 }}>
                 <div className="logo-sidebar" >
                     <Link href={ROUTE_PATH.HOME}>
-                        <Image width={75} priority src={logo} alt='Tiệm len Tiểu Phương' />
+                        <Image width={75} height={75} priority src={logo} alt='Tiệm len Tiểu Phương' />
                     </Link>
                 </div>
                 <Button

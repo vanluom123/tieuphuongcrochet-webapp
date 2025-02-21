@@ -75,11 +75,11 @@ const ViewTable = (
         }
     };
 
-    const memoizedOnClickMenu = useCallback((key: React.Key) => {
+    const onClickMenu = (key: React.Key) => {
         if (onTabChange instanceof Function) {
             onTabChange(key);
         }
-    }, []);
+    };
 
     const items = useMemo(() => [
         {
@@ -87,19 +87,22 @@ const ViewTable = (
             key: ALL_ITEM.key
         },
         ...mapTabsData(itemsTabs || [])
-    ], [t, itemsTabs]);
+    ], [itemsTabs]);
 
-    const getCardItem = useMemo(() => (item: DataType) => {
-        switch (mode) {
-            case 'Product':
-                return <ProductCard loading={loading} product={item as Product} onReadDetail={() => onReadDetail(item.key)} />;
-            case 'Pattern':
-                return <FreePatternCard loading={loading} pattern={item as Pattern} onReadDetail={() => onReadDetail(item.key)} />;
-            default:
-                return <BlogCard item={item as Post} onReadDetail={() => onReadDetail(item.key)} />;
-        }
+    const getCardItem = useMemo(() => {
+        const renderCardItem = (item: DataType) => {
+            switch (mode) {
+                case 'Product':
+                    return <ProductCard loading={loading} product={item as Product} onReadDetail={() => onReadDetail(item.key)} />;
+                case 'Pattern':
+                    return <FreePatternCard loading={loading} pattern={item as Pattern} onReadDetail={() => onReadDetail(item.key)} />;
+                default:
+                    return <BlogCard item={item as Post} onReadDetail={() => onReadDetail(item.key)} />;
+            }
+        };
+        return renderCardItem;
     }, [mode, loading, onReadDetail]);
-
+    
     return (
         <div className='data-list'>
             <Affix offsetTop={0} className='affix-search-area'>
@@ -143,7 +146,7 @@ const ViewTable = (
                     {isShowTabs && items &&
                         <CategoryMenu
                             items={items as TabsItem[]}
-                            onClickMenu={(key) => memoizedOnClickMenu(key)}
+                            onClickMenu={(key) => onClickMenu(key)}
                         />
                     }
                 </div>
