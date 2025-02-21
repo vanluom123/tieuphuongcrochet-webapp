@@ -1,5 +1,5 @@
-"use client"
-import { useState, useEffect } from "react";
+"use client";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { SegmentedValue } from "antd/es/segmented";
 import { useRouter } from "next/navigation";
 
@@ -11,7 +11,6 @@ import { filterByText, mapNameFilters } from '@/app/lib/utils';
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
 
 interface FreePatternProps {
-	// initial	Data: DataTableState
 	categories: Category[];
 }
 
@@ -25,115 +24,98 @@ const FreePatterns = ({ categories }: FreePatternProps) => {
 	const [params, setParams] = useState(initialListParams);
 
 	const router = useRouter();
-	const onPageChange = (current: number, pageSize: number) => {
-		const newParams = {
-			...params,
+
+	const memoizedParams = useMemo(() => params, [params]);
+
+	const onPageChange = useCallback((current: number, pageSize: number) => {
+		setParams(prev => ({
+			...prev,
 			pageNo: current - 1,
-			pageSize: pageSize,
-		}
-		setParams(newParams)
-	}
+			pageSize,
+		}));
+	}, []);
 
-	useEffect(() => {
-		setState(prevState => ({ ...prevState, loading: true, data: [] }));
-		fetchFreePatterns(params)
-			.then((response) => {
-				if (!response) {
-					throw new Error('No response from server');
-				}
-				setState(prevState => ({
-					...prevState,
-					data: Array.isArray(response.data) ? response.data : [],
-					totalRecord: response.totalRecords || 0
-				}));
-			})
-			.catch((error) => {
-				console.error('Error fetching free patterns:', error);
-				setState(prevState => ({
-					...prevState,
-					data: [],
-					totalRecord: 0
-				}));
-			})
-			.finally(() => {
-				setState(prevState => ({ ...prevState, loading: false }));
-			});
-	}, [params]);
-
-	const onSearchFreePatterns = (value: string) => {
+	const onSearchFreePatterns = useCallback((value: string) => {
 		const prodFilter: Filter = filterByText(value, 'name', 'description', 'author');
 		const tempFilters = mapNameFilters(params.filters as Filter[], 'searchText', prodFilter);
+		setParams(prev => ({
+			...prev,
+			filters: tempFilters,
+		}));
+	}, [params.filters]);
 
-		const newParams = {
-			...initialListParams,
-			filters: tempFilters
+	const onTabChange = useCallback((key: React.Key) => {
+		const categoryFilter: Filter = key === ALL_ITEM.key ? {} as Filter : {
+			name: 'category',
+			filterLogic: FILTER_LOGIC.ALL,
+			filterCriteria: [
+				{
+					key: 'category.id',
+					value: [`${key}`],
+					operation: FILTER_OPERATION.IN
+				}
+			],
 		};
-		setParams(newParams);
-	}
-
-	const onViewFreePattern = (id: React.Key) => {
-		router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`);
-	};
-
-	const onTabChange = (key: React.Key) => {
-		const categoryFilter: Filter = key === ALL_ITEM.key ? {} as Filter :
-			{
-				name: 'category',
-				filterLogic: FILTER_LOGIC.ALL,
-				filterCriteria: [
-					{
-						key: 'category.id',
-						value: [`${key}`],
-						operation: FILTER_OPERATION.IN
-					}
-				],
-			}
-			;
-
 		const tempFilters = mapNameFilters(params.filters as Filter[], 'category', categoryFilter);
+		setParams(prev => ({
+			...prev,
+			filters: tempFilters,
+		}));
+	}, [params.filters]);
 
-		const newParams: ListParams = {
-			...initialListParams,
-			filters: tempFilters
+	const onStatusFilter = useCallback((value: SegmentedValue) => {
+		const statusFilter: Filter = value === TRANSLATION_STATUS.ALL ? {} as Filter : {
+			name: 'statusFilter',
+			filterLogic: FILTER_LOGIC.ALL,
+			filterCriteria: [
+				{
+					key: 'status',
+					value,
+					operation: FILTER_OPERATION.EQUAL
+				}
+			],
 		};
-
-		setParams(newParams);
-	}
-
-	const onStatusFilter = (value: SegmentedValue) => {
-		const statusFilter: Filter = value === TRANSLATION_STATUS.ALL ? {} as Filter :
-			{
-				name: 'statusFilter',
-				filterLogic: FILTER_LOGIC.ALL,
-				filterCriteria: [
-					{
-						key: 'status',
-						value,
-						operation: FILTER_OPERATION.EQUAL
-					}
-				],
-			}
-			;
-
 		const tempFilters = mapNameFilters(params.filters as Filter[], 'statusFilter', statusFilter);
+		setParams(prev => ({
+			...prev,
+			filters: tempFilters,
+		}));
+	}, [params.filters]);
 
-		const newParams: ListParams = {
-			...initialListParams,
-			filters: tempFilters
-		};
+	useEffect(() => {
+		let isMounted = true;
+		setState(prev => ({ ...prev, loading: true }));
 
-		setParams(newParams);
-	}
+		fetchFreePatterns(memoizedParams)
+			.then(response => {
+				if (!isMounted) return;
+				if (!response) throw new Error('No response from server');
+
+				setState({
+					loading: false,
+					data: response.data || [],
+					totalRecord: response.totalRecords || 0
+				});
+			})
+			.catch(error => {
+				console.error('Error fetching free patterns:', error);
+				if (isMounted) {
+					setState({ loading: false, data: [], totalRecord: 0 });
+				}
+			});
+
+		return () => { isMounted = false; };
+	}, [memoizedParams]);
 
 	return (
 		<div className='shop-page scroll-animate'>
 			<HeaderPart titleId='FreePattern.title' descriptionId='FreePattern.description' />
 			<ViewTable
 				mode='Pattern'
-				onReadDetail={onViewFreePattern}
-				dataSource={state?.data ?? []}
-				total={state?.totalRecord ?? 0}
-				loading={!!state?.loading}
+				onReadDetail={id => router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`)}
+				dataSource={state.data}
+				total={state.totalRecord}
+				loading={state.loading}
 				isShowTabs
 				itemsTabs={categories as DataType[]}
 				pageIndex={params.pageNo}
@@ -145,7 +127,7 @@ const FreePatterns = ({ categories }: FreePatternProps) => {
 				isShowStatusFilter
 			/>
 		</div>
-	)
+	);
 }
 
 export default FreePatterns;
