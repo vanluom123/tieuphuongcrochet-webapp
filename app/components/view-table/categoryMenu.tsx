@@ -1,6 +1,6 @@
+'use client'
 import { ALL_ITEM } from "@/app/lib/constant";
 import { TabsItem } from "@/app/lib/definitions";
-import { scrollHorizional } from "@/app/lib/utils";
 import { Button, Dropdown } from "antd";
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DownOutlined } from '@ant-design/icons';
@@ -32,10 +32,10 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
         const itemLeft = element.offsetLeft;
         const containerWidth = container.clientWidth;
         const itemWidth = element.offsetWidth;
-        
+
         // Tính toán vị trí cuộn để căn giữa item
         const scrollPosition = itemLeft - (containerWidth / 2) + (itemWidth / 2);
-        
+
         // Cuộn mượt đến vị trí
         container.scrollTo({
             left: Math.max(0, scrollPosition),
@@ -53,8 +53,21 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
         }
     }, [onClickMenu, scrollToItem]);
 
+    const onClickItemBtn = useCallback((key: React.Key, childKey?: React.Key, index?: number | undefined) => {
+        setItemSelected({ key, childKey: childKey || '' });
+        onClickMenu(childKey || key);
+
+        if (index && index > -1) {
+            const elements = document.querySelectorAll('.menu-overflow-item');
+            const element = elements[index] as HTMLElement;
+            if (element) {
+                scrollToItem(element);
+            }
+        }
+    }, [onClickMenu, scrollToItem]);
+
     const categoriesTabNode = (
-        <ul 
+        <ul
             ref={scrollContainerRef}
             className="tabs-menu menu-horizional ul-menu-overflow horizontal-scroll"
         >
@@ -76,7 +89,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                     })) || [];
 
                     return (
-                        <li 
+                        <li
                             key={c.key}
                             className={`menu-overflow-item menu-submenu ${c.key === itemSelected.key && 'menu-item-selected'}`}
                             onClick={(e) => onClickItem(c.key, undefined, e.currentTarget)}
@@ -94,7 +107,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                     );
                 }
                 return (
-                    <li 
+                    <li
                         key={c.key}
                         onClick={(e) => onClickItem(c.key, undefined, e.currentTarget)}
                         className={`menu-overflow-item menu-item-only-child ${c.key === itemSelected.key && 'menu-item-selected'}`}
@@ -117,7 +130,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
             <CategoryDrawer
                 items={items}
                 itemSelected={itemSelected}
-                onClickItem={onClickItem}
+                onClickItem={onClickItemBtn}
                 open={open}
                 setOpen={setOpen}
             />
