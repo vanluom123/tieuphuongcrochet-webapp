@@ -424,12 +424,18 @@ body {
 @media screen and (min-width: $screen_425) {
   .container {
     padding: 15px;
+    .patterns-tab{
+      padding-bottom: 32px;
+    }
   }
 }
 
 @media screen and (min-width: $xs) {
   .container {
     padding: 20px;
+    .patterns-tab{
+      padding-bottom: 0px;
+    }
   }
 
   .layout-wrap {
@@ -603,6 +609,12 @@ body {
         &.small-screen {
           display: none;
         }
+      }
+    }
+
+    .ant-float-btn {
+      &.float-btn-center-bottom{
+        bottom: 20px;
       }
     }
   }
@@ -797,6 +809,22 @@ body {
         .menu-title-content {
           font-size: $fontSize_large;
         }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $md) {
+  .layout-wrap {
+
+    .ant-float-btn {
+      &.float-btn-right-bottom{
+        right: 7px;
+        bottom: 70px;
+      }
+      &.float-btn-back-top {
+        right: 7px;
+        bottom:10px;
       }
     }
   }
@@ -1316,16 +1344,19 @@ body {
   scroll-behavior: smooth;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  scrollbar-width: none;
+  /* Hide scrollbar for Firefox */
 }
 
 .horizontal-scroll::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome, Safari */
+  display: none;
+  /* Hide scrollbar for Chrome, Safari */
 }
 
 .horizontal-scroll {
   cursor: grab;
 }
+
 .horizontal-scroll.active {
   cursor: grabbing;
 }
@@ -1337,15 +1368,50 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Light gray track */
+  background: #f1f1f1;
+  /* Light gray track */
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #fecdcd; /* Darker gray scrollbar */
+  background: #fecdcd;
+  /* Darker gray scrollbar */
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: $colorPrimary; /* Darker on hover */
+  background: $colorPrimary;
+  /* Darker on hover */
+}
+
+.ant-pagination {
+  &.pagination {
+    border-top: 1px solid $borderColor;
+    border-bottom: 1px solid $borderColor;
+    padding: 10px;
+    margin-top: 60px;
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+
+    .ant-pagination-total-text {
+      position: absolute;
+      left: 10px;
+    }
+  }
+}
+
+.ant-float-btn {
+  &.float-btn-center-bottom {
+    bottom: 2px;
+    left: calc(50% - 20px);
+  }
+
+  &.float-btn-right-bottom {
+    bottom: 80px;
+  }
+
+  &.float-btn-back-top {
+    bottom: 20px;
+  }
 }

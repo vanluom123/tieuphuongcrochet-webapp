@@ -1,4 +1,4 @@
-import { Collection, Pattern } from "../definitions";
+import { Collection, IResponseList, ListParams, ListResponse, Pattern } from "../definitions";
 import apiJwtService from "./apiJwtService";
 import { API_ROUTES } from "../constant";
 
@@ -11,15 +11,22 @@ export async function fetchUserCollections(): Promise<Collection[]> {
     return response ?? [];
 }
 
-export async function fetchUserPatterns(userId: string): Promise<Pattern[]> {
-    const response = await apiJwtService({
-        endpoint: `${API_ROUTES.FREE_PATTERN}/create-by`,
-        method: 'GET',
+export async function fetchUserPatterns(userId: string, params: ListParams): Promise<IResponseList<Pattern>> {
+    const response: ListResponse<Pattern> = await apiJwtService({
+        endpoint: `${API_ROUTES.USER}/${userId}${API_ROUTES.FREE_PATTERN}`,
+        method: 'POST',
         queryParams: {
-            'userId': userId
+            'pageNo': params?.pageNo.toString(),
+            'pageSize': params?.pageSize.toString(),
+            'sortBy': params?.sortBy as string,
+            'sortDir': params?.sortDir as string,
         }
     });
-    return response ?? [];
+
+    return {
+        data: response.contents || [],
+        totalRecords: response.totalElements || 0
+    }
 }
 
 export async function deleteUserPattern(id: string) {
@@ -57,7 +64,7 @@ export async function updateUserProfile(data: any) {
 }
 
 export async function loadUserInfo(id: string = '') {
-    if(!id) {
+    if (!id) {
         return;
     }
     const res = await apiJwtService({
@@ -70,7 +77,7 @@ export async function loadUserInfo(id: string = '') {
     return {
         name: res?.name,
         imageUrl: res?.imageUrl,
-        email: res?.email, 
+        email: res?.email,
         phone: res?.phone,
         birthDate: res?.birthDate,
         gender: res?.gender,

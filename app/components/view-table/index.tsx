@@ -1,6 +1,6 @@
 'use client'
 import { Input, Flex, Col, Pagination, MenuProps, Empty, Row, Spin, Affix } from 'antd';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SegmentedValue } from 'antd/es/segmented';
 import { useTranslations } from 'next-intl';
 import { ALL_ITEM, TRANSLATION_STATUS, TRANSLATION_OPTIONS } from '@/app/lib/constant';
@@ -102,7 +102,7 @@ const ViewTable = (
         };
         return renderCardItem;
     }, [mode, loading, onReadDetail]);
-    
+
     return (
         <div className='data-list'>
             <Affix offsetTop={0} className='affix-search-area'>

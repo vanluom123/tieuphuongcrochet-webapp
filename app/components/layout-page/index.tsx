@@ -68,7 +68,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
                 {children}
             </Content>
             <FooterPage currentNav={currentNav} />
-            <FloatButton.BackTop visibilityHeight={0} />
+            <FloatButton.BackTop className='float-btn-back-top' visibilityHeight={0} />
         </Layout>
     )
 }

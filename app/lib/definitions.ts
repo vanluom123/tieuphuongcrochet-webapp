@@ -281,3 +281,8 @@ export interface CUResponse {
 	message: string,
 	error: string
 }
+
+export interface IResponseList<T> {
+	data: T[],
+	totalRecords: number
+}

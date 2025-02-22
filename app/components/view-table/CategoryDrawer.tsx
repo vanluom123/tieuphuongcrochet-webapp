@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Button, Col, Drawer, Dropdown, Row } from 'antd';
 import { useTranslations } from 'next-intl';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface ItemSelected {
     key: React.Key;
@@ -44,6 +45,9 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
             open={open}
             onClose={onClose}
             className="custom-drawer-categories"
+            extra={
+                  <Button shape='circle' type='text' icon={<CloseOutlined />} onClick={onClose}/>
+              }
         >
             <Row gutter={[10, 10]}>
                 {items?.length > 0 && items.map((item, index) => {
