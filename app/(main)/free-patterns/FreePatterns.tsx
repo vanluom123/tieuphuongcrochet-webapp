@@ -2,6 +2,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { SegmentedValue } from "antd/es/segmented";
 import { useRouter } from "next/navigation";
+import { PlusOutlined } from '@ant-design/icons';
+import { FloatButton } from "antd";
 
 import HeaderPart from '@/app/components/header-part';
 import ViewTable from '@/app/components/view-table';
@@ -9,6 +11,8 @@ import { ALL_ITEM, FILTER_LOGIC, FILTER_OPERATION, ROUTE_PATH, TRANSLATION_STATU
 import { initialListParams, Filter, ListParams, DataTableState, Category, DataType } from '@/app/lib/definitions';
 import { filterByText, mapNameFilters } from '@/app/lib/utils';
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService';
+import FreePatternFormModal from "@/app/components/profile/FreePatternFormModal";
+import { handleTokenRefresh } from "@/app/lib/service/apiJwtService";
 
 interface FreePatternProps {
 	categories: Category[];
@@ -22,6 +26,10 @@ const FreePatterns = ({ categories }: FreePatternProps) => {
 	});
 
 	const [params, setParams] = useState(initialListParams);
+	const [modalData, setModalData] = useState({
+		open: false,
+		id: ''
+	});
 
 	const router = useRouter();
 
@@ -82,6 +90,25 @@ const FreePatterns = ({ categories }: FreePatternProps) => {
 		}));
 	}, [params.filters]);
 
+	const onRefreshData = useCallback(() => {
+		setState(prev => ({ ...prev, loading: true }));
+		fetchFreePatterns(memoizedParams)
+			.then(response => {
+				if (!response) throw new Error('No response from server');
+
+				setState({
+					loading: false,
+					data: response.data || [],
+					totalRecord: response.totalRecords || 0
+				});
+			})
+			.catch(error => {
+				console.error('Error fetching free patterns:', error);
+				setState({ loading: false, data: [], totalRecord: 0 })
+			});
+
+	}, []);
+
 	useEffect(() => {
 		let isMounted = true;
 		setState(prev => ({ ...prev, loading: true }));
@@ -107,6 +134,11 @@ const FreePatterns = ({ categories }: FreePatternProps) => {
 		return () => { isMounted = false; };
 	}, [memoizedParams]);
 
+	const onAddPattern = useCallback(async () => {
+		await handleTokenRefresh();
+		setModalData({ open: true, id: '' });
+	}, []);
+
 	return (
 		<div className='shop-page scroll-animate'>
 			<HeaderPart titleId='FreePattern.title' descriptionId='FreePattern.description' />
@@ -125,6 +157,15 @@ const FreePatterns = ({ categories }: FreePatternProps) => {
 				onTabChange={onTabChange}
 				onStatusFilter={onStatusFilter}
 				isShowStatusFilter
+			/>
+			<FloatButton type='primary'
+				className='float-btn-right-bottom'
+				icon={<PlusOutlined />}
+				onClick={onAddPattern} />
+			<FreePatternFormModal
+				modalData={modalData}
+				setModalData={setModalData}
+				onRefreshData={onRefreshData}
 			/>
 		</div>
 	);

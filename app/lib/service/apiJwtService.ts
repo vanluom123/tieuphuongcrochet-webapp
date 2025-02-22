@@ -4,28 +4,13 @@ import { JwtPayload } from "jsonwebtoken";
 
 import apiService from "./apiService";
 import refreshAccessToken from "@/app/lib/service/refreshTokenService";
+import { ROUTE_PATH } from "../constant";
 
 // With expiration buffer
 const EXPIRATION_BUFFER_SECONDS = 30; // 30 seconds before actual expiration
 
-async function apiJwtService({
-    baseUrl = process.env.NEXT_PUBLIC_API_URL,
-    endpoint = '',
-    method = 'GET',
-    data = null,
-    headers = {},
-    queryParams = {},
-    formData
-}: {
-    baseUrl?: string;
-    endpoint?: string;
-    method?: string;
-    data?: any | null;
-    headers?: Record<string, string>;
-    timeout?: number;
-    queryParams?: Record<string, string>;
-    formData?: FormData;
-}) {
+export async function handleTokenRefresh() {
+    // Logout the user and redirect to login page
     const session = await getSession();
     let accessToken = session?.user.accessToken;
 
@@ -45,11 +30,34 @@ async function apiJwtService({
             accessToken = tokenResponse.accessToken;
             session.user.accessToken = tokenResponse.accessToken;
             session.user.refreshToken = tokenResponse.refreshToken;
+            return accessToken;
         } catch (e) {
             await handleTokenRefreshFailure();
         }
     }
 
+    return accessToken;
+}
+
+async function apiJwtService({
+    baseUrl = process.env.NEXT_PUBLIC_API_URL,
+    endpoint = '',
+    method = 'GET',
+    data = null,
+    headers = {},
+    queryParams = {},
+    formData
+}: {
+    baseUrl?: string;
+    endpoint?: string;
+    method?: string;
+    data?: any | null;
+    headers?: Record<string, string>;
+    timeout?: number;
+    queryParams?: Record<string, string>;
+    formData?: FormData;
+}) {
+    let accessToken = await handleTokenRefresh();
     const options: RequestInit = {
         method: method,
         headers: {
@@ -69,11 +77,11 @@ async function apiJwtService({
     });
 }
 
-async function handleTokenRefreshFailure() {
+export async function handleTokenRefreshFailure() {
     // Logout the user and redirect to login page
     await signOut({
         redirect: true,
-        callbackUrl: '/login'
+        callbackUrl: ROUTE_PATH.LOGIN
     });
 }
 
