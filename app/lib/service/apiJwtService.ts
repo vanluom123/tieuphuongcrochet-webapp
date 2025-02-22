@@ -57,7 +57,7 @@ async function apiJwtService({
     queryParams?: Record<string, string>;
     formData?: FormData;
 }) {
-    let accessToken = await handleTokenRefresh();
+    const accessToken = await handleTokenRefresh();
     const options: RequestInit = {
         method: method,
         headers: {
