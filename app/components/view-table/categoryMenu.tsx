@@ -71,7 +71,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
             ref={scrollContainerRef}
             className="tabs-menu menu-horizional ul-menu-overflow horizontal-scroll"
         >
-            {items.map((c) => {
+            {items.map((c, index) => {
                 if (c?.children && c.children.length > 0) {
                     const menuItems = c.children?.map((i) => ({
                         key: i.key,
@@ -79,7 +79,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                             <a
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    onClickItem(c.key, i.key);
+                                    onClickItemBtn(c.key, i.key, index);
                                 }}
                                 className='menu-title-content'
                             >
