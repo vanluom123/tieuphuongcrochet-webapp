@@ -19,7 +19,7 @@ interface CategoryDrawerProps {
     open: boolean;
     setOpen: (open: boolean) => void;
     itemSelected: ItemSelected;
-    onClickItem: (key: React.Key, childKey?: React.Key) => void;
+    onClickItem: (key: React.Key, childKey?: React.Key, index?: number) => void;
 }
 
 const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: CategoryDrawerProps) => {
@@ -30,8 +30,8 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
     }, [setOpen]);
 
     const onClickItemBtn = useCallback(
-        (key: React.Key, childKey?: React.Key) => {
-            onClickItem(key, childKey);
+        (key: React.Key, childKey?: React.Key, index?: number) => {
+            onClickItem(key, childKey, index);
             onClose();
         },
         [onClickItem, onClose]
@@ -54,7 +54,7 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
                     const menuItems = item.children?.map((i) => ({
                         key: i.key,
                         label: (
-                            <a onClick={() => onClickItemBtn(item.key, i.key)}>
+                            <a onClick={(e) => onClickItemBtn(item.key, i.key, index)}>
                                 {t(`${item.label}.${i.label}`)}
                             </a>
                         ),
@@ -69,7 +69,7 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
                                     selectedKeys: [(itemSelected.childKey || itemSelected.key) as string]
                                 }}>
                                     <Button
-                                        onClick={() => onClickItemBtn(item.key)}
+                                        onClick={(e) => onClickItemBtn(item.key, undefined, index)}
                                         className={`${itemSelected.key === item.key ? 'active' : ''}`}
                                     >
                                         <span>{t(`${item.label}.title`)}</span>
@@ -77,7 +77,7 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
                                 </Dropdown>
                             ) : (
                                 <Button
-                                    onClick={() => onClickItemBtn(item.key)}
+                                    onClick={(e) => onClickItemBtn(item.key, undefined,index )}
                                     type="default"
                                     className={`${itemSelected.key === item.key ? 'active' : ''}`}
                                 >
