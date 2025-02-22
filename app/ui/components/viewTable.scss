@@ -218,3 +218,22 @@
     transition: all .3s;
   }
 }
+
+.horizontal-scroll {
+  // Các style hiện tại...
+  
+  // Thêm transition cho smooth scrolling
+  scroll-behavior: smooth;
+  
+  // Ẩn scrollbar trên Firefox
+  scrollbar-width: none;
+  
+  // Ẩn scrollbar trên Chrome/Safari/Edge
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.menu-overflow-item {
+  transition: all 0.3s ease;
+}

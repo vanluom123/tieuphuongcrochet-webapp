@@ -13,7 +13,7 @@ interface CategoryMenuProps {
 }
 
 const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
-    const scrollHorizionalRef = useRef(scrollHorizional);
+    const scrollContainerRef = useRef<HTMLUListElement>(null);
     const [itemSelected, setItemSelected] = useState({
         key: '' as React.Key,
         childKey: '' as React.Key,
@@ -21,44 +21,72 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
     const [open, setOpen] = useState(false);
     const t = useTranslations('CategoryMenu');
 
-
     useEffect(() => {
         setItemSelected({ key: ALL_ITEM.key, childKey: '' });
-        scrollHorizionalRef.current();
-    }, [])
+    }, []);
 
-    const onClickItem = useCallback((key: React.Key, childKey?: React.Key) => {
+    const scrollToItem = useCallback((element: HTMLElement) => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const itemLeft = element.offsetLeft;
+        const containerWidth = container.clientWidth;
+        const itemWidth = element.offsetWidth;
+        
+        // Tính toán vị trí cuộn để căn giữa item
+        const scrollPosition = itemLeft - (containerWidth / 2) + (itemWidth / 2);
+        
+        // Cuộn mượt đến vị trí
+        container.scrollTo({
+            left: Math.max(0, scrollPosition),
+            behavior: 'smooth'
+        });
+    }, []);
+
+    const onClickItem = useCallback((key: React.Key, childKey?: React.Key, element?: HTMLElement) => {
         setItemSelected({ key, childKey: childKey || '' });
-
         onClickMenu(childKey || key);
-    }, [onClickMenu]);
+
+        // Cuộn đến item được chọn nếu có element
+        if (element) {
+            scrollToItem(element);
+        }
+    }, [onClickMenu, scrollToItem]);
 
     const categoriesTabNode = (
-        <ul className="tabs-menu menu-horizional ul-menu-overflow horizontal-scroll">
+        <ul 
+            ref={scrollContainerRef}
+            className="tabs-menu menu-horizional ul-menu-overflow horizontal-scroll"
+        >
             {items.map((c) => {
                 if (c?.children && c.children.length > 0) {
                     const menuItems = c.children?.map((i) => ({
                         key: i.key,
                         label: (
                             <a
-                                onClick={() => onClickItem(c.key, i.key)}
-                                className='menu-title-content'>
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onClickItem(c.key, i.key);
+                                }}
+                                className='menu-title-content'
+                            >
                                 {t(`${c.label}.${i.label}`)}
                             </a>
                         )
                     })) || [];
 
                     return (
-                        <li key={c.key}
-
+                        <li 
+                            key={c.key}
                             className={`menu-overflow-item menu-submenu ${c.key === itemSelected.key && 'menu-item-selected'}`}
+                            onClick={(e) => onClickItem(c.key, undefined, e.currentTarget)}
                         >
                             <Dropdown menu={{
                                 items: menuItems,
                                 selectable: true,
                                 selectedKeys: [(itemSelected.childKey || itemSelected.key) as string]
                             }}>
-                                <a onClick={() => onClickItem(c.key)}>
+                                <a>
                                     <span className="menu-title-content">{t(`${c.label}.title`)}</span>
                                 </a>
                             </Dropdown>
@@ -66,11 +94,12 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                     );
                 }
                 return (
-                    <li key={c.key}
-                        onClick={() => onClickItem(c.key)}
+                    <li 
+                        key={c.key}
+                        onClick={(e) => onClickItem(c.key, undefined, e.currentTarget)}
                         className={`menu-overflow-item menu-item-only-child ${c.key === itemSelected.key && 'menu-item-selected'}`}
                     >
-                        <span className="menu-title-content"> {t(c.label)}</span>
+                        <span className="menu-title-content">{t(c.label)}</span>
                     </li>
                 );
             })}
