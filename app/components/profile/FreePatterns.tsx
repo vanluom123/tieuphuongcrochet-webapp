@@ -33,8 +33,6 @@ const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {
 
     const onRefreshData = useCallback(() => {
         setLoading(true);
-        console.log('onRefreshData', params);
-
         fetchUserPatterns(userId, params)
             .then(({ data, totalRecords }) => setPatterns({
                 data: data,
