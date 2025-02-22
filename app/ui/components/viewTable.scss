@@ -20,27 +20,13 @@
     }
   }
 
-  .search-wrap,
-  .pagination {
+  .search-wrap {
     border-top: 1px solid $borderColor;
     border-bottom: 1px solid $borderColor;
   }
 
   .search-wrap {
     padding: 5px;
-  }
-
-  .pagination {
-    padding: 10px;
-    margin-top: 60px;
-    display: flex;
-    justify-content: flex-end;
-    position: relative;
-
-    .ant-pagination-total-text {
-      position: absolute;
-      left: 10px;
-    }
   }
 
   .tabs-menu {
@@ -220,6 +206,9 @@
 
       a {
         width: 100%;
+      }
+      &.ant-btn-circle{
+        height: 32px;
       }
     }
   }
