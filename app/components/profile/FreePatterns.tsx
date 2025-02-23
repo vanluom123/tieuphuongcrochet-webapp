@@ -1,5 +1,5 @@
 'use client';
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Col, Empty, FloatButton, Pagination, Row, Spin } from 'antd';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -102,6 +102,19 @@ const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {
         }));
     };
 
+    const displayPlusButton = useMemo(() => {
+        if (isCreator) {
+            return (
+                <FloatButton type='primary'
+                    className='float-btn-center-bottom'
+                    tooltip={<div>{t('patterns.add')}</div>}
+                    icon={<PlusOutlined />}
+                    onClick={() => onAddPattern()} />
+            )
+        }
+        return null;
+    }, [isCreator]);
+
 
     return (
         <Spin spinning={loading} size="large">
@@ -135,13 +148,6 @@ const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {
                             showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
                             onChange={onChange}
                         />
-                        {isCreator && (
-                            <FloatButton type='primary'
-                                className='float-btn-center-bottom'
-                                tooltip={<div>{t('patterns.add')}</div>}
-                                icon={<PlusOutlined />}
-                                onClick={() => onAddPattern()} />
-                        )}
                     </div>
                 ) : (
                     (
@@ -151,6 +157,7 @@ const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {
                     )
                 )}
             </div>
+            {displayPlusButton}
             <FreePatternFormModal
                 modalData={modalData}
                 setModalData={setModalData}
