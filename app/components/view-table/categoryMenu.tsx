@@ -53,11 +53,11 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
         }
     }, [onClickMenu, scrollToItem]);
 
-    const onClickItemBtn = useCallback((key: React.Key, childKey?: React.Key, index?: number | undefined) => {
+    const onClickItemBtn = useCallback((key: React.Key, childKey?: React.Key, index: number = -1) => {
         setItemSelected({ key, childKey: childKey || '' });
         onClickMenu(childKey || key);
 
-        if (index && index > -1) {
+        if (index > -1) {
             const elements = document.querySelectorAll('.menu-overflow-item');
             const element = elements[index] as HTMLElement;
             if (element) {
