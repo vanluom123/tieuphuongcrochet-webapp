@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { LockOutlined, MailOutlined, GoogleOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Space, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
@@ -138,8 +138,18 @@ const Login = () => {
                             </Form.Item>
                         </Form>
                         <Divider>Or</Divider>
-                        <Link href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorize/google?redirect_uri=${process.env.NEXT_PUBLIC_URL}/oauth2/redirect`}>
-                            {t('btn_google_login')}
+                        <Link 
+                            href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorize/google?redirect_uri=${process.env.NEXT_PUBLIC_URL}/oauth2/redirect`}
+                            className="google-login-button"
+                        >
+                            <Button 
+                                icon={<GoogleOutlined />}
+                                size="large"
+                                className="google-btn"
+                                block
+                            >
+                                {t('btn_google_login')}
+                            </Button>
                         </Link>
                     </Col>
                 </Row>
