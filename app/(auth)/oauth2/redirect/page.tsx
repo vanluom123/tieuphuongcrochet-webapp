@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Flex, Spin } from 'antd';
 import { ROUTE_PATH } from '@/app/lib/constant';
 import { notification } from '@/app/lib/notify';
+import { signIn } from 'next-auth/react';
 
 const OAuth2RedirectHandler = () => {
     const router = useRouter();
@@ -25,7 +26,8 @@ const OAuth2RedirectHandler = () => {
             }
 
             if (token) {
-                sessionStorage.setItem('accessToken', token);
+                console.log('SignIn params:', { token: token, redirect: false });
+                await signIn('custom-oauth2', { token: token, redirect: false });
                 router.push(ROUTE_PATH.HOME);
             }
         } catch (err) {

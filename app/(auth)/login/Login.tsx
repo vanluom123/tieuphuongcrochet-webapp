@@ -53,17 +53,6 @@ const Login = () => {
         }
     };
 
-    const handleGoogleLogin = async () => {
-        try {
-            await signIn('google', { callbackUrl: ROUTE_PATH.HOME });
-        } catch (error) {
-            notification.error({
-                message: t('error_login_title'),
-                description: t('error_login_unknown_error')
-            });
-        }
-    };
-
     return (
         <div className='auth-page'>
             <Flex justify='center' className='logo'>
@@ -149,7 +138,7 @@ const Login = () => {
                             </Form.Item>
                         </Form>
                         <Divider>Or</Divider>
-                        <Link href='http://localhost:8080/oauth2/authorize/google?redirect_uri=http://localhost:3000/oauth2/redirect'>
+                        <Link href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorize/google?redirect_uri=${process.env.NEXT_PUBLIC_URL}/oauth2/redirect`}>
                             {t('btn_google_login')}
                         </Link>
                     </Col>
