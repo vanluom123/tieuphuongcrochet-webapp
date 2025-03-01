@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Flex, Form, Input, Row, Space, Spin } from 'antd';
+import { Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Space, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 import Link from 'next/link';
@@ -13,16 +13,16 @@ import { User } from '@/app/lib/definitions';
 import logo from '@/public/logo.png';
 import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
 import { notification } from '@/app/lib/notify';
-import '../../ui/components/login.scss';   
+import '../../ui/components/login.scss';
 
 const Login = () => {
     const [form] = Form.useForm();
     const router = useRouter();
-    const {data: session, status} = useSession({ required: false });
+    const { data: session, status } = useSession({ required: false });
     const t = useTranslations('Login');
 
     const [isLoading, setIsLoading] = useState(false);
-    
+
     useEffect(() => {
         if (session?.user?.email && status === 'authenticated') {
             router.push(ROUTE_PATH.DASHBOARD);
@@ -50,6 +50,17 @@ const Login = () => {
                 notification.error({ message: t('error_login_title'), description: t('error_login_unknown_error') });
             }
             setIsLoading(false);
+        }
+    };
+
+    const handleGoogleLogin = async () => {
+        try {
+            await signIn('google', { callbackUrl: ROUTE_PATH.HOME });
+        } catch (error) {
+            notification.error({
+                message: t('error_login_title'),
+                description: t('error_login_unknown_error')
+            });
         }
     };
 
@@ -124,7 +135,7 @@ const Login = () => {
                                 </Link>
                             </Form.Item>
                             <Form.Item name='actions' className='actions'>
-                                <Space size='small'>
+                                <Space size='small' direction="horizontal" style={{ width: '100%' }}>
                                     <Button
                                         type="primary"
                                         loading={isLoading}
@@ -133,13 +144,15 @@ const Login = () => {
                                         disabled={isLoading}
                                     >
                                         {t('btn_login')}
-                                    </Button>
-                                    Or <Link href={ROUTE_PATH.REGISTER}>{t('btn_register')}</Link>
+                                    </Button> Or <Link href={ROUTE_PATH.REGISTER}>{t('btn_register')}</Link>
                                 </Space>
                             </Form.Item>
                         </Form>
+                        <Divider>Or</Divider>
+                        <Link href='http://localhost:8080/oauth2/authorize/google?redirect_uri=http://localhost:3000/oauth2/redirect'>
+                            {t('btn_google_login')}
+                        </Link>
                     </Col>
-
                 </Row>
             </Spin>
         </div>

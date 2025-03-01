@@ -28,25 +28,21 @@ export const options: NextAuthOptions = {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
-
                 const res = await apiService({
                     baseUrl: process.env.NEXT_PUBLIC_API_URL,
                     endpoint: API_ROUTES.LOGIN,
                     method: 'POST',
-                    data: credentials,
+                    data: credentials
                 }).catch(() => {
                     return null;
                 });
-
                 if (res == null) {
                     return null;
                 }
-
                 return res;
             }
         })
     ],
-
     callbacks: {
         async jwt({token, user}) {
             if (user) {
@@ -56,7 +52,6 @@ export const options: NextAuthOptions = {
                     picture: user.imageUrl
                 };
             }
-
             return token;
         },
         async session({session, token}) {
@@ -70,6 +65,6 @@ export const options: NextAuthOptions = {
                 session.user.id = token.userId;
             }
             return session;
-        },
+        }
     }
 }
