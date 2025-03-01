@@ -13,20 +13,9 @@ const OAuth2RedirectHandler = () => {
 
     const handleOAuthLogin = useCallback(async () => {
         const token = searchParams.get('token');
-        const error = searchParams.get('error');
 
         try {
-            if (error) {
-                notification.error({
-                    message: 'Login failed',
-                    description: error
-                });
-                router.push(ROUTE_PATH.LOGIN);
-                return;
-            }
-
             if (token) {
-                console.log('SignIn params:', { token: token, redirect: false });
                 await signIn('custom-oauth2', { token: token, redirect: false });
                 router.push(ROUTE_PATH.HOME);
             }

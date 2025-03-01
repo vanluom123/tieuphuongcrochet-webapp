@@ -49,16 +49,10 @@ export const options: NextAuthOptions = {
             credentials: {
                 token: { label: "Token", type: "text" }
             },
-            async authorize(credentials, req) {
-                console.log('Entering custom-oauth2 authorize');
-                console.log('Request:', req?.method, req?.query);
-                console.log('Credentials received:', credentials);
-                
+            async authorize(credentials) {
                 if (!credentials?.token) {
-                    console.log('No token in custom-oauth2');
                     return null;
                 }
-                
                 try {
                     const res = await apiService({
                         baseUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -68,10 +62,8 @@ export const options: NextAuthOptions = {
                             accessToken: credentials.token
                         }
                     });
-                    console.log('API response:', res);
                     return res;
                 } catch (error) {
-                    console.error('Error in custom-oauth2:', error);
                     return null;
                 }
             }
@@ -79,8 +71,6 @@ export const options: NextAuthOptions = {
     ],
     callbacks: {
         async jwt({ token, user }) {
-            console.log('token in jwt', token);
-            console.log('user in jwt', user);
             if (user) {
                 return {
                     ...token,
@@ -91,8 +81,6 @@ export const options: NextAuthOptions = {
             return token;
         },
         async session({ session, token }) {
-            console.log('session in session', session);
-            console.log('token in session', token);
             if (session.user) {
                 session.user.accessToken = token.accessToken;
                 session.user.refreshToken = token.refreshToken;
