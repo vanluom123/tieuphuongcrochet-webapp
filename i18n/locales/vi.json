@@ -187,7 +187,8 @@
     "error_msg_incorrect_password": "Định dạng mật khẩu không chính xác!",
     "error_login_401_description": "Email hoặc mật khẩu không đúng!",
     "error_login_title": "Đăng nhập thất bại",
-    "error_login_unknown_error": "Đã có lỗi xảy ra"
+    "error_login_unknown_error": "Đã có lỗi xảy ra",
+    "btn_google_login": "Đăng nhập với Google"
   },
   "Register": {
     "title": "Đăng ký",

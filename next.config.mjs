@@ -5,6 +5,7 @@ const nextConfig = {
     poweredByHeader: false,
     reactStrictMode: true,
     images: {
+      unoptimized: true,
       formats: ['image/avif', 'image/webp'],
       remotePatterns: [
         {
@@ -15,6 +16,11 @@ const nextConfig = {
         {
           protocol: 'https',
           hostname: 'tieuphuongcrochet.com',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'lh3.googleusercontent.com',
           pathname: '/**',
         }
       ],

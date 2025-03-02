@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Form, Input, Button, Row, Col, Flex } from 'antd';
+import { Form, Input, Button, Row, Col, Flex, Spin } from 'antd';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -17,8 +17,7 @@ import ActiveAccountModal from "./ActiveAccountModal";
 
 const RegisterPage = () => {
 
-    const [isDisable, setIsDisable] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [formState, setFormState] = useState({ isDisable: false, isModalVisible: false, isLoading: false });
     const [form] = Form.useForm();
     const router = useRouter();
     const t = useTranslations('Register');
@@ -28,19 +27,18 @@ const RegisterPage = () => {
     }
 
     const onSubmitRegister = async (values: User) => {
-        setIsDisable(true);
+        setFormState({ ...formState, isDisable: true, isLoading: true });
         const res = await registerService(values);
         if (res?.status) {
-            setIsModalVisible(true);
-
+            setFormState({ ...formState, isModalVisible: true });
         } else if (res?.statusCode) {
             notification.error({ message: t('error_register_title'), description: t(`error_register_${res.statusCode}`) });
         }
-        setIsDisable(false);
+        setFormState({ ...formState, isDisable: false, isLoading: false });
     }
 
     const onSignIn = () => {
-        setIsModalVisible(false);
+        setFormState({ ...formState, isModalVisible: false });
         form.resetFields();
         router.push(ROUTE_PATH.LOGIN);
     }
@@ -60,109 +58,111 @@ const RegisterPage = () => {
                     </Flex>
                     <Row justify="center" style={{ width: '100%' }}>
                         <Col xs={24} sm={22} md={20} lg={18} xl={16}>
-                            <Form
-                                form={form}
-                                name="register"
-                                layout="vertical"
-                                autoComplete="off"
-                                onFinish={onSubmitRegister}
-                            >
-                                <Form.Item
-                                    label={t('input_fullname')}
-                                    name="name"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: t('error_msg_required_fullname')
-                                        },
-                                    ]}
+                            <Spin spinning={formState.isLoading}>
+                                <Form
+                                    form={form}
+                                    name="register"
+                                    layout="vertical"
+                                    autoComplete="off"
+                                    onFinish={onSubmitRegister}
                                 >
-                                    <Input
-                                        maxLength={100}
-                                        placeholder={t('input_fullname')}
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    name="email"
-                                    label={t('input_email')}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: t('error_msg_required_email')
-                                        },
-                                        {
-                                            pattern: new RegExp(REGEX.EMAIL),
-                                            message: t('error_msg_incorrect_email'),
-                                        },
-                                    ]}
-                                >
-                                    <Input maxLength={100} placeholder={t('input_email')} />
-                                </Form.Item>
-                                <Form.Item
-                                    name="password"
-                                    label={t('input_password')}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: t('error_msg_required_password')
-                                        },
-                                        {
-                                            pattern: new RegExp(REGEX.PASSWORD),
-                                            message: t('error_msg_incorrect_password'),
-                                        },
-                                    ]}
-                                >
-                                    <Input.Password
-                                        placeholder={t('input_password')}
-                                        autoComplete="current-password"
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    name="rePassword"
-                                    label={t('input_confirm_password')}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: t('error_msg_required_confirm_password')
-                                        },
-                                        {
-                                            validator: async (_, value) => {
-                                                if (!value || form.getFieldValue('password') === value) {
-                                                    return Promise.resolve();
+                                    <Form.Item
+                                        label={t('input_fullname')}
+                                        name="name"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: t('error_msg_required_fullname')
+                                            },
+                                        ]}
+                                    >
+                                        <Input
+                                            maxLength={100}
+                                            placeholder={t('input_fullname')}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="email"
+                                        label={t('input_email')}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: t('error_msg_required_email')
+                                            },
+                                            {
+                                                pattern: new RegExp(REGEX.EMAIL),
+                                                message: t('error_msg_incorrect_email'),
+                                            },
+                                        ]}
+                                    >
+                                        <Input maxLength={100} placeholder={t('input_email')} />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="password"
+                                        label={t('input_password')}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: t('error_msg_required_password')
+                                            },
+                                            {
+                                                pattern: new RegExp(REGEX.PASSWORD),
+                                                message: t('error_msg_incorrect_password'),
+                                            },
+                                        ]}
+                                    >
+                                        <Input.Password
+                                            placeholder={t('input_password')}
+                                            autoComplete="current-password"
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="rePassword"
+                                        label={t('input_confirm_password')}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: t('error_msg_required_confirm_password')
+                                            },
+                                            {
+                                                validator: async (_, value) => {
+                                                    if (!value || form.getFieldValue('password') === value) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    throw new Error(t('error_msg_not_match_confirm_password'))
                                                 }
-                                                throw new Error(t('error_msg_not_match_confirm_password'))
-                                            }
-                                        },
-                                    ]}
-                                >
-                                    <Input.Password autoComplete="current-password" />
-                                </Form.Item>
-                                <div className="note">
-                                    <p>
-                                        <strong>{t('note_title')}:</strong>
-                                    </p>
-                                    <div>
-                                        <p>- <span style={{ color: '#ff4d4f' }}>(*)</span>: {t('note_content_1')}</p>
-                                        <p>- {t('note_content_2')}</p>
+                                            },
+                                        ]}
+                                    >
+                                        <Input.Password autoComplete="current-password" />
+                                    </Form.Item>
+                                    <div className="note">
+                                        <p>
+                                            <strong>{t('note_title')}:</strong>
+                                        </p>
+                                        <div>
+                                            <p>- <span style={{ color: '#ff4d4f' }}>(*)</span>: {t('note_content_1')}</p>
+                                            <p>- {t('note_content_2')}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <Button className='btn-border' type="primary" htmlType="submit" style={{ width: '100%', marginBottom: 8 }} disabled={isDisable}>
-                                        {t('btn_register')}
-                                    </Button>
-                                    <Button className='btn-border' type="default" style={{ width: '100%' }} onClick={() => onCancel()} disabled={isDisable}>
-                                        {t('btn_cancel')}
-                                    </Button>
-                                </div>
-                            </Form>
+                                    <div>
+                                        <Button className='btn-border' type="primary" htmlType="submit" style={{ width: '100%', marginBottom: 8 }} disabled={formState.isDisable}>
+                                            {t('btn_register')}
+                                        </Button>
+                                        <Button className='btn-border' type="default" style={{ width: '100%' }} onClick={() => onCancel()} disabled={formState.isDisable}>
+                                            {t('btn_cancel')}
+                                        </Button>
+                                    </div>
+                                </Form>
+                            </Spin>
                         </Col>
                     </Row>
                 </Flex>
             </div>
             <ActiveAccountModal
-                isOpen={isModalVisible}
+                isOpen={formState.isModalVisible}
                 onClick={onSignIn}
-                onCancel={() => setIsModalVisible(false)}
+                onCancel={() => setFormState({ ...formState, isModalVisible: false })}
             />
         </div>
     )

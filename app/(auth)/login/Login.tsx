@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Flex, Form, Input, Row, Space, Spin } from 'antd';
+import { LockOutlined, MailOutlined, GoogleOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Space, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 import Link from 'next/link';
@@ -13,16 +13,16 @@ import { User } from '@/app/lib/definitions';
 import logo from '@/public/logo.png';
 import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
 import { notification } from '@/app/lib/notify';
-import '../../ui/components/login.scss';   
+import '../../ui/components/login.scss';
 
 const Login = () => {
     const [form] = Form.useForm();
     const router = useRouter();
-    const {data: session, status} = useSession({ required: false });
+    const { data: session, status } = useSession({ required: false });
     const t = useTranslations('Login');
 
     const [isLoading, setIsLoading] = useState(false);
-    
+
     useEffect(() => {
         if (session?.user?.email && status === 'authenticated') {
             router.push(ROUTE_PATH.DASHBOARD);
@@ -124,7 +124,7 @@ const Login = () => {
                                 </Link>
                             </Form.Item>
                             <Form.Item name='actions' className='actions'>
-                                <Space size='small'>
+                                <Space size='small' direction="horizontal" style={{ width: '100%' }}>
                                     <Button
                                         type="primary"
                                         loading={isLoading}
@@ -133,13 +133,25 @@ const Login = () => {
                                         disabled={isLoading}
                                     >
                                         {t('btn_login')}
-                                    </Button>
-                                    Or <Link href={ROUTE_PATH.REGISTER}>{t('btn_register')}</Link>
+                                    </Button> Or <Link href={ROUTE_PATH.REGISTER}>{t('btn_register')}</Link>
                                 </Space>
                             </Form.Item>
                         </Form>
+                        <Divider>Or</Divider>
+                        <Link 
+                            href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorize/google?redirect_uri=${process.env.NEXT_PUBLIC_URL}/oauth2/redirect`}
+                            className="google-login-button"
+                        >
+                            <Button 
+                                icon={<GoogleOutlined />}
+                                size="large"
+                                className="google-btn"
+                                block
+                            >
+                                {t('btn_google_login')}
+                            </Button>
+                        </Link>
                     </Col>
-
                 </Row>
             </Spin>
         </div>
