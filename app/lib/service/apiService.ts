@@ -1,4 +1,3 @@
-import { ApiError } from '../utils/apiErrorHandler';
 
 interface ApiServiceParams {
     baseUrl?: string;
@@ -44,7 +43,7 @@ async function apiService({
         });
 
         if (!response.ok) {
-            throw new ApiError(response.status, await response.text());
+            throw new Error(await response.text());
         }
 
         return await response.json();

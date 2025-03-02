@@ -187,7 +187,8 @@
     "error_msg_incorrect_password": "Password format is incorrect!",
     "error_login_401_description": "Invalid email or password",
     "error_login_title": "Login failed",
-    "error_login_unknown_error": "An unknown error occurred"
+    "error_login_unknown_error": "An unknown error occurred",
+    "btn_google_login": "Login with Google"
   },
   "Register": {
     "title": "Register account",

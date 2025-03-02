@@ -1,6 +1,6 @@
 import CredentialsProvider from 'next-auth/providers/credentials'
-import {API_ROUTES, ROUTE_PATH} from '@/app/lib/constant';
-import {NextAuthOptions} from 'next-auth';
+import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
+import { NextAuthOptions } from 'next-auth';
 import apiService from '../../../lib/service/apiService';
 
 export const options: NextAuthOptions = {
@@ -11,6 +11,7 @@ export const options: NextAuthOptions = {
     },
     providers: [
         CredentialsProvider({
+            id: "credentials",
             name: "Credentials",
             credentials: {
                 email: {
@@ -28,27 +29,48 @@ export const options: NextAuthOptions = {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
-
                 const res = await apiService({
                     baseUrl: process.env.NEXT_PUBLIC_API_URL,
                     endpoint: API_ROUTES.LOGIN,
                     method: 'POST',
-                    data: credentials,
+                    data: credentials
                 }).catch(() => {
                     return null;
                 });
-
                 if (res == null) {
                     return null;
                 }
-
                 return res;
+            }
+        }),
+        CredentialsProvider({
+            id: "custom-oauth2",
+            name: "custom-oauth2",
+            credentials: {
+                token: { label: "Token", type: "text" }
+            },
+            async authorize(credentials) {
+                if (!credentials?.token) {
+                    return null;
+                }
+                try {
+                    const res = await apiService({
+                        baseUrl: process.env.NEXT_PUBLIC_API_URL,
+                        endpoint: '/auth/me',
+                        method: 'GET',
+                        queryParams: {
+                            accessToken: credentials.token
+                        }
+                    });
+                    return res;
+                } catch (error) {
+                    return null;
+                }
             }
         })
     ],
-
     callbacks: {
-        async jwt({token, user}) {
+        async jwt({ token, user }) {
             if (user) {
                 return {
                     ...token,
@@ -56,10 +78,9 @@ export const options: NextAuthOptions = {
                     picture: user.imageUrl
                 };
             }
-
             return token;
         },
-        async session({session, token}) {
+        async session({ session, token }) {
             if (session.user) {
                 session.user.accessToken = token.accessToken;
                 session.user.refreshToken = token.refreshToken;
@@ -70,6 +91,6 @@ export const options: NextAuthOptions = {
                 session.user.id = token.userId;
             }
             return session;
-        },
+        }
     }
 }
