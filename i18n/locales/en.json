@@ -176,7 +176,7 @@
     "email": "Email",
     "password": "Password",
     "btn_login": "Login",
-    "btn_register": "Register",
+    "btn_register": "Create a new account",
     "input_email": "Email",
     "input_password": "Password",
     "remember_me": "Remember me",
@@ -188,7 +188,8 @@
     "error_login_401_description": "Invalid email or password",
     "error_login_title": "Login failed",
     "error_login_unknown_error": "An unknown error occurred",
-    "btn_google_login": "Login with Google"
+    "btn_google_login": "Login with Google",
+    "text_Or": "Or"
   },
   "Register": {
     "title": "Register account",

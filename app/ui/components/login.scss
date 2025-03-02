@@ -2,6 +2,10 @@
 
 
 .auth-page {
+  &.login-page {
+    padding-bottom: 50px;
+  }
+
   .logo {
     max-height: 170px;
 
@@ -44,34 +48,6 @@
 
     &:hover {
       text-decoration: underline;
-    }
-  }
-}
-
-.google-login-button {
-  display: block;
-  text-decoration: none;
-
-  .google-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    color: #757575;
-    font-weight: 500;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background-color: #f8f8f8;
-      border-color: #c6c6c6;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    }
-
-    .anticon {
-      font-size: 18px;
-      color: #fc8282;
     }
   }
 }
