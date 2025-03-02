@@ -176,7 +176,7 @@
     "email": "Email",
     "password": "Mật khẩu",
     "btn_login": "Đăng nhập",
-    "btn_register": "Đăng ký",
+    "btn_register": "Tạo tài khoản mới",
     "input_email": "Email",
     "input_password": "Mật khẩu",
     "remember_me": "Ghi nhớ tôi",
@@ -188,7 +188,8 @@
     "error_login_401_description": "Email hoặc mật khẩu không đúng!",
     "error_login_title": "Đăng nhập thất bại",
     "error_login_unknown_error": "Đã có lỗi xảy ra",
-    "btn_google_login": "Đăng nhập với Google"
+    "btn_google_login": "Đăng nhập với Google",
+    "text_Or": "Hoặc"
   },
   "Register": {
     "title": "Đăng ký",

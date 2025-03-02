@@ -54,7 +54,7 @@ const Login = () => {
     };
 
     return (
-        <div className='auth-page'>
+        <div className='auth-page login-page'>
             <Flex justify='center' className='logo'>
                 <Link href={ROUTE_PATH.HOME} >
                     <Image priority src={logo} alt='Tiệm len Tiểu Phương' width={150} height={150} />
@@ -124,29 +124,39 @@ const Login = () => {
                                 </Link>
                             </Form.Item>
                             <Form.Item name='actions' className='actions'>
-                                <Space size='small' direction="horizontal" style={{ width: '100%' }}>
-                                    <Button
-                                        type="primary"
-                                        loading={isLoading}
-                                        htmlType="submit"
-                                        className="login-form-button btn-border"
-                                        disabled={isLoading}
-                                    >
-                                        {t('btn_login')}
-                                    </Button> Or <Link href={ROUTE_PATH.REGISTER}>{t('btn_register')}</Link>
-                                </Space>
+                                <Row gutter={[10, 20]} align='middle'>
+                                    <Col xs={24} md={24} lg={12} >
+                                        <Button
+                                            block
+                                            type="primary"
+                                            loading={isLoading}
+                                            htmlType="submit"
+                                            className="login-form-button btn-border"
+                                            disabled={isLoading}
+                                            style={{ width: '100%' }}
+                                        >
+                                            {t('btn_login')}
+                                        </Button>
+                                    </Col>
+                                    <Col xs={24} md={24} lg={12}>
+                                        <span>{t('text_Or')}&nbsp;</span>
+                                        <Link href={ROUTE_PATH.REGISTER}>{t('btn_register')}</Link>
+                                    </Col>
+                                </Row>
                             </Form.Item>
                         </Form>
-                        <Divider>Or</Divider>
-                        <Link 
+                        <Divider>{t('text_Or')}</Divider>
+                        <Link
                             href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorize/google?redirect_uri=${process.env.NEXT_PUBLIC_URL}/oauth2/redirect`}
                             className="google-login-button"
                         >
-                            <Button 
+                            <Button
+                                block
                                 icon={<GoogleOutlined />}
                                 size="large"
-                                className="google-btn"
-                                block
+                                className="btn-border"
+                                variant="outlined"
+                                color="primary"
                             >
                                 {t('btn_google_login')}
                             </Button>
