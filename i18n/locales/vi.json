@@ -2,7 +2,8 @@
   "App": {
     "title_mobile": "Tiểu Phương Crochet",
     "title": "Tiểu Phương Crochet - Hướng dẫn móc len và Chart miễn phí",
-    "description": "Khám phá thế giới móc len cùng Tiểu Phương Crochet. Cung cấp hướng dẫn chi tiết, chart miễn phí và mẫu móc búp bê dễ thương."
+    "description": "Khám phá thế giới móc len cùng Tiểu Phương Crochet. Cung cấp hướng dẫn chi tiết, chart miễn phí và mẫu móc búp bê dễ thương.",
+    "loading": "Đang tải. Bạn chờ xíu nha..."
   },
   "MenuNav": {
     "home": "Trang chủ",
@@ -45,6 +46,7 @@
     "note": "Nếu bạn muốn đặt mua sản phẩm này theo yêu cầu của bạn, hãy liên hệ với mình nhé. Mình sẽ cố gắng hết sức để mang đến cho bạn những sản phẩm tốt nhất. Cảm ơn bạn!"
   },
   "FreePattern": {
+    "loading":"Đang tải. Bạn chờ xíu nha...",
     "title": "Chart miễn phí",
     "description": "Dưới đây là những mẫu móc mà mình đã sưu tầm được ( Mình sẽ dịch dần dần nhé). Trong thời gian sắp tới, mình sẽ tiếp tục cập nhật thêm nhiều mẫu móc len đẹp khác và những mẫu mà mình tự sáng tạo nữa đấy. Hãy tham khảo và lựa chọn cho mình một mẫu ưng ý nhé!",
     "detail": "Chi tiết",

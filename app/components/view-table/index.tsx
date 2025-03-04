@@ -53,7 +53,7 @@ const ViewTable = (
     const [direction, setDirection] = useState<TDirection>('horizontal');
     const { Search } = Input;
 
-    const t = useTranslations("Btn");
+    const t = useTranslations("App");
 
     const onSearchBtn = (value: string) => {
         if (onSearch instanceof Function) {
@@ -152,7 +152,7 @@ const ViewTable = (
                 </div>
             </Affix>
 
-            <Spin spinning={loading} tip="Loading...">
+            <Spin spinning={loading} tip={t('loading')}>
                 {/* Data source */}
                 {
                     direction === 'vertical' ?
