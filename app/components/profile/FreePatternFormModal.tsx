@@ -124,7 +124,7 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
             destroyOnClose={true}
             confirmLoading={state.loading}
         >
-            <Spin spinning={state.loading}>
+            <Spin spinning={state.loading} tip={t('loading')}>
                 <div className="crupattern-page">
                     <Flex justify="center">
                         <h1>{modalData.id ? t('updatePattern') : t('createPattern')}</h1>

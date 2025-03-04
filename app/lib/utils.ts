@@ -494,3 +494,15 @@ export const scrollHorizional = () => {
         });
     }
 }
+
+/** Utility function for handling notifications */
+export const showNotification = (type: "success" | "error", message: string, description: string) => {
+    if (!notification) {
+        console.error("Notification object is undefined!");
+        return;
+    }
+
+    setTimeout(() => {
+        notification[type]({ message, description });
+    }, 0);
+};

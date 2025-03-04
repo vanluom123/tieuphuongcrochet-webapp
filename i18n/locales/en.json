@@ -2,7 +2,8 @@
   "App": {
     "title_mobile": "Tieu Phuong Crochet",
     "title": "Tieu Phuong Crochet - Free crochet patterns and charts",
-    "description": "Discover the world of crochet with Tieu Phuong Crochet. Providing detailed instructions, free crochet patterns and cute amigurumi patterns."
+    "description": "Discover the world of crochet with Tieu Phuong Crochet. Providing detailed instructions, free crochet patterns and cute amigurumi patterns.",
+    "loading": "Loading. Waitting a minute..."
   },
   "MenuNav": {
     "home": "Home",
@@ -45,6 +46,7 @@
     "note": "If you want to order this product according to your requirements, please contact me. I will try my best to bring you the best products. Thank you!"
   },
   "FreePattern": {
+    "loading":"Loading. Waitting a minute...",
     "title": "Free crochet patterns",
     "description": "Below are the crochet patterns that I have collected (I will translate gradually). In the near future, I will continue to update many other beautiful crochet patterns and patterns that I create myself. Please refer and choose for yourself a satisfactory model!",
     "detail": "Chart detail",
