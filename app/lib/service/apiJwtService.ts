@@ -56,7 +56,7 @@ async function apiJwtService({
     timeout?: number;
     queryParams?: Record<string, string>;
     formData?: FormData;
-}) {
+}): Promise<any> {
     const accessToken = await handleTokenRefresh();
     const options: RequestInit = {
         method: method,

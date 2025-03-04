@@ -424,10 +424,8 @@ export const uploadImageToServer = async (currentImages: FileUpload[] = [], prev
     const deletedImages = prevImages.filter(item => currentImages.findIndex(img => img.fileName === item.fileName) < 0) || [];
     // Delete images that are removed
     if (deletedImages.length > 0) {
-        const res: string[] = await uploadFile.delete(deletedImages.map(img => img.fileName || ''));
-        console.log('delete images', res);
-
-        if (res.length > 0) {
+        const res = await uploadFile.delete(deletedImages.map(img => img.fileName || ''));
+        if (res.success == false) {
             notification.error({ message: 'Error!', description: 'Delete file failed!' });
             return;
         }
@@ -448,9 +446,9 @@ export const uploadImageToServer = async (currentImages: FileUpload[] = [], prev
         }
 
         formData.append('files', image.originFileObj as File);
-        const res: FileUpload[] = await uploadFile.upload(formData);
-        if (res?.length > 0) {
-            filesRes = [...res];
+        const res = await uploadFile.upload(formData);
+        if (res.success == true && res.data.length > 0) {
+            filesRes = [...res.data];
         } else {
             notification.error({ message: '!Error', description: 'Upload image failed' });
             break;

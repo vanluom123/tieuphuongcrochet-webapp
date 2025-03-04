@@ -215,48 +215,64 @@ export const TRANSLATION_OPTIONS: TranslationStatus[] = [
 
 
 export const API_ROUTES = {
-	HOME: '/home',
-	PRODUCT: '/product',
-	PATTERN: '/pattern',
-	FREE_PATTERN: '/free-pattern',
-	BLOG: '/blog',
-	USER: '/users',
-	UPDATE_INFO: 'update-info',
+  // Auth routes
+  LOGIN: '/api/v1/auth/login',
+  SIGNUP: '/api/v1/auth/signup', 
+  LOGOUT: '/api/v1/auth/logout',
+  RESET_PASSWORD: '/api/v1/auth/password-reset-request',
+  CONFIRM: '/api/v1/auth/confirm',
+  RESEND_VERIFICATION: '/api/v1/auth/resend-verification-email',
+  REFRESH_TOKEN: '/api/v1/auth/refresh-token',
+
+  // User routes
+  USERS: '/api/v1/users',
+  USER_PROFILE: '/api/v1/user-profile',
+  USER_COLLECTIONS: '/api/v1/users/{userId}/collections',
+  USER_FREE_PATTERNS: '/api/v1/users/{userId}/free-pattern',
+
+  // Pattern routes
+  PATTERNS: '/api/v1/patterns',
+  PATTERN_IDS: '/api/v1/patterns/ids',
   
-	// Category
-	CATEGORY: '/category',
-	// Get sub categories
-	SUB_CATEGORY: '/category/get-sub-categories',
-	// Get parent categories
-	PARENT_CATEGORY: '/category/get-parent-categories',
-	ALL_CATEGORY: '/category/get-all-categories',
+  // Free pattern routes
+  FREE_PATTERNS: '/api/v1/free-pattern',
 
-	// Common CRUD
-	CREATE: 'create',
-	DETAIL: 'detail',
-	UPDATE: 'update',
-	DELETE: 'delete',
-	PAGINATION: 'pagination',
+  // Product routes
+  PRODUCTS: '/api/v1/products',
 
-	// Auth
-	LOGIN: '/auth/login',
-	SIGNUP: '/auth/signup',
-	LOGOUT: '/auth/login',
-	RESET_PASSWORD: '/auth/login',
-	REFRESH_TOKEN: 'auth/refresh-token',
-	UPLOAD_FILE: 'firebase-storage/upload-file',
-	DELETE_MULTIPLE_FILES: 'firebase-storage/delete-multiple-files',
+  // Blog routes
+  BLOGS: '/api/v1/blogs',
+  
+  // Category routes
+  CATEGORIES: '/api/v1/categories',
+  
+  // Blog category routes
+  BLOG_CATEGORIES: '/api/v1/blog-categories',
 
-	//Setting
-	CU_BANNER_TYPE : '/bannerType/createOrUpdate',
-	D_BANNER_TYPE : '/bannerType/delete',
-	BANNER_TYPE : '/bannerType/getAll',
-	CU_BANNER: '/banner/batchInsertOrUpdate',
-	GETT_ALL_BANNER: '/banner/getAll',
+  // Collection routes
+  COLLECTIONS: '/api/v1/collections',
+  COLLECTION_FREE_PATTERNS: '/api/v1/collections/{collection_id}/free-patterns',
 
-  // Profile
-  COLLECTIONS: '/collections',
-}
+  // Banner routes
+  BANNERS: '/api/v1/banners',
+  BANNER_TYPES: '/api/v1/banner-types',
+
+  // Settings
+  SETTINGS: '/api/v1/settings',
+
+  // Common operations
+  CREATE: 'create',
+  DETAIL: 'detail', 
+  UPDATE: 'update',
+  DELETE: 'delete',
+  PAGINATION: 'pagination',
+
+  // File upload
+  FIREBASE_STORAGE: '/api/v1/firebase-storage',
+  
+  // Home routes
+  HOMES: '/api/v1/homes',
+};
 
 export const PARAMS_FOR_SITEMAP: ListParams = {
 	pageNo: 0,

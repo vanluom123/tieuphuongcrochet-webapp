@@ -7,50 +7,56 @@ import { notification } from "../notify";
 
 export const fetchCategories = async () => {
     const res = await apiService({
-        endpoint: API_ROUTES.ALL_CATEGORY,
+        endpoint: API_ROUTES.CATEGORIES
     });
-    const newData = mapTreeData(res);
+    const newData = mapTreeData(res.data);
     return newData;
 }
 
 export const createCategory = async (data: Category) => {
-    const url = `${API_ROUTES.CATEGORY}/${API_ROUTES.CREATE}`
     const res = await apiJwtService({
-        endpoint: url,
+        endpoint: API_ROUTES.CATEGORIES,
         method: 'POST',
-        data: data,
-    }).catch((err) => {
-        notification.error({message: 'Failed', description: err.message})
+        data: data
     });
-    if (res?.id || res?.length > 0) {
+
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message })
+    }
+
+    if (res.success) {
         notification.success({ message: 'Success', description: 'Create category successfully' })
     }
 }
 
 export const updateCategory = async (data: Category) => {
-    const url = `${API_ROUTES.CATEGORY}/${API_ROUTES.UPDATE}`
     const res = await apiJwtService({
-        endpoint: url,
+        endpoint: API_ROUTES.CATEGORIES,
         method: 'PUT',
-        data: data,
-    }).catch((err) => {
-        notification.error({message: 'Failed', description: err.message})
+        data: data
     });
-    if (res?.id) {
-        notification.success({ message: 'Success', description: 'Update category successfully' })
+
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message })
     }
 
+    if (res.success) {
+        notification.success({ message: 'Success', description: 'Update category successfully' })
+    }
 }
 
 export const deleteCategory = async (id: string) => {
-    const url = `${API_ROUTES.CATEGORY}/${API_ROUTES.DELETE}?id=${id}`
-    
-    await apiJwtService({
-        endpoint: url,
+    const res = await apiJwtService({
+        endpoint: API_ROUTES.CATEGORIES,
         method: 'DELETE',
-    }).then(() => {
+        queryParams: { id }
+    });
+
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message })
+    }
+
+    if (res.success) {
         notification.success({ message: 'Success', description: 'Delete category successfully' })
-    }).catch((err) => {
-        notification.error({ message: 'Failed', description: err.message })
-    })
+    }
 }

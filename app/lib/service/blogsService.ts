@@ -1,81 +1,97 @@
 import { API_ROUTES } from "../constant";
-import { CUResponse, DataType, ListParams, ListResponse, Post } from "../definitions";
+import { DataType, ListParams, Post, ResponseData } from "../definitions";
 import apiService from "./apiService";
 import { getAvatar } from "../utils";
 import apiJwtService from "./apiJwtService";
 import { notification } from "../notify";
+import { map } from "lodash";
 
-export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{ data: DataType[], totalRecords: number }> => {
-    try {
-        const res: ListResponse<Post> = await apiService({
-            endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.PAGINATION}`,
-            method: 'POST',
-            queryParams: {
-                pageNo: params.pageNo.toString(),
-                pageSize: params.pageSize.toString(),
-                sortBy: params.sortBy as string,
-                sortDir: params.sortDir as string,
-            },
-            data: params.filters,
-            next,
-        });
+export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{
+    data: DataType[],
+    totalRecords: number
+}> => {
+    const res: ResponseData = await apiService({
+        endpoint: API_ROUTES.BLOGS,
+        method: 'POST',
+        queryParams: {
+            pageNo: params.pageNo.toString(),
+            pageSize: params.pageSize.toString(),
+            sortBy: params.sortBy as string,
+            sortDir: params.sortDir as string,
+        },
+        data: params.filters,
+        next,
+    });
 
-        const newData = res.contents?.map(item => ({
-            ...item,
-            key: item.id,
-            name: item.title,
-            src: item?.fileContent || item.files?.[0]?.fileContent,
-        }));
-
-        return {
-            data: newData as DataType[],
-            totalRecords: res.totalElements || 0
-        };
-    } catch (err) {
-        console.error("Error fetching blogs:", err);
-        return { data: [], totalRecords: 0 };
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message })
+        return { data: [], totalRecords: 0 }
     }
+
+    const newData = map(res.data.contents, item => ({
+        ...item,
+        key: item.id,
+        name: item.title,
+        src: item?.fileContent || item.files?.[0]?.fileContent,
+    }));
+
+    return {
+        data: newData as DataType[],
+        totalRecords: res.data.totalElements || 0
+    };
 };
 
 export const fetchPostDetail = async (id: string, next?: NextFetchRequestConfig): Promise<Post> => {
-    try {
-        const res: Post = await apiService({
-            endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.DETAIL}?id=${id}`,
-            method: 'GET',
-            next,
-        });
+    const res: ResponseData = await apiService({
+        endpoint: `${API_ROUTES.BLOGS}/${id}`,
+        method: 'GET',
+        next
+    });
 
-        return {
-            ...res,
-            src: getAvatar(res.files || []),
-            files: res.files?.map(f => ({ ...f, url: f?.fileContent })) || [],
-        };
-    } catch (err) {
-        console.error("Error fetching post detail:", err);
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message })
         return {} as Post;
     }
+
+    return {
+        ...res.data,
+        src: getAvatar(res.data.files || []),
+        files: res.data.files ? map(res.data.files, f => ({ ...f, url: f?.fileContent })) : [],
+    };
 };
 
 export const deletePost = async (id: string): Promise<void> => {
-    try {
-        await apiJwtService({
-            endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.DELETE}?id=${id}`,
-            method: 'DELETE',
-        });
-    } catch (err) {
-        console.error("Error deleting post:", err);
-        throw err;
+    const res: ResponseData = await apiJwtService({
+        endpoint: API_ROUTES.BLOGS,
+        method: 'DELETE',
+        queryParams: { id },
+    });
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message })
+    }
+    if (res.success) {
+        notification.success({ message: 'Success', description: 'Delete post successfully' })
     }
 };
 
-export const createUpdatePost = async (data: Post): Promise<CUResponse> => {
-    const res = await apiJwtService({
-        endpoint: `${API_ROUTES.BLOG}/${API_ROUTES.CREATE}`,
+export const createUpdatePost = async (data: Post): Promise<ResponseData> => {
+    const res: ResponseData = await apiJwtService({
+        endpoint: `${API_ROUTES.BLOGS}/${API_ROUTES.CREATE}`,
         method: 'POST',
         data,
-    }).catch(err => {
-        notification.error({ message: 'Failed', description: err.message });
     });
+
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message })
+    }
+
+    if (res.success && !data.id) {
+        notification.success({ message: 'Success', description: 'Create post successfully' })
+    }
+
+    if (res.success && data.id) {
+        notification.success({ message: 'Success', description: 'Update post successfully' })
+    }
 
     return res;
 };

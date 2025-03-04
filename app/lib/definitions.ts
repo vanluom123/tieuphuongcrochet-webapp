@@ -274,7 +274,7 @@ export interface Comment {
 	createdDate: string;
 }
 
-export interface CUResponse {
+export interface ResponseData {
 	code: number,
 	data: any,
 	success: boolean,

@@ -12,7 +12,7 @@ const handleApiError = (err: any) => {
 
 export const fetchBannerTypes = async (): Promise<DataType[]> => {
     try {
-        const res: IBannerType[] = await apiJwtService({ endpoint: API_ROUTES.BANNER_TYPE });
+        const res: IBannerType[] = await apiJwtService({ endpoint: API_ROUTES.BANNER_TYPES });
         return map(res, ({ id, name, createdDate }) => ({
             id,
             name,
@@ -26,7 +26,7 @@ export const fetchBannerTypes = async (): Promise<DataType[]> => {
 
 export const fetchBanners = async (): Promise<Banner[]> => {
     try {
-        const res = await apiJwtService({ endpoint: API_ROUTES.GETT_ALL_BANNER });
+        const res = await apiJwtService({ endpoint: API_ROUTES.BANNERS });
         return map(res, d => ({
             ...d,
             bannerTypeId: d.bannerType?.id
@@ -38,8 +38,8 @@ export const fetchBanners = async (): Promise<Banner[]> => {
 
 export const createUpdateBanners = async (banners: Banner[]): Promise<void> => {
     try {
-        const res = await apiJwtService({
-            endpoint: API_ROUTES.CU_BANNER,
+        await apiJwtService({
+            endpoint: API_ROUTES.BANNERS,
             method: 'POST',
             data: banners,
         });
@@ -51,8 +51,9 @@ export const createUpdateBanners = async (banners: Banner[]): Promise<void> => {
 export const deleteBannerType = async (id: string): Promise<void> => {
     try {
         await apiJwtService({
-            endpoint: `${API_ROUTES.D_BANNER_TYPE}/${id}`,
+            endpoint: API_ROUTES.BANNER_TYPES,
             method: 'DELETE',
+            queryParams: { id }
         });
         notification.success({ message: 'Success', description: 'Delete banner type successfully' });
     } catch (err) {
@@ -62,8 +63,8 @@ export const deleteBannerType = async (id: string): Promise<void> => {
 
 export const createUpdateBannerType = async (data: IBannerType): Promise<void> => {
     try {
-        const res = await apiJwtService({
-            endpoint: API_ROUTES.CU_BANNER_TYPE,
+        await apiJwtService({
+            endpoint: API_ROUTES.BANNER_TYPES,
             method: 'POST',
             data,
         });

@@ -1,14 +1,14 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
-import { Product, FileUpload, ListParams, DataType, CUResponse } from "../definitions";
+import { Product, FileUpload, ListParams, DataType, ResponseData } from "../definitions";
 import { getAvatar } from "../utils";
 import apiService from "./apiService";
 import { notification } from "antd";
 import apiJwtService from "./apiJwtService";
 
 export const fetchProducts = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{ data: DataType[], totalRecords: number }> => {
-    const res = await apiService({
-        endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.PAGINATION}`,
+    const res: ResponseData = await apiService({
+        endpoint: API_ROUTES.PRODUCTS,
         method: 'POST',
         queryParams: {
             'pageNo': params.pageNo.toString(),
@@ -18,11 +18,13 @@ export const fetchProducts = async (params: ListParams, next?: NextFetchRequestC
         },
         data: params.filters,
         next,
-    }).catch((err) => {
-        return {} as Product;
     });
 
-    const newData = map(res.contents, (item: Product) => ({
+    if (!res.success) {
+        return { data: [], totalRecords: 0 }
+    }
+
+    const newData = map(res.data.contents, (item: Product) => ({
         ...item,
         key: item.id,
         name: item.name,
@@ -32,54 +34,61 @@ export const fetchProducts = async (params: ListParams, next?: NextFetchRequestC
     }));
     return {
         data: newData as DataType[],
-        totalRecords: res.totalElements || 0
+        totalRecords: res.data.totalElements || 0
     }
 };
 
 export const fetchProductDetail = async (id: string, revalidate?: number): Promise<Product> => {
     const res = await apiService({
-        endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.DETAIL}?id=${id}`,
+        endpoint: `${API_ROUTES.PRODUCTS}/${id}`,
         method: 'GET',
         next: { revalidate: revalidate || 0, tags: [`product-${id}`] },
-    }).catch((err) => {
-        return {} as Product;
     });
 
+    if (!res.success) {
+        return {} as Product;
+    }
+
     const newData: Product = {
-        ...res,
-        src: getAvatar(res.images as FileUpload[]),
-        images: res.images?.map((f: FileUpload) => ({ ...f, url: f?.fileContent }))
+        ...res.data,
+        src: getAvatar(res.data.images as FileUpload[]),
+        images: res.data.images?.map((f: FileUpload) => ({ ...f, url: f?.fileContent }))
     };
-    
+
     return newData;
 };
 
 export const deleteProduct = async (id: string) => {
-    const url = `${API_ROUTES.PRODUCT}/${API_ROUTES.DELETE}?id=${id}`;
-    await apiJwtService({
-        endpoint: url,
+    const res: ResponseData = await apiJwtService({
+        endpoint: API_ROUTES.PRODUCTS,
         method: 'DELETE',
-    }).then(() => {
-        notification.success({ message: 'Success', description: 'Delete product successfully' })
-    }).catch((err) => {
-        notification.error({ message: 'Failed', description: err.message })
-    })
+        queryParams: { id },
+    });
+
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message });
+    }
+
+    if (res.success) {
+        notification.success({ message: 'Success', description: 'Delete product successfully' });
+    }
 };
 
-export const createUpdateProduct = async (data: Product): Promise<CUResponse> => {
-    const endpoint = `${API_ROUTES.PRODUCT}/${API_ROUTES.CREATE}`
-    const res: CUResponse = await apiJwtService({
-        endpoint,
+export const createUpdateProduct = async (data: Product): Promise<ResponseData> => {
+    const res: ResponseData = await apiJwtService({
+        endpoint: `${API_ROUTES.PRODUCTS}/${API_ROUTES.CREATE}`,
         method: 'POST',
         data,
-    }).catch((err) => {
-        notification.error({message: 'Failed', description: err.message});
-   });
+    });
 
-    if (res?.success && !data.id) {
+    if (!res.success) {
+        notification.error({ message: 'Failed', description: res.message });
+    }
+
+    if (res.success && !data.id) {
         notification.success({ message: 'Success', description: 'Create product successfully' })
     }
-    if(res?.success && data.id) {
+    if (res.success && data.id) {
         notification.success({ message: 'Success', description: 'Update product successfully' })
     }
 
