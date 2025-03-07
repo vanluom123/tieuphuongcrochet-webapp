@@ -1,22 +1,26 @@
-import { map } from "lodash";
-import { API_ROUTES } from "../constant";
-import { Product, FileUpload, ListParams, DataType, CUResponse } from "../definitions";
-import { getAvatar } from "../utils";
+import {map} from "lodash";
+import {API_ROUTES} from "../constant";
+import {CUResponse, DataType, FileUpload, ListParams, Product} from "../definitions";
+import {getAvatar} from "../utils";
 import apiService from "./apiService";
-import { notification } from "antd";
+import {notification} from "antd";
 import apiJwtService from "./apiJwtService";
 
-export const fetchProducts = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{ data: DataType[], totalRecords: number }> => {
+export const fetchProducts = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{
+    data: DataType[],
+    totalRecords: number
+}> => {
     const res = await apiService({
         endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.PAGINATION}`,
-        method: 'POST',
+        method: 'GET',
         queryParams: {
             'pageNo': params.pageNo.toString(),
             'pageSize': params.pageSize.toString(),
             'sortBy': params.sortBy as string,
             'sortDir': params.sortDir as string,
+            'categoryId': params.categoryId,
+            'filter': params.filter
         },
-        data: params.filters,
         next,
     }).catch((err) => {
         return {} as Product;
@@ -40,7 +44,7 @@ export const fetchProductDetail = async (id: string, revalidate?: number): Promi
     const res = await apiService({
         endpoint: `${API_ROUTES.PRODUCT}/${API_ROUTES.DETAIL}?id=${id}`,
         method: 'GET',
-        next: { revalidate: revalidate || 0, tags: [`product-${id}`] },
+        next: {revalidate: revalidate || 0, tags: [`product-${id}`]},
     }).catch((err) => {
         return {} as Product;
     });
@@ -48,9 +52,9 @@ export const fetchProductDetail = async (id: string, revalidate?: number): Promi
     const newData: Product = {
         ...res,
         src: getAvatar(res.images as FileUpload[]),
-        images: res.images?.map((f: FileUpload) => ({ ...f, url: f?.fileContent }))
+        images: res.images?.map((f: FileUpload) => ({...f, url: f?.fileContent}))
     };
-    
+
     return newData;
 };
 
@@ -60,9 +64,9 @@ export const deleteProduct = async (id: string) => {
         endpoint: url,
         method: 'DELETE',
     }).then(() => {
-        notification.success({ message: 'Success', description: 'Delete product successfully' })
+        notification.success({message: 'Success', description: 'Delete product successfully'})
     }).catch((err) => {
-        notification.error({ message: 'Failed', description: err.message })
+        notification.error({message: 'Failed', description: err.message})
     })
 };
 
@@ -74,13 +78,13 @@ export const createUpdateProduct = async (data: Product): Promise<CUResponse> =>
         data,
     }).catch((err) => {
         notification.error({message: 'Failed', description: err.message});
-   });
+    });
 
     if (res?.success && !data.id) {
-        notification.success({ message: 'Success', description: 'Create product successfully' })
+        notification.success({message: 'Success', description: 'Create product successfully'})
     }
-    if(res?.success && data.id) {
-        notification.success({ message: 'Success', description: 'Update product successfully' })
+    if (res?.success && data.id) {
+        notification.success({message: 'Success', description: 'Update product successfully'})
     }
 
     return res;

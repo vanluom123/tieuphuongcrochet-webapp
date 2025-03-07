@@ -1,21 +1,20 @@
-import { User } from '@/app/lib/definitions';
-import { ListParams } from '@/app/lib/definitions';
-import { API_ROUTES } from '../constant';
+import {ListParams, User} from '@/app/lib/definitions';
+import {API_ROUTES} from '../constant';
 import apiJwtService from './apiJwtService';
-import { map } from 'lodash';
+import {map} from 'lodash';
 
 export async function fetchUsers(params: ListParams): Promise<{ data: User[], totalRecords: number }> {
     try {
         const response = await apiJwtService({
             endpoint: `${API_ROUTES.USER}/${API_ROUTES.PAGINATION}`,
-            method: 'POST',
+            method: 'GET',
             queryParams: {
                 pageNo: params.pageNo.toString(),
                 pageSize: params.pageSize.toString(),
                 sortBy: params.sortBy as string,
                 sortDir: params.sortDir as string,
-            },
-            data: params.filters
+                filter: params.filter
+            }
         }).catch((err) => {
             return {} as User;
         });
@@ -28,7 +27,7 @@ export async function fetchUsers(params: ListParams): Promise<{ data: User[], to
         };
     } catch (error) {
         console.error('Error fetching users:', error);
-        return { data: [], totalRecords: 0 };
+        return {data: [], totalRecords: 0};
     }
 }
 
@@ -37,7 +36,7 @@ export async function fetchUserDetail(id: string): Promise<User> {
         const response = await apiJwtService({
             endpoint: `${API_ROUTES.USER}/${API_ROUTES.DETAIL}`,
             method: 'GET',
-            queryParams: { 'id': id }
+            queryParams: {'id': id}
         }).catch((err) => {
             return {} as User;
         });
@@ -54,7 +53,7 @@ export async function updateUser(id: string, userData: User): Promise<User> {
             endpoint: `${API_ROUTES.USER}/${API_ROUTES.UPDATE}`,
             method: 'PUT',
             data: userData,
-            queryParams: { 'id': id }
+            queryParams: {'id': id}
         }).catch((err) => {
             return {} as User;
         });
@@ -70,7 +69,7 @@ export async function deleteUser(id: string): Promise<void> {
         await apiJwtService({
             endpoint: `${API_ROUTES.USER}/${API_ROUTES.DELETE}`,
             method: 'DELETE',
-            queryParams: { 'id': id }
+            queryParams: {'id': id}
         });
     } catch (error) {
         console.error('Error deleting user:', error);
