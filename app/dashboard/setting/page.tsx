@@ -17,7 +17,7 @@ const Setting = () => {
     const [bannersList, SetBannersList] = useState<Banner[]>([]);
     const [loading, setLoading] = useState(false);
     const [bannerTypes, setBannerTypes] = useState<DataType[]>([]);
-    const banners = useRef<Banner[]>([]);
+    const bannerRef = useRef<Banner[]>([]);
 
     const [form] = Form.useForm();
     const { Item } = Form;
@@ -31,6 +31,7 @@ const Setting = () => {
         ]).then(([bannerTypes, banners]) => {
             setBannerTypes(bannerTypes);
             SetBannersList(banners);
+            bannerRef.current = banners;
         }).finally(() => {
             setLoading(false);
         })
@@ -74,7 +75,7 @@ const Setting = () => {
     }
 
     const onDeleteBanner = (index: number) => {
-        const newBannerList = filter([...banners.current], (_, i) => i !== index);
+        const newBannerList = filter([...bannerRef.current], (_, i) => i !== index);
         SetBannersList(newBannerList);
         setIsUpdatedBList(true);
     }

@@ -6,6 +6,8 @@ import { map } from "lodash";
 import { memo, useEffect } from "react";
 import UploadFiles from "@/app/components/upload-files";
 import { FileUpload, Banner, DataType } from "@/app/lib/definitions";
+import { notification } from "antd";
+import { uploadImageToServer } from "@/app/lib/utils";
 
 
 export interface EdittingBanner {
@@ -60,9 +62,22 @@ const BannerForm = ({
 		}
 	}, [edittingBanner, form]);
 
-	const onAddBanner = (values: any) => {
+	const onAddBanner = async (values: any) => {
 		const { title, content, url, bannerImage, bannerTypeId, active, textColor } = values;
-		
+
+		let fileContent = bannerImage[0]?.fileContent || bannerImage[0]?.url || '';
+		let fileName = bannerImage[0]?.fileName || bannerImage[0]?.name || '';
+
+		if (bannerImage[0]?.originFileObj) {
+			const uploadedFiles = await uploadImageToServer(bannerImage, []);
+			if (!uploadedFiles || uploadedFiles.length === 0) {
+				notification.error({ message: 'Error', description: 'Failed to upload image' });
+				return;
+			}
+			fileContent = uploadedFiles[0].fileContent;
+			fileName = uploadedFiles[0].fileName;
+		}
+
 		const banner: Banner = {
 			title,
 			content,
@@ -70,9 +85,11 @@ const BannerForm = ({
 			bannerTypeId,
 			active,
 			textColor: typeof textColor === 'string' ? textColor : textColor?.toHexString(),
-			fileContent: bannerImage[0].fileContent || '',
-			fileName: bannerImage[0].fileName || '',
+			fileContent,
+			fileName
 		}
+
+		console.log('filename %s --- filecontent %s', fileName, fileContent)
 
 		let tempBanners = [...bannersList];
 		if (edittingBanner.isEditting) {
@@ -85,6 +102,7 @@ const BannerForm = ({
 				banner
 			]
 		}
+		console.log('tempbanner: ', tempBanners)
 		setIsUpdatedBList(true);
 		SetBannersList(tempBanners);
 		form.resetFields();
@@ -105,11 +123,11 @@ const BannerForm = ({
 			form={form}
 			initialValues={{
 				textColor: '#FFFFFF',
-				active: true, 
-				bannerTypeId: '', 
-				bannerImage: [], 
-				title: '', 
-				content: '', 
+				active: true,
+				bannerTypeId: '',
+				bannerImage: [],
+				title: '',
+				content: '',
 				url: ''
 			}}
 		>
