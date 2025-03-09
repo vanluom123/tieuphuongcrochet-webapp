@@ -51,9 +51,8 @@ export const createUpdateBanners = async (banners: Banner[]): Promise<void> => {
 export const deleteBannerType = async (id: string): Promise<void> => {
     try {
         await apiJwtService({
-            endpoint: API_ROUTES.BANNER_TYPES,
-            method: 'DELETE',
-            queryParams: { id }
+            endpoint: `${API_ROUTES.BANNER_TYPES}/${id}`,
+            method: 'DELETE'
         });
         notification.success({ message: 'Success', description: 'Delete banner type successfully' });
     } catch (err) {

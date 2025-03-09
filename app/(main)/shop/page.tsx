@@ -1,13 +1,13 @@
-import { Metadata } from "next";
-import { JsonLd } from "react-schemaorg";
-import { WebPage } from "schema-dts";
-import { getTranslations } from "next-intl/server";
+import {Metadata} from "next";
+import {JsonLd} from "react-schemaorg";
+import {WebPage} from "schema-dts";
+import {getTranslations} from "next-intl/server";
 
 import Products from "./Products";
-import { ROUTE_PATH } from '@/app/lib/constant';
-import { fetchProducts } from '@/app/lib/service/productService';
-import { fetchCategories } from '@/app/lib/service/categoryService';
-import { Category, DataType, FileUpload, initialListParams } from '@/app/lib/definitions';
+import {ROUTE_PATH} from '@/app/lib/constant';
+import {fetchProducts} from '@/app/lib/service/productService';
+import {fetchCategories} from '@/app/lib/service/categoryService';
+import {Category, DataType, FileUpload, initialListParams} from '@/app/lib/definitions';
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations("Shop");

@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Button, Col, Flex, Form, Input, Radio, RadioChangeEvent, Row, TreeSelect } from 'antd';
-import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
-import { SearchProps } from 'antd/es/input';
+import {useState} from 'react';
+import {Button, Col, Flex, Form, Input, Radio, RadioChangeEvent, Row, TreeSelect} from 'antd';
+import {PlusOutlined, ReloadOutlined} from '@ant-design/icons';
+import {SearchProps} from 'antd/es/input';
 
-import { SegmentedValue } from 'antd/es/segmented';
-import { Filter, SearchParams } from '@/app/lib/definitions';
-import { ALL_ITEM, TRANSLATION_STATUS, TRANSLATION_OPTIONS } from '@/app/lib/constant';
-import { getRadioFilter, mapNameFilters, filterByText, getCategoryFilter, getStatusFilter } from '@/app/lib/utils';
+import {SegmentedValue} from 'antd/es/segmented';
+import {SearchParams} from '@/app/lib/definitions';
+import {ALL_ITEM, TRANSLATION_OPTIONS, TRANSLATION_STATUS} from '@/app/lib/constant';
 import FreePatternStatus from '../free-pattern-status';
-import { DefaultOptionType } from 'antd/es/select';
+import {DefaultOptionType} from 'antd/es/select';
+import {combineFilters} from "@/app/lib/filter-utils";
 
 interface SearchTableProps {
     onAddNew: () => void;
@@ -20,30 +20,35 @@ interface SearchTableProps {
     isShowSearch?: boolean;
     isShowAddNew?: boolean;
     searchFields?: string[];
-    isShowStatusFilter?:boolean;
+    isShowStatusFilter?: boolean;
     categories?: DefaultOptionType[];
-  }
-  
-const initialSearchParams: SearchParams = {
-    filters: []
-};
+}
 
 const SearchTable = ({
-    onAddNew,
-    onSearch,
-    onSearchChange,
-    textAddNew,
-    loading,
-    isShowFilter,
-    isShowSearch = true,
-    isShowAddNew = true,
-    searchFields = ['name'],
-    isShowStatusFilter,
-    categories
-}: SearchTableProps) => {
-    const { Search } = Input;
+                         onAddNew,
+                         onSearch,
+                         onSearchChange,
+                         textAddNew,
+                         loading,
+                         isShowFilter,
+                         isShowSearch = true,
+                         isShowAddNew = true,
+                         searchFields = ['name'],
+                         isShowStatusFilter,
+                         categories
+                     }: SearchTableProps) => {
+    const {Search} = Input;
     const [form] = Form.useForm();
-    const [searchParams, setSearchParams] = useState(initialSearchParams);
+    const [searchParams, setSearchParams] = useState({
+        categoryId: '',
+        filter: ''
+    });
+    const [filters, setFilters] = useState({
+        status: '',
+        search: '',
+        categoryId: '',
+        isHome: ALL_ITEM.key
+    });
 
     const onHandleSearch = (searchParams: SearchParams) => {
         setSearchParams(searchParams);
@@ -53,15 +58,21 @@ const SearchTable = ({
     };
 
     const onchangeRadio = (e: RadioChangeEvent) => {
-        const isHomeFilter = getRadioFilter(e);
-
-        const newFilters = mapNameFilters(searchParams.filters, 'isHome', isHomeFilter);
-
-        const newSearchParams: SearchParams = {
-            filters: newFilters
-        };
-
-        onHandleSearch(newSearchParams);
+        setFilters(prev => {
+            const newFilters = {
+                ...prev,
+                isHome: e.target.value
+            }
+            const combined = combineFilters({
+                ...newFilters,
+                searchFields
+            });
+            onHandleSearch({
+                categoryId: prev.categoryId,
+                filter: combined
+            })
+            return newFilters;
+        })
     };
 
     const onSearchText: SearchProps['onSearch'] = (value) => {
@@ -69,44 +80,73 @@ const SearchTable = ({
             onSearch(value);
             return;
         }
-        const searchField: Filter = filterByText(value, ...searchFields);
-        const newFilters = mapNameFilters(searchParams.filters, 'searchText', searchField);
-
-        const newSearchParams: SearchParams = {
-            filters: newFilters
-        };
-
-        onHandleSearch(newSearchParams);
+        setFilters(prev => {
+            const newFilters = {
+                ...prev,
+                search: value
+            }
+            const combined = combineFilters({
+                ...newFilters,
+                searchFields
+            });
+            onHandleSearch({
+                categoryId: prev.categoryId,
+                filter: combined
+            })
+            return newFilters;
+        })
     }
 
     const onChangeCategory = (key: string) => {
-        const categoryFilter = getCategoryFilter(key);
-
-        const newFilters = mapNameFilters(searchParams.filters, 'category', categoryFilter);
-
-        const newSearchParams: SearchParams = {
-            filters: newFilters
-        };
-
-        onHandleSearch(newSearchParams);
+        console.log('category key: ', key);
+        setFilters(prev => {
+            const newFilters = {
+                ...prev,
+                categoryId: key === undefined ? '' : key
+            }
+            const combined = combineFilters({
+                ...newFilters,
+                searchFields
+            });
+            onHandleSearch({
+                categoryId: key === undefined ? '' : key,
+                filter: combined
+            })
+            return newFilters;
+        })
     }
 
     const onChangeStatus = (value: SegmentedValue) => {
-        const statusFilter = getStatusFilter(value);
-
-        const newFilters = mapNameFilters(searchParams.filters, 'statusFilter', statusFilter);
-
-        const newSearchParams: SearchParams = {
-            filters: newFilters
-        };
-
-        onHandleSearch(newSearchParams);
+        setFilters(prev => {
+            const newFilters = {
+                ...prev,
+                status: value as string
+            }
+            const combined = combineFilters({
+                ...newFilters,
+                searchFields
+            });
+            onHandleSearch({
+                categoryId: prev.categoryId,
+                filter: combined
+            })
+            return newFilters;
+        })
     }
 
     const onReset = () => {
         form.resetFields();
+        const resetFilters = {
+            status: '',
+            search: '',
+            categoryId: '',
+            isHome: ALL_ITEM.key
+        };
+        setFilters(resetFilters);
+
         onHandleSearch({
-            filters: []
+            categoryId: '',
+            filter: ''
         });
     }
 
@@ -122,9 +162,9 @@ const SearchTable = ({
                     initialValues={{
                         isHome: ALL_ITEM.key,
                     }}
-                    style={{ flex: 'min-content' }}
+                    style={{flex: 'min-content'}}
                 >
-                    <Row style={{ width: '100%' }} gutter={12} className='search'>
+                    <Row style={{width: '100%'}} gutter={12} className='search'>
                         <Col xs={24} md={12} xl={12} xxl={6}>
                             <Form.Item name='searchText'>
                                 <Search
@@ -189,9 +229,9 @@ const SearchTable = ({
                                     <Col xs={24} xl={4} xxl={3}>
                                         <span>
                                             <Button
-                                                style={{ textAlign: 'center', width: '120px' }}
+                                                style={{textAlign: 'center', width: '120px'}}
                                                 danger shape="default"
-                                                icon={<ReloadOutlined />}
+                                                icon={<ReloadOutlined/>}
                                                 htmlType="reset"
                                                 onClick={onReset}
                                             >
@@ -208,7 +248,7 @@ const SearchTable = ({
             }
             {
                 isShowAddNew &&
-                <Button type="primary" onClick={onAddNew} icon={<PlusOutlined />}>
+                <Button type="primary" onClick={onAddNew} icon={<PlusOutlined/>}>
                     {textAddNew || 'Add new'}
                 </Button>
             }

@@ -47,9 +47,8 @@ export const updateCategory = async (data: Category) => {
 
 export const deleteCategory = async (id: string) => {
     const res = await apiJwtService({
-        endpoint: API_ROUTES.CATEGORIES,
-        method: 'DELETE',
-        queryParams: { id }
+        endpoint: `${API_ROUTES.CATEGORIES}/${id}`,
+        method: 'DELETE'
     });
 
     if (!res.success) {

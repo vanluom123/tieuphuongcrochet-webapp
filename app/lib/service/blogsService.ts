@@ -1,7 +1,7 @@
 import { API_ROUTES } from "../constant";
 import { DataType, ListParams, Post, ResponseData } from "../definitions";
 import apiService from "./apiService";
-import { getAvatar } from "../utils";
+import {getAvatar} from "../utils";
 import apiJwtService from "./apiJwtService";
 import { notification } from "../notify";
 import { map } from "lodash";
@@ -12,14 +12,14 @@ export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConf
 }> => {
     const res: ResponseData = await apiService({
         endpoint: API_ROUTES.BLOGS,
-        method: 'POST',
+        method: 'GET',
         queryParams: {
             pageNo: params.pageNo.toString(),
             pageSize: params.pageSize.toString(),
             sortBy: params.sortBy as string,
             sortDir: params.sortDir as string,
+            filter: params.filter
         },
-        data: params.filters,
         next,
     });
 
@@ -62,9 +62,8 @@ export const fetchPostDetail = async (id: string, next?: NextFetchRequestConfig)
 
 export const deletePost = async (id: string): Promise<void> => {
     const res: ResponseData = await apiJwtService({
-        endpoint: API_ROUTES.BLOGS,
-        method: 'DELETE',
-        queryParams: { id },
+        endpoint: `${API_ROUTES.BLOGS}/${id}`,
+        method: 'DELETE'
     });
     if (!res.success) {
         notification.error({ message: 'Failed', description: res.message })
@@ -76,7 +75,7 @@ export const deletePost = async (id: string): Promise<void> => {
 
 export const createUpdatePost = async (data: Post): Promise<ResponseData> => {
     const res: ResponseData = await apiJwtService({
-        endpoint: `${API_ROUTES.BLOGS}/${API_ROUTES.CREATE}`,
+        endpoint: API_ROUTES.BLOGS,
         method: 'POST',
         data,
     });

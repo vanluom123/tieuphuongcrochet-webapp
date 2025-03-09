@@ -1,23 +1,24 @@
-import { map } from "lodash";
-import { API_ROUTES } from "../constant";
-import { Product, FileUpload, ListParams, DataType, ResponseData } from "../definitions";
-import { getAvatar } from "../utils";
+import {map} from "lodash";
+import {API_ROUTES} from "../constant";
+import {DataType, FileUpload, ListParams, Product, ResponseData} from "../definitions";
+import {getAvatar} from "../utils";
 import apiService from "./apiService";
-import { notification } from "antd";
+import {notification} from "antd";
 import apiJwtService from "./apiJwtService";
 
 export const fetchProducts = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{ data: DataType[], totalRecords: number }> => {
     const res: ResponseData = await apiService({
         endpoint: API_ROUTES.PRODUCTS,
-        method: 'POST',
+        method: 'GET',
         queryParams: {
             'pageNo': params.pageNo.toString(),
             'pageSize': params.pageSize.toString(),
             'sortBy': params.sortBy as string,
             'sortDir': params.sortDir as string,
+            'categoryId': params.categoryId,
+            'filter': params.filter
         },
-        data: params.filters,
-        next,
+        next
     });
 
     if (!res.success) {
@@ -30,7 +31,7 @@ export const fetchProducts = async (params: ListParams, next?: NextFetchRequestC
         name: item.name,
         price: item.price,
         currency_code: item.currency_code,
-        src: item?.fileContent || getAvatar(item.images as FileUpload[]),
+        src: item?.fileContent || getAvatar(item.images as FileUpload[])
     }));
     return {
         data: newData as DataType[],
@@ -42,7 +43,7 @@ export const fetchProductDetail = async (id: string, revalidate?: number): Promi
     const res = await apiService({
         endpoint: `${API_ROUTES.PRODUCTS}/${id}`,
         method: 'GET',
-        next: { revalidate: revalidate || 0, tags: [`product-${id}`] },
+        next: { revalidate: revalidate || 0, tags: [`product-${id}`] }
     });
 
     if (!res.success) {
@@ -60,9 +61,8 @@ export const fetchProductDetail = async (id: string, revalidate?: number): Promi
 
 export const deleteProduct = async (id: string) => {
     const res: ResponseData = await apiJwtService({
-        endpoint: API_ROUTES.PRODUCTS,
-        method: 'DELETE',
-        queryParams: { id },
+        endpoint: `${API_ROUTES.PRODUCTS}/${id}`,
+        method: 'DELETE'
     });
 
     if (!res.success) {
@@ -76,9 +76,9 @@ export const deleteProduct = async (id: string) => {
 
 export const createUpdateProduct = async (data: Product): Promise<ResponseData> => {
     const res: ResponseData = await apiJwtService({
-        endpoint: `${API_ROUTES.PRODUCTS}/${API_ROUTES.CREATE}`,
+        endpoint: API_ROUTES.PRODUCTS,
         method: 'POST',
-        data,
+        data
     });
 
     if (!res.success) {

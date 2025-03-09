@@ -1,7 +1,7 @@
-import { map } from "lodash";
-import { API_ROUTES } from "../constant";
-import { FileUpload, ListParams, DataType, Pattern, ResponseData } from "../definitions";
-import { getAvatar, showNotification } from "../utils";
+import {map} from "lodash";
+import {API_ROUTES} from "../constant";
+import {DataType, FileUpload, ListParams, Pattern, ResponseData} from "../definitions";
+import {getAvatar, showNotification} from "../utils";
 import apiService from "./apiService";
 import apiJwtService from "./apiJwtService";
 
@@ -13,15 +13,16 @@ export const fetchFreePatterns = async (
     try {
         const res = await apiService({
             endpoint: API_ROUTES.FREE_PATTERNS,
-            method: "POST",
+            method: 'GET',
             queryParams: {
                 pageNo: params.pageNo.toString(),
                 pageSize: params.pageSize.toString(),
                 sortBy: params.sortBy as string,
                 sortDir: params.sortDir as string,
+                categoryId: params.categoryId,
+                filter: params.filter
             },
-            next,
-            data: params.filters,
+            next
         });
 
         if (!res.data || !res.data.contents) throw new Error("Invalid API response");
@@ -38,7 +39,7 @@ export const fetchFreePatterns = async (
         };
     } catch (error) {
         console.error("Error fetching free patterns:", error);
-        return { data: [], totalRecords: 0 };
+        return {data: [], totalRecords: 0};
     }
 };
 
@@ -51,7 +52,7 @@ export const fetchFreePatternDetail = async (
         const res = await apiService({
             endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}`,
             method: "GET",
-            next: { revalidate: revalidate || 0, tags: [`free-pattern-${id}`] },
+            next: {revalidate: revalidate || 0, tags: [`free-pattern-${id}`]},
         });
 
         if (!res.data) throw new Error("Invalid API response");
@@ -90,11 +91,9 @@ export const createUpdateFreePattern = async (data: Pattern): Promise<ResponseDa
 /** Delete a free pattern */
 export const deleteFreePattern = async (id: string) => {
     try {
-        const url = API_ROUTES.FREE_PATTERNS;
         await apiJwtService({
-            endpoint: url,
-            method: "DELETE",
-            queryParams: { id }
+            endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}`,
+            method: "DELETE"
         });
         showNotification("success", "Success", "Delete free pattern successfully");
     } catch (error: any) {

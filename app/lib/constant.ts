@@ -1,5 +1,5 @@
 import shopee from '@/public/shope.jpg';
-import { ListParams, TBannerType, TranslationStatus } from './definitions';
+import {ListParams, TBannerType, TranslationStatus} from './definitions';
 
 export const ROUTE_PATH = {
   HOME: '/',
@@ -260,13 +260,6 @@ export const API_ROUTES = {
   // Settings
   SETTINGS: '/api/v1/settings',
 
-  // Common operations
-  CREATE: 'create',
-  DETAIL: 'detail', 
-  UPDATE: 'update',
-  DELETE: 'delete',
-  PAGINATION: 'pagination',
-
   // File upload
   FIREBASE_STORAGE: '/api/v1/firebase-storage',
   
@@ -279,7 +272,8 @@ export const PARAMS_FOR_SITEMAP: ListParams = {
 	pageSize: parseInt(process.env.NEXT_PUBLIC_RECORDS_PER_SITEMAP || '300'),
 	sortBy: 'createdDate',
 	sortDir: 'desc',
-	filters: []
+    categoryId: '',
+	filter: ''
 };
 
 export const GENDER ={

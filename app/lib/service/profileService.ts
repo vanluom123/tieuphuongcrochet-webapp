@@ -1,7 +1,7 @@
-import { Collection, IResponseList, ListParams, ListResponse, Pattern } from "../definitions";
+import {Collection, IResponseList, ListParams, Pattern} from "../definitions";
 import apiJwtService from "./apiJwtService";
-import { API_ROUTES } from "../constant";
-import { notification } from "../notify";
+import {API_ROUTES} from "../constant";
+import {notification} from "../notify";
 
 export async function fetchUserCollections(userId: string): Promise<Collection[]> {
     const response = await apiJwtService({
@@ -20,12 +20,13 @@ export async function fetchUserCollections(userId: string): Promise<Collection[]
 export async function fetchUserPatterns(userId: string, params: ListParams): Promise<IResponseList<Pattern>> {
     const res = await apiJwtService({
         endpoint: `${API_ROUTES.USERS}/${userId}/free-pattern`,
-        method: 'POST',
+        method: 'GET',
         queryParams: {
             'pageNo': params?.pageNo.toString(),
             'pageSize': params?.pageSize.toString(),
             'sortBy': params?.sortBy as string,
-            'sortDir': params?.sortDir as string
+            'sortDir': params?.sortDir as string,
+            'filter': params.filter
         }
     });
 
@@ -37,9 +38,8 @@ export async function fetchUserPatterns(userId: string, params: ListParams): Pro
 
 export async function deleteUserPattern(id: string) {
     return await apiJwtService({
-        endpoint: API_ROUTES.FREE_PATTERNS,
-        method: 'DELETE',
-        queryParams: { id }
+        endpoint: `${API_ROUTES.PATTERNS}/${id}`,
+        method: 'DELETE'
     });
 }
 
