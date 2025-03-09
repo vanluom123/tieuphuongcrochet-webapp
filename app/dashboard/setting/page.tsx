@@ -16,8 +16,7 @@ const Setting = () => {
     const [edittingBanner, setEdittingBanner] = useState<EdittingBanner>(initialEdittingBanner);
     const [bannersList, SetBannersList] = useState<Banner[]>([]);
     const [loading, setLoading] = useState(false);
-
-    const bannerTypesRef = useRef<DataType[]>([]);
+    const [bannerTypes, setBannerTypes] = useState<DataType[]>([]);
     const banners = useRef<Banner[]>([]);
 
     const [form] = Form.useForm();
@@ -30,12 +29,22 @@ const Setting = () => {
             fetchBannerTypes(),
             fetchBanners()
         ]).then(([bannerTypes, banners]) => {
-            bannerTypesRef.current = bannerTypes;
+            setBannerTypes(bannerTypes);
             SetBannersList(banners);
         }).finally(() => {
             setLoading(false);
         })
     }, [])
+
+    const handleRefreshBannerTypes = async () => {
+        const bannerTypes = await fetchBannerTypes();
+        setBannerTypes(bannerTypes);
+    }
+
+    const handleRefreshBanners = async () => {
+        const banners = await fetchBanners();
+        SetBannersList(banners);
+    }
 
     const onSubmitForm = async () => {
         await createUpdateBanners(bannersList);
@@ -78,7 +87,7 @@ const Setting = () => {
     };
 
     const getBannerType = (id?: string, bannerType?: IBannerType) => {
-        return id ? find(bannerTypesRef.current, bt => bt.key === id)?.name : bannerType?.name;
+        return id ? find(bannerTypes, bt => bt.key === id)?.name : bannerType?.name;
     };
 
     const getActiveKey = () => {
@@ -89,7 +98,11 @@ const Setting = () => {
 
     return (<>
         <div className="setting-page">
-            <BannerType bannerTypes={bannerTypesRef.current} />
+            <BannerType
+                bannerTypes={bannerTypes}
+                onRefresh={handleRefreshBannerTypes}
+                loading={loading}
+            />
             <Divider style={{ margin: '30px 0' }} />
             <h2 className="align-center">Banners</h2>
             <Collapse
@@ -101,12 +114,13 @@ const Setting = () => {
                         label: 'Banner Form',
                         children:
                             <BannerForm
-                                bannerTypes={bannerTypesRef.current}
+                                bannerTypes={bannerTypes}
                                 bannersList={bannersList}
                                 edittingBanner={edittingBanner}
                                 setEdittingBanner={setEdittingBanner}
                                 SetBannersList={SetBannersList}
                                 setIsUpdatedBList={setIsUpdatedBList}
+                                onRefresh={handleRefreshBanners}
                             />
                     }]}
             />

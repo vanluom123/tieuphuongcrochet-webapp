@@ -29,6 +29,7 @@ interface BannerItemProps {
 	setEdittingBanner: (value: EdittingBanner) => void;
 	setIsUpdatedBList: (value: boolean) => void;
 	bannerTypes: DataType[];
+	onRefresh: () => void;
 }
 
 const BannerForm = ({
@@ -37,7 +38,8 @@ const BannerForm = ({
 	edittingBanner,
 	setEdittingBanner,
 	SetBannersList,
-	setIsUpdatedBList
+	setIsUpdatedBList,
+	onRefresh
 }: BannerItemProps) => {
 	const [form] = Form.useForm();
 	const { Item } = Form;
@@ -86,6 +88,7 @@ const BannerForm = ({
 		setIsUpdatedBList(true);
 		SetBannersList(tempBanners);
 		form.resetFields();
+		onRefresh();
 	};
 
 	const onCancel = () => {
@@ -100,7 +103,15 @@ const BannerForm = ({
 			layout="vertical"
 			onFinish={onAddBanner}
 			form={form}
-			initialValues={{textColor: '#FFFFFF', active: true, bannerTypeId: '', bannerImage: [], title: '', content: '', url: ''}}
+			initialValues={{
+				textColor: '#FFFFFF',
+				active: true, 
+				bannerTypeId: '', 
+				bannerImage: [], 
+				title: '', 
+				content: '', 
+				url: ''
+			}}
 		>
 			<Row gutter={[30, 30]}>
 				<Col xs={24} md={10}>
