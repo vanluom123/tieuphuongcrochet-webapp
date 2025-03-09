@@ -10,7 +10,7 @@ export async function fetchUserCollections(userId: string): Promise<Collection[]
     });
 
     if (!response.success) {
-        notification.error({ message: 'Failed', description: response.message })
+        notification.error({message: 'Failed', description: response.message})
         return [];
     }
 
@@ -54,7 +54,7 @@ export async function createCollection(name: string) {
     return await apiJwtService({
         endpoint: API_ROUTES.COLLECTIONS,
         method: 'POST',
-        queryParams: { name }
+        queryParams: {name}
     });
 }
 
@@ -62,16 +62,28 @@ export async function updateCollection(id: string, name: string) {
     return await apiJwtService({
         endpoint: API_ROUTES.COLLECTIONS,
         method: 'PUT',
-        queryParams: { collectionId: id, name }
+        queryParams: {collectionId: id, name}
     })
 }
 
 export async function updateUserProfile(data: any) {
-    return await apiJwtService({
+    const res = await apiJwtService({
         endpoint: API_ROUTES.USER_PROFILE,
         method: 'PUT',
         data
     });
+    if (res.success) {
+        notification.success({
+            message: 'Success',
+            description: 'Update profile successfully'
+        })
+    } else {
+        notification.error({
+            message: 'Failed',
+            description: 'Update profile failed'
+        })
+    }
+    return res.data;
 }
 
 export async function loadUserInfo(id: string = '') {
@@ -87,7 +99,7 @@ export async function loadUserInfo(id: string = '') {
     });
 
     if (!res.success) {
-        notification.error({ message: 'Failed', description: res.message })
+        notification.error({message: 'Failed', description: res.message})
         return;
     }
 
