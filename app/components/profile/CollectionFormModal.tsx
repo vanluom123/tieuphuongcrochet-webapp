@@ -2,7 +2,7 @@ import {Form, Input, Modal} from 'antd';
 import {useTranslations} from 'next-intl';
 import {Collection} from '@/app/lib/definitions';
 import {useEffect, useState} from 'react';
-import {createUpdateCollection, fetchCollectionDetail} from '@/app/lib/service/profileService';
+import {createCollection, fetchCollectionDetail} from '@/app/lib/service/profileService';
 
 const {Item} = Form;
 
@@ -58,7 +58,7 @@ const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps
         setState(prevState => ({...prevState, loading: true}));
 
         try {
-            const res = await createUpdateCollection(name);
+            const res = await createCollection(name);
             if (res?.id) {
                 form.resetFields();
                 setModalData({open: false, id: ''});

@@ -18,6 +18,7 @@ import UserInfo from '../../components/profile/UserInfo';
 import defaultUser from '../../../public/default-user.png';
 import defaultBackground from '../../../public/default-background.jpg';
 import '../../ui/components/profile.scss';
+// import Collections from "@/app/components/profile/Collections";
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
 
@@ -73,6 +74,11 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
             label: t('tabs.patterns'),
             children: <FreePatterns userId={userId} isCreator={isCreator} />,
         },
+        // {
+        //     key: 'collections',
+        //     label: t('tabs.collections'),
+        //     children: <Collections userId={userId} isCreator={isCreator} />,
+        // },
         {
             key: 'info',
             label: t('tabs.info'),
@@ -93,11 +99,13 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                 imageUrl: file
             });
 
-            setUserData(updatedUser);
+            if (updatedUser) {
+                notification.success({
+                    message: t('message.upload_avatar_success')
+                });
+                setUserData(updatedUser);
+            }
             setLoading({ ...loading, avatar: false });
-            notification.success({
-                message: t('message.upload_avatar_success')
-            });
         }
     }
 
@@ -129,7 +137,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                     {
                         loading.cover ? <Skeleton.Node className='skeleton-cover' style={{ width: '100%', height: '100%' }} active={loading.cover} /> :
                             <Image
-                                src={userData?.backgroundImageUrl || defaultBackground}
+                                src={userData?.backgroundImageUrl && userData.backgroundImageUrl.trim() ? userData.backgroundImageUrl : defaultBackground}
                                 alt="User cover image"
                                 layout="fill"
                                 style={{ objectFit: 'cover' }} 
@@ -145,7 +153,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                                     className='skeleton-avatar'
                                 /> :
                                     <Image
-                                        src={userData?.imageUrl || defaultUser}
+                                        src={userData?.imageUrl && userData.imageUrl.trim() ? userData.imageUrl : defaultUser}
                                         alt="User Avatar"
                                         width={120}
                                         height={120}

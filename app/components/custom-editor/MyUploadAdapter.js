@@ -8,7 +8,7 @@ class MyUploadAdapter {
 			
 			// URL where to send files.
 			const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-			this.url = `${baseUrl}${API_ROUTES.UPLOAD_FILE}`;
+			this.url = `${baseUrl}${API_ROUTES.FIREBASE_STORAGE}`;
 	}
 
 	// Starts the upload process.

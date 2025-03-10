@@ -22,8 +22,8 @@ const SingleUpload = ({ onUpload, className, icon, isCrop = false }: SingleUploa
 
             const res = await uploadFile.upload(formData);
 
-            if (res && res.length > 0) {
-                avatarUrl = res[0].fileContent;
+            if (res.success && res.data.length > 0) {
+                avatarUrl = res.data[0].fileContent;
             }
         } catch (error) {
             notification.error({
