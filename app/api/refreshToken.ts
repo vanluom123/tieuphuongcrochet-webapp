@@ -15,7 +15,7 @@ export default async function refreshAccessToken(token: JWT): Promise<JWT> {
         };
     });
 
-    if (res == null) {
+    if (res.success == false) {
         return {
             ...token,
             error: "RefreshAccessTokenError",
@@ -24,7 +24,7 @@ export default async function refreshAccessToken(token: JWT): Promise<JWT> {
 
     return {
         ...token,
-        accessToken: res.accessToken || res.jwtToken,
-        refreshToken: res.refreshToken ?? token.refreshToken,
+        accessToken: res.data.accessToken || res.data.jwtToken,
+        refreshToken: res.data.refreshToken ?? token.refreshToken,
     };
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Flex, Form, Input, InputNumber, Row, Space, Spin, Switch, TreeSelect } from "antd";
 import { useRouter } from "next/navigation";
 
-import { Category, CUResponse, FileUpload, Product } from "@/app/lib/definitions";
+import { Category, ResponseData, FileUpload, Product } from "@/app/lib/definitions";
 import { CURRENCY_LIST, ROUTE_PATH } from "@/app/lib/constant";
 import { fetchCategories } from "@/app/lib/service/categoryService";
 import UploadFiles from "@/app/components/upload-files";
@@ -71,9 +71,9 @@ const ProductForm = ({ params }: ProductFormProps) => {
         // Handle upload, delete images
         sendData.images = await uploadImageToServer(sendData.images, state.product.images);
         
-        const res: CUResponse = await createUpdateProduct(sendData);
+        const res: ResponseData = await createUpdateProduct(sendData);
         setState(initialState);
-        if (res?.success) {
+        if (res.success) {
             form.resetFields();
             router.push(ROUTE_PATH.DASHBOARD_PRODUCTS);
         }

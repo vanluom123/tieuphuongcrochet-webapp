@@ -1,14 +1,14 @@
 'use client'
-import { useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { Category, DataTableState, initialListParams, SearchParams } from '@/app/lib/definitions';
+import {useEffect, useRef, useState} from 'react';
+import {useTranslations} from 'next-intl';
+import {useRouter} from 'next/navigation';
+import {Category, DataTableState, initialListParams, SearchParams} from '@/app/lib/definitions';
 import DataTable from '@/app/components/data-table';
 import SearchTable from '@/app/components/data-table/SearchTable';
-import { deleteProduct, fetchProducts } from '@/app/lib/service/productService';
-import { ROUTE_PATH } from '@/app/lib/constant';
-import { fetchCategories } from '@/app/lib/service/categoryService';
-import { DefaultOptionType } from 'antd/es/select';
+import {deleteProduct, fetchProducts} from '@/app/lib/service/productService';
+import {ROUTE_PATH} from '@/app/lib/constant';
+import {fetchCategories} from '@/app/lib/service/categoryService';
+import {DefaultOptionType} from 'antd/es/select';
 
 const initialState: DataTableState = {
     loading: false,
@@ -19,24 +19,24 @@ const initialState: DataTableState = {
 const Products = () => {
     const [state, setState] = useState(initialState);
     const [params, setParams] = useState(initialListParams)
-	const categories = useRef<Category[]>([]);
+    const categories = useRef<Category[]>([]);
 
     const t = useTranslations('Product');
     const router = useRouter();
 
     useEffect(() => {
-        setState(prevState => ({ ...prevState, loading: true }));
+        setState(prevState => ({...prevState, loading: true}));
         Promise.all([
             fetchProducts(params),
             fetchCategories()
         ])
-        .then(([{ data, totalRecords }, categoriesData]) => {
-            setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
-            categories.current = categoriesData as Category[];
-        })
-        .finally(() => {
-            setState(prevState => ({ ...prevState, loading: false }));
-        });
+            .then(([{data, totalRecords}, categoriesData]) => {
+                setState(prevState => ({...prevState, data, totalRecord: totalRecords}));
+                categories.current = categoriesData as Category[];
+            })
+            .finally(() => {
+                setState(prevState => ({...prevState, loading: false}));
+            });
     }, [params]);
 
     const onEditRecord = (id: React.Key) => {
@@ -45,15 +45,15 @@ const Products = () => {
 
     const onDeleteRecord = async (rd: React.Key) => {
         try {
-            setState(prevState => ({ ...prevState, loading: true }));
+            setState(prevState => ({...prevState, loading: true}));
             await deleteProduct(rd as string);
             // Refresh the data after successful deletion
-            const { data, totalRecords } = await fetchProducts(params);
-            setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
+            const {data, totalRecords} = await fetchProducts(params);
+            setState(prevState => ({...prevState, data, totalRecord: totalRecords}));
         } catch (error) {
             console.error('Error deleting product:', error);
         } finally {
-            setState(prevState => ({ ...prevState, loading: false }));
+            setState(prevState => ({...prevState, loading: false}));
         }
     }
 
@@ -77,7 +77,7 @@ const Products = () => {
     }
 
     const onPageChange = (pagination: any) => {
-        const { current, pageSize } = pagination;
+        const {current, pageSize} = pagination;
         const newParams = {
             ...params,
             pageNo: current - 1,

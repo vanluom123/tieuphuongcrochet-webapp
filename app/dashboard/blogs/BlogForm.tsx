@@ -72,7 +72,7 @@ const BlogForm = ({ params }: BlogFormProps) => {
         sendData.files = await uploadImageToServer(sendData.files, state.post.files);
 
         createUpdatePost(sendData).then((res) => {
-            if (res?.success) {
+            if (res.success) {
                 form.resetFields();
                 router.push(ROUTE_PATH.DASHBOARD_POSTS);
             }

@@ -1,18 +1,17 @@
 'use client'
-import { Tag } from 'antd';
-import { useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { Category, DataTableState, initialListParams, SearchParams, TTranslationStatus } from '@/app/lib/definitions';
-import { getStatusColor } from '@/app/lib/utils';
-import { SegmentedValue } from 'antd/es/segmented';
+import {Tag} from 'antd';
+import {useEffect, useRef, useState} from 'react';
+import {useTranslations} from 'next-intl';
+import {useRouter} from 'next/navigation';
+import {Category, DataTableState, initialListParams, SearchParams, TTranslationStatus} from '@/app/lib/definitions';
+import {getStatusColor} from '@/app/lib/utils';
+import {SegmentedValue} from 'antd/es/segmented';
 import DataTable from '@/app/components/data-table';
 import SearchTable from '@/app/components/data-table/SearchTable';
-import { deleteFreePattern, fetchFreePatterns } from '@/app/lib/service/freePatternService';
-import { ROUTE_PATH } from '@/app/lib/constant';
-import { fetchCategories } from '@/app/lib/service/categoryService';
-import { DefaultOptionType } from 'antd/es/select';
-
+import {deleteFreePattern, fetchFreePatterns} from '@/app/lib/service/freePatternService';
+import {ROUTE_PATH} from '@/app/lib/constant';
+import {fetchCategories} from '@/app/lib/service/categoryService';
+import {DefaultOptionType} from 'antd/es/select';
 
 const initialState: DataTableState = {
     loading: false,
@@ -30,17 +29,19 @@ const FreePatterns = () => {
     const router = useRouter();
 
     useEffect(() => {
-        fetchCategories().then((data) => {
-            categories.current = data as Category[];
-        })
+        fetchCategories()
+            .then((data) => {
+                categories.current = data as Category[];
+            })
     }, []);
 
     useEffect(() => {
-        setState(prevState => ({ ...prevState, loading: true }));
-        fetchFreePatterns(params).then(({ data, totalRecords }) => {
-            setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
-        }).finally(() => {
-            setState(prevState => ({ ...prevState, loading: false }));
+        setState(prevState => ({...prevState, loading: true}));
+        fetchFreePatterns(params)
+            .then(({data, totalRecords}) => {
+                setState(prevState => ({...prevState, data, totalRecord: totalRecords}));
+            }).finally(() => {
+            setState(prevState => ({...prevState, loading: false}));
         });
     }, [params]);
 
@@ -52,13 +53,13 @@ const FreePatterns = () => {
         try {
             await deleteFreePattern(rd as string);
             // Refresh the data after successful deletion
-            setState(prevState => ({ ...prevState, loading: true }));
-            const { data, totalRecords } = await fetchFreePatterns(params);
-            setState(prevState => ({ ...prevState, data, totalRecord: totalRecords }));
+            setState(prevState => ({...prevState, loading: true}));
+            const {data, totalRecords} = await fetchFreePatterns(params);
+            setState(prevState => ({...prevState, data, totalRecord: totalRecords}));
         } catch (error) {
             console.error('Error deleting pattern:', error);
         } finally {
-            setState(prevState => ({ ...prevState, loading: false }));
+            setState(prevState => ({...prevState, loading: false}));
         }
     }
 
@@ -99,7 +100,7 @@ const FreePatterns = () => {
     }
 
     const onPageChange = (pagination: any) => {
-        const { current, pageSize } = pagination;
+        const {current, pageSize} = pagination;
         const newParams = {
             ...params,
             pageNo: current - 1,
@@ -109,7 +110,6 @@ const FreePatterns = () => {
     }
 
     const onSearchChange = (searchParams: SearchParams) => {
-
         const newParams = {
             ...params,
             ...searchParams

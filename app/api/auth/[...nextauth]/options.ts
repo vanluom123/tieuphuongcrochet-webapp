@@ -12,7 +12,7 @@ export const options: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             id: "credentials",
-            name: "Credentials",
+            name: "credentials",
             credentials: {
                 email: {
                     label: "Email:",
@@ -37,10 +37,10 @@ export const options: NextAuthOptions = {
                 }).catch(() => {
                     return null;
                 });
-                if (res == null) {
+                if (res.success == false) {
                     return null;
                 }
-                return res;
+                return res.data;
             }
         }),
         CredentialsProvider({
@@ -56,13 +56,13 @@ export const options: NextAuthOptions = {
                 try {
                     const res = await apiService({
                         baseUrl: process.env.NEXT_PUBLIC_API_URL,
-                        endpoint: '/auth/me',
+                        endpoint: '/api/v1/auth/me',
                         method: 'GET',
                         queryParams: {
                             accessToken: credentials.token
                         }
                     });
-                    return res;
+                    return res.data;
                 } catch (error) {
                     return null;
                 }

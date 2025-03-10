@@ -16,27 +16,29 @@ export interface ListResponse<T> {
 	pageSize: number;
 	totalElements: number;
 	totalPages: number;
-};
+}
 
 export interface ListParams {
 	pageNo: number;
 	pageSize: number;
 	sortBy?: string;
 	sortDir?: 'asc' | 'desc';
-	filters?: Filter[];
-};
+	categoryId: string;
+	filter: string;
+}
 
 export const initialListParams: ListParams = {
 	pageNo: 0,
 	pageSize: Number(process.env.NEXT_PUBLIC_PAGE_SIZE),
 	sortBy: 'createdDate',
 	sortDir: 'desc',
-	filters: []
-};
+	categoryId: '',
+	filter: ''
+}
 
 export interface FileUpload extends UploadFile {
 	fileContent: string;
-};
+}
 
 export interface Filter {
 	name?: string;
@@ -62,7 +64,7 @@ export const UPLOAD_MODES = {
 export interface BreadCrumbItem {
 	path: string;
 	title: string | ReactNode;
-};
+}
 
 // ----------------Table-----------------------
 
@@ -87,8 +89,9 @@ export interface DataType {
 }
 
 export interface SearchParams {
-	filters: Filter[];
-};
+	categoryId: string;
+	filter: string;
+}
 
 export interface Paging {
 	pageSize: number;
@@ -112,7 +115,7 @@ export interface Banner {
 	id?: string;
 	bannerType?: IBannerType;
 	textColor?: string;
-};
+}
 
 export interface IBannerType {
 	id?: React.Key;
@@ -137,7 +140,7 @@ export interface Category {
 	children?: unknown[];
 	parentIds?: unknown[];
 	key?: string;
-};
+}
 
 // -------------------------- Pattern --------------------------
 export interface Menu {
@@ -205,7 +208,7 @@ export interface HomeData {
 	freePatterns: Pattern[],
 	banners: Banner[],
 	blogs: Post[]
-};
+}
 
 // -------------------------- Tabs --------------------------
 
@@ -274,7 +277,7 @@ export interface Comment {
 	createdDate: string;
 }
 
-export interface CUResponse {
+export interface ResponseData {
 	code: number,
 	data: any,
 	success: boolean,

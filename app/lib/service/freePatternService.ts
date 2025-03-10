@@ -1,7 +1,7 @@
-import { map } from "lodash";
-import { API_ROUTES } from "../constant";
-import { FileUpload, ListParams, DataType, Pattern, CUResponse } from "../definitions";
-import { getAvatar, showNotification } from "../utils";
+import {map} from "lodash";
+import {API_ROUTES} from "../constant";
+import {DataType, FileUpload, ListParams, Pattern, ResponseData} from "../definitions";
+import {getAvatar, showNotification} from "../utils";
 import apiService from "./apiService";
 import apiJwtService from "./apiJwtService";
 
@@ -12,21 +12,22 @@ export const fetchFreePatterns = async (
 ): Promise<{ data: DataType[]; totalRecords: number }> => {
     try {
         const res = await apiService({
-            endpoint: `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.PAGINATION}`,
-            method: "POST",
+            endpoint: API_ROUTES.FREE_PATTERNS,
+            method: 'GET',
             queryParams: {
                 pageNo: params.pageNo.toString(),
                 pageSize: params.pageSize.toString(),
                 sortBy: params.sortBy as string,
                 sortDir: params.sortDir as string,
+                categoryId: params.categoryId,
+                filter: params.filter
             },
-            next,
-            data: params.filters,
+            next
         });
 
-        if (!res || !res.contents) throw new Error("Invalid API response");
+        if (!res.data || !res.data.contents) throw new Error("Invalid API response");
 
-        const newData = map(res.contents, (item) => ({
+        const newData = map(res.data.contents, (item) => ({
             ...item,
             key: item.id,
             src: item.fileContent || getAvatar(item?.images as FileUpload[]),
@@ -34,11 +35,11 @@ export const fetchFreePatterns = async (
 
         return {
             data: newData as DataType[],
-            totalRecords: res.totalElements || 0,
+            totalRecords: res.data.totalElements || 0,
         };
     } catch (error) {
         console.error("Error fetching free patterns:", error);
-        return { data: [], totalRecords: 0 };
+        return {data: [], totalRecords: 0};
     }
 };
 
@@ -48,19 +49,19 @@ export const fetchFreePatternDetail = async (
     revalidate?: number
 ): Promise<Pattern> => {
     try {
-        const data = await apiService({
-            endpoint: `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.DETAIL}?id=${id}`,
+        const res = await apiService({
+            endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}`,
             method: "GET",
-            next: { revalidate: revalidate || 0, tags: [`free-pattern-${id}`] },
+            next: {revalidate: revalidate || 0, tags: [`free-pattern-${id}`]},
         });
 
-        if (!data) throw new Error("Invalid API response");
+        if (!res.data) throw new Error("Invalid API response");
 
         return {
-            ...data,
-            src: getAvatar(data.images as FileUpload[]),
-            files: data.files ? map(data.files, (f) => ({ ...f, url: f?.fileContent })) : [],
-            images: data.images ? map(data.images, (f) => ({ ...f, url: f?.fileContent })) : [],
+            ...res.data,
+            src: getAvatar(res.data.images as FileUpload[]),
+            files: res.data.files ? map(res.data.files, (f) => ({ ...f, url: f?.fileContent })) : [],
+            images: res.data.images ? map(res.data.images, (f) => ({ ...f, url: f?.fileContent })) : [],
         };
     } catch (error) {
         console.error("Error fetching pattern details:", error);
@@ -69,11 +70,10 @@ export const fetchFreePatternDetail = async (
 };
 
 /** Create or update a free pattern */
-export const createUpdateFreePattern = async (data: Pattern): Promise<CUResponse> => {
+export const createUpdateFreePattern = async (data: Pattern): Promise<ResponseData> => {
     try {
-        const endpoint = `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.CREATE}`;
-        const res: CUResponse = await apiJwtService({
-            endpoint,
+        const res: ResponseData = await apiJwtService({
+            endpoint: API_ROUTES.FREE_PATTERNS,
             method: "POST",
             data,
         });
@@ -84,17 +84,16 @@ export const createUpdateFreePattern = async (data: Pattern): Promise<CUResponse
         return res;
     } catch (error: any) {
         showNotification("error", "Failed", error.message || "An unexpected error occurred)");
-        return { success: false, message: error?.message || "API error" } as CUResponse;
+        return { success: false, message: error?.message || "API error" } as ResponseData;
     }
 };
 
 /** Delete a free pattern */
 export const deleteFreePattern = async (id: string) => {
     try {
-        const url = `${API_ROUTES.FREE_PATTERN}/${API_ROUTES.DELETE}?id=${id}`;
         await apiJwtService({
-            endpoint: url,
-            method: "DELETE",
+            endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}`,
+            method: "DELETE"
         });
         showNotification("success", "Success", "Delete free pattern successfully");
     } catch (error: any) {

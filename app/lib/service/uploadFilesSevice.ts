@@ -1,27 +1,24 @@
-import {API_ROUTES} from "../constant";
-import {FileUpload} from "../definitions";
+import { API_ROUTES } from "../constant";
 import apiJwtService from "./apiJwtService";
 
 const uploadFile = {
-	
-	async upload(formData: FormData) :Promise<any> {
-        const url = `${API_ROUTES.UPLOAD_FILE}`;
-		return await apiJwtService({
-			endpoint: url,
+
+	async upload(formData: FormData): Promise<any> {
+		const res = await apiJwtService({
+			endpoint: API_ROUTES.FIREBASE_STORAGE,
 			method: 'POST',
 			formData: formData,
-		}).catch((err) => {
-			return {} as FileUpload;
 		});
+		return res;
 	},
 
-	delete(fileNames: string[]) :Promise<any> {
-		const url = `${API_ROUTES.DELETE_MULTIPLE_FILES}`
-		return apiJwtService({
-			endpoint: url,
+	async delete(fileNames: string[]): Promise<any> {
+		const res = await apiJwtService({
+			endpoint: API_ROUTES.FIREBASE_STORAGE,
 			method: 'DELETE',
 			data: fileNames
 		});
+		return res;
 	}
 }
 

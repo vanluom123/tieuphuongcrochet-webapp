@@ -1,22 +1,24 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
-import { Product, Pattern, Post, HomeData } from "../definitions";
+import { HomeData, Pattern, Post, Product, ResponseData } from "../definitions";
 import { getAvatar } from "../utils";
 import apiService from "./apiService";
 
 export const fetchHomeData = async (): Promise<HomeData> => {
-    const data = await apiService({
-        endpoint: API_ROUTES.HOME,
+    const res: ResponseData = await apiService({
+        endpoint: API_ROUTES.HOMES,
         method: 'GET',
         next: {
             revalidate: 60, // 1 minute
             tags: ['home'],
         }
-    }).catch((err) => {
-        return {} as HomeData;
     });
 
-    const freePatterns: Pattern[] = map(data.freePatterns, pt => ({
+    if (!res.success) {
+        return {} as HomeData;
+    }
+
+    const freePatterns: Pattern[] = map(res.data.freePatterns, pt => ({
         status: pt.status,
         id: pt.id,
         author: pt.author,
@@ -27,7 +29,7 @@ export const fetchHomeData = async (): Promise<HomeData> => {
         userId: pt.userId,
     }));
 
-    const products: Product[] = map(data.products, prod => ({
+    const products: Product[] = map(res.data.products, prod => ({
         id: prod.id,
         name: prod.name,
         price: prod.price,
@@ -36,7 +38,7 @@ export const fetchHomeData = async (): Promise<HomeData> => {
         category: prod.category
     }));
 
-    const blogs: Post[] = map(data.blogs, bl => ({
+    const blogs: Post[] = map(res.data.blogs, bl => ({
         ...bl,
         src: bl.fileContent || getAvatar(bl.files || [])
     }));
@@ -44,6 +46,6 @@ export const fetchHomeData = async (): Promise<HomeData> => {
         freePatterns,
         products,
         blogs,
-        banners: data.banners,
+        banners: res.data.banners,
     };
 };

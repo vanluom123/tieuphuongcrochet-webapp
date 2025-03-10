@@ -9,7 +9,12 @@ import {fetchUserCollections} from '@/app/lib/service/profileService';
 import {ROUTE_PATH} from '@/app/lib/constant';
 import CollectionFormModal from './CollectionFormModal';
 
-const Collections = () => {
+interface CollectionProps {
+    isCreator: boolean;
+    userId: string;
+}
+
+const Collections = ({isCreator, userId}: CollectionProps) => {
     const t = useTranslations('Profile');
     const router = useRouter();
 
@@ -25,10 +30,10 @@ const Collections = () => {
     };
 
     useEffect(() => {
-        fetchUserCollections().then(data => {
+        fetchUserCollections(userId).then(data => {
             setCollections(data);
         });
-    }, []);
+    }, [userId]);
 
     const onAddCollection = () => {
         setModalData({open: true, id: ''})

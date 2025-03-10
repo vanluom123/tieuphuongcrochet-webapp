@@ -16,9 +16,10 @@ interface ModalForm {
 interface TypeBannerModalProps {
 	openCUModal: ModalForm;
 	setOpenCUModal: (value: ModalForm) => void;
+	onRefresh: () => void;
 }
 
-const CUTypeModal = ({ openCUModal, setOpenCUModal }: TypeBannerModalProps) => {
+const CUTypeModal = ({ openCUModal, setOpenCUModal, onRefresh }: TypeBannerModalProps) => {
 	const [form] = Form.useForm();
 	useEffect(() => {
 		if (openCUModal.id) {
@@ -35,6 +36,7 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal }: TypeBannerModalProps) => {
 			await createUpdateBannerType(sendData);
 			setOpenCUModal({ open: false, id: '' });
 			form.resetFields();
+			onRefresh();
 		}).catch((errorInfo: any) => {
 		});
 	}
@@ -93,11 +95,18 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal }: TypeBannerModalProps) => {
 	)
 }
 
-const BannerType = ({ bannerTypes }: { bannerTypes: DataType[] }) => {
+interface BannerTypeProps {
+	bannerTypes: DataType[];
+	onRefresh: () => void;
+	loading: boolean;
+}
+
+const BannerType = ({ bannerTypes, onRefresh, loading }: BannerTypeProps) => {
 	const [openCUModal, setOpenCUModal] = useState<ModalForm>({ open: false, id: '' });
 
 	const onDeleteRecord = async (id: React.Key) => {
 		await deleteBannerType(id as string);
+		onRefresh();
 	};
 
 	const onEditRecord = (id: React.Key, values: IBannerType) => {
@@ -118,12 +127,16 @@ const BannerType = ({ bannerTypes }: { bannerTypes: DataType[] }) => {
 					</Button>
 				</Flex>
 				<DataTable
-					loading={bannerTypes.length === 0}
+					loading={loading}
 					dataSource={bannerTypes}
 					onDeleteRecord={onDeleteRecord}
 					onEditRecord={onEditRecord} />
 			</div>
-			{openCUModal.open && <CUTypeModal openCUModal={openCUModal} setOpenCUModal={setOpenCUModal} />}
+			{openCUModal.open && <CUTypeModal
+			 	openCUModal={openCUModal}
+			  	setOpenCUModal={setOpenCUModal}
+				onRefresh={onRefresh}
+			 />}
 		</>
 	)
 }

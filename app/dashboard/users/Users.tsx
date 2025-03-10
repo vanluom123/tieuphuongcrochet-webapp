@@ -1,13 +1,13 @@
 'use client'
-import { SearchProps } from 'antd/es/input';
-import { DataTableState, DataType, Filter, initialListParams } from '@/app/lib/definitions';
-import { useEffect, useState } from 'react';
+import {SearchProps} from 'antd/es/input';
+import {DataTableState, DataType, initialListParams} from '@/app/lib/definitions';
+import {useEffect, useState} from 'react';
 import DataTable from '@/app/components/data-table';
 import SearchTable from '@/app/components/data-table/SearchTable';
-import { filterByText, mapNameFilters } from '@/app/lib/utils';
-import { deleteUser, fetchUsers } from '@/app/lib/service/userService';
-import { useRouter } from 'next/navigation';
-import { ROUTE_PATH } from '@/app/lib/constant';
+import {deleteUser, fetchUsers} from '@/app/lib/service/userService';
+import {useRouter} from 'next/navigation';
+import {ROUTE_PATH} from '@/app/lib/constant';
+import {sfLike, sfOr} from "spring-filter-query-builder";
 
 const initialState: DataTableState = {
     loading: false,
@@ -20,11 +20,12 @@ const Users = () => {
     const router = useRouter();
     const [state, setState] = useState(initialState);
     useEffect(() => {
-        setState(prevState => ({ ...prevState, loading: true }));
-        fetchUsers(params).then(({ data, totalRecords }) => {
-            setState(prevState => ({ ...prevState, data: data as DataType[], totalRecord: totalRecords }));
-        }).finally(() => {
-            setState(prevState => ({ ...prevState, loading: false }));
+        setState(prevState => ({...prevState, loading: true}));
+        fetchUsers(params)
+            .then(({data, totalRecords}) => {
+                setState(prevState => ({...prevState, data: data as DataType[], totalRecord: totalRecords}));
+            }).finally(() => {
+            setState(prevState => ({...prevState, loading: false}));
         });
     }, [params]);
 
@@ -37,18 +38,20 @@ const Users = () => {
     }
 
     const onSearch: SearchProps['onSearch'] = (value) => {
-        const filters: Filter = filterByText(value, 'name', 'role', 'email');
-        const tempFilters = mapNameFilters(params.filters as Filter[], 'searchText', filters);
-
-        const newParams = {
-            ...initialListParams,
-            filters: tempFilters
-        };
-        setParams(newParams);
+        setParams(prev => {
+            const newFilter = sfOr([
+                sfLike('name', value),
+                sfLike('email', value)
+            ]).toString();
+            return {
+                ...prev,
+                filter: newFilter
+            }
+        })
     }
 
     const onPageChange = (pagination: any) => {
-        const { current, pageSize } = pagination;
+        const {current, pageSize} = pagination;
         const newParams = {
             ...params,
             pageNo: current - 1,
@@ -78,7 +81,8 @@ const Users = () => {
     return (
         <>
             <div className='users-admin'>
-                <SearchTable isShowAddNew={false} onSearch={onSearch} loading={state.loading} onAddNew={() => { }} />
+                <SearchTable isShowAddNew={false} onSearch={onSearch} loading={state.loading} onAddNew={() => {
+                }}/>
                 <div className='admin-table'>
                     <DataTable
                         loading={state.loading}
