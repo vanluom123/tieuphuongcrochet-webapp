@@ -10,7 +10,6 @@ export async function fetchUserCollections(userId: string): Promise<Collection[]
     });
 
     if (!response.success) {
-        notification.error({message: 'Failed', description: response.message})
         return [];
     }
 
@@ -37,33 +36,37 @@ export async function fetchUserPatterns(userId: string, params: ListParams): Pro
 }
 
 export async function deleteUserPattern(id: string) {
-    return await apiJwtService({
+    const res = await apiJwtService({
         endpoint: `${API_ROUTES.PATTERNS}/${id}`,
         method: 'DELETE'
     });
+    return res.data;
 }
 
 export async function fetchCollectionDetail(id: string) {
-    return await apiJwtService({
+    const res = await apiJwtService({
         endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
         method: 'GET'
     });
+    return res.data;
 }
 
 export async function createCollection(name: string) {
-    return await apiJwtService({
+    const res = await apiJwtService({
         endpoint: API_ROUTES.COLLECTIONS,
         method: 'POST',
         queryParams: {name}
     });
+    return res.data;
 }
 
 export async function updateCollection(id: string, name: string) {
-    return await apiJwtService({
+    const res = await apiJwtService({
         endpoint: API_ROUTES.COLLECTIONS,
         method: 'PUT',
         queryParams: {collectionId: id, name}
     })
+    return res.data;
 }
 
 export async function updateUserProfile(data: any) {
@@ -72,17 +75,6 @@ export async function updateUserProfile(data: any) {
         method: 'PUT',
         data
     });
-    if (res.success) {
-        notification.success({
-            message: 'Success',
-            description: 'Update profile successfully'
-        })
-    } else {
-        notification.error({
-            message: 'Failed',
-            description: 'Update profile failed'
-        })
-    }
     return res.data;
 }
 
@@ -99,7 +91,6 @@ export async function loadUserInfo(id: string = '') {
     });
 
     if (!res.success) {
-        notification.error({message: 'Failed', description: res.message})
         return;
     }
 

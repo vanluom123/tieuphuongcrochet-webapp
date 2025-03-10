@@ -99,11 +99,13 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                 imageUrl: file
             });
 
-            setUserData(updatedUser);
+            if (updatedUser) {
+                notification.success({
+                    message: t('message.upload_avatar_success')
+                });
+                setUserData(updatedUser);
+            }
             setLoading({ ...loading, avatar: false });
-            notification.success({
-                message: t('message.upload_avatar_success')
-            });
         }
     }
 
@@ -135,7 +137,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                     {
                         loading.cover ? <Skeleton.Node className='skeleton-cover' style={{ width: '100%', height: '100%' }} active={loading.cover} /> :
                             <Image
-                                src={userData?.backgroundImageUrl || defaultBackground}
+                                src={userData?.backgroundImageUrl && userData.backgroundImageUrl.trim() ? userData.backgroundImageUrl : defaultBackground}
                                 alt="User cover image"
                                 layout="fill"
                                 style={{ objectFit: 'cover' }} 
@@ -151,7 +153,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                                     className='skeleton-avatar'
                                 /> :
                                     <Image
-                                        src={userData?.imageUrl || defaultUser}
+                                        src={userData?.imageUrl && userData.imageUrl.trim() ? userData.imageUrl : defaultUser}
                                         alt="User Avatar"
                                         width={120}
                                         height={120}
