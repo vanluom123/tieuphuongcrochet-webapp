@@ -251,7 +251,6 @@ export const API_ROUTES = {
 
   // Collection routes
   COLLECTIONS: '/api/v1/collections',
-  COLLECTION_FREE_PATTERNS: '/api/v1/collections/{collection_id}/free-patterns',
 
   // Banner routes
   BANNERS: '/api/v1/banners',

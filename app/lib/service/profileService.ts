@@ -1,7 +1,6 @@
 import {Collection, IResponseList, ListParams, Pattern} from "../definitions";
 import apiJwtService from "./apiJwtService";
 import {API_ROUTES} from "../constant";
-import {notification} from "../notify";
 
 export async function fetchUserCollections(userId: string): Promise<Collection[]> {
     const response = await apiJwtService({
@@ -57,7 +56,7 @@ export async function createCollection(name: string) {
         method: 'POST',
         queryParams: {name}
     });
-    return res.data;
+    return res;
 }
 
 export async function updateCollection(id: string, name: string) {

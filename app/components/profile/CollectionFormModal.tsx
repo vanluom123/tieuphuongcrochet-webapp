@@ -1,10 +1,11 @@
-import {Form, Input, Modal} from 'antd';
-import {useTranslations} from 'next-intl';
-import {Collection} from '@/app/lib/definitions';
-import {useEffect, useState} from 'react';
-import {createCollection, fetchCollectionDetail} from '@/app/lib/service/profileService';
+import { Form, Input, Modal } from 'antd';
+import { useTranslations } from 'next-intl';
+import { Collection } from '@/app/lib/definitions';
+import { useEffect, useState } from 'react';
+import { createCollection, fetchCollectionDetail } from '@/app/lib/service/profileService';
+import { notification } from '@/app/lib/notify';
 
-const {Item} = Form;
+const { Item } = Form;
 
 interface CollectionFormModalProps {
     modalData: {
@@ -19,7 +20,7 @@ const initialState = {
     collection: {} as Collection
 }
 
-const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps) => {
+const CollectionFormModal = ({ modalData, setModalData }: CollectionFormModalProps) => {
     const [form] = Form.useForm();
     const t = useTranslations('Profile');
     const [state, setState] = useState(initialState);
@@ -33,21 +34,22 @@ const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps
 
     useEffect(() => {
         if (modalData.id && modalData.open) {
-            setState(prevState => ({...prevState, loading: true}));
+            setState(prevState => ({ ...prevState, loading: true }));
 
-            fetchCollectionDetail(modalData.id).then(collection => {
-                form.setFieldsValue(collection);
-                setState(prevState => ({
-                    ...prevState,
-                    collection
-                }));
-            });
+            fetchCollectionDetail(modalData.id)
+                .then(collection => {
+                    form.setFieldsValue(collection);
+                    setState(prevState => ({
+                        ...prevState,
+                        collection
+                    }));
+                });
         }
     }, [modalData.id, modalData.open, form]);
 
     const onHandleCancel = () => {
         form.resetFields();
-        setModalData({open: false, id: ''});
+        setModalData({ open: false, id: '' });
     }
 
     const onHandleOk = () => {
@@ -55,19 +57,22 @@ const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps
     }
 
     const onSubmitForm = async (name: string) => {
-        setState(prevState => ({...prevState, loading: true}));
-
-        try {
-            const res = await createCollection(name);
-            if (res?.id) {
-                form.resetFields();
-                setModalData({open: false, id: ''});
-            }
-        } catch (error) {
-            console.error('Error creating/updating collection:', error);
-        } finally {
-            setState(prevState => ({...prevState, loading: false}));
+        setState(prevState => ({ ...prevState, loading: true }));
+        const res = await createCollection(name);
+        if (res.success) {
+            form.resetFields();
+            setModalData({ open: false, id: '' });
+            notification.success({
+                message: 'Success',
+                description: 'Create collection success'
+            })
+        } else {
+            notification.error({
+                message: 'Failed',
+                description: 'Create collection failed'
+            })
         }
+        setState(prevState => ({ ...prevState, loading: false }));
     }
 
     return (
@@ -88,9 +93,9 @@ const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps
                 <Item
                     name="name"
                     label={t('collections.name')}
-                    rules={[{required: true, message: t('collections.nameRequired')}]}
+                    rules={[{ required: true, message: t('collections.nameRequired') }]}
                 >
-                    <Input/>
+                    <Input />
                 </Item>
             </Form>
         </Modal>

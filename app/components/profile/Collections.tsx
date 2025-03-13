@@ -1,12 +1,12 @@
-import {useEffect, useState} from 'react';
-import {Col, FloatButton, Row} from 'antd';
-import {useTranslations} from 'next-intl';
-import {PlusOutlined} from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { Col, FloatButton, Row } from 'antd';
+import { useTranslations } from 'next-intl';
+import { PlusOutlined } from '@ant-design/icons';
 import CollectionCard from './CollectionCard';
-import {useRouter} from 'next/navigation';
-import {Collection} from '@/app/lib/definitions';
-import {fetchUserCollections} from '@/app/lib/service/profileService';
-import {ROUTE_PATH} from '@/app/lib/constant';
+import { useRouter } from 'next/navigation';
+import { Collection } from '@/app/lib/definitions';
+import { fetchUserCollections } from '@/app/lib/service/profileService';
+import { ROUTE_PATH } from '@/app/lib/constant';
 import CollectionFormModal from './CollectionFormModal';
 
 interface CollectionProps {
@@ -14,7 +14,7 @@ interface CollectionProps {
     userId: string;
 }
 
-const Collections = ({isCreator, userId}: CollectionProps) => {
+const Collections = ({ isCreator, userId }: CollectionProps) => {
     const t = useTranslations('Profile');
     const router = useRouter();
 
@@ -30,13 +30,14 @@ const Collections = ({isCreator, userId}: CollectionProps) => {
     };
 
     useEffect(() => {
-        fetchUserCollections(userId).then(data => {
-            setCollections(data);
-        });
+        fetchUserCollections(userId)
+            .then(data => {
+                setCollections(data);
+            });
     }, [userId]);
 
     const onAddCollection = () => {
-        setModalData({open: true, id: ''})
+        setModalData({ open: true, id: '' })
     };
 
     return (
@@ -58,12 +59,12 @@ const Collections = ({isCreator, userId}: CollectionProps) => {
                         type="primary"
                         tooltip={<div>{t('collections.add')}</div>}
                         shape="circle"
-                        icon={<PlusOutlined/>}
+                        icon={<PlusOutlined />}
                         onClick={onAddCollection}
                     />
                 )}
             </div>
-            <CollectionFormModal modalData={modalData} setModalData={setModalData}/>
+            <CollectionFormModal modalData={modalData} setModalData={setModalData} />
         </>
     );
 };
