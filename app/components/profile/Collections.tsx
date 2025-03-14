@@ -43,26 +43,23 @@ const Collections = ({ isCreator, userId }: CollectionProps) => {
     return (
         <>
             <div className="collections-tab">
-                {collections.length > 0 ? (
-                    <Row gutter={[16, 16]}>
-                        {collections.map((collection) => (
-                            <Col xs={24} sm={12} lg={8} key={collection.id}>
-                                <CollectionCard
-                                    collection={collection}
-                                    onViewDetail={() => onViewCollection(collection.id)}
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                ) : (
-                    <FloatButton
-                        type="primary"
-                        tooltip={<div>{t('collections.add')}</div>}
-                        shape="circle"
-                        icon={<PlusOutlined />}
-                        onClick={onAddCollection}
-                    />
-                )}
+                <Row gutter={[16, 16]}>
+                    {collections.map((collection) => (
+                        <Col xs={24} sm={12} lg={8} key={collection.id}>
+                            <CollectionCard
+                                collection={collection}
+                                onViewDetail={() => onViewCollection(collection.id)}
+                            />
+                        </Col>
+                    ))}
+                </Row>
+                <FloatButton
+                    type="primary"
+                    tooltip={<div>{t('collections.add')}</div>}
+                    shape="circle"
+                    icon={<PlusOutlined />}
+                    onClick={onAddCollection}
+                />
             </div>
             <CollectionFormModal modalData={modalData} setModalData={setModalData} />
         </>

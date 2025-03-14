@@ -1,11 +1,11 @@
-import { Form, Input, Modal } from 'antd';
-import { useTranslations } from 'next-intl';
-import { Collection } from '@/app/lib/definitions';
-import { useEffect, useState } from 'react';
-import { createCollection, fetchCollectionDetail } from '@/app/lib/service/profileService';
-import { notification } from '@/app/lib/notify';
+import {Form, Input, Modal} from 'antd';
+import {useTranslations} from 'next-intl';
+import {Collection} from '@/app/lib/definitions';
+import {useEffect, useState} from 'react';
+import {createCollection, fetchCollectionDetail} from '@/app/lib/service/profileService';
+import {notification} from '@/app/lib/notify';
 
-const { Item } = Form;
+const {Item} = Form;
 
 interface CollectionFormModalProps {
     modalData: {
@@ -20,7 +20,7 @@ const initialState = {
     collection: {} as Collection
 }
 
-const CollectionFormModal = ({ modalData, setModalData }: CollectionFormModalProps) => {
+const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps) => {
     const [form] = Form.useForm();
     const t = useTranslations('Profile');
     const [state, setState] = useState(initialState);
@@ -34,7 +34,7 @@ const CollectionFormModal = ({ modalData, setModalData }: CollectionFormModalPro
 
     useEffect(() => {
         if (modalData.id && modalData.open) {
-            setState(prevState => ({ ...prevState, loading: true }));
+            setState(prevState => ({...prevState, loading: true}));
 
             fetchCollectionDetail(modalData.id)
                 .then(collection => {
@@ -49,7 +49,7 @@ const CollectionFormModal = ({ modalData, setModalData }: CollectionFormModalPro
 
     const onHandleCancel = () => {
         form.resetFields();
-        setModalData({ open: false, id: '' });
+        setModalData({open: false, id: ''});
     }
 
     const onHandleOk = () => {
@@ -57,11 +57,11 @@ const CollectionFormModal = ({ modalData, setModalData }: CollectionFormModalPro
     }
 
     const onSubmitForm = async (name: string) => {
-        setState(prevState => ({ ...prevState, loading: true }));
+        setState(prevState => ({...prevState, loading: true}));
         const res = await createCollection(name);
         if (res.success) {
             form.resetFields();
-            setModalData({ open: false, id: '' });
+            setModalData({open: false, id: ''});
             notification.success({
                 message: 'Success',
                 description: 'Create collection success'
@@ -72,7 +72,7 @@ const CollectionFormModal = ({ modalData, setModalData }: CollectionFormModalPro
                 description: 'Create collection failed'
             })
         }
-        setState(prevState => ({ ...prevState, loading: false }));
+        setState(prevState => ({...prevState, loading: false}));
     }
 
     return (
@@ -85,17 +85,12 @@ const CollectionFormModal = ({ modalData, setModalData }: CollectionFormModalPro
             destroyOnClose={true}
             confirmLoading={state.loading}
         >
-            <Form
-                form={form}
-                layout="vertical"
-                onFinish={onSubmitForm}
-            >
+            <Form form={form} onFinish={({name}) => onSubmitForm(name)}>
                 <Item
                     name="name"
-                    label={t('collections.name')}
-                    rules={[{ required: true, message: t('collections.nameRequired') }]}
+                    rules={[{required: true, message: 'Please input collection name!'}]}
                 >
-                    <Input />
+                    <Input placeholder={t('collections.name')}/>
                 </Item>
             </Form>
         </Modal>
