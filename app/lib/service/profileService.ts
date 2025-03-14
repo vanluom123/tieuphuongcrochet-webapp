@@ -61,11 +61,19 @@ export async function createCollection(name: string) {
 
 export async function updateCollection(id: string, name: string) {
     const res = await apiJwtService({
-        endpoint: API_ROUTES.COLLECTIONS,
+        endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
         method: 'PUT',
-        queryParams: {collectionId: id, name}
+        queryParams: {name}
     })
     return res.data;
+}
+
+export async function deleteCollection(id: string) {
+    const res = await apiJwtService({
+        endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
+        method: 'DELETE'
+    });
+    return res;
 }
 
 export async function updateUserProfile(data: any) {
