@@ -13,6 +13,7 @@ interface CollectionFormModalProps {
         id: string;
     };
     setModalData: (data: { open: boolean; id: string; }) => void;
+    onRefreshData: () => void;
 }
 
 const initialState = {
@@ -20,7 +21,7 @@ const initialState = {
     collection: {} as Collection
 }
 
-const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps) => {
+const CollectionFormModal = ({modalData, setModalData, onRefreshData}: CollectionFormModalProps) => {
     const [form] = Form.useForm();
     const t = useTranslations('Profile');
     const [state, setState] = useState(initialState);
@@ -34,15 +35,10 @@ const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps
 
     useEffect(() => {
         if (modalData.id && modalData.open) {
-            setState(prevState => ({...prevState, loading: true}));
-
             fetchCollectionDetail(modalData.id)
                 .then(collection => {
                     form.setFieldsValue(collection);
-                    setState(prevState => ({
-                        ...prevState,
-                        collection
-                    }));
+                    setState({loading: false, collection});
                 });
         }
     }, [modalData.id, modalData.open, form]);
@@ -57,6 +53,7 @@ const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps
     }
 
     const onSubmitForm = async (name: string) => {
+        setState(prev => ({...prev, loading: true}));
         const res = modalData.id 
             ? await updateCollection(modalData.id, name) 
             : await createCollection(name);
@@ -67,6 +64,12 @@ const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps
             message: res.success ? 'Success' : 'Failed',
             description: res.message
         });
+
+        if (res.success) {
+            onRefreshData();
+        }
+
+        setState(prev => ({...prev, loading: false}));
     }
 
     return (
