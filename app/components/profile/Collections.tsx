@@ -50,10 +50,7 @@ const Collections = ({isCreator, userId}: CollectionProps) => {
     }
 
     const onDeleteCollection = (id: string) => {
-        // Call API to delete collection
-        console.log('delete collection id: ', id);
         deleteCollection(id).then(res => {
-            console.log('delete collection res: ', res);
             if (res.success) {
                 notification.success({
                     message: 'Success',

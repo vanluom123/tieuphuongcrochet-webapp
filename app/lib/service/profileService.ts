@@ -65,7 +65,7 @@ export async function updateCollection(id: string, name: string) {
         method: 'PUT',
         queryParams: {name}
     })
-    return res.data;
+    return res;
 }
 
 export async function deleteCollection(id: string) {

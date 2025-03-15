@@ -2,7 +2,7 @@ import {Form, Input, Modal} from 'antd';
 import {useTranslations} from 'next-intl';
 import {Collection} from '@/app/lib/definitions';
 import {useEffect, useState} from 'react';
-import {createCollection, fetchCollectionDetail} from '@/app/lib/service/profileService';
+import {createCollection, fetchCollectionDetail, updateCollection} from '@/app/lib/service/profileService';
 import {notification} from '@/app/lib/notify';
 
 const {Item} = Form;
@@ -57,22 +57,16 @@ const CollectionFormModal = ({modalData, setModalData}: CollectionFormModalProps
     }
 
     const onSubmitForm = async (name: string) => {
-        setState(prevState => ({...prevState, loading: true}));
-        const res = await createCollection(name);
-        if (res.success) {
-            form.resetFields();
-            setModalData({open: false, id: ''});
-            notification.success({
-                message: 'Success',
-                description: 'Create collection success'
-            })
-        } else {
-            notification.error({
-                message: 'Failed',
-                description: 'Create collection failed'
-            })
-        }
-        setState(prevState => ({...prevState, loading: false}));
+        const res = modalData.id 
+            ? await updateCollection(modalData.id, name) 
+            : await createCollection(name);
+
+        form.resetFields();
+        setModalData({open: false, id: ''});
+        notification[res.success ? 'success' : 'error']({
+            message: res.success ? 'Success' : 'Failed',
+            description: res.message
+        });
     }
 
     return (
