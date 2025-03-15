@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Col, FloatButton, Row, Spin} from 'antd';
 import {useTranslations} from 'next-intl';
 import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
@@ -49,10 +49,11 @@ const Collections = ({isCreator, userId}: CollectionProps) => {
         setLoading(false);
     }
 
-    const onDeleteCollection = (id: React.Key) => {
+    const onDeleteCollection = (id: string) => {
         // Call API to delete collection
+        console.log('delete collection id: ', id);
         deleteCollection(id).then(res => {
-            console.log('delete collection: ', res);
+            console.log('delete collection res: ', res);
             if (res.success) {
                 notification.success({
                     message: 'Success',
@@ -82,6 +83,25 @@ const Collections = ({isCreator, userId}: CollectionProps) => {
         });
     }
 
+    const displayPlusButton = useMemo(() => {
+        if (isCreator) {
+            return (
+                <FloatButton
+                    type="primary"
+                    tooltip={<div>{t('collections.add')}</div>}
+                    shape="circle"
+                    icon={<PlusOutlined/>}
+                    onClick={onAddCollection}
+                />
+            )
+        }
+        return null;
+    }, [isCreator]);
+
+    const onEdit = (id: string) => {
+        setModalData({ open: true, id: `${id}` })
+    }
+
     return (
         <Spin spinning={loading} size={"large"}>
             <div className="collections-tab">
@@ -93,17 +113,12 @@ const Collections = ({isCreator, userId}: CollectionProps) => {
                                 collection={collection}
                                 onViewDetail={() => onViewCollection(collection.id)}
                                 onDelete={() => showDeleteConfirm(collection.id || '')}
+                                onEdit={() => onEdit(collection.id || '')}
                             />
                         </Col>
                     ))}
                 </Row>
-                <FloatButton
-                    type="primary"
-                    tooltip={<div>{t('collections.add')}</div>}
-                    shape="circle"
-                    icon={<PlusOutlined/>}
-                    onClick={onAddCollection}
-                />
+                {displayPlusButton}
             </div>
             <CollectionFormModal modalData={modalData} setModalData={setModalData}/>
         </Spin>

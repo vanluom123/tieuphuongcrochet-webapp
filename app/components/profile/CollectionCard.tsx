@@ -1,7 +1,7 @@
 'use client'
 
 import {Card, Flex, Tooltip, Typography} from 'antd';
-import {DeleteOutlined, FolderOutlined} from '@ant-design/icons';
+import {DeleteOutlined, EditOutlined, FolderOutlined} from '@ant-design/icons';
 import {useTranslations} from 'next-intl';
 import {Collection} from '@/app/lib/definitions';
 import CustomNextImage from '../next-image';
@@ -13,6 +13,7 @@ interface CollectionCardProps {
     collection: Collection;
     onViewDetail?: () => void;
     onDelete?: () => void;
+    onEdit?: () => void;
     isShowActions?: boolean;
 }
 
@@ -20,10 +21,25 @@ const CollectionCard = ({
                             collection,
                             onViewDetail,
                             onDelete,
+                            onEdit,
                             isShowActions = false
                         }: CollectionCardProps) => {
     const t = useTranslations('Profile');
     const {name, description, itemCount, avatar} = collection;
+
+    const handleEdit = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onEdit) {
+            onEdit();
+        }
+    }
+
+    const handleDelete = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onDelete) {
+            onDelete();
+        }
+    }
 
     return (
         <Card
@@ -44,13 +60,13 @@ const CollectionCard = ({
                 )
             }
             actions={isShowActions ? [
-                // <Tooltip key="edit-tooltip" color='#fc8282' title={t('patterns.edit')}>
-                // 	<span key="edit" onClick={onEdit}>
-                // 		<EditOutlined style={{fontSize: 18}}/>
-                // 	</span>
-                // </Tooltip>,
+                <Tooltip key="edit-tooltip" color='#fc8282' title={'edit'}>
+                	<span key="edit" onClick={handleEdit}>
+                		<EditOutlined style={{fontSize: 18}}/>
+                	</span>
+                </Tooltip>,
                 <Tooltip key="delete-tooltip" color='#fc8282' title={'delete'}>
-					<span key='delete' onClick={onDelete}>
+					<span key='delete' onClick={handleDelete}>
 						<DeleteOutlined style={{fontSize: 18}}/>
 					</span>
                 </Tooltip>
