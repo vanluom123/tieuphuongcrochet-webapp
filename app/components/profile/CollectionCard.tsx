@@ -25,7 +25,7 @@ const CollectionCard = ({
                             isShowActions = false
                         }: CollectionCardProps) => {
     const t = useTranslations('Profile');
-    const {name, description, itemCount, avatar} = collection;
+    const {name, description, totalPatterns, avatar} = collection;
 
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -84,7 +84,7 @@ const CollectionCard = ({
                 )}
 
                 <Text className="collection-count">
-                    {t('collections.itemCount', {count: itemCount})}
+                    {t('collections.itemCount')} ({(totalPatterns)})
                 </Text>
             </Flex>
         </Card>

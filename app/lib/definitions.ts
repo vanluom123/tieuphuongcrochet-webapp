@@ -264,7 +264,7 @@ export interface Collection {
 	id: string;
 	name?: string;
 	description?: string;
-	itemCount?: number;
+	totalPatterns?: number;
 	avatar?: string;
 	createdDate?: string;
 }
