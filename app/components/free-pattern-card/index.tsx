@@ -31,7 +31,7 @@ const FreePatternCard = (
     const { Meta } = Card;
     const { name, src, status, username, userAvatar, userId, id } = pattern;
     const t = useTranslations("FreePattern");
-    const { isBookmarked, openBookmarkModal } = useBookmark(id?.toString());
+    const { isBookmarked, toggleBookmark } = useBookmark(id?.toString());
     const { data: session } = useSession();
 
     return (
@@ -56,13 +56,13 @@ const FreePatternCard = (
                 }
                 onClick={onReadDetail}
                 actions={[
-                    <Tooltip key="bookmark" title={!session?.user ? 'Đăng nhập để lưu' : (isBookmarked ? 'Đã lưu' : 'Lưu')}>
+                    <Tooltip key="bookmark" title={!session?.user ? t('login_to_save') : (isBookmarked ? t('remove_from_collection') : t('save'))}>
                         <Button
                             type="text"
                             icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                openBookmarkModal(id?.toString() || '');
+                                toggleBookmark(id?.toString() || '');
                             }}
                         />
                     </Tooltip>

@@ -25,3 +25,11 @@ export const checkPatternInCollection = async (patternId: string)
     });
     return res;
 }
+
+export const removePatternFromCollection = async (patternId: string): Promise<ResponseData> => {
+    const res = await apiJwtService({
+        endpoint: `${API_ROUTES.COLLECTIONS}/remove-pattern/${patternId}`,
+        method: 'DELETE'
+    })
+    return res;
+}

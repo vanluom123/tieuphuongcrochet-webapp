@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { checkPatternInCollection } from '@/app/lib/service/collectionService';
+import { checkPatternInCollection, removePatternFromCollection } from '@/app/lib/service/collectionService';
 import { useBookmarkModal } from '@/app/context/BookmarkModalContext';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -57,9 +57,32 @@ export function useBookmark(patternId?: string) {
         openBookmarkModal(id);
     };
 
+    const toggleBookmark = async (id: string) => {
+        if (!isLoggedIn) {
+            // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+            router.push(ROUTE_PATH.LOGIN);
+            return;
+        }
+        
+        // Nếu đã bookmark, xóa khỏi collection
+        if (isBookmarked) {
+            try {
+                await removePatternFromCollection(id);
+                setIsBookmarked(false);
+            } catch (error) {
+                console.error('Error removing pattern from collection:', error);
+            }
+        } else {
+            // Nếu chưa bookmark, mở modal để thêm vào collection
+            setCurrentPatternId(id);
+            openBookmarkModal(id);
+        }
+    };
+
     return {
         isBookmarked: isLoggedIn ? isBookmarked : false, // Luôn trả về false nếu chưa đăng nhập
         openBookmarkModal: handleBookmarkClick, // Thay thế bằng hàm mới
+        toggleBookmark, // Thêm hàm mới vào return
         bookmarkModalState,
         closeBookmarkModal,
         handleBookmarkSuccess: () => {
