@@ -39,8 +39,14 @@ const FreePatternCard = (
     const { name, src, status, username, userAvatar, userId, id } = pattern;
     const t = useTranslations("FreePattern");
     const profileT = useTranslations("Profile");
-    const { isBookmarked, toggleBookmark } = userId ? useBookmark(id?.toString()) : { isBookmarked: false, toggleBookmark: () => {} };
     const { data: session } = useSession();
+    const { isBookmarked, toggleBookmark } = useBookmark(id?.toString());
+
+    // Tạo hàm xử lý bookmark an toàn
+    const handleToggleBookmark = (patternId: string) => {
+        if (!userId) return; // Không làm gì nếu không có userId
+        toggleBookmark(patternId);
+    };
 
     // Tạo menu cho nút 3 chấm
     const actionItems: MenuProps['items'] = [
@@ -86,18 +92,18 @@ const FreePatternCard = (
                 }
                 onClick={onReadDetail}
                 actions={[
-                    userId && (
+                    userId ? (
                         <Tooltip key="bookmark" title={!session?.user ? t('login_to_save') : (isBookmarked ? t('remove_from_collection') : t('save'))}>
                             <Button
                                 type="text"
                                 icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    toggleBookmark(id?.toString() || '');
+                                    handleToggleBookmark(id?.toString() || '');
                                 }}
                             />
                         </Tooltip>
-                    ),
+                    ) : null,
                     // Hiển thị menu 3 chấm khi isShowActions = true
                     isShowActions && (
                         <Dropdown key="more" menu={{ items: actionItems }} trigger={['click']}>
