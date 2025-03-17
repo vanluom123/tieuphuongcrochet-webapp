@@ -86,7 +86,9 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ open, onClose, patternId,
             if (response.success) {
                 message.success(t('pattern_saved_to_collection'));
                 onSuccess();
-                onClose();
+                setTimeout(() => {
+                    onClose();
+                }, 50);
             } else {
                 message.error(response.message || t('save_pattern_error'));
             }

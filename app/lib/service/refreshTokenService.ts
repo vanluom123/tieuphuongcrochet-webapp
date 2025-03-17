@@ -8,8 +8,5 @@ export default async function refreshAccessToken(token: string) {
         method: 'GET'
     });
 
-    return {
-        accessToken: res.data.accessToken as string,
-        refreshToken: res.data.refreshToken as string,
-    }
+    return res;
 }

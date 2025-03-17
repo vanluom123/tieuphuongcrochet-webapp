@@ -16,8 +16,6 @@ interface FreePatternCardProps {
     width?: string | number;
     pattern: Pattern;
     onReadDetail?: () => void;
-    onSave?: () => void;
-    showSaveButton?: boolean;
     loading?: boolean;
     isShowActions?: boolean;
     onDelete?: () => void;

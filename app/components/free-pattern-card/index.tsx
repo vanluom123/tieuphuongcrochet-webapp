@@ -11,6 +11,7 @@ import { getStatusColor } from '@/app/lib/utils';
 import CustomNextImage from '../next-image';
 import { useBookmark } from '@/app/hooks/useBookmark';
 import '../../ui/components/freePatternCard.scss';
+import { useSession } from 'next-auth/react';
 
 interface FreePatternCardProps {
     width?: string | number;
@@ -31,6 +32,7 @@ const FreePatternCard = (
     const { name, src, status, username, userAvatar, userId, id } = pattern;
     const t = useTranslations("FreePattern");
     const { isBookmarked, openBookmarkModal } = useBookmark(id?.toString());
+    const { data: session } = useSession();
 
     return (
         <>
@@ -54,7 +56,7 @@ const FreePatternCard = (
                 }
                 onClick={onReadDetail}
                 actions={[
-                    <Tooltip key="bookmark" title={isBookmarked ? 'Đã lưu' : 'Lưu'}>
+                    <Tooltip key="bookmark" title={!session?.user ? 'Đăng nhập để lưu' : (isBookmarked ? 'Đã lưu' : 'Lưu')}>
                         <Button
                             type="text"
                             icon={isBookmarked ? <BookFilled /> : <BookOutlined />}

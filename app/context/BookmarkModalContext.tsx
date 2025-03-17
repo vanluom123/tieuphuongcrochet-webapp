@@ -29,10 +29,19 @@ export const BookmarkModalProvider = ({ children }: { children: ReactNode }) => 
     };
 
     const closeBookmarkModal = () => {
-        setBookmarkModalState({
+        const currentPatternId = bookmarkModalState.patternId;
+        
+        setBookmarkModalState(prev => ({
             open: false,
-            patternId: ''
-        });
+            patternId: currentPatternId
+        }));
+        
+        setTimeout(() => {
+            setBookmarkModalState(prev => ({
+                ...prev,
+                patternId: ''
+            }));
+        }, 100);
     };
 
     const handleBookmarkSuccess = () => {
