@@ -1,7 +1,8 @@
 'use client'
 
-import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip } from 'antd';
-import { BookFilled, BookOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip, Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
+import { BookFilled, BookOutlined, UserOutlined, EditOutlined, DeleteOutlined, MoreOutlined } from '@ant-design/icons';
 import React from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -18,6 +19,9 @@ interface FreePatternCardProps {
     pattern: Pattern;
     onReadDetail?: () => void;
     loading?: boolean;
+    isShowActions?: boolean;
+    onDelete?: () => void;
+    onEdit?: () => void;
 }
 
 const FreePatternCard = (
@@ -26,13 +30,39 @@ const FreePatternCard = (
         width,
         onReadDetail,
         loading,
+        isShowActions = false,
+        onDelete,
+        onEdit,
     }: FreePatternCardProps) => {
 
     const { Meta } = Card;
     const { name, src, status, username, userAvatar, userId, id } = pattern;
     const t = useTranslations("FreePattern");
-    const { isBookmarked, toggleBookmark } = useBookmark(id?.toString());
+    const profileT = useTranslations("Profile");
+    const { isBookmarked, toggleBookmark } = userId ? useBookmark(id?.toString()) : { isBookmarked: false, toggleBookmark: () => {} };
     const { data: session } = useSession();
+
+    // Tạo menu cho nút 3 chấm
+    const actionItems: MenuProps['items'] = [
+        {
+            key: 'edit',
+            label: profileT('patterns.edit'),
+            icon: <EditOutlined />,
+            onClick: (e) => {
+                e.domEvent.stopPropagation();
+                if (onEdit) onEdit();
+            },
+        },
+        {
+            key: 'delete',
+            label: profileT('patterns.delete'),
+            icon: <DeleteOutlined />,
+            onClick: (e) => {
+                e.domEvent.stopPropagation();
+                if (onDelete) onDelete();
+            },
+        },
+    ];
 
     return (
         <>
@@ -56,17 +86,29 @@ const FreePatternCard = (
                 }
                 onClick={onReadDetail}
                 actions={[
-                    <Tooltip key="bookmark" title={!session?.user ? t('login_to_save') : (isBookmarked ? t('remove_from_collection') : t('save'))}>
-                        <Button
-                            type="text"
-                            icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                toggleBookmark(id?.toString() || '');
-                            }}
-                        />
-                    </Tooltip>
-                ]}
+                    userId && (
+                        <Tooltip key="bookmark" title={!session?.user ? t('login_to_save') : (isBookmarked ? t('remove_from_collection') : t('save'))}>
+                            <Button
+                                type="text"
+                                icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleBookmark(id?.toString() || '');
+                                }}
+                            />
+                        </Tooltip>
+                    ),
+                    // Hiển thị menu 3 chấm khi isShowActions = true
+                    isShowActions && (
+                        <Dropdown key="more" menu={{ items: actionItems }} trigger={['click']}>
+                            <Button
+                                type="text"
+                                icon={<MoreOutlined />}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        </Dropdown>
+                    ),
+                ].filter(Boolean)}
             >
                 <Skeleton loading={!name} active>
                     {name &&

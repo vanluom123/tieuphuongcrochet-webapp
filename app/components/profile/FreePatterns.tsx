@@ -8,7 +8,7 @@ import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
 import {initialListParams, IResponseList, Pattern} from '@/app/lib/definitions';
 import {deleteUserPattern, fetchUserPatterns} from '@/app/lib/service/profileService';
 import {ROUTE_PATH} from '@/app/lib/constant';
-import FreePatternCard from './FreePatternCard';
+import FreePatternCard from '../free-pattern-card';
 import FreePatternFormModal from './FreePatternFormModal';
 import {modal, notification} from '@/app/lib/notify';
 
