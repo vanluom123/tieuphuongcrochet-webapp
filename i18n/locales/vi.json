@@ -191,7 +191,8 @@
     "error_login_title": "Đăng nhập thất bại",
     "error_login_unknown_error": "Đã có lỗi xảy ra",
     "btn_google_login": "Đăng nhập với Google",
-    "text_Or": "Hoặc"
+    "text_Or": "Hoặc",
+    "resend_verification_email": "Gửi lại email xác thực"
   },
   "Register": {
     "title": "Đăng ký",
@@ -502,6 +503,17 @@
       "cupcake": "Bánh cupcake"
     },
     "heart": "Trái tim"
-
+  },
+  "VerificationEmail": {
+    "title": "Gửi lại email xác thực",
+    "description": "Vui lòng nhập địa chỉ email đăng ký của bạn để nhận email xác thực mới.",
+    "input_email": "Email",
+    "btn_resend": "Gửi lại email xác thực",
+    "error_msg_required_email": "Vui lòng nhập email",
+    "error_msg_incorrect_email": "Định dạng email không chính xác!",
+    "success_resend_title": "Gửi thành công",
+    "success_resend_description": "Email xác thực mới đã được gửi. Vui lòng kiểm tra hộp thư của bạn.",
+    "error_resend_title": "Gửi thất bại",
+    "error_resend_unknown": "Đã xảy ra lỗi khi gửi email xác thực. Vui lòng thử lại sau."
   }
 }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { LockOutlined, MailOutlined, GoogleOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Space, Spin } from 'antd';
+import { Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 import Link from 'next/link';
@@ -14,6 +14,7 @@ import logo from '@/public/logo.png';
 import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
 import { notification } from '@/app/lib/notify';
 import '../../ui/components/login.scss';
+import ResendVerificationModal from '@/app/components/login/ResendVerificationModal';
 
 const Login = () => {
     const [form] = Form.useForm();
@@ -22,6 +23,7 @@ const Login = () => {
     const t = useTranslations('Login');
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isResendModalVisible, setIsResendModalVisible] = useState(false);
 
     useEffect(() => {
         if (session?.user?.email && status === 'authenticated') {
@@ -119,9 +121,22 @@ const Login = () => {
                                     <Checkbox>{t('remember_me')}</Checkbox>
                                 </Form.Item>
 
-                                <Link className="login-form-forgot" href="#">
-                                    {t('forgot_password')}
-                                </Link>
+                                <Row gutter={[8, 8]}>
+                                    <Col span={24}>
+                                        <Link className="login-form-forgot" href="#">
+                                            {t('forgot_password')}
+                                        </Link>
+                                    </Col>
+                                    <Col span={24}>
+                                        <Button
+                                            type="link"
+                                            className="resend-verification-link"
+                                            onClick={() => setIsResendModalVisible(true)}
+                                        >
+                                            {t('resend_verification_email')}
+                                        </Button>
+                                    </Col>
+                                </Row>
                             </Form.Item>
                             <Form.Item name='actions' className='actions'>
                                 <Row gutter={[10, 20]} align='middle'>
@@ -164,6 +179,10 @@ const Login = () => {
                     </Col>
                 </Row>
             </Spin>
+            <ResendVerificationModal
+                isOpen={isResendModalVisible}
+                onCancel={() => setIsResendModalVisible(false)}
+            />
         </div>
     );
 };
