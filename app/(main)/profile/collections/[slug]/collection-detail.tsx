@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
-import { initialListParams, IResponseList, Pattern } from '@/app/lib/definitions';
-import { fetchFreePatternsByCollection } from '@/app/lib/service/profileService';
+import { Collection, initialListParams, IResponseList, Pattern } from '@/app/lib/definitions';
+import { fetchCollectionById, fetchFreePatternsByCollection } from '@/app/lib/service/profileService';
 import { ROUTE_PATH } from '@/app/lib/constant';
 import FreePatternCard from '@/app/components/free-pattern-card';
 
@@ -22,45 +22,48 @@ interface CollectionDetailProps {
 }
 
 const CollectionDetail = ({ params }: CollectionDetailProps) => {
-    const t = useTranslations('Profile');
-    const router = useRouter();
     const { data: session } = useSession();
+    const router = useRouter();
+    const t = useTranslations('Profile');
     const collectionId = params.slug;
-    const [para, setPara] = useState(initialListParams);
     const [loading, setLoading] = useState(true);
+    const [para, setPara] = useState(initialListParams);
     const [patterns, setPatterns] = useState<IResponseList<Pattern>>({
         data: [],
         totalRecords: 0
     });
+    const [collection, setCollection] = useState<Collection>();
 
     useEffect(() => {
         const fetchCollectionData = async () => {
+            if (!collectionId) return;
+
             setLoading(true);
-            const userId = session?.user.id || '';
-            const patternsData = await fetchFreePatternsByCollection(
-                userId,
-                collectionId,
-                para
-            );
+            try {
+                const userId = session?.user?.id || '';
+                const [colData, patternsData] = await Promise.all([
+                    fetchCollectionById(userId, collectionId),
+                    fetchFreePatternsByCollection(userId, collectionId, para)
+                ]);
 
-            setPatterns({
-                data: patternsData.data as Pattern[] || [],
-                totalRecords: patternsData.totalRecords || 0
-            });
-
-            setLoading(false);
+                setCollection(colData.data);
+                setPatterns({
+                    data: patternsData.data as Pattern[] || [],
+                    totalRecords: patternsData.totalRecords || 0
+                });
+            } catch (error) {
+                console.error('Lỗi khi tải dữ liệu bộ sưu tập:', error);
+            } finally {
+                setLoading(false);
+            }
         };
 
-        if (collectionId) {
-            fetchCollectionData();
-        }
-    }, [collectionId]);
+        fetchCollectionData();
+    }, [collectionId, session?.user?.id, para]);
 
     const onViewPattern = (id: React.Key) => {
         router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`);
     };
-
-    // const isOwner = session?.user?.id === collection?.userId;
 
     return (
         <Spin spinning={loading} size="large">
@@ -72,25 +75,25 @@ const CollectionDetail = ({ params }: CollectionDetailProps) => {
                         {
                             title: <Link href={ROUTE_PATH.HOME}><HomeOutlined /></Link>,
                         },
-                        // {
-                        //     title: <Link href={`${ROUTE_PATH.PROFILE}/${collection?.userId}`}>{t('breadcrumb.profile')}</Link>,
-                        // },
-                        // {
-                        //     title: t('breadcrumb.collections'),
-                        // },
-                        // {
-                        //     title: collection?.name || t('collections.loading'),
-                        // },
+                        {
+                            title: <Link href={`${ROUTE_PATH.PROFILE}/${collection?.userId}`}>{t('breadcrumb.profile')}</Link>,
+                        },
+                        {
+                            title: t('breadcrumb.collections'),
+                        },
+                        {
+                            title: collection?.name || t('collections.loading'),
+                        },
                     ]}
                 />
 
                 {/* Collection header */}
-                {/* {collection && (
+                {collection && (
                     <div className="collection-header mb-6">
                         <Title level={2}>{collection.name}</Title>
                         <Paragraph>{collection.description}</Paragraph>
                     </div>
-                )} */}
+                )}
 
                 {/* Patterns grid */}
                 <div className="patterns-grid">
@@ -101,7 +104,6 @@ const CollectionDetail = ({ params }: CollectionDetailProps) => {
                                     <FreePatternCard
                                         pattern={pattern}
                                         onReadDetail={() => onViewPattern(pattern.id || '')}
-                                        // isShowActions={isOwner}
                                     />
                                 </Col>
                             ))}

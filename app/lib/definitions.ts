@@ -267,6 +267,7 @@ export interface Collection {
 	totalPatterns?: number;
 	avatar?: string;
 	createdDate?: string;
+	userId?: string;
 }
 
 // -------------------------- Comment --------------------------
