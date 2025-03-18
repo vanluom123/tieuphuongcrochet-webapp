@@ -2,7 +2,7 @@ import { Form, Input, Modal } from 'antd';
 import { useTranslations } from 'next-intl';
 import { Collection } from '@/app/lib/definitions';
 import { useEffect, useState } from 'react';
-import { createCollection, fetchCollectionDetail, updateCollection } from '@/app/lib/service/profileService';
+import { createCollection, fetchCollectionById, updateCollection } from '@/app/lib/service/profileService';
 import { notification } from '@/app/lib/notify';
 
 const { Item } = Form;
@@ -14,6 +14,7 @@ interface CollectionFormModalProps {
     };
     setModalData: (data: { open: boolean; id: string; }) => void;
     onRefreshData: () => void;
+    userId: string;
 }
 
 const initialState = {
@@ -21,7 +22,7 @@ const initialState = {
     collection: {} as Collection
 }
 
-const CollectionFormModal = ({ modalData, setModalData, onRefreshData }: CollectionFormModalProps) => {
+const CollectionFormModal = ({ modalData, setModalData, onRefreshData, userId }: CollectionFormModalProps) => {
     const [form] = Form.useForm();
     const t = useTranslations('Profile');
     const [state, setState] = useState(initialState);
@@ -36,10 +37,10 @@ const CollectionFormModal = ({ modalData, setModalData, onRefreshData }: Collect
     useEffect(() => {
         if (modalData.id && modalData.open) {
             setState(prev => ({ ...prev, loading: true }));
-            fetchCollectionDetail(modalData.id)
-                .then(collection => {
-                    form.setFieldsValue(collection);
-                    setState(prev => ({ ...prev, collection: collection }));
+            fetchCollectionById(userId, modalData.id)
+                .then(res => {
+                    form.setFieldsValue(res.data);
+                    setState(prev => ({ ...prev, collection: res.data }));
                 }).finally(() => setState(prev => ({ ...prev, loading: false })));
         }
     }, [modalData.id, modalData.open, form]);

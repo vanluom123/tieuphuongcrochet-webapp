@@ -73,12 +73,13 @@ export async function deleteUserPattern(id: string) {
     return res.data;
 }
 
-export async function fetchCollectionDetail(id: string) {
-    const res = await apiJwtService({
-        endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
+export async function fetchCollectionById(userId: string, collectionId: string)
+    : Promise<ResponseData> {
+    const res: ResponseData = await apiJwtService({
+        endpoint: `${API_ROUTES.USERS}/${userId}/collections/${collectionId}`,
         method: 'GET'
     });
-    return res.data;
+    return res;
 }
 
 export async function createCollection(name: string) {

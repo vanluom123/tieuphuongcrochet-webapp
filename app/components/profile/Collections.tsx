@@ -123,6 +123,7 @@ const Collections = ({ isCreator, userId }: CollectionProps) => {
                 modalData={modalData}
                 setModalData={setModalData}
                 onRefreshData={onRefreshData}
+                userId={userId}
             />
         </Spin>
     );
