@@ -26,7 +26,7 @@ const Collections = ({ isCreator, userId }: CollectionProps) => {
     const [loading, setLoading] = useState(false);
 
     const onViewCollection = (id: string) => {
-        router.push(`${ROUTE_PATH.COLLECTIONS}/${id}`);
+        router.push(`${ROUTE_PATH.PROFILE}${ROUTE_PATH.COLLECTIONS}/${id}`);
     };
 
     useEffect(() => {
