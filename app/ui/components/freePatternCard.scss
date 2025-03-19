@@ -57,9 +57,10 @@
   .action-buttons {
     position: absolute;
     top: 8px;
-    left: 8px;
+    right: 8px;
     z-index: 2;
     display: none; // Hide by default
+    flex-direction: column;
     gap: 4px;
 
     .action-button {

@@ -1,12 +1,10 @@
 'use client'
 
-import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip, Dropdown } from 'antd';
-import type { MenuProps } from 'antd';
+import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip } from 'antd';
 import {
     UserOutlined,
     EditOutlined,
     DeleteOutlined,
-    MoreOutlined,
     StarFilled, StarOutlined
 } from '@ant-design/icons';
 import React from 'react';
@@ -54,28 +52,6 @@ const FreePatternCard = (
         toggleBookmark(patternId);
     };
 
-    // Tạo menu cho nút 3 chấm
-    const actionItems: MenuProps['items'] = [
-        {
-            key: 'edit',
-            label: profileT('patterns.edit'),
-            icon: <EditOutlined />,
-            onClick: (e) => {
-                e.domEvent.stopPropagation();
-                if (onEdit) onEdit();
-            },
-        },
-        {
-            key: 'delete',
-            label: profileT('patterns.delete'),
-            icon: <DeleteOutlined />,
-            onClick: (e) => {
-                e.domEvent.stopPropagation();
-                if (onDelete) onDelete();
-            },
-        },
-    ];
-
     return (
         <>
             <Card
@@ -95,7 +71,23 @@ const FreePatternCard = (
                         ) : (
                             <div style={{ position: 'relative' }}>
                                 {isShowActions && (
-                                    <Flex className="action-buttons">
+                                    <Flex className="action-buttons" vertical>
+                                        {userId && (
+                                            <Tooltip title={!session?.user
+                                                ? t('login_to_save')
+                                                : (isBookmarked ? t('remove_from_collection') : t('save'))
+                                            }>
+                                                <Button
+                                                    type="text"
+                                                    icon={isBookmarked ? <StarFilled /> : <StarOutlined />}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleToggleBookmark(id?.toString() || '');
+                                                    }}
+                                                    className="action-button"
+                                                />
+                                            </Tooltip>
+                                        )}
                                         <Tooltip title={profileT('patterns.edit')}>
                                             <Button
                                                 type="text"
