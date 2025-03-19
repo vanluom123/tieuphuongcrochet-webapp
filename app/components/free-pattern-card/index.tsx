@@ -2,7 +2,13 @@
 
 import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
-import { BookFilled, BookOutlined, UserOutlined, EditOutlined, DeleteOutlined, MoreOutlined } from '@ant-design/icons';
+import {
+    UserOutlined,
+    EditOutlined,
+    DeleteOutlined,
+    MoreOutlined,
+    StarFilled, StarOutlined
+} from '@ant-design/icons';
 import React from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -98,7 +104,7 @@ const FreePatternCard = (
                                     >
                                         <Button
                                             type="text"
-                                            icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
+                                            icon={isBookmarked ? <StarFilled /> : <StarOutlined />}
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleToggleBookmark(id?.toString() || '');
