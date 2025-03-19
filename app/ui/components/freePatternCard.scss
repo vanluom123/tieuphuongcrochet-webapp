@@ -25,4 +25,18 @@
       }
     }
   }
+
+  .bookmark-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    padding: 4px;
+    z-index: 1;
+
+    &:hover {
+      background: white;
+    }
+  }
 }

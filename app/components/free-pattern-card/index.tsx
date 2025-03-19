@@ -84,26 +84,35 @@ const FreePatternCard = (
                 }}
                 cover={
                     <>
-                        {src && loading ?
-                            <Skeleton.Image active /> :
-                            <CustomNextImage src={src} alt={name} />
-                        }
+                        {src && loading ? (
+                            <Skeleton.Image active />
+                        ) : (
+                            <div style={{ position: 'relative' }}>
+                                <CustomNextImage src={src} alt={name} />
+                                {userId && (
+                                    <Tooltip
+                                        title={!session?.user
+                                            ? t('login_to_save')
+                                            : (isBookmarked ? t('remove_from_collection') : t('save'))
+                                        }
+                                    >
+                                        <Button
+                                            type="text"
+                                            icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleToggleBookmark(id?.toString() || '');
+                                            }}
+                                            className="bookmark-button"
+                                        />
+                                    </Tooltip>
+                                )}
+                            </div>
+                        )}
                     </>
                 }
                 onClick={onReadDetail}
                 actions={[
-                    userId ? (
-                        <Tooltip key="bookmark" title={!session?.user ? t('login_to_save') : (isBookmarked ? t('remove_from_collection') : t('save'))}>
-                            <Button
-                                type="text"
-                                icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleToggleBookmark(id?.toString() || '');
-                                }}
-                            />
-                        </Tooltip>
-                    ) : null,
                     // Hiển thị menu 3 chấm khi isShowActions = true
                     isShowActions && (
                         <Dropdown key="more" menu={{ items: actionItems }} trigger={['click']}>
