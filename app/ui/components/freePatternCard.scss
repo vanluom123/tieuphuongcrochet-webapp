@@ -53,4 +53,29 @@
       background: white;
     }
   }
+
+  .action-buttons {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    display: none; // Hide by default
+    gap: 4px;
+
+    .action-button {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      padding: 4px;
+
+      &:hover {
+        background: white;
+      }
+    }
+  }
+
+  &:hover {
+    .action-buttons {
+      display: flex; // Show on hover
+    }
+  }
 }

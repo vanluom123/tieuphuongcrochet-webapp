@@ -94,25 +94,39 @@ const FreePatternCard = (
                             <Skeleton.Image active />
                         ) : (
                             <div style={{ position: 'relative' }}>
-                                {/* Add the dropdown menu here */}
                                 {isShowActions && (
-                                    <Dropdown menu={{ items: actionItems }} trigger={['click']}>
-                                        <Button
-                                            type="text"
-                                            icon={<MoreOutlined />}
-                                            onClick={(e) => e.stopPropagation()}
-                                            className="more-options-button"
-                                        />
-                                    </Dropdown>
+                                    <Flex className="action-buttons">
+                                        <Tooltip title={profileT('patterns.edit')}>
+                                            <Button
+                                                type="text"
+                                                icon={<EditOutlined />}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (onEdit) onEdit();
+                                                }}
+                                                className="action-button"
+                                            />
+                                        </Tooltip>
+                                        <Tooltip title={profileT('patterns.delete')}>
+                                            <Button
+                                                type="text"
+                                                icon={<DeleteOutlined />}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (onDelete) onDelete();
+                                                }}
+                                                className="action-button"
+                                            />
+                                        </Tooltip>
+                                    </Flex>
                                 )}
                                 <CustomNextImage src={src} alt={name} />
+                                {/* Bookmark button remains unchanged */}
                                 {userId && (
-                                    <Tooltip
-                                        title={!session?.user
-                                            ? t('login_to_save')
-                                            : (isBookmarked ? t('remove_from_collection') : t('save'))
-                                        }
-                                    >
+                                    <Tooltip title={!session?.user
+                                        ? t('login_to_save')
+                                        : (isBookmarked ? t('remove_from_collection') : t('save'))
+                                    }>
                                         <Button
                                             type="text"
                                             icon={isBookmarked ? <StarFilled /> : <StarOutlined />}
