@@ -94,6 +94,17 @@ const FreePatternCard = (
                             <Skeleton.Image active />
                         ) : (
                             <div style={{ position: 'relative' }}>
+                                {/* Add the dropdown menu here */}
+                                {isShowActions && (
+                                    <Dropdown menu={{ items: actionItems }} trigger={['click']}>
+                                        <Button
+                                            type="text"
+                                            icon={<MoreOutlined />}
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="more-options-button"
+                                        />
+                                    </Dropdown>
+                                )}
                                 <CustomNextImage src={src} alt={name} />
                                 {userId && (
                                     <Tooltip
@@ -118,18 +129,6 @@ const FreePatternCard = (
                     </>
                 }
                 onClick={onReadDetail}
-                actions={[
-                    // Hiển thị menu 3 chấm khi isShowActions = true
-                    isShowActions && (
-                        <Dropdown key="more" menu={{ items: actionItems }} trigger={['click']}>
-                            <Button
-                                type="text"
-                                icon={<MoreOutlined />}
-                                onClick={(e) => e.stopPropagation()}
-                            />
-                        </Dropdown>
-                    ),
-                ].filter(Boolean)}
             >
                 <Skeleton loading={!name} active>
                     {name &&
