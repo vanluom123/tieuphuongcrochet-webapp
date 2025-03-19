@@ -28,12 +28,6 @@ interface ProfileDetailProps {
     }
 }
 
-interface ProfileDetailProps {
-    params: {
-        slug: string;
-    }
-}
-
 const ProfileDetail = ({ params }: ProfileDetailProps) => {
     const [loading, setLoading] = useState({
         avatar: false,

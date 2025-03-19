@@ -1,3 +1,5 @@
+'use client'
+import { useState } from 'react';
 import { Button, MenuProps, Dropdown, Modal, Avatar } from "antd";
 import { UserOutlined, LogoutOutlined, DashboardOutlined } from '@ant-design/icons';
 import { signOut, useSession } from "next-auth/react";
@@ -5,11 +7,13 @@ import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import '../../ui/navigation.scss';
+import LoginModal from '../login/LoginModal';
 
 const UserAccount = () => {
     const { data: session } = useSession();
     const t = useTranslations('UserAccount');
     const router = useRouter();
+    const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
 
     const userAvatar = session?.user.imageUrl;
     const userId = session?.user.id;
@@ -41,7 +45,7 @@ const UserAccount = () => {
                 Modal.confirm({
                     title: t('logout_confirm'),
                     onOk: () => {
-                        signOut({ callbackUrl: ROUTE_PATH.LOGIN });
+                        signOut({ callbackUrl: ROUTE_PATH.HOME });
                     }
                 })
             }
@@ -57,9 +61,22 @@ const UserAccount = () => {
                     }
                 </Dropdown>
             ) : (
-                <Button type="primary" onClick={() => router.push(ROUTE_PATH.LOGIN)}>
-                    {t("sign_in")}
-                </Button>
+                <>
+                    <Button 
+                        type="primary" 
+                        onClick={() => setIsLoginModalVisible(true)}
+                    >
+                        {t("sign_in")}
+                    </Button>
+                    <LoginModal
+                        isOpen={isLoginModalVisible}
+                        onCancel={() => setIsLoginModalVisible(false)}
+                        onSuccess={() => {
+                            setIsLoginModalVisible(false);
+                            router.refresh();
+                        }}
+                    />
+                </>
             )}
         </span>
     )

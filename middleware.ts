@@ -28,8 +28,17 @@ export default withAuth(
         // Kiểm tra nếu route bắt đầu bằng /dashboard
         if (request.nextUrl.pathname.startsWith(ROUTE_PATH.DASHBOARD)) {
             if (!token) {
-                // Nếu chưa đăng nhập, redirect về trang login
-                return NextResponse.redirect(new URL(ROUTE_PATH.LOGIN, request.url))
+                // Thay vì redirect, trả về response với status để client xử lý hiển thị modal
+                return new Response(JSON.stringify({ 
+                    success: false, 
+                    message: 'Unauthorized',
+                    showLogin: true 
+                }), {
+                    status: 401,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
             }
 
             // Kiểm tra role của user (giả sử role được lưu trong token)

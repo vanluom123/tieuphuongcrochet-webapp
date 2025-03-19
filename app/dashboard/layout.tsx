@@ -10,6 +10,7 @@ import { redirect, useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import LoginModal from '@/app/components/login/LoginModal';
 
 import logo from '@/public/logo.png';
 
@@ -17,6 +18,7 @@ import { Button, Layout, Menu, theme } from 'antd';
 import { ROUTE_PATH, USER_ROLES } from '../lib/constant';
 import NavLinksDashboard, { sidebarItems } from '../components/nav-link-dashboard';
 import '../ui/dashboard.scss'
+import { useAuth } from '../hooks/useAuth';
 
 const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
@@ -28,6 +30,8 @@ const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { data: session, status } = useSession();
     const pathname = usePathname();
     const router = useRouter();
+    const { showLoginModal, setShowLoginModal } = useAuth(true);
+
     // Sử dụng useEffect để thay đổi state sau khi đã hydrate
     useEffect(() => {
         setCollapsed(true);
@@ -51,59 +55,73 @@ const LayoutAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         router.push(key);
     }
     return (
-        <Layout className='admin-page-layout'>
-            <Header className='admin-page-layout__header' style={{ display: 'flex', alignItems: 'center', padding: 0, background: colorBgContainer, height: 76 }}>
-                <div className="logo-sidebar" >
-                    <Link href={ROUTE_PATH.HOME}>
-                        <Image width={75} height={75} priority src={logo} alt='Tiệm len Tiểu Phương' />
-                    </Link>
-                </div>
-                <Button
-                    className='siderbar-large-screen'
-                    type="text"
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    onClick={toggleCollapsed}
-                    style={{
-                        fontSize: '16px',
-                        width: 40
-                    }}
-                />
-                <span className='table-title'>{getTitle()}</span>
-            </Header>
+        <>
+            <Layout className='admin-page-layout'>
+                <Header className='admin-page-layout__header' style={{ display: 'flex', alignItems: 'center', padding: 0, background: colorBgContainer, height: 76 }}>
+                    <div className="logo-sidebar" >
+                        <Link href={ROUTE_PATH.HOME}>
+                            <Image width={75} height={75} priority src={logo} alt='Tiệm len Tiểu Phương' />
+                        </Link>
+                    </div>
+                    <Button
+                        className='siderbar-large-screen'
+                        type="text"
+                        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                        onClick={toggleCollapsed}
+                        style={{
+                            fontSize: '16px',
+                            width: 40
+                        }}
+                    />
+                    <span className='table-title'>{getTitle()}</span>
+                </Header>
 
-            <Layout className='admin-page-layout__content'>
-                <Sider
-                    trigger={null}
-                    collapsible
-                    collapsed={collapsed}
-                    theme='light'
-                    className='siderbar-large-screen'
-                >
+                <Layout className='admin-page-layout__content'>
+                    <Sider
+                        trigger={null}
+                        collapsible
+                        collapsed={collapsed}
+                        theme='light'
+                        className='siderbar-large-screen'
+                    >
 
-                    <NavLinksDashboard />
-                </Sider>
-                <Content
-                    style={{
-                        margin: '24px 16px',
-                        padding: 24,
-                        minHeight: 280,
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
-                    }}
-                >
-                    {children}
-                </Content>
+                        <NavLinksDashboard />
+                    </Sider>
+                    <Content
+                        style={{
+                            margin: '24px 16px',
+                            padding: 24,
+                            minHeight: 280,
+                            background: colorBgContainer,
+                            borderRadius: borderRadiusLG,
+                        }}
+                    >
+                        {children}
+                    </Content>
 
+                </Layout>
+                <Footer className='admin-page-layout__footer siderbar-small-screen'>
+                    <Menu
+                        mode="horizontal"
+                        defaultSelectedKeys={[ROUTE_PATH.DASHBOARD]}
+                        items={sidebarItems}
+                        onSelect={onSelectItem}
+                    />
+                </Footer>
             </Layout>
-            <Footer className='admin-page-layout__footer siderbar-small-screen'>
-                <Menu
-                    mode="horizontal"
-                    defaultSelectedKeys={[ROUTE_PATH.DASHBOARD]}
-                    items={sidebarItems}
-                    onSelect={onSelectItem}
-                />
-            </Footer>
-        </Layout>
+            
+            <LoginModal
+                isOpen={showLoginModal}
+                onCancel={() => {
+                    setShowLoginModal(false);
+                    router.push(ROUTE_PATH.HOME);
+                }}
+                onSuccess={() => {
+                    setShowLoginModal(false);
+                    router.refresh();
+                }}
+            />
+        </>
     )
 }
 
