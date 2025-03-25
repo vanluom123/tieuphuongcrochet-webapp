@@ -10,9 +10,14 @@ import { ROUTE_PATH } from "../constant";
 const EXPIRATION_BUFFER_SECONDS = 30; // 30 seconds before actual expiration
 
 export async function handleTokenRefresh() {
-    // Logout the user and redirect to login page
     const session = await getSession();
-    let accessToken = session?.user.accessToken;
+
+    if (!session || !session.user || !session.user.accessToken) {
+        console.warn('No session or access token found.'); // Log cảnh báo
+        return null;
+    }
+
+    let accessToken = session.user.accessToken;
 
     // Decode the access token
     const decoded = jwtDecode.decode(accessToken as string) as JwtPayload;
@@ -21,18 +26,30 @@ export async function handleTokenRefresh() {
             Date.now() >= ((decoded.exp as number) - EXPIRATION_BUFFER_SECONDS) * 1000);
 
     if (isTokenExpired) {
+        console.log('Access token is expired, attempting to refresh...'); // Log thông tin
         try {
-            if (session == null) {
-                throw new Error('Session is not null');
+            if (!session.user.refreshToken) {
+                console.warn('No refresh token available.'); // Log cảnh báo
+                await handleTokenRefreshFailure();
+                return null;
             }
+
             const refreshToken = session.user.refreshToken;
-            const tokenResponse = await refreshAccessToken(refreshToken as string);
-            accessToken = tokenResponse.accessToken;
-            session.user.accessToken = tokenResponse.accessToken;
-            session.user.refreshToken = tokenResponse.refreshToken;
+            const res = await refreshAccessToken(refreshToken as string);
+            if (!res.success) {
+                console.error('Failed to refresh access token.'); // Log lỗi
+                await handleTokenRefreshFailure();
+                return null;
+            }
+            accessToken = res.data.accessToken;
+            session.user.accessToken = res.data.accessToken;
+            session.user.refreshToken = res.data.refreshToken;
+            console.log('Access token refreshed successfully.'); // Log thông tin
             return accessToken;
         } catch (e) {
+            console.error('Error during token refresh:', e); // Log lỗi
             await handleTokenRefreshFailure();
+            return null;
         }
     }
 

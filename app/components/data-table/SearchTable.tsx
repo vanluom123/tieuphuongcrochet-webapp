@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {Button, Col, Flex, Form, Input, Radio, RadioChangeEvent, Row, TreeSelect} from 'antd';
 import {PlusOutlined, ReloadOutlined} from '@ant-design/icons';
 import {SearchProps} from 'antd/es/input';
@@ -9,6 +9,7 @@ import {ALL_ITEM, TRANSLATION_OPTIONS, TRANSLATION_STATUS} from '@/app/lib/const
 import FreePatternStatus from '../free-pattern-status';
 import {DefaultOptionType} from 'antd/es/select';
 import {combineFilters} from "@/app/lib/filter-utils";
+import {debounce} from '@/app/lib/utils';
 
 interface SearchTableProps {
     onAddNew: () => void;
@@ -57,6 +58,74 @@ const SearchTable = ({
         }
     };
 
+    // Debounced search handlers
+    const debouncedSearch = useCallback(
+        debounce((value: string) => {
+            if (onSearch instanceof Function) {
+                onSearch(value);
+                return;
+            }
+            setFilters(prev => {
+                const newFilters = {
+                    ...prev,
+                    search: value
+                }
+                const combined = combineFilters({
+                    ...newFilters,
+                    searchFields
+                });
+                onHandleSearch({
+                    categoryId: prev.categoryId,
+                    filter: combined
+                })
+                return newFilters;
+            })
+        }, 500),
+        [onSearch, searchFields, onHandleSearch]
+    );
+
+    const debouncedCategoryChange = useCallback(
+        debounce((key: string) => {
+            setFilters(prev => {
+                const newFilters = {
+                    ...prev,
+                    categoryId: key === undefined ? '' : key
+                }
+                const combined = combineFilters({
+                    ...newFilters,
+                    searchFields
+                });
+                onHandleSearch({
+                    categoryId: key === undefined ? '' : key,
+                    filter: combined
+                })
+                return newFilters;
+            })
+        }, 500),
+        [searchFields, onHandleSearch]
+    );
+
+    const debouncedStatusChange = useCallback(
+        debounce((value: SegmentedValue) => {
+            setFilters(prev => {
+                const newFilters = {
+                    ...prev,
+                    status: value as string
+                }
+                const combined = combineFilters({
+                    ...newFilters,
+                    searchFields
+                });
+                onHandleSearch({
+                    categoryId: prev.categoryId,
+                    filter: combined
+                })
+                return newFilters;
+            })
+        }, 500),
+        [searchFields, onHandleSearch]
+    );
+
     const onchangeRadio = (e: RadioChangeEvent) => {
         setFilters(prev => {
             const newFilters = {
@@ -76,62 +145,15 @@ const SearchTable = ({
     };
 
     const onSearchText: SearchProps['onSearch'] = (value) => {
-        if (onSearch instanceof Function) {
-            onSearch(value);
-            return;
-        }
-        setFilters(prev => {
-            const newFilters = {
-                ...prev,
-                search: value
-            }
-            const combined = combineFilters({
-                ...newFilters,
-                searchFields
-            });
-            onHandleSearch({
-                categoryId: prev.categoryId,
-                filter: combined
-            })
-            return newFilters;
-        })
+        debouncedSearch(value);
     }
 
     const onChangeCategory = (key: string) => {
-        console.log('category key: ', key);
-        setFilters(prev => {
-            const newFilters = {
-                ...prev,
-                categoryId: key === undefined ? '' : key
-            }
-            const combined = combineFilters({
-                ...newFilters,
-                searchFields
-            });
-            onHandleSearch({
-                categoryId: key === undefined ? '' : key,
-                filter: combined
-            })
-            return newFilters;
-        })
+        debouncedCategoryChange(key);
     }
 
     const onChangeStatus = (value: SegmentedValue) => {
-        setFilters(prev => {
-            const newFilters = {
-                ...prev,
-                status: value as string
-            }
-            const combined = combineFilters({
-                ...newFilters,
-                searchFields
-            });
-            onHandleSearch({
-                categoryId: prev.categoryId,
-                filter: combined
-            })
-            return newFilters;
-        })
+        debouncedStatusChange(value);
     }
 
     const onReset = () => {

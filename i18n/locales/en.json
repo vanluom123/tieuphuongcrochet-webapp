@@ -54,6 +54,9 @@
     "note": "If I accidentally posted a copyrighted chart, please tell me so I can take it down! Thank you!",
     "createPattern": "Create new chart",
     "updatePattern": "Update chart",
+    "login_to_save": "Login to save",
+    "save": "Save to collection",
+    "remove_from_collection": "Remove from collection",
     "status": {
       "ALL": "ALL",
       "SUCCESS": "TRANSLATED",
@@ -503,5 +506,25 @@
       "cupcake": "Cup cake"
     },
     "heart": "HeartHeart"
+  },
+  "Common": {
+    "please_login_first": "Please login",
+    "collection_created": "Collection created",
+    "create_collection_error": "Create collection error",
+    "pattern_saved_to_collection": "Pattern saved to collection",
+    "save_pattern_error": "Save pattern error",
+    "save_to_collection": "Save to collection",
+    "login_to_save": "Login to save",
+    "please_login_to_save_patterns": "Please login to save patterns",
+    "collection_name": "Collection name",
+    "please_enter_collection_name": "Please enter collection name",
+    "enter_collection_name": "Enter collection name",
+    "create_new_collection": "Create new collection",
+    "no_collections": "No collections",
+    "save": "Save",
+    "error_loading_collections": "Error loading collections",
+    "create": "Create",
+    "cancel": "Cancel",
+    "refresh": "Refresh"
   }
 }

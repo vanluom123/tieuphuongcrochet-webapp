@@ -202,8 +202,29 @@
     top: 5px;
     left: 5px;
     z-index: 2;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 16px;
+    color: $colorPrimary;
+    font-size: 14px;
+    padding: 4px 0;
 }
 
+.profile-back-button:hover {
+    color: $colorPrimary;
+}
+
+.collection-detail-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.collection-header {
+    margin-top: 8px;
+}
 
 .patterns-tab {
     position: relative;

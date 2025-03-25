@@ -1,13 +1,14 @@
 'use client'
 import {SearchProps} from 'antd/es/input';
 import {DataTableState, DataType, initialListParams} from '@/app/lib/definitions';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import DataTable from '@/app/components/data-table';
 import SearchTable from '@/app/components/data-table/SearchTable';
 import {deleteUser, fetchUsers} from '@/app/lib/service/userService';
 import {useRouter} from 'next/navigation';
 import {ROUTE_PATH} from '@/app/lib/constant';
 import {sfLike, sfOr} from "spring-filter-query-builder";
+import {debounce} from '@/app/lib/utils';
 
 const initialState: DataTableState = {
     loading: false,
@@ -37,17 +38,24 @@ const Users = () => {
         deleteUser(id as string);
     }
 
+    const debouncedSearch = useCallback(
+        debounce((value: string) => {
+            setParams(prev => {
+                const newFilter = sfOr([
+                    sfLike('name', value),
+                    sfLike('email', value)
+                ]).toString();
+                return {
+                    ...prev,
+                    filter: newFilter
+                }
+            })
+        }, 500),
+        []
+    );
+
     const onSearch: SearchProps['onSearch'] = (value) => {
-        setParams(prev => {
-            const newFilter = sfOr([
-                sfLike('name', value),
-                sfLike('email', value)
-            ]).toString();
-            return {
-                ...prev,
-                filter: newFilter
-            }
-        })
+        debouncedSearch(value);
     }
 
     const onPageChange = (pagination: any) => {

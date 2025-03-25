@@ -1,21 +1,45 @@
 'use client'
 
-import { Card, Typography, Flex } from 'antd';
-import { FolderOutlined } from '@ant-design/icons';
-import { useTranslations } from 'next-intl';
-import { Collection } from '@/app/lib/definitions';
+import {Card, Flex, Tooltip, Typography} from 'antd';
+import {DeleteOutlined, EditOutlined, FolderOutlined} from '@ant-design/icons';
+import {useTranslations} from 'next-intl';
+import {Collection} from '@/app/lib/definitions';
 import CustomNextImage from '../next-image';
+import React from "react";
 
-const { Title, Text } = Typography;
+const {Title, Text} = Typography;
 
 interface CollectionCardProps {
     collection: Collection;
     onViewDetail?: () => void;
+    onDelete?: () => void;
+    onEdit?: () => void;
+    isShowActions?: boolean;
 }
 
-const CollectionCard = ({ collection, onViewDetail }: CollectionCardProps) => {
+const CollectionCard = ({
+                            collection,
+                            onViewDetail,
+                            onDelete,
+                            onEdit,
+                            isShowActions = false
+                        }: CollectionCardProps) => {
     const t = useTranslations('Profile');
-    const { name, description, itemCount, avatar } = collection;
+    const {name, description, totalPatterns, avatar} = collection;
+
+    const handleEdit = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onEdit) {
+            onEdit();
+        }
+    }
+
+    const handleDelete = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onDelete) {
+            onDelete();
+        }
+    }
 
     return (
         <Card
@@ -31,24 +55,36 @@ const CollectionCard = ({ collection, onViewDetail }: CollectionCardProps) => {
                     />
                 ) : (
                     <div className="collection-placeholder">
-                        <FolderOutlined />
+                        <FolderOutlined/>
                     </div>
                 )
             }
+            actions={isShowActions ? [
+                <Tooltip key="edit-tooltip" color='#fc8282' title={'edit'}>
+                	<span key="edit" onClick={handleEdit}>
+                		<EditOutlined style={{fontSize: 18}}/>
+                	</span>
+                </Tooltip>,
+                <Tooltip key="delete-tooltip" color='#fc8282' title={'delete'}>
+					<span key='delete' onClick={handleDelete}>
+						<DeleteOutlined style={{fontSize: 18}}/>
+					</span>
+                </Tooltip>
+            ] : []}
         >
             <Flex vertical gap={8}>
-                <Title level={5} ellipsis={{ rows: 1 }} className="collection-name">
+                <Title level={5} ellipsis={{rows: 1}} className="collection-name">
                     {name}
                 </Title>
 
                 {description && (
-                    <Text type="secondary" ellipsis={{ tooltip: true }} className="collection-description">
+                    <Text type="secondary" ellipsis={{tooltip: true}} className="collection-description">
                         {description}
                     </Text>
                 )}
 
                 <Text className="collection-count">
-                    {t('collections.itemCount', { count: itemCount })}
+                    {t('collections.itemCount')} ({(totalPatterns)})
                 </Text>
             </Flex>
         </Card>

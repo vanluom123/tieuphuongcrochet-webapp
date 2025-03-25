@@ -451,3 +451,39 @@ export const showNotification = (type: "success" | "error", message: string, des
         notification[type]({message, description});
     }, 0);
 };
+
+/**
+ * Debounce function - Trì hoãn việc gọi một hàm cho đến khi không có hoạt động nào xảy ra trong khoảng thời gian chỉ định
+ * @param func Hàm cần trì hoãn việc thực thi
+ * @param wait Thời gian chờ tính bằng milliseconds
+ * @param immediate Nếu true, gọi hàm ngay lập tức thay vì đợi kết thúc thời gian delay
+ * @returns Hàm đã được debounce
+ */
+export const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  wait = 300,
+  immediate = false
+): ((...args: Parameters<T>) => void) => {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  
+  return function(this: any, ...args: Parameters<T>) {
+    const context = this;
+    
+    const later = () => {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    
+    const callNow = immediate && !timeout;
+    
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    
+    timeout = setTimeout(later, wait);
+    
+    if (callNow) {
+      func.apply(context, args);
+    }
+  };
+};

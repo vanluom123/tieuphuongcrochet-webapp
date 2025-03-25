@@ -1,11 +1,11 @@
 'use client'
 import { Input, Flex, Col, Pagination, MenuProps, Empty, Row, Spin, Affix } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { SegmentedValue } from 'antd/es/segmented';
 import { useTranslations } from 'next-intl';
 import { ALL_ITEM, TRANSLATION_STATUS, TRANSLATION_OPTIONS } from '@/app/lib/constant';
 import { DataType, Pattern, Post, Product, TabsItem, TDirection } from '@/app/lib/definitions';
-import { mapTabsData, onScrollBody } from '@/app/lib/utils';
+import { mapTabsData, onScrollBody, debounce } from '@/app/lib/utils';
 import ProductCard from '../product-card';
 import FreePatternStatus from '../free-pattern-status';
 import BlogCard from '../blog-card';
@@ -54,18 +54,34 @@ const ViewTable = (
     const { Search } = Input;
 
     const t = useTranslations("App");
+    const tViewTable = useTranslations("ViewTable");
+
+    // Debounced search handlers
+    const debouncedSearch = useCallback(
+        debounce((value: string) => {
+            if (onSearch instanceof Function) {
+                onSearch(value);
+                onScrollBody('.data-list');
+            }
+        }, 500),
+        [onSearch]
+    );
+
+    const debouncedStatusChange = useCallback(
+        debounce((value: SegmentedValue) => {
+            if (onStatusFilter instanceof Function) {
+                onStatusFilter(value);
+            }
+        }, 500),
+        [onStatusFilter]
+    );
 
     const onSearchBtn = (value: string) => {
-        if (onSearch instanceof Function) {
-            onSearch(value);
-            onScrollBody('.data-list');
-        }
+        debouncedSearch(value);
     };
 
     const onChangeStatus = (value: SegmentedValue) => {
-        if (onStatusFilter instanceof Function) {
-            onStatusFilter(value);
-        }
+        debouncedStatusChange(value);
     };
 
     const onChange = (page: number, pageSize: number) => {
@@ -112,7 +128,7 @@ const ViewTable = (
                         {/* Search */}
                         <Search
                             allowClear
-                            placeholder="Search by name, description, or author"
+                            placeholder={tViewTable('search_placeholder')}
                             style={{ width: 304 }}
                             onSearch={onSearchBtn}
                         />

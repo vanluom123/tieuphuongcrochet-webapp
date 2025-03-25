@@ -1,5 +1,5 @@
 'use client'
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import {useRouter} from "next/navigation";
 import HeaderPart from '@/app/components/header-part';
 import {ALL_ITEM, ROUTE_PATH} from '@/app/lib/constant';
@@ -7,6 +7,7 @@ import {Category, DataTableState, DataType, initialListParams} from '@/app/lib/d
 import ViewTable from '@/app/components/view-table';
 import {fetchProducts} from '@/app/lib/service/productService';
 import {sfLike, sfOr} from "spring-filter-query-builder";
+import {debounce} from '@/app/lib/utils';
 
 interface ProductsProps {
     initialData: DataTableState;
@@ -38,17 +39,24 @@ const Products = ({initialData, categories}: ProductsProps) => {
         });
     }, [params]);
 
+    const debouncedSearch = useCallback(
+        debounce((value: string) => {
+            setParams(prevParams => {
+                const newFilter = sfOr([
+                    sfLike('name', value),
+                    sfLike('description', value)
+                ]).toString();
+                return {
+                    ...prevParams,
+                    filter: newFilter
+                }
+            })
+        }, 500),
+        []
+    );
+
     const onSearchProducts = (value: string) => {
-        setParams(prevParams => {
-            const newFilter = sfOr([
-                sfLike('name', value),
-                sfLike('description', value)
-            ]).toString();
-            return {
-                ...prevParams,
-                filter: newFilter
-            }
-        })
+        debouncedSearch(value);
     }
 
     const onViewProduct = (id: React.Key) => {
