@@ -1,7 +1,37 @@
-import {Collection, IResponseList, ListParams, Pattern} from "../definitions";
+import { Collection, DataType, FileUpload, IResponseList, ListParams, Pattern, ResponseData } from "../definitions";
 import apiJwtService from "./apiJwtService";
-import {API_ROUTES} from "../constant";
-import {notification} from "../notify";
+import { API_ROUTES } from "../constant";
+import { map } from "lodash";
+import { getAvatar } from "../utils";
+
+export async function fetchFreePatternsByCollection(userId: string, collectionId: string, params: ListParams)
+    : Promise<{ data: DataType[], totalRecords: number }> {
+    const res = await apiJwtService({
+        endpoint: `${API_ROUTES.USERS}/${userId}/collections/${collectionId}/free-patterns`,
+        method: 'GET',
+        queryParams: {
+            pageNo: params.pageNo.toString(),
+            pageSize: params.pageSize.toString(),
+            sortBy: params.sortBy as string,
+            sortDir: params.sortDir as string
+        }
+    });
+
+    if (!res.data || !res.data.contents) {
+        return { data: [], totalRecords: 0 };
+    }
+
+    const newData = map(res.data.contents, (item) => ({
+        ...item,
+        key: item.id,
+        src: item.fileContent || getAvatar(item?.images as FileUpload[]),
+    }));
+
+    return {
+        data: newData as DataType[],
+        totalRecords: res.data.totalElements || 0,
+    };
+}
 
 export async function fetchUserCollections(userId: string): Promise<Collection[]> {
     const response = await apiJwtService({
@@ -43,30 +73,39 @@ export async function deleteUserPattern(id: string) {
     return res.data;
 }
 
-export async function fetchCollectionDetail(id: string) {
-    const res = await apiJwtService({
-        endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
+export async function fetchCollectionById(userId: string, collectionId: string)
+    : Promise<ResponseData> {
+    const res: ResponseData = await apiJwtService({
+        endpoint: `${API_ROUTES.USERS}/${userId}/collections/${collectionId}`,
         method: 'GET'
     });
-    return res.data;
+    return res;
 }
 
 export async function createCollection(name: string) {
     const res = await apiJwtService({
         endpoint: API_ROUTES.COLLECTIONS,
         method: 'POST',
-        queryParams: {name}
+        queryParams: { name }
     });
-    return res.data;
+    return res;
 }
 
 export async function updateCollection(id: string, name: string) {
     const res = await apiJwtService({
-        endpoint: API_ROUTES.COLLECTIONS,
+        endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
         method: 'PUT',
-        queryParams: {collectionId: id, name}
+        queryParams: { name }
     })
-    return res.data;
+    return res;
+}
+
+export async function deleteCollection(id: string) {
+    const res = await apiJwtService({
+        endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
+        method: 'DELETE'
+    });
+    return res;
 }
 
 export async function updateUserProfile(data: any) {

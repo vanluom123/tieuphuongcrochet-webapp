@@ -1415,3 +1415,9 @@ body {
     bottom: 20px;
   }
 }
+
+.active {
+  .ant-btn-icon {
+    color: $colorPrimary;
+  }
+}

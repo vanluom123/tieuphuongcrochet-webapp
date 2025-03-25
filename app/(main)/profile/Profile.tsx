@@ -18,7 +18,7 @@ import UserInfo from '../../components/profile/UserInfo';
 import defaultUser from '../../../public/default-user.png';
 import defaultBackground from '../../../public/default-background.jpg';
 import '../../ui/components/profile.scss';
-// import Collections from "@/app/components/profile/Collections";
+import Collections from "@/app/components/profile/Collections";
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
 
@@ -74,11 +74,11 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
             label: t('tabs.patterns'),
             children: <FreePatterns userId={userId} isCreator={isCreator} />,
         },
-        // {
-        //     key: 'collections',
-        //     label: t('tabs.collections'),
-        //     children: <Collections userId={userId} isCreator={isCreator} />,
-        // },
+        {
+            key: 'collections',
+            label: t('tabs.collections'),
+            children: <Collections userId={userId} isCreator={isCreator} />,
+        },
         {
             key: 'info',
             label: t('tabs.info'),

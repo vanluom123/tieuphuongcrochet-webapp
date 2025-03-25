@@ -1,7 +1,7 @@
 'use client'
 import { memo, useEffect, useRef, useState } from "react";
-import { Avatar, Button, Col, Divider, Flex, Row, Space, Tag } from "antd"
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Avatar, Button, Col, Divider, Flex, Row, Space, Tag, Tooltip } from "antd"
+import { BookFilled, BookOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Link from "next/link";
 import { findIndex, map } from "lodash";
 import { useTranslations } from "next-intl";
@@ -15,6 +15,8 @@ import DownloadImage from "../custom-image";
 import { ROUTE_PATH, SOCIAL_LINKS, TRANSLATION_STATUS } from "@/app/lib/constant";
 import FormattedCurrency from "../forrmat-currency";
 import '../../ui/components/introduction-card.scss';
+import { useSession } from "next-auth/react";
+import { useBookmark } from "@/app/hooks/useBookmark";
 
 interface IntroductionCardProps {
 	data: Pattern | Product,
@@ -27,10 +29,19 @@ const IMAGE_AMOUNT = 4;
 
 const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: IntroductionCardProps) => {
 	const { src, name, author, description, images, link, price, currency_code } = data;
-	const { status, userId, userAvatar, username } = data as Pattern;
+	const { status, userId, userAvatar, username, id } = data as Pattern;
 	const [activeThumbnail, setActiveThumbnail] = useState({ index: 0, src });
 	const t = useTranslations("IntroductionCard");
+	const tFrep = useTranslations("FreePattern");
 	const sliderRef = useRef(null);
+
+	const { data: session } = useSession();
+	const { isBookmarked, toggleBookmark } = useBookmark(id?.toString());
+
+	const handleToggleBookmark = (patternId: string) => {
+		if (!userId) return;
+		toggleBookmark(patternId);
+	};
 
 	const onClickThumbnail = (index: number, url: string) => {
 		setActiveThumbnail({ index, src: url });
@@ -154,13 +165,31 @@ const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: Introducti
 			<Col xs={24} md={12}>
 				<div className="text-box">
 					<h1 className="card-title mt-0">{name}</h1><br />
-					{
-						(status && status !== TRANSLATION_STATUS.NONE) &&
-						<div>
-							<Tag className='status-tag'
-								color={getStatusColor(status || 'NONE')}>{t(`status.${status}`)}</Tag>
-						</div>
-					}
+					<Flex align="center">
+						{userId && (
+							<Tooltip title={!session?.user
+								? tFrep('login_to_save')
+								: (isBookmarked ? tFrep('remove_from_collection') : tFrep('save'))
+							}>
+								<Button
+									type="text"
+									icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
+									onClick={() => handleToggleBookmark(id?.toString() || '')}
+									className={isBookmarked ? 'active action-button' : 'action-button'}
+								>
+								</Button>
+							</Tooltip>
+						)}
+						{
+							(status && status !== TRANSLATION_STATUS.NONE) &&
+							<div>
+								<Tag className='status-tag'
+									color={getStatusColor(status || 'NONE')}>{t(`status.${status}`)}</Tag>
+							</div>
+						}
+
+					</Flex>
+
 					{author && <span className="author">{t('author')}:&nbsp;<i>{author}</i></span>}
 					<p className="description">{description}</p>
 					{
