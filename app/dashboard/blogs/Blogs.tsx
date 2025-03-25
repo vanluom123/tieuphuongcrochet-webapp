@@ -1,7 +1,7 @@
 'use client'
 
 import {SearchProps} from 'antd/es/input';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import {DataTableState, initialListParams} from '@/app/lib/definitions';
 import {deletePost, fetchBlogs} from '@/app/lib/service/blogsService';
 import SearchTable from '@/app/components/data-table/SearchTable';
@@ -9,6 +9,7 @@ import DataTable from '@/app/components/data-table';
 import {ROUTE_PATH} from '@/app/lib/constant';
 import {useRouter} from 'next/navigation';
 import {sfLike} from "spring-filter-query-builder";
+import {debounce} from '@/app/lib/utils';
 
 const initialState: DataTableState = {
     loading: false,
@@ -40,14 +41,21 @@ const Blogs = () => {
         deletePost(id as string)
     }
 
+    const debouncedSearch = useCallback(
+        debounce((value: string) => {
+            setParams(prev => {
+                const newFilter = sfLike('title', value).toString();
+                return {
+                    ...prev,
+                    filter: newFilter
+                }
+            })
+        }, 500),
+        []
+    );
+
     const onSearch: SearchProps['onSearch'] = (value) => {
-        setParams(prev => {
-            const newFilter = sfLike('title', value).toString();
-            return {
-                ...prev,
-                filter: newFilter
-            }
-        })
+        debouncedSearch(value);
     }
 
     const onPageChange = (pagination: any) => {

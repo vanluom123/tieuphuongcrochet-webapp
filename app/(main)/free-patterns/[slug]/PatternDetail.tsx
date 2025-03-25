@@ -1,5 +1,5 @@
 'use client';
-import { Divider } from "antd";
+import {Divider, Flex } from "antd";
 import { useTranslations } from "next-intl";
 import IntroductionCard from "@/app/components/introduction-card";
 import ViewDetailWrapper from "@/app/components/view-detail-wrapper";
@@ -23,7 +23,12 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
             alertType="warning">
 
             {/* Introducing the free pattern */}
-            <IntroductionCard isPreviewAvatar data={pattern} isShowThumbnail />
+            <div className="pattern-header">
+                <Flex vertical gap="small">
+                    <IntroductionCard isPreviewAvatar data={pattern} isShowThumbnail />
+                </Flex>
+            </div>
+
             <Divider />
 
             {/* ViewImagesList sẽ chỉ được render ở client side */}
