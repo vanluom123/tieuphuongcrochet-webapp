@@ -271,7 +271,8 @@
       "add": "Add collection",
       "name": "Collection name",
       "nameRequired": "Please enter the collection name",
-      "itemCount": "Item count"
+      "itemCount": "Item count",
+      "no_collections": "No collections"
     },
     "patterns": {
       "empty": "No patterns yet",
@@ -288,7 +289,8 @@
         "success": "SUCCESS",
         "pending": "PENDING",
         "none": "NONE"
-      }
+      },
+      "no_patterns": "No patterns"
     },
     "info": {
       "change_avatar": "Change avatar",
