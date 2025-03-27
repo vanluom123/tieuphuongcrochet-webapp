@@ -67,7 +67,7 @@ export async function fetchUserPatterns(userId: string, params: ListParams): Pro
 
 export async function deleteUserPattern(id: string) {
     const res = await apiJwtService({
-        endpoint: `${API_ROUTES.PATTERNS}/${id}`,
+        endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}`,
         method: 'DELETE'
     });
     return res.data;

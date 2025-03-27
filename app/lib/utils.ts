@@ -467,11 +467,10 @@ export const debounce = <T extends (...args: any[]) => any>(
   let timeout: ReturnType<typeof setTimeout> | null = null;
   
   return function(this: any, ...args: Parameters<T>) {
-    const context = this;
-    
+
     const later = () => {
       timeout = null;
-      if (!immediate) func.apply(context, args);
+      if (!immediate) func.apply(this, args);
     };
     
     const callNow = immediate && !timeout;
@@ -483,7 +482,7 @@ export const debounce = <T extends (...args: any[]) => any>(
     timeout = setTimeout(later, wait);
     
     if (callNow) {
-      func.apply(context, args);
+      func.apply(this, args);
     }
   };
 };
