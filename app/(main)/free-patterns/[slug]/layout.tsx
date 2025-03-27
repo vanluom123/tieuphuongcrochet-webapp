@@ -1,3 +1,5 @@
+'use client'
+
 import { BookmarkModalProvider } from '@/app/context/BookmarkModalContext';
 import { ReactNode } from 'react';
 
