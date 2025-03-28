@@ -1,6 +1,20 @@
 @import "../../variables.module.scss";
 
 .introduction-card {
+  .bookmark-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
   .card-title {
     font-size: 28px;
     font-weight: 600;
