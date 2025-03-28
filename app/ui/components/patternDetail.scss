@@ -1,0 +1,63 @@
+@import "../../variables.module.scss";
+
+.custom-bookmark-button {
+  position: fixed !important;
+  width: 40px !important;
+  height: 40px !important;
+  right: 24px !important;
+  bottom: 150px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  z-index: 99 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  background-color: #FF8282 !important;
+  border-color: #FF8282 !important;
+  
+  // Điều chỉnh vị trí khác nhau cho desktop và mobile
+  @media (max-width: 767px) {
+    right: 7px !important;
+    bottom: 80px !important;
+  }
+  
+  .bookmark-icon-wrapper {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    
+    img {
+      width: 20px !important;
+      height: 20px !important;
+      object-fit: contain !important;
+    }
+    
+    .bookmark-dot {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 10px;
+      height: 10px;
+      background-color: #00cc00;
+      border-radius: 50%;
+      border: 1px solid white;
+    }
+  }
+}
+
+// Thêm margin bottom cho page khi có floating button
+.pattern-header {
+  margin-bottom: 16px;
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .introduction-card {
+    .bookmark-button {
+      display: none;
+    }
+  }
+} 
