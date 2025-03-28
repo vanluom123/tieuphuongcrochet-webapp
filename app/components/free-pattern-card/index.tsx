@@ -3,10 +3,8 @@
 import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip } from 'antd';
 import {
     UserOutlined,
-    EditOutlined,
-    DeleteOutlined,
-    BookFilled,
-    BookOutlined
+    EditFilled,
+    DeleteFilled
 } from '@ant-design/icons';
 import React from 'react';
 import Link from 'next/link';
@@ -19,6 +17,9 @@ import { useBookmark } from '@/app/hooks/useBookmark';
 import '../../ui/components/freePatternCard.scss';
 import { useSession } from 'next-auth/react';
 import { removePatternFromCollection } from '@/app/lib/service/collectionService';
+import whiteBookmark from '@/public/white-bookmark.png';
+import primaryBookmark from '@/public/primary-bookmark.png';
+import Image from 'next/image';
 
 interface FreePatternCardProps {
     width?: string | number;
@@ -98,13 +99,14 @@ const FreePatternCard = (
                                         }>
                                             <Button
                                                 type="text"
-                                                icon={isBookmarked ? <BookFilled /> : <BookOutlined />}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleToggleBookmark(id?.toString() || '');
                                                 }}
-                                                className={isBookmarked ? 'active action-button' : 'action-button'}
-                                            />
+                                                className='action-button'
+                                            >
+                                                <Image width={20} height={20} src={isBookmarked ? primaryBookmark : whiteBookmark} alt='bookmark' />
+                                            </Button>
                                         </Tooltip>
                                     )}
                                     {isShowActions && (
@@ -112,7 +114,7 @@ const FreePatternCard = (
                                         <><Tooltip title={profileT('patterns.edit')}>
                                             <Button
                                                 type="text"
-                                                icon={<EditOutlined />}
+                                                icon={<EditFilled />}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     if (onEdit) onEdit();
@@ -121,7 +123,7 @@ const FreePatternCard = (
                                         </Tooltip><Tooltip title={profileT('patterns.delete')}>
                                                 <Button
                                                     type="text"
-                                                    icon={<DeleteOutlined />}
+                                                    icon={<DeleteFilled />}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         if (onDelete) onDelete();
