@@ -89,12 +89,9 @@ const BannerForm = ({
 			fileName
 		}
 
-		console.log('filename %s --- filecontent %s', fileName, fileContent)
-
 		let tempBanners = [...bannersList];
 		if (edittingBanner.isEditting) {
 			tempBanners.splice(edittingBanner.index, 1, banner);
-
 			setEdittingBanner(initialEdittingBanner);
 		} else {
 			tempBanners = [
@@ -106,7 +103,6 @@ const BannerForm = ({
 		setIsUpdatedBList(true);
 		SetBannersList(tempBanners);
 		form.resetFields();
-		onRefresh();
 	};
 
 	const onCancel = () => {
