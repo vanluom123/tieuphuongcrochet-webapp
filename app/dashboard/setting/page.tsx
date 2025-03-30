@@ -85,7 +85,7 @@ const Setting = () => {
         if (bannersList.length > 0) {
             return Promise.resolve();
         }
-        return Promise.reject(new Error('Must have at least 1 banner'));
+        return Promise.reject(new Error('Phải có ít nhất 1 banner'));
     };
 
     const getBannerType = (id?: string, bannerType?: IBannerType) => {
@@ -113,7 +113,7 @@ const Setting = () => {
                 items={[
                     {
                         key: 'bannerItem',
-                        label: 'Banner Form',
+                        label: 'Thêm/Sửa Banner',
                         children:
                             <BannerForm
                                 bannerTypes={bannerTypes}
@@ -134,7 +134,7 @@ const Setting = () => {
             >
 
                 <Item name='bannersList'
-                    label='Banners list'
+                    label='Danh sách banner'
                     rules={[
                         { validator: () => validateBanners() }
                     ]}
