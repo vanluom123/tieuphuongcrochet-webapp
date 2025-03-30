@@ -1,5 +1,5 @@
 'use client'
-import { Form, Button, Space, Divider, List, Collapse } from "antd";
+import { Form, Button, Space, Divider, List, Collapse, Typography } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { filter, find } from "lodash";
@@ -21,6 +21,7 @@ const Setting = () => {
 
     const [form] = Form.useForm();
     const { Item } = Form;
+    const { Title } = Typography;
     const router = useRouter();
 
     useEffect(() => {
@@ -105,7 +106,7 @@ const Setting = () => {
                 loading={loading}
             />
             <Divider style={{ margin: '30px 0' }} />
-            <h2 className="align-center">Banners</h2>
+            <Title level={2} className="align-center">Banners</Title>
             <Collapse
                 expandIconPosition='end'
                 {...getActiveKey()}
@@ -147,7 +148,9 @@ const Setting = () => {
                             <List.Item
                                 key={`banner-item__${index}`}
                                 extra={
-                                    <BannerItem banner={item} classNames="banner-item__preview" />
+                                    <div style={{ width: '320px', height: '180px', overflow: 'hidden' }}>
+                                        <BannerItem banner={item} classNames="banner-item__preview" />
+                                    </div>
                                 }
                                 actions={[
                                     <Button
@@ -156,6 +159,7 @@ const Setting = () => {
                                         key="list-vertical-edit"
                                         icon={<EditOutlined />}
                                         disabled={edittingBanner.isEditting}
+                                        title="Sửa"
                                     />,
                                     <Button
                                         shape="circle"
@@ -163,6 +167,7 @@ const Setting = () => {
                                         icon={<DeleteOutlined />}
                                         disabled={edittingBanner.isEditting}
                                         onClick={() => onDeleteBanner(index)}
+                                        title="Xóa"
                                     />,
                                 ]}
                             >
@@ -183,19 +188,16 @@ const Setting = () => {
                             disabled={edittingBanner.isEditting || !isUpdatedBList}
                             className="btn-form btn-border"
                         >
-                            Submit
+                            Lưu thay đổi
                         </Button>
-                        {/* <Button className="btn-form" htmlType="reset">reset</Button> */}
                         <Button
                             disabled={edittingBanner.isEditting || !isUpdatedBList}
                             className="btn-form btn-border"
-                            onClick={onCancel}>Cancel</Button>
+                            onClick={onCancel}>Hủy bỏ</Button>
                     </Space>
                 </div>
             </Form>
-
         </div>
-
     </>)
 }
 

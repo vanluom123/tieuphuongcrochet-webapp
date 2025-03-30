@@ -1,4 +1,4 @@
-import { Button, Col, ColorPicker, Form, Input, Row, Select, Space, Switch } from "antd";
+import { Button, Col, ColorPicker, Form, Input, Row, Select, Space, Switch, Typography } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 
 
@@ -45,6 +45,7 @@ const BannerForm = ({
 }: BannerItemProps) => {
 	const [form] = Form.useForm();
 	const { Item } = Form;
+	const { Text } = Typography;
 
 
 	useEffect(() => {
@@ -131,10 +132,15 @@ const BannerForm = ({
 				<Col xs={24} md={10}>
 					<Item
 						name='bannerImage'
-						label='Banner Image (16x9):'
+						label={
+							<>
+								Banner Image: <Text type="secondary">(Tỷ lệ 16:9 để hiển thị tốt nhất)</Text>
+							</>
+						}
 						rules={[
-							{ required: true, message: 'Please upload banner image' }
+							{ required: true, message: 'Vui lòng tải lên hình ảnh banner' }
 						]}
+						extra="Kích thước đề xuất: 1600x900px hoặc tỷ lệ 16:9"
 					>
 						<UploadFiles
 							files={edittingBanner.image}
@@ -148,12 +154,12 @@ const BannerForm = ({
 					</Item>
 				</Col>
 				<Col xs={24} md={7}>
-					<Item name='active' label='Active'>
+					<Item name='active' label='Kích hoạt'>
 						<Switch />
 					</Item>
 				</Col>
 				<Col xs={24} md={7}>
-					<Item name='textColor' label='Pick a color for title & content:' >
+					<Item name='textColor' label='Màu chữ tiêu đề & nội dung:' >
 						<ColorPicker showText />
 					</Item>
 				</Col>
@@ -162,9 +168,9 @@ const BannerForm = ({
 			<Row gutter={[30, 30]}>
 				<Col xs={24} md={12}>
 					<Item name='bannerTypeId'
-						label='Photo type:'
+						label='Loại banner:'
 						rules={[
-							{ required: true, message: 'Please select the banner type' }
+							{ required: true, message: 'Vui lòng chọn loại banner' }
 						]}
 					>
 						<Select
@@ -172,24 +178,24 @@ const BannerForm = ({
 								label: bt.name,
 								value: bt.key
 							}))}
-							placeholder="Select the photo type" />
+							placeholder="Chọn loại banner" />
 					</Item>
 				</Col>
 				<Col xs={24} md={12}>
-					<Item name='title' label='Title' >
-						<Input placeholder="Input the title:" />
+					<Item name='title' label='Tiêu đề' >
+						<Input placeholder="Nhập tiêu đề:" />
 					</Item>
 				</Col>
 			</Row>
 			<Row gutter={[30, 30]}>
 				<Col xs={24} md={12}>
-					<Item name='url' label='Link:' >
-						<Input placeholder="Input the link:" />
+					<Item name='url' label='Đường dẫn:' >
+						<Input placeholder="Nhập đường dẫn:" />
 					</Item>
 				</Col>
 				<Col xs={24} md={12}>
-					<Item name='content' label='Content:' >
-						<Input placeholder="Input the content:" />
+					<Item name='content' label='Nội dung:' >
+						<Input placeholder="Nhập nội dung:" />
 					</Item>
 				</Col>
 			</Row>
@@ -202,11 +208,11 @@ const BannerForm = ({
 						className="btn-border"
 						icon={<PlusOutlined />}
 					>
-						{edittingBanner.isEditting ? 'Update' : 'Add'}
+						{edittingBanner.isEditting ? 'Cập nhật' : 'Thêm mới'}
 					</Button>
 					<Button
 						className="btn-form btn-border"
-						onClick={onCancel}>Cancel</Button>
+						onClick={onCancel}>Hủy bỏ</Button>
 				</Space>
 			</div>
 		</Form >
