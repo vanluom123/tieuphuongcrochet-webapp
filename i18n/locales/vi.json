@@ -86,9 +86,9 @@
       "cancel": "Hủy"
     },
     "Keywords": {
-      "free_patterns": "chart miễn phí",
-      "sewing_patterns": "chart móc len",
-      "craft_patterns": "chart móc len"
+      "free_patterns": "Mẫu móc len miễn phí",
+      "sewing_patterns": "Mẫu may",
+      "craft_patterns": "Mẫu thủ công"
     }
   },
   "Product": {
@@ -243,12 +243,12 @@
     "back_home": "Trở về trang chủ"
   },
   "Error": {
-    "title": "500",
-    "description": "Rất tiếc, đã có lỗi xảy ra.",
+    "title": "Đã xảy ra lỗi",
+    "description": "Xin lỗi, đã có lỗi xảy ra khi xử lý yêu cầu của bạn",
     "back_home": "Trở về trang chủ",
     "try_again": "Thử lại"
   },
-  "User": {
+    "User": {
     "title": "Người dùng",
     "description": "Người dùng của website"
   },

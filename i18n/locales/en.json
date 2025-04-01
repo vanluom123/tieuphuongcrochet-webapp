@@ -86,9 +86,9 @@
       "cancel": "Cancel"
     },
     "Keywords": {
-      "free_patterns": "free patterns",
-      "sewing_patterns": "sewing patterns",
-      "craft_patterns": "craft patterns"
+      "free_patterns": "Free crochet patterns",
+      "sewing_patterns": "Sewing patterns",
+      "craft_patterns": "Craft patterns"
     }
   },
   "Product": {
@@ -176,7 +176,7 @@
     "dashboard": "Dashboard"
   },
   "Login": {
-    "title": "Login", 
+    "title": "Login",
     "description": "Login to your account",
     "email": "Email",
     "password": "Password",
@@ -240,10 +240,10 @@
     "back_home": "Back Home"
   },
   "Error": {
-    "title": "500",
-    "description": "Sorry, something went wrong.",
+    "title": "Something went wrong",
+    "description": "Sorry, there was an error processing your request",
     "back_home": "Back Home",
-    "try_again": "Try again"
+    "try_again": "Try Again"
   },
   "User": {
     "title": "Users",
@@ -373,7 +373,7 @@
       "turtle": "Turtle",
       "doremon": "Doremon"
     },
-    "accessories":{
+    "accessories": {
       "title": "Accessories",
       "hairpin": "Hairpin",
       "hairband": "Hairband",
@@ -394,7 +394,7 @@
       "dragon": "Dragon",
       "koala": "Koala"
     },
-    "clothes":{
+    "clothes": {
       "title": "Clothes",
       "shirt": "Shirt",
       "dress": "Dress",
@@ -449,10 +449,9 @@
       "daffodil": "Daffodil",
       "lavender": "Lavender",
       "asteraceae": "Asteraceae"
-
     },
     "noel": "Noel",
-    "doll":{
+    "doll": {
       "title": "Doll",
       "body": "Body",
       "disney": "Disney characters",
@@ -464,7 +463,7 @@
       "anime": "Anime characters",
       "head": "Head"
     },
-    "minidolls":{
+    "minidolls": {
       "title": "Mini Dolls",
       "disney": "Disney characters",
       "barbie": "Barbie",
@@ -474,7 +473,7 @@
     "hat": "Hat",
     "dumpling": {
       "title": "Dumplings",
-      "kitty":"Kitty",
+      "kitty": "Kitty",
       "12zodiac": "12 Zodiac signs"
     },
     "keychain": "Keychain",
@@ -528,5 +527,5 @@
     "create": "Create",
     "cancel": "Cancel",
     "refresh": "Refresh"
-  }
+    }
 }
