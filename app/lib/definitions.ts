@@ -290,3 +290,26 @@ export interface IResponseList<T> {
 	data: T[],
 	totalRecords: number
 }
+
+export interface CommentData {
+	id: string;
+	content: string;
+	createdDate: string;
+	userId: string;
+	username: string;
+	userAvatar: string;
+	parentId?: string | null;
+	replies: CommentData[];
+	replyCount: number;
+	mentionedUserId?: string;
+	mentionedUsername?: string;
+}
+
+export interface PaginatedResponse<T> {
+	content: T[];
+	pageNo: number;
+	pageSize: number;
+	totalElements: number;
+	totalPages: number;
+	last: boolean;
+}

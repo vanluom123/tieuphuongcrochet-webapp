@@ -264,6 +264,9 @@ export const API_ROUTES = {
   
   // Home routes
   HOMES: '/api/v1/homes',
+
+  // Comment
+  COMMENTS: '/api/v1/comments'
 };
 
 export const PARAMS_FOR_SITEMAP: ListParams = {
