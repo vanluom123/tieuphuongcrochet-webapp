@@ -1,4 +1,4 @@
-import { Alert, Button, Divider, Flex, Form, Input, Modal, Space } from "antd";
+import { Alert, Button, Divider, Flex, Form, Input, Modal, Space, Typography } from "antd";
 import React, { memo, useEffect, useState } from "react";
 import { includes, map } from "lodash";
 import { DataType, IBannerType, TBannerType } from "@/app/lib/definitions";
@@ -50,18 +50,19 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal, onRefresh }: TypeBannerModal
 		if (includes(BANNER_TYPES_DEFAULT, name)) {
 			return Promise.resolve();
 		}
-		return Promise.reject(new Error('Please enter a name belonging to 1 of the names above!'));
+		return Promise.reject(new Error('Vui lòng nhập tên thuộc một trong các tên bên trên!'));
 	}
 
 	return (
 		<Modal
-			title={openCUModal.id ? 'Update the banner type' : 'Create a new banner type'}
+			title={openCUModal.id ? 'Cập nhật loại banner' : 'Tạo loại banner mới'}
 			open={openCUModal.open}
 			onOk={onSubmit}
 			onCancel={oncancel}
-			okText='Submit'>
+			okText='Lưu'
+			cancelText='Hủy'>
 			<Space direction='vertical'>
-				<Alert showIcon message='Please enter a name belonging to 1 of the names below!' type='warning'
+				<Alert showIcon message='Vui lòng nhập tên thuộc một trong các tên bên dưới!' type='warning'
 					description={
 						<Space wrap>
 							{map(BANNER_TYPES_DEFAULT, (b, index) => {
@@ -80,14 +81,14 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal, onRefresh }: TypeBannerModal
 				>
 					<Form.Item
 						name='name'
-						label='Name:'
-						rules={[{ required: true, message: 'Please enter the name' },
+						label='Tên:'
+						rules={[{ required: true, message: 'Vui lòng nhập tên' },
 						{
 							validator: (_, value) => validateName(value)
 						}
 						]}
 					>
-						<Input placeholder="Enter the name:" />
+						<Input placeholder="Nhập tên:" />
 					</Form.Item>
 				</Form>
 			</Space>
@@ -103,6 +104,7 @@ interface BannerTypeProps {
 
 const BannerType = ({ bannerTypes, onRefresh, loading }: BannerTypeProps) => {
 	const [openCUModal, setOpenCUModal] = useState<ModalForm>({ open: false, id: '' });
+	const { Title } = Typography;
 
 	const onDeleteRecord = async (id: React.Key) => {
 		await deleteBannerType(id as string);
@@ -116,14 +118,14 @@ const BannerType = ({ bannerTypes, onRefresh, loading }: BannerTypeProps) => {
 	return (
 		<>
 			<div className="banner-type-wrapper">
-				<h2 className="align-center">Banner Types</h2>
+				<Title level={2} className="align-center">Loại Banner</Title>
 				<Flex justify="flex-end">
 					<Button
 						danger
 						className="banner-type__create btn-border"
 						onClick={() => setOpenCUModal({ open: true, id: '' })}
 					>
-						Create
+						Tạo mới
 					</Button>
 				</Flex>
 				<DataTable
