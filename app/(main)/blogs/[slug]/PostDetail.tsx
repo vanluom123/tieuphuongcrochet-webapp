@@ -7,12 +7,13 @@ import { getDateFormatted } from "@/app/lib/utils";
 import { useLocale } from "use-intl";
 import { LANGUAGES } from "@/app/lib/constant";
 import CustomNextImage from "@/app/components/next-image";
+import CommentSection from "@/app/components/comment/CommentSection";
 
 export default function PostDetail({ post }: { post: Post }) {
 
 	const locale = useLocale();
 
-	const { title, content, createdDate, src } = post;
+	const { id, title, content, createdDate, src } = post;
 
 	return (
 		<ViewDetailWrapper>
@@ -33,6 +34,10 @@ export default function PostDetail({ post }: { post: Post }) {
 				</Flex>
 				<Col>
 					<div className="editor-view text-box" dangerouslySetInnerHTML={{ __html: content }} />
+				</Col>
+				{/* Comment Section */}
+				<Col xs={24} style={{ marginTop: '20px' }}>
+					<CommentSection blogPostId={id?.toString() || ''} />
 				</Col>
 			</Row>
 		</ViewDetailWrapper>
