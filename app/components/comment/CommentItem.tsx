@@ -30,13 +30,16 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const [loadedReplies, setLoadedReplies] = useState(false);
     const [loadingReplies, setLoadingReplies] = useState(false);
 
+    // Đảm bảo comment.id luôn có giá trị
+    const commentId = comment.id || `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
     const handleReplyClick = async () => {
         setIsReplying(!isReplying);
 
         if (!loadedReplies && comment.replyCount > 0) {
             try {
                 setLoadingReplies(true);
-                const fetchedReplies = await fetchCommentReplies(comment.id);
+                const fetchedReplies = await fetchCommentReplies(commentId);
                 setReplies(fetchedReplies);
                 setLoadedReplies(true);
                 setLoadingReplies(false);
@@ -55,7 +58,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         if (!loadedReplies) {
             try {
                 setLoadingReplies(true);
-                const fetchedReplies = await fetchCommentReplies(comment.id);
+                const fetchedReplies = await fetchCommentReplies(commentId);
                 setReplies(fetchedReplies);
                 setLoadedReplies(true);
                 setLoadingReplies(false);
@@ -68,7 +71,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     };
 
     const handleDelete = async () => {
-        const result = await deleteComment(comment.id);
+        const result = await deleteComment(commentId);
         if (result.success) {
             onCommentUpdate();
         }
@@ -85,18 +88,37 @@ const CommentItem: React.FC<CommentItemProps> = ({
     );
 
     const timeAgo = (dateString: string) => {
+        if (!dateString) return '';
+        
         try {
-            const date = new Date(dateString.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
-            return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
+            // Kiểm tra định dạng "dd/MM/yyyy HH:mm:ss"
+            if (/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}/.test(dateString)) {
+                const date = new Date(dateString.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
+                return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
+            }
+            
+            // Nếu là định dạng ISO hoặc định dạng khác
+            const date = new Date(dateString);
+            if (!isNaN(date.getTime())) {
+                return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
+            }
+            
+            return dateString;
         } catch (e) {
+            console.error('Error parsing date:', e, dateString);
             return dateString;
         }
+    };
+
+    // Hàm tạo key duy nhất cho mỗi reply
+    const getReplyKey = (reply: CommentData, index: number) => {
+        return reply.id ? reply.id.toString() : `reply-${commentId}-${index}-${Date.now()}`;
     };
 
     return (
         <div className="comment-item" style={{marginBottom: 16, marginLeft: level > 0 ? 40 : 0}}>
             <div className="comment-content" style={{display: 'flex'}}>
-                <Avatar src={comment.userAvatar} alt={comment.username}/>
+                <Avatar src={comment.userAvatar} alt={comment.username || 'Ẩn danh'}/>
                 <div style={{marginLeft: 12, flex: 1}}>
                     <div className="comment-bubble" style={{
                         backgroundColor: '#f0f2f5',
@@ -105,14 +127,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         display: 'inline-block',
                         maxWidth: '100%'
                     }}>
-                        <Typography.Text strong>{comment.username}</Typography.Text>
+                        <Typography.Text strong>{comment.username || 'Ẩn danh'}</Typography.Text>
                         {comment.mentionedUsername && (
                             <Typography.Text type="secondary" style={{marginLeft: 4}}>
                                 @{comment.mentionedUsername}
                             </Typography.Text>
                         )}
                         <Typography.Paragraph style={{marginBottom: 0, whiteSpace: 'pre-wrap'}}>
-                            {comment.content}
+                            {comment.content || ''}
                         </Typography.Paragraph>
                     </div>
 
@@ -122,7 +144,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                 Trả lời
                             </Button>
                             <Typography.Text type="secondary" style={{fontSize: 12}}>
-                                {timeAgo(comment.createdDate)}
+                                {timeAgo(comment.createdDate || '')}
                             </Typography.Text>
                             {session?.user?.id === comment.userId && (
                                 <Dropdown overlay={dropdownMenu} trigger={['click']}>
@@ -136,7 +158,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         <div style={{marginTop: 8}}>
                             <CommentForm
                                 blogPostId={blogPostId}
-                                parentId={comment.id}
+                                parentId={commentId}
                                 mentionedUserId={comment.userId}
                                 mentionedUsername={comment.username}
                                 onSuccess={() => {
@@ -162,9 +184,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
                     {showReplies && replies.length > 0 && (
                         <div className="comment-replies" style={{marginTop: 8}}>
-                            {replies.map((reply) => (
+                            {replies.map((reply, index) => (
                                 <CommentItem
-                                    key={reply.id}
+                                    key={getReplyKey(reply, index)}
                                     comment={reply}
                                     blogPostId={blogPostId}
                                     onCommentUpdate={onCommentUpdate}
