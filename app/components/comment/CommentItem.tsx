@@ -5,6 +5,7 @@ import {Avatar, Button, Dropdown, Menu, Space, Typography} from 'antd';
 import {CommentData} from '../../lib/definitions';
 import {DeleteOutlined, EllipsisOutlined} from '@ant-design/icons';
 import {formatDistance} from 'date-fns';
+import {vi} from 'date-fns/locale';
 import {deleteComment, fetchCommentReplies} from '../../lib/service/commentService';
 import CommentForm from './CommentForm';
 import {useSession} from 'next-auth/react';
@@ -27,14 +28,22 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const [isReplying, setIsReplying] = useState(false);
     const [replies, setReplies] = useState<CommentData[]>(comment.replies || []);
     const [loadedReplies, setLoadedReplies] = useState(false);
+    const [loadingReplies, setLoadingReplies] = useState(false);
 
     const handleReplyClick = async () => {
         setIsReplying(!isReplying);
 
         if (!loadedReplies && comment.replyCount > 0) {
-            const fetchedReplies = await fetchCommentReplies(comment.id);
-            setReplies(fetchedReplies);
-            setLoadedReplies(true);
+            try {
+                setLoadingReplies(true);
+                const fetchedReplies = await fetchCommentReplies(comment.id);
+                setReplies(fetchedReplies);
+                setLoadedReplies(true);
+                setLoadingReplies(false);
+            } catch (error) {
+                console.error('Failed to load replies:', error);
+                setLoadingReplies(false);
+            }
         }
 
         if (comment.replyCount > 0) {
@@ -44,9 +53,16 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
     const handleLoadReplies = async () => {
         if (!loadedReplies) {
-            const fetchedReplies = await fetchCommentReplies(comment.id);
-            setReplies(fetchedReplies);
-            setLoadedReplies(true);
+            try {
+                setLoadingReplies(true);
+                const fetchedReplies = await fetchCommentReplies(comment.id);
+                setReplies(fetchedReplies);
+                setLoadedReplies(true);
+                setLoadingReplies(false);
+            } catch (error) {
+                console.error('Failed to load replies:', error);
+                setLoadingReplies(false);
+            }
         }
         setShowReplies(!showReplies);
     };
@@ -62,7 +78,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <Menu>
             {session?.user?.id === comment.userId && (
                 <Menu.Item key="delete" onClick={handleDelete} icon={<DeleteOutlined/>}>
-                    Delete
+                    Xóa
                 </Menu.Item>
             )}
         </Menu>
@@ -71,7 +87,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const timeAgo = (dateString: string) => {
         try {
             const date = new Date(dateString.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
-            return formatDistance(date, new Date(), {addSuffix: true});
+            return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
         } catch (e) {
             return dateString;
         }
@@ -103,7 +119,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     <div className="comment-actions" style={{marginTop: 4}}>
                         <Space size="middle">
                             <Button type="link" size="small" onClick={handleReplyClick}>
-                                Reply
+                                Trả lời
                             </Button>
                             <Typography.Text type="secondary" style={{fontSize: 12}}>
                                 {timeAgo(comment.createdDate)}
@@ -138,8 +154,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
                             type="link"
                             onClick={handleLoadReplies}
                             style={{paddingLeft: 0}}
+                            loading={loadingReplies}
                         >
-                            View {comment.replyCount} {comment.replyCount === 1 ? 'reply' : 'replies'}
+                            Xem {comment.replyCount} {comment.replyCount === 1 ? 'câu trả lời' : 'câu trả lời'}
                         </Button>
                     )}
 

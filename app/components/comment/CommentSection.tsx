@@ -23,20 +23,25 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
     const loadComments = useCallback(async (pageNo: number) => {
         setLoading(true);
         try {
-            const data = await fetchRootComments(blogPostId, pageNo, pageSize);
-
-            if (pageNo === 0) {
-                setComments(data.content);
-            } else {
-                setComments(prev => [...prev, ...data.content]);
-            }
-
-            setTotalPages(data.totalPages);
-            setHasMore(!data.last);
-
-            // Get total count
+            // Load comment count first to ensure we have the most accurate count
             const count = await fetchRootCommentsCount(blogPostId);
             setCommentCount(count);
+            
+            if (count > 0) {
+                const data = await fetchRootComments(blogPostId, pageNo, pageSize);
+                console.log('Fetched comments:', data);
+                
+                if (data && data.content) {
+                    if (pageNo === 0) {
+                        setComments(data.content);
+                    } else {
+                        setComments(prev => [...prev, ...data.content]);
+                    }
+                    
+                    setTotalPages(data.totalPages);
+                    setHasMore(!data.last);
+                }
+            }
         } catch (error) {
             console.error('Failed to load comments:', error);
         } finally {
@@ -49,6 +54,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
     }, [loadComments]);
 
     const handleCommentUpdate = useCallback(() => {
+        // Reset page to 0 when adding/updating comments
+        setPage(0);
         loadComments(0);
     }, [loadComments]);
 
@@ -64,7 +71,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
         <div className="comment-section">
             <Divider orientation="left">
                 <Typography.Title level={4} style={{margin: 0}}>
-                    Comments ({commentCount})
+                    Bình luận ({commentCount})
                 </Typography.Title>
             </Divider>
 
@@ -75,7 +82,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
                 />
             </div>
 
-            {loading && page === 0 ? (
+            {loading && comments.length === 0 ? (
                 <div style={{textAlign: 'center', padding: 24}}>
                     <Spin/>
                 </div>
@@ -94,8 +101,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
                         </div>
                     ) : (
                         <Typography.Text type="secondary"
-                                         style={{display: 'block', textAlign: 'center', padding: '16px 0'}}>
-                            Be the first to comment!
+                                       style={{display: 'block', textAlign: 'center', padding: '16px 0'}}>
+                            {commentCount > 0 ? 'Không thể tải bình luận. Vui lòng thử lại sau.' : 'Hãy là người đầu tiên bình luận!'}
                         </Typography.Text>
                     )}
 
@@ -105,7 +112,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
                                 onClick={loadMoreComments}
                                 loading={loading && page > 0}
                             >
-                                Load more comments
+                                Xem thêm bình luận
                             </Button>
                         </div>
                     )}

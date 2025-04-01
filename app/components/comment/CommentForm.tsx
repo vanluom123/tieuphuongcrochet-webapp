@@ -1,98 +1,105 @@
 'use client'
 
 import React, {useState} from 'react';
-import {Avatar, Button, Input} from 'antd';
+import {Button, Form, Input, Row, Col, Space, Spin, message} from 'antd';
 import {createUpdateComment} from '../../lib/service/commentService';
 import {useSession} from 'next-auth/react';
-import {SendOutlined} from '@ant-design/icons';
+
+const {TextArea} = Input;
 
 interface CommentFormProps {
     blogPostId: string;
+    onSuccess: () => void;
     parentId?: string;
-    commentId?: string;
-    initialValue?: string;
     mentionedUserId?: string;
     mentionedUsername?: string;
-    onSuccess: () => void;
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({
                                                      blogPostId,
+                                                     onSuccess,
                                                      parentId,
-                                                     commentId,
-                                                     initialValue = '',
                                                      mentionedUserId,
-                                                     mentionedUsername,
-                                                     onSuccess
+                                                     mentionedUsername
                                                  }) => {
-    const {data: session} = useSession();
-    const [content, setContent] = useState(initialValue);
+    const {data: session, status} = useSession();
+    const [form] = Form.useForm();
     const [submitting, setSubmitting] = useState(false);
 
-    const handleSubmit = async () => {
-        if (!content.trim()) return;
+    const handleSubmit = async (values: { content: string }) => {
+        if (!session || status !== 'authenticated') {
+            message.error('Vui lòng đăng nhập để bình luận');
+            return;
+        }
 
         setSubmitting(true);
+        try {
+            const result = await createUpdateComment({
+                blogPostId,
+                content: values.content,
+                parentId,
+                mentionedUserId
+            });
 
-        const data = {
-            ...(commentId && {id: commentId}),
-            blogPostId,
-            content: content.trim(),
-            ...(parentId && {parentId}),
-            ...(mentionedUserId && {mentionedUserId})
-        };
-
-        const result = await createUpdateComment(data);
-
-        setSubmitting(false);
-
-        if (result.success) {
-            setContent('');
-            onSuccess();
+            if (result.success) {
+                form.resetFields();
+                onSuccess();
+                message.success('Bình luận đã được đăng thành công');
+            }
+        } catch (error) {
+            console.error('Error submitting comment:', error);
+            message.error('Không thể đăng bình luận. Vui lòng thử lại sau.');
+        } finally {
+            setSubmitting(false);
         }
     };
 
-    const placeholder = mentionedUsername
-        ? `Reply to @${mentionedUsername}...`
-        : 'Write a comment...';
+    const placeholder = mentionedUsername 
+        ? `Trả lời @${mentionedUsername}...` 
+        : 'Viết bình luận của bạn...';
+
+    const submitButtonText = parentId ? 'Trả lời' : 'Bình luận';
+
+    if (status === 'loading') {
+        return <Spin size="small" />;
+    }
 
     return (
-        <div style={{display: 'flex', alignItems: 'flex-start', gap: 12}}>
-            <Avatar
-                src={session?.user?.imageUrl}
-                alt={session?.user?.name || 'User'}
-                size="default"
-            />
-            <div style={{flexGrow: 1, display: 'flex'}}>
-                <Input.TextArea
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+        <Form
+            form={form}
+            onFinish={handleSubmit}
+            layout="vertical"
+            requiredMark={false}
+        >
+            <Form.Item
+                name="content"
+                rules={[{required: true, message: 'Vui lòng nhập nội dung bình luận'}]}
+                style={{marginBottom: 12}}
+            >
+                <TextArea
                     placeholder={placeholder}
-                    autoSize={{minRows: 1, maxRows: 6}}
-                    disabled={submitting || !session}
-                    style={{
-                        borderRadius: '18px',
-                        padding: '8px 12px',
-                        resize: 'none',
-                        backgroundColor: '#f0f2f5'
-                    }}
-                    onPressEnter={(e) => {
-                        if (!e.shiftKey) {
-                            e.preventDefault();
-                            handleSubmit();
-                        }
-                    }}
+                    autoSize={{minRows: 2, maxRows: 6}}
+                    disabled={status !== 'authenticated'}
                 />
-                <Button
-                    type="text"
-                    icon={<SendOutlined/>}
-                    onClick={handleSubmit}
-                    loading={submitting}
-                    disabled={!content.trim() || !session}
-                    style={{marginLeft: 8}}
-                />
-            </div>
-        </div>
+            </Form.Item>
+
+            <Row justify="end">
+                <Col>
+                    <Space>
+                        {status !== 'authenticated' && (
+                            <Button type="primary" href="/login">
+                                Đăng nhập để bình luận
+                            </Button>
+                        )}
+                        {status === 'authenticated' && (
+                            <Button type="primary" htmlType="submit" loading={submitting}>
+                                {submitButtonText}
+                            </Button>
+                        )}
+                    </Space>
+                </Col>
+            </Row>
+        </Form>
     );
 };
 
