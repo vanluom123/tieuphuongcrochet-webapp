@@ -1,16 +1,17 @@
 import { IMAGE_FALLBACK } from "@/app/lib/constant";
 import Image from "next/image";
 
-interface CustomNextImageProps {
+export interface CustomNextImageProps {
     src?: string;
     alt?: string;
     className?: string;
     onClick?: () => void;
+    aspectRatio?: string;
 }
 
-const CustomNextImage = ({ src, alt, className, onClick }: CustomNextImageProps) => {
+const CustomNextImage = ({ src, alt, className, onClick, aspectRatio = '100%' }: CustomNextImageProps) => {
     return (
-        <div style={{ position: 'relative', width: '100%', paddingTop: '100%' }}>
+        <div style={{ position: 'relative', width: '100%', paddingTop: aspectRatio }}>
             <Image
                 fill
                 sizes="100%"
