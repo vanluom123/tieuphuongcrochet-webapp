@@ -9,6 +9,7 @@ import {useRouter} from 'next/navigation';
 import {ROUTE_PATH} from '@/app/lib/constant';
 import {sfLike, sfOr} from "spring-filter-query-builder";
 import {debounce} from '@/app/lib/utils';
+import Link from "next/link";
 
 const initialState: DataTableState = {
     loading: false,
@@ -70,8 +71,15 @@ const Users = () => {
 
     const columns = [
         {
+            title: 'Id',
+            dataIndex: 'id',
+            render: (value: string) => (
+                <Link href={`${ROUTE_PATH.PROFILE}/${value}`}>{value}</Link>
+            )
+        },
+        {
             title: 'Email',
-            dataIndex: 'email',
+            dataIndex: 'email'
         },
         {
             title: 'Role',

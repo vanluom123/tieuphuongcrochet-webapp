@@ -71,7 +71,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
         // Handle upload, delete images
         sendData.images = await uploadImageToServer(sendData.images, state.product.images);
         
-        const res: ResponseData = await createUpdateProduct(sendData);
+        const res: ResponseData<any> = await createUpdateProduct(sendData);
         setState(initialState);
         if (res.success) {
             form.resetFields();

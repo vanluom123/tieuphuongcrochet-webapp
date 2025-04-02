@@ -38,7 +38,11 @@ export async function generateMetadata() {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
+      images: [
+        {
+          url: `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg`,
+        }
+      ],
     },
     robots: {
       index: true,
@@ -47,8 +51,7 @@ export async function generateMetadata() {
     icons: {
       icon: "/favicon.ico",
       apple: "/opengraph-image.jpg",
-    },
-    charSet: "utf-8",
+    }
   };
 }
 

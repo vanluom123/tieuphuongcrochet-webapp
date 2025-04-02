@@ -278,9 +278,9 @@ export interface Comment {
 	createdDate: string;
 }
 
-export interface ResponseData {
+export interface ResponseData<T> {
 	code: number,
-	data: any,
+	data: T,
 	success: boolean,
 	message: string,
 	error: string
@@ -289,4 +289,27 @@ export interface ResponseData {
 export interface IResponseList<T> {
 	data: T[],
 	totalRecords: number
+}
+
+export interface CommentData {
+	id: string;
+	content: string;
+	createdDate: string;
+	userId: string;
+	username: string;
+	userAvatar?: string | null;
+	parentId?: string | null;
+	replies: CommentData[];
+	replyCount: number;
+	mentionedUserId?: string;
+	mentionedUsername?: string;
+}
+
+export interface PageResponse<T> {
+	contents: T[];
+	pageNo: number;
+	pageSize: number;
+	totalElements: number;
+	totalPages: number;
+	last: boolean;
 }
