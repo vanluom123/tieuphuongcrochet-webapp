@@ -9,6 +9,8 @@ import {vi} from 'date-fns/locale';
 import {deleteComment, fetchCommentReplies} from '../../lib/service/commentService';
 import CommentForm from './CommentForm';
 import {useSession} from 'next-auth/react';
+import {useRouter} from 'next/navigation';
+import {ROUTE_PATH} from '../../lib/constant';
 
 interface CommentItemProps {
     comment: CommentData;
@@ -24,6 +26,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                                      level = 0
                                                  }) => {
     const {data: session} = useSession();
+    const router = useRouter();
     const [showReplies, setShowReplies] = useState(false);
     const [isReplying, setIsReplying] = useState(false);
     const [replies, setReplies] = useState<CommentData[]>(comment.replies || []);
@@ -35,6 +38,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
     // Đảm bảo comment.id luôn có giá trị
     const commentId = comment.id || `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    // Navigate to user profile
+    const navigateToUserProfile = (userId: string) => {
+        if (userId) {
+            router.push(`${ROUTE_PATH.PROFILE}/${userId}`);
+        }
+    };
 
     const handleReplyClick = async () => {
         setIsReplying(!isReplying);
@@ -123,9 +133,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
             <div className="comment-content" style={{display: 'flex'}}>
                 <Avatar
                     src={comment.userAvatar}
-                    style={{backgroundColor: '#FF8282', verticalAlign: 'middle'}}
-                    icon={!comment.userAvatar && <UserOutlined/>} // nếu ko có avatarUrl thì hiện icon mặc định
+                    style={{backgroundColor: '#FF8282', verticalAlign: 'middle', cursor: 'pointer'}}
+                    icon={!comment.userAvatar && <UserOutlined/>}
                     alt={comment.username || 'Ẩn danh'}
+                    onClick={() => navigateToUserProfile(comment.userId)}
                 >
                     {fallbackCharacter}
                 </Avatar>
@@ -138,9 +149,19 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         display: 'inline-block',
                         maxWidth: '100%'
                     }}>
-                        <Typography.Text strong>{comment.username || 'Ẩn danh'}</Typography.Text>
-                        {comment.mentionedUsername && (
-                            <Typography.Text type="secondary" style={{marginLeft: 4}}>
+                        <Typography.Text 
+                            strong 
+                            style={{cursor: 'pointer'}}
+                            onClick={() => navigateToUserProfile(comment.userId)}
+                        >
+                            {comment.username || 'Ẩn danh'}
+                        </Typography.Text>
+                        {comment.mentionedUsername && comment.mentionedUserId && (
+                            <Typography.Text 
+                                type="secondary" 
+                                style={{marginLeft: 4, cursor: 'pointer'}}
+                                onClick={() => navigateToUserProfile(comment.mentionedUserId || '')}
+                            >
                                 @{comment.mentionedUsername}
                             </Typography.Text>
                         )}
