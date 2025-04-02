@@ -10,7 +10,7 @@ import {createUpdateComment, deleteComment, fetchCommentReplies} from '../../lib
 import CommentForm from './CommentForm';
 import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/navigation';
-import {ROUTE_PATH} from '../../lib/constant';
+import {ROUTE_PATH, USER_ROLES} from '../../lib/constant';
 
 const {TextArea} = Input;
 
@@ -129,7 +129,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
     const dropdownMenu = (
         <Menu>
-            {session?.user?.id === comment.userId && (
+            {session?.user?.id === comment.userId ? (
                 <>
                     <Menu.Item key="edit" onClick={handleEdit} icon={<EditOutlined/>}>
                         Sửa
@@ -138,6 +138,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         Xóa
                     </Menu.Item>
                 </>
+            ) : session?.user?.role === USER_ROLES.ADMIN && (
+                <Menu.Item key="delete" onClick={handleDelete} icon={<DeleteOutlined/>}>
+                    Xóa
+                </Menu.Item>
             )}
         </Menu>
     );
@@ -249,7 +253,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                     <Typography.Text type="secondary" style={{fontSize: 12}}>
                                         {timeAgo(comment.createdDate || '')}
                                     </Typography.Text>
-                                    {session?.user?.id === comment.userId && (
+                                    {(session?.user?.id === comment.userId || session?.user?.role === USER_ROLES.ADMIN) && (
                                         <Dropdown overlay={dropdownMenu} trigger={['click']}>
                                             <Button type="text" icon={<EllipsisOutlined/>} size="small"/>
                                         </Dropdown>
