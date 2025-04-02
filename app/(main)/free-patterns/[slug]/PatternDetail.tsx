@@ -9,6 +9,7 @@ import { useBookmark } from "@/app/hooks/useBookmark";
 import Image from "next/image";
 import whiteBookmark from '@/public/white-bookmark.png';
 import '@/app/ui/components/patternDetail.scss';
+import CommentSection from "@/app/components/comment/CommentSection";
 
 // Lazy load ViewImagesList component
 const ViewImagesList = dynamic(
@@ -71,6 +72,8 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
                     }
                 />
             </Tooltip>
+
+            <CommentSection id={pattern?.id?.toString() || ''} type={"free-pattern"} />
         </ViewDetailWrapper>
     )
 }

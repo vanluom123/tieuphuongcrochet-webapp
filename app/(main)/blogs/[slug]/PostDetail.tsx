@@ -37,7 +37,7 @@ export default function PostDetail({ post }: { post: Post }) {
 				</Col>
 				{/* Comment Section */}
 				<Col xs={24} style={{ marginTop: '20px' }}>
-					<CommentSection blogPostId={id?.toString() || ''} />
+					<CommentSection id={id?.toString() || ''} type={"blog"} />
 				</Col>
 			</Row>
 		</ViewDetailWrapper>

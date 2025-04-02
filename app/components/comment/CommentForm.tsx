@@ -1,14 +1,16 @@
 'use client'
 
 import React, {useState} from 'react';
-import {Button, Form, Input, Row, Col, Space, Spin, message} from 'antd';
+import {Button, Col, Form, Input, message, Row, Space, Spin} from 'antd';
 import {createUpdateComment} from '../../lib/service/commentService';
 import {useSession} from 'next-auth/react';
 
 const {TextArea} = Input;
 
 interface CommentFormProps {
-    blogPostId: string;
+    blogPostId?: string;
+    productId?: string;
+    freePatternId?: string;
     onSuccess: () => void;
     parentId?: string;
     mentionedUserId?: string;
@@ -17,6 +19,8 @@ interface CommentFormProps {
 
 const CommentForm: React.FC<CommentFormProps> = ({
                                                      blogPostId,
+                                                     productId,
+                                                     freePatternId,
                                                      onSuccess,
                                                      parentId,
                                                      mentionedUserId,
@@ -36,6 +40,8 @@ const CommentForm: React.FC<CommentFormProps> = ({
         try {
             const result = await createUpdateComment({
                 blogPostId,
+                productId,
+                freePatternId,
                 content: values.content,
                 parentId,
                 mentionedUserId
@@ -54,14 +60,14 @@ const CommentForm: React.FC<CommentFormProps> = ({
         }
     };
 
-    const placeholder = mentionedUsername 
-        ? `Trả lời @${mentionedUsername}...` 
+    const placeholder = mentionedUsername
+        ? `Trả lời @${mentionedUsername}...`
         : 'Viết bình luận của bạn...';
 
     const submitButtonText = parentId ? 'Trả lời' : 'Bình luận';
 
     if (status === 'loading') {
-        return <Spin size="small" />;
+        return <Spin size="small"/>;
     }
 
     return (

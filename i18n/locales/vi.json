@@ -158,7 +158,8 @@
   },
   "Form": {
     "name": "Họ và tên",
-    "email": "Email"
+    "email": "Email",
+    "error_msg_incorrect_email": "Incorrect email"
   },
   "IntroductionCard": {
     "author": "Tác giả",

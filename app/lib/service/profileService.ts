@@ -1,11 +1,14 @@
-import { Collection, DataType, FileUpload, IResponseList, ListParams, Pattern, ResponseData } from "../definitions";
+import {Collection, DataType, FileUpload, IResponseList, ListParams, Pattern, ResponseData} from "../definitions";
 import apiJwtService from "./apiJwtService";
-import { API_ROUTES } from "../constant";
-import { map } from "lodash";
-import { getAvatar } from "../utils";
+import {API_ROUTES} from "../constant";
+import {map} from "lodash";
+import {getAvatar} from "../utils";
 
-export async function fetchFreePatternsByCollection(userId: string, collectionId: string, params: ListParams)
-    : Promise<{ data: DataType[], totalRecords: number }> {
+export async function fetchFreePatternsByCollection(
+    userId: string,
+    collectionId: string,
+    params: ListParams
+): Promise<{ data: DataType[], totalRecords: number }> {
     const res = await apiJwtService({
         endpoint: `${API_ROUTES.USERS}/${userId}/collections/${collectionId}/free-patterns`,
         method: 'GET',
@@ -18,7 +21,7 @@ export async function fetchFreePatternsByCollection(userId: string, collectionId
     });
 
     if (!res.data || !res.data.contents) {
-        return { data: [], totalRecords: 0 };
+        return {data: [], totalRecords: 0};
     }
 
     const newData = map(res.data.contents, (item) => ({
@@ -46,7 +49,10 @@ export async function fetchUserCollections(userId: string): Promise<Collection[]
     return response.data;
 }
 
-export async function fetchUserPatterns(userId: string, params: ListParams): Promise<IResponseList<Pattern>> {
+export async function fetchUserPatterns(
+    userId: string,
+    params: ListParams
+): Promise<IResponseList<Pattern>> {
     const res = await apiJwtService({
         endpoint: `${API_ROUTES.USERS}/${userId}/free-pattern`,
         method: 'GET',
@@ -73,9 +79,11 @@ export async function deleteUserPattern(id: string) {
     return res.data;
 }
 
-export async function fetchCollectionById(userId: string, collectionId: string)
-    : Promise<ResponseData> {
-    const res: ResponseData = await apiJwtService({
+export async function fetchCollectionById(
+    userId: string,
+    collectionId: string
+): Promise<ResponseData<any>> {
+    const res: ResponseData<any> = await apiJwtService({
         endpoint: `${API_ROUTES.USERS}/${userId}/collections/${collectionId}`,
         method: 'GET'
     });
@@ -86,7 +94,7 @@ export async function createCollection(name: string) {
     const res = await apiJwtService({
         endpoint: API_ROUTES.COLLECTIONS,
         method: 'POST',
-        queryParams: { name }
+        queryParams: {name}
     });
     return res;
 }
@@ -95,7 +103,7 @@ export async function updateCollection(id: string, name: string) {
     const res = await apiJwtService({
         endpoint: `${API_ROUTES.COLLECTIONS}/${id}`,
         method: 'PUT',
-        queryParams: { name }
+        queryParams: {name}
     })
     return res;
 }

@@ -6,6 +6,7 @@ import IntroductionCard from "@/app/components/introduction-card";
 import ViewDetailWrapper from "@/app/components/view-detail-wrapper";
 import { Product } from "@/app/lib/definitions";
 import dynamic from "next/dynamic";
+import CommentSection from "@/app/components/comment/CommentSection";
 
 // Lazy load ViewImagesList component
 const ViewImagesList = dynamic(
@@ -32,6 +33,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 contentTitle={t("detail")}
                 content={product?.content}
             />
+            <CommentSection id={product?.id?.toString() || ''} type={"product"} />
         </ViewDetailWrapper>
     )
 }

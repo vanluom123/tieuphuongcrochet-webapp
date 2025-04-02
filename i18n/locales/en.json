@@ -94,6 +94,10 @@
   "Product": {
     "title": "Products",
     "description": "These are the products I sell. In addition, I also accept orders!!",
+    "detail": "Product images",
+    "note": "Note",
+    "createProduct": "Create product",
+    "updateProduct": "Update product",
     "Fields": {
       "name": "Product name",
       "description": "Description",
