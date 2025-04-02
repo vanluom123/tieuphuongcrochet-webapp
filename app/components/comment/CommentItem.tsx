@@ -16,7 +16,9 @@ const {TextArea} = Input;
 
 interface CommentItemProps {
     comment: CommentData;
-    blogPostId: string;
+    blogPostId?: string;
+    productId?: string;
+    freePatternId?: string;
     onCommentUpdate: () => void;
     level?: number;
 }
@@ -24,6 +26,8 @@ interface CommentItemProps {
 const CommentItem: React.FC<CommentItemProps> = ({
                                                      comment,
                                                      blogPostId,
+                                                     productId,
+                                                     freePatternId,
                                                      onCommentUpdate,
                                                      level = 0
                                                  }) => {
@@ -106,12 +110,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
     const handleSaveEdit = async () => {
         if (!editContent.trim()) return;
-        
+
         setSubmitting(true);
         try {
             const result = await createUpdateComment({
                 id: commentId,
                 blogPostId,
+                productId,
+                freePatternId,
                 content: editContent,
                 parentId: comment.parentId || undefined
             });
@@ -203,9 +209,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                         <Button size="small" onClick={handleCancelEdit}>
                                             Hủy
                                         </Button>
-                                        <Button 
-                                            type="primary" 
-                                            size="small" 
+                                        <Button
+                                            type="primary"
+                                            size="small"
                                             onClick={handleSaveEdit}
                                             loading={submitting}
                                         >
@@ -224,16 +230,16 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                 display: 'inline-block',
                                 maxWidth: '100%'
                             }}>
-                                <Typography.Text 
-                                    strong 
+                                <Typography.Text
+                                    strong
                                     style={{cursor: 'pointer'}}
                                     onClick={() => navigateToUserProfile(comment.userId)}
                                 >
                                     {comment.username || 'Ẩn danh'}
                                 </Typography.Text>
                                 {comment.mentionedUsername && comment.mentionedUserId && (
-                                    <Typography.Text 
-                                        type="secondary" 
+                                    <Typography.Text
+                                        type="secondary"
                                         style={{marginLeft: 4, cursor: 'pointer'}}
                                         onClick={() => navigateToUserProfile(comment.mentionedUserId || '')}
                                     >
@@ -267,6 +273,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         <div style={{marginTop: 8}}>
                             <CommentForm
                                 blogPostId={blogPostId}
+                                productId={productId}
+                                freePatternId={freePatternId}
                                 parentId={commentId}
                                 mentionedUserId={comment.userId}
                                 mentionedUsername={comment.username}
@@ -298,6 +306,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                     key={getReplyKey(reply, index)}
                                     comment={reply}
                                     blogPostId={blogPostId}
+                                    productId={productId}
+                                    freePatternId={freePatternId}
                                     onCommentUpdate={onCommentUpdate}
                                     level={level + 1}
                                 />

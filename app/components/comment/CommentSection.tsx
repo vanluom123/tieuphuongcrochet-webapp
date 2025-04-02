@@ -8,10 +8,11 @@ import CommentItem from './CommentItem';
 import CommentForm from './CommentForm';
 
 interface CommentSectionProps {
-    blogPostId: string;
+    id: string;
+    type: 'blog' | 'product' | 'free-pattern'
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
+const CommentSection: React.FC<CommentSectionProps> = ({id, type}) => {
     const [comments, setComments] = useState<CommentData[]>([]);
     const [loading, setLoading] = useState(false);
     const [commentCount, setCommentCount] = useState(0);
@@ -21,17 +22,31 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
     const [error, setError] = useState<string | null>(null);
     const pageSize = 10;
 
+    // Get the appropriate id prop based on content type
+    const getContentProps = () => {
+        switch (type) {
+            case 'blog':
+                return { blogPostId: id };
+            case 'product':
+                return { productId: id };
+            case 'free-pattern':
+                return { freePatternId: id };
+            default:
+                return { blogPostId: id };
+        }
+    };
+
     const loadComments = useCallback(async (pageNo: number) => {
         setLoading(true);
         setError(null);
         try {
             // Load comment count
-            const count = await fetchRootCommentsCount(blogPostId);
+            const count = await fetchRootCommentsCount(id, type);
             setCommentCount(count);
 
             // Fetch comments using typed API response
             if (count > 0) {
-                const data = await fetchRootComments(blogPostId, pageNo, pageSize);
+                const data = await fetchRootComments(id, type, pageNo, pageSize);
                 setComments(data.contents || []);
                 setTotalPages(data.totalPages);
                 setHasMore(!data.last);
@@ -47,7 +62,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
         } finally {
             setLoading(false);
         }
-    }, [blogPostId]);
+    }, [id, type]);
 
     useEffect(() => {
         loadComments(0);
@@ -72,6 +87,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
         return comment.id ? comment.id.toString() : `comment-${index}-${Date.now()}`;
     };
 
+    const contentProps = getContentProps();
+
     return (
         <div className="comment-section">
             <Divider orientation="left">
@@ -82,7 +99,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
 
             <div style={{marginBottom: 24}}>
                 <CommentForm
-                    blogPostId={blogPostId}
+                    {...contentProps}
                     onSuccess={handleCommentUpdate}
                 />
             </div>
@@ -99,7 +116,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
                                 <CommentItem
                                     key={getCommentKey(comment, index)}
                                     comment={comment}
-                                    blogPostId={blogPostId}
+                                    {...contentProps}
                                     onCommentUpdate={handleCommentUpdate}
                                 />
                             ))}

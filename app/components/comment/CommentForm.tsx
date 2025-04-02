@@ -8,7 +8,9 @@ import {useSession} from 'next-auth/react';
 const {TextArea} = Input;
 
 interface CommentFormProps {
-    blogPostId: string;
+    blogPostId?: string;
+    productId?: string;
+    freePatternId?: string;
     onSuccess: () => void;
     parentId?: string;
     mentionedUserId?: string;
@@ -17,6 +19,8 @@ interface CommentFormProps {
 
 const CommentForm: React.FC<CommentFormProps> = ({
                                                      blogPostId,
+                                                     productId,
+                                                     freePatternId,
                                                      onSuccess,
                                                      parentId,
                                                      mentionedUserId,
@@ -36,6 +40,8 @@ const CommentForm: React.FC<CommentFormProps> = ({
         try {
             const result = await createUpdateComment({
                 blogPostId,
+                productId,
+                freePatternId,
                 content: values.content,
                 parentId,
                 mentionedUserId

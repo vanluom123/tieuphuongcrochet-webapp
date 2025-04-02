@@ -8,7 +8,9 @@ import {CommentData, PageResponse, ResponseData} from "../definitions";
 // Create or update comment
 export const createUpdateComment = async (data: {
     id?: string;
-    blogPostId: string;
+    blogPostId?: string;
+    productId?: string;
+    freePatternId?: string;
     content: string;
     parentId?: string;
     mentionedUserId?: string;
@@ -22,12 +24,13 @@ export const createUpdateComment = async (data: {
 
 // Get root comments for a blog post
 export const fetchRootComments = async (
-    blogId: string,
+    id: string,
+    type: string,
     pageNo: number = 0,
     pageSize: number = 10
 ): Promise<PageResponse<CommentData>> => {
     const res: ResponseData<PageResponse<CommentData>> = await apiService({
-        endpoint: `${API_ROUTES.COMMENTS}/blog/${blogId}/root`,
+        endpoint: `${API_ROUTES.COMMENTS}/${type}/${id}/root`,
         method: 'GET',
         queryParams: {
             pageNo: pageNo.toString(),
@@ -86,10 +89,11 @@ export const deleteComment = async (
 
 // Get count of root comments for a blog post
 export const fetchRootCommentsCount = async (
-    blogId: string
+    id: string,
+    type: string
 ): Promise<number> => {
     const res: ResponseData<any> = await apiService({
-        endpoint: `${API_ROUTES.COMMENTS}/blog/${blogId}/root/count`,
+        endpoint: `${API_ROUTES.COMMENTS}/${type}/${id}/root/count`,
         method: 'GET'
     });
 
