@@ -306,7 +306,7 @@ export interface CommentData {
 }
 
 export interface PageResponse<T> {
-	content: T[];
+	contents: T[];
 	pageNo: number;
 	pageSize: number;
 	totalElements: number;

@@ -27,7 +27,7 @@ export const fetchRootComments = async (
     pageSize: number = 10
 ): Promise<PageResponse<CommentData>> => {
     const res: ResponseData<PageResponse<CommentData>> = await apiService({
-        endpoint: `${API_ROUTES.COMMENTS}/root/${blogId}`,
+        endpoint: `${API_ROUTES.COMMENTS}/blog/${blogId}/root`,
         method: 'GET',
         queryParams: {
             pageNo: pageNo.toString(),
@@ -89,7 +89,7 @@ export const fetchRootCommentsCount = async (
     blogId: string
 ): Promise<number> => {
     const res: ResponseData<any> = await apiService({
-        endpoint: `${API_ROUTES.COMMENTS}/count/root/${blogId}`,
+        endpoint: `${API_ROUTES.COMMENTS}/blog/${blogId}/root/count`,
         method: 'GET'
     });
 
@@ -105,7 +105,7 @@ export const fetchAllCommentsCount = async (
     blogId: string
 ): Promise<number> => {
     const res: ResponseData<any> = await apiService({
-        endpoint: `${API_ROUTES.COMMENTS}/count/${blogId}`,
+        endpoint: `${API_ROUTES.COMMENTS}/blog/${blogId}/count`,
         method: 'GET'
     });
 

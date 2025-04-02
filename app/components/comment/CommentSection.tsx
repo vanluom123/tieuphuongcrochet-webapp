@@ -34,7 +34,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
             if (count > 0) {
                 const data = await fetchRootComments(blogPostId, pageNo, pageSize);
                 setApiResponse(data);
-                setComments(data.content || []);
+                setComments(data.contents || []);
                 setTotalPages(data.totalPages);
                 setHasMore(!data.last);
                 setPage(data.pageNo);
