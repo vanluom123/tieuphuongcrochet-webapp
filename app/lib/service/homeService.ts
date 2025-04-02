@@ -1,11 +1,11 @@
-import { map } from "lodash";
-import { API_ROUTES } from "../constant";
-import { HomeData, Pattern, Post, Product, ResponseData } from "../definitions";
-import { getAvatar } from "../utils";
+import {map} from "lodash";
+import {API_ROUTES} from "../constant";
+import {HomeData, Pattern, Post, Product, ResponseData} from "../definitions";
+import {getAvatar} from "../utils";
 import apiService from "./apiService";
 
 export const fetchHomeData = async (): Promise<HomeData> => {
-    const res: ResponseData = await apiService({
+    const res: ResponseData<any> = await apiService({
         endpoint: API_ROUTES.HOMES,
         method: 'GET',
         next: {

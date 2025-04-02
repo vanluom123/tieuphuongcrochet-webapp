@@ -278,9 +278,9 @@ export interface Comment {
 	createdDate: string;
 }
 
-export interface ResponseData {
+export interface ResponseData<T> {
 	code: number,
-	data: any,
+	data: T,
 	success: boolean,
 	message: string,
 	error: string
@@ -297,7 +297,7 @@ export interface CommentData {
 	createdDate: string;
 	userId: string;
 	username: string;
-	userAvatar: string;
+	userAvatar?: string | null;
 	parentId?: string | null;
 	replies: CommentData[];
 	replyCount: number;
@@ -305,8 +305,8 @@ export interface CommentData {
 	mentionedUsername?: string;
 }
 
-export interface PaginatedResponse<T> {
-	content: T[];
+export interface PageResponse<T> {
+	contents: T[];
 	pageNo: number;
 	pageSize: number;
 	totalElements: number;
