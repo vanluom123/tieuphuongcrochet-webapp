@@ -297,7 +297,7 @@ export interface CommentData {
 	createdDate: string;
 	userId: string;
 	username: string;
-	userAvatar: string;
+	userAvatar?: string | null;
 	parentId?: string | null;
 	replies: CommentData[];
 	replyCount: number;

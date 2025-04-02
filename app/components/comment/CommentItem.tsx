@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import {Avatar, Button, Dropdown, Menu, Space, Typography} from 'antd';
 import {CommentData} from '../../lib/definitions';
-import {DeleteOutlined, EllipsisOutlined} from '@ant-design/icons';
+import {DeleteOutlined, EllipsisOutlined, UserOutlined} from '@ant-design/icons';
 import {formatDistance} from 'date-fns';
 import {vi} from 'date-fns/locale';
 import {deleteComment, fetchCommentReplies} from '../../lib/service/commentService';
@@ -29,6 +29,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const [replies, setReplies] = useState<CommentData[]>(comment.replies || []);
     const [loadedReplies, setLoadedReplies] = useState(false);
     const [loadingReplies, setLoadingReplies] = useState(false);
+
+    // Lấy ký tự đầu tiên của tên user nếu ảnh không tải được
+    const fallbackCharacter = comment.username.charAt(0).toUpperCase();
 
     // Đảm bảo comment.id luôn có giá trị
     const commentId = comment.id || `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -89,20 +92,20 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
     const timeAgo = (dateString: string) => {
         if (!dateString) return '';
-        
+
         try {
             // Kiểm tra định dạng "dd/MM/yyyy HH:mm:ss"
             if (/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}/.test(dateString)) {
                 const date = new Date(dateString.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
                 return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
             }
-            
+
             // Nếu là định dạng ISO hoặc định dạng khác
             const date = new Date(dateString);
             if (!isNaN(date.getTime())) {
                 return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
             }
-            
+
             return dateString;
         } catch (e) {
             console.error('Error parsing date:', e, dateString);
@@ -118,7 +121,15 @@ const CommentItem: React.FC<CommentItemProps> = ({
     return (
         <div className="comment-item" style={{marginBottom: 16, marginLeft: level > 0 ? 40 : 0}}>
             <div className="comment-content" style={{display: 'flex'}}>
-                <Avatar src={comment.userAvatar} alt={comment.username || 'Ẩn danh'}/>
+                <Avatar
+                    src={comment.userAvatar}
+                    style={{backgroundColor: '#FF8282', verticalAlign: 'middle'}}
+                    icon={!comment.userAvatar && <UserOutlined/>} // nếu ko có avatarUrl thì hiện icon mặc định
+                    alt={comment.username || 'Ẩn danh'}
+                >
+                    {fallbackCharacter}
+                </Avatar>
+
                 <div style={{marginLeft: 12, flex: 1}}>
                     <div className="comment-bubble" style={{
                         backgroundColor: '#f0f2f5',
