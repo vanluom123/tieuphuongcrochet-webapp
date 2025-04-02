@@ -294,10 +294,25 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                 mentionedUserId={comment.userId}
                                 mentionedUsername={comment.username}
                                 onSuccess={() => {
-                                    onCommentUpdate();
+                                    // Tải lại danh sách replies ngay sau khi thêm thành công
+                                    const loadNewReplies = async () => {
+                                        try {
+                                            const fetchedReplies = await fetchCommentReplies(commentId);
+                                            setReplies(fetchedReplies);
+                                            // Đảm bảo hiển thị danh sách replies
+                                            setShowReplies(true);
+                                        } catch (error) {
+                                            console.error('Failed to load new replies:', error);
+                                        }
+                                    };
+                                    
+                                    loadNewReplies();
+                                    // Đánh dấu đã tải replies để không tải lại khi click vào nút Xem replies
+                                    setLoadedReplies(true);
+                                    // Ẩn form reply
                                     setIsReplying(false);
-                                    setLoadedReplies(false);
-                                    setShowReplies(true);
+                                    // Thông báo component cha cập nhật
+                                    onCommentUpdate();
                                 }}
                             />
                         </div>
