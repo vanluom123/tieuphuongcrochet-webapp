@@ -19,7 +19,7 @@ interface CommentItemProps {
     blogPostId?: string;
     productId?: string;
     freePatternId?: string;
-    onCommentUpdate: () => void;
+    onCommentUpdate: (isDelete?: boolean) => void;
     level?: number;
 }
 
@@ -96,10 +96,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
         const result = await deleteComment(commentId);
         if (result.success) {
             if (level > 0 && comment.parentId) {
-                // Nếu là reply, cần thông báo cho parent để cập nhật UI
-                onCommentUpdate();
+                // Nếu là reply, thông báo cho parent và chỉ rõ đây là thao tác xóa
+                onCommentUpdate(true);
             } else {
-                // Nếu là comment gốc, cần cập nhật UI
+                // Nếu là comment gốc, chỉ cần gọi onCommentUpdate
                 onCommentUpdate();
             }
         }
@@ -130,7 +130,16 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
             if (result.success) {
                 setIsEditing(false);
-                onCommentUpdate();
+                
+                // Cập nhật comment hiện tại với nội dung mới
+                if (level > 0 && comment.parentId) {
+                    // Nếu đây là một reply, thông báo cho parent component 
+                    // truyền false để biết đây không phải là xóa mà là sửa
+                    onCommentUpdate(false);
+                } else {
+                    // Nếu là root comment thì chỉ cần gọi onCommentUpdate
+                    onCommentUpdate();
+                }
             }
         } catch (error) {
             console.error('Error updating comment:', error);
@@ -314,9 +323,23 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                     blogPostId={blogPostId}
                                     productId={productId}
                                     freePatternId={freePatternId}
-                                    onCommentUpdate={() => {
-                                        // Khi một reply bị xóa, cập nhật state local để xóa nó khỏi danh sách
-                                        setReplies(prevReplies => prevReplies.filter(r => r.id !== reply.id));
+                                    onCommentUpdate={(isDelete = false) => {
+                                        if (isDelete) {
+                                            // Nếu là xóa reply, thì lọc nó ra khỏi danh sách ngay lập tức
+                                            setReplies(prevReplies => prevReplies.filter(r => r.id !== reply.id));
+                                        } else {
+                                            // Nếu là sửa reply hoặc hành động khác, tải lại toàn bộ replies
+                                            const updateReplies = async () => {
+                                                try {
+                                                    const fetchedReplies = await fetchCommentReplies(commentId);
+                                                    setReplies(fetchedReplies);
+                                                } catch (error) {
+                                                    console.error('Failed to update replies:', error);
+                                                }
+                                            };
+                                            updateReplies();
+                                        }
+                                        
                                         // Sau đó gọi onCommentUpdate để thông báo cho component cha
                                         onCommentUpdate();
                                     }}
