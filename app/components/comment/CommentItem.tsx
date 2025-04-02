@@ -1,16 +1,18 @@
 'use client'
 
 import React, {useState} from 'react';
-import {Avatar, Button, Dropdown, Menu, Space, Typography} from 'antd';
+import {Avatar, Button, Dropdown, Form, Input, Menu, Space, Typography} from 'antd';
 import {CommentData} from '../../lib/definitions';
-import {DeleteOutlined, EllipsisOutlined, UserOutlined} from '@ant-design/icons';
+import {DeleteOutlined, EditOutlined, EllipsisOutlined, UserOutlined} from '@ant-design/icons';
 import {formatDistance} from 'date-fns';
 import {vi} from 'date-fns/locale';
-import {deleteComment, fetchCommentReplies} from '../../lib/service/commentService';
+import {createUpdateComment, deleteComment, fetchCommentReplies} from '../../lib/service/commentService';
 import CommentForm from './CommentForm';
 import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/navigation';
 import {ROUTE_PATH} from '../../lib/constant';
+
+const {TextArea} = Input;
 
 interface CommentItemProps {
     comment: CommentData;
@@ -29,6 +31,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const router = useRouter();
     const [showReplies, setShowReplies] = useState(false);
     const [isReplying, setIsReplying] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editContent, setEditContent] = useState(comment.content || '');
+    const [submitting, setSubmitting] = useState(false);
     const [replies, setReplies] = useState<CommentData[]>(comment.replies || []);
     const [loadedReplies, setLoadedReplies] = useState(false);
     const [loadingReplies, setLoadingReplies] = useState(false);
@@ -90,12 +95,49 @@ const CommentItem: React.FC<CommentItemProps> = ({
         }
     };
 
+    const handleEdit = () => {
+        setIsEditing(true);
+        setEditContent(comment.content || '');
+    };
+
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+    };
+
+    const handleSaveEdit = async () => {
+        if (!editContent.trim()) return;
+        
+        setSubmitting(true);
+        try {
+            const result = await createUpdateComment({
+                id: commentId,
+                blogPostId,
+                content: editContent,
+                parentId: comment.parentId || undefined
+            });
+
+            if (result.success) {
+                setIsEditing(false);
+                onCommentUpdate();
+            }
+        } catch (error) {
+            console.error('Error updating comment:', error);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     const dropdownMenu = (
         <Menu>
             {session?.user?.id === comment.userId && (
-                <Menu.Item key="delete" onClick={handleDelete} icon={<DeleteOutlined/>}>
-                    Xóa
-                </Menu.Item>
+                <>
+                    <Menu.Item key="edit" onClick={handleEdit} icon={<EditOutlined/>}>
+                        Sửa
+                    </Menu.Item>
+                    <Menu.Item key="delete" onClick={handleDelete} icon={<DeleteOutlined/>}>
+                        Xóa
+                    </Menu.Item>
+                </>
             )}
         </Menu>
     );
@@ -142,49 +184,80 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 </Avatar>
 
                 <div style={{marginLeft: 12, flex: 1}}>
-                    <div className="comment-bubble" style={{
-                        backgroundColor: '#f0f2f5',
-                        borderRadius: 18,
-                        padding: '8px 12px',
-                        display: 'inline-block',
-                        maxWidth: '100%'
-                    }}>
-                        <Typography.Text 
-                            strong 
-                            style={{cursor: 'pointer'}}
-                            onClick={() => navigateToUserProfile(comment.userId)}
-                        >
-                            {comment.username || 'Ẩn danh'}
-                        </Typography.Text>
-                        {comment.mentionedUsername && comment.mentionedUserId && (
-                            <Typography.Text 
-                                type="secondary" 
-                                style={{marginLeft: 4, cursor: 'pointer'}}
-                                onClick={() => navigateToUserProfile(comment.mentionedUserId || '')}
-                            >
-                                @{comment.mentionedUsername}
-                            </Typography.Text>
-                        )}
-                        <Typography.Paragraph style={{marginBottom: 0, whiteSpace: 'pre-wrap'}}>
-                            {comment.content || ''}
-                        </Typography.Paragraph>
-                    </div>
+                    {isEditing ? (
+                        <div className="comment-edit-form" style={{marginTop: 8}}>
+                            <Form layout="vertical">
+                                <Form.Item style={{marginBottom: 12}}>
+                                    <TextArea
+                                        value={editContent}
+                                        onChange={(e) => setEditContent(e.target.value)}
+                                        autoSize={{minRows: 2, maxRows: 6}}
+                                    />
+                                </Form.Item>
+                                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                    <Space>
+                                        <Button size="small" onClick={handleCancelEdit}>
+                                            Hủy
+                                        </Button>
+                                        <Button 
+                                            type="primary" 
+                                            size="small" 
+                                            onClick={handleSaveEdit}
+                                            loading={submitting}
+                                        >
+                                            Lưu
+                                        </Button>
+                                    </Space>
+                                </div>
+                            </Form>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="comment-bubble" style={{
+                                backgroundColor: '#f0f2f5',
+                                borderRadius: 18,
+                                padding: '8px 12px',
+                                display: 'inline-block',
+                                maxWidth: '100%'
+                            }}>
+                                <Typography.Text 
+                                    strong 
+                                    style={{cursor: 'pointer'}}
+                                    onClick={() => navigateToUserProfile(comment.userId)}
+                                >
+                                    {comment.username || 'Ẩn danh'}
+                                </Typography.Text>
+                                {comment.mentionedUsername && comment.mentionedUserId && (
+                                    <Typography.Text 
+                                        type="secondary" 
+                                        style={{marginLeft: 4, cursor: 'pointer'}}
+                                        onClick={() => navigateToUserProfile(comment.mentionedUserId || '')}
+                                    >
+                                        @{comment.mentionedUsername}
+                                    </Typography.Text>
+                                )}
+                                <Typography.Paragraph style={{marginBottom: 0, whiteSpace: 'pre-wrap'}}>
+                                    {comment.content || ''}
+                                </Typography.Paragraph>
+                            </div>
 
-                    <div className="comment-actions" style={{marginTop: 4}}>
-                        <Space size="middle">
-                            <Button type="link" size="small" onClick={handleReplyClick}>
-                                Trả lời
-                            </Button>
-                            <Typography.Text type="secondary" style={{fontSize: 12}}>
-                                {timeAgo(comment.createdDate || '')}
-                            </Typography.Text>
-                            {session?.user?.id === comment.userId && (
-                                <Dropdown overlay={dropdownMenu} trigger={['click']}>
-                                    <Button type="text" icon={<EllipsisOutlined/>} size="small"/>
-                                </Dropdown>
-                            )}
-                        </Space>
-                    </div>
+                            <div className="comment-actions" style={{marginTop: 4}}>
+                                <Space size="middle">
+                                    <Button type="link" size="small" onClick={handleReplyClick}>
+                                        Trả lời
+                                    </Button>
+                                    <Typography.Text type="secondary" style={{fontSize: 12}}>
+                                        {timeAgo(comment.createdDate || '')}
+                                    </Typography.Text>
+                                    {session?.user?.id === comment.userId && (
+                                        <Dropdown overlay={dropdownMenu} trigger={['click']}>
+                                            <Button type="text" icon={<EllipsisOutlined/>} size="small"/>
+                                        </Dropdown>
+                                    )}
+                                </Space>
+                            </div>
+                        </>
+                    )}
 
                     {isReplying && (
                         <div style={{marginTop: 8}}>
