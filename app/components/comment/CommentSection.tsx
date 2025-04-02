@@ -1,7 +1,7 @@
 'use client'
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, Divider, message, Spin, Typography} from 'antd';
+import {Button, Divider, Spin, Typography} from 'antd';
 import {CommentData} from '../../lib/definitions';
 import {fetchRootComments, fetchRootCommentsCount} from '../../lib/service/commentService';
 import CommentItem from './CommentItem';
@@ -19,7 +19,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
     const [totalPages, setTotalPages] = useState(0);
     const [hasMore, setHasMore] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [apiResponse, setApiResponse] = useState<any>(null);
     const pageSize = 10;
 
     const loadComments = useCallback(async (pageNo: number) => {
@@ -33,7 +32,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
             // Fetch comments using typed API response
             if (count > 0) {
                 const data = await fetchRootComments(blogPostId, pageNo, pageSize);
-                setApiResponse(data);
                 setComments(data.contents || []);
                 setTotalPages(data.totalPages);
                 setHasMore(!data.last);
@@ -72,45 +70,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
     const getCommentKey = (comment: CommentData, index: number) => {
         // Đảm bảo mỗi comment có một key duy nhất
         return comment.id ? comment.id.toString() : `comment-${index}-${Date.now()}`;
-    };
-
-    // Hàm debug để kiểm tra dữ liệu API
-    const debugApiResponse = () => {
-        console.log('API Response:', apiResponse);
-        console.log('Comments State:', comments);
-
-        if (apiResponse) {
-            const responseJson = JSON.stringify(apiResponse, null, 2);
-            message.info('Dữ liệu đã được ghi vào console');
-
-            // Tạo debug info trên giao diện
-            const debugInfo = document.createElement('div');
-            debugInfo.id = 'comments-debug-info';
-            debugInfo.style.display = 'block'; // Hiển thị để xem dữ liệu
-            debugInfo.style.whiteSpace = 'pre';
-            debugInfo.style.fontFamily = 'monospace';
-            debugInfo.style.fontSize = '12px';
-            debugInfo.style.padding = '10px';
-            debugInfo.style.backgroundColor = '#f0f0f0';
-            debugInfo.style.maxHeight = '300px';
-            debugInfo.style.overflow = 'auto';
-            debugInfo.style.marginTop = '20px';
-            debugInfo.textContent = responseJson;
-
-            // Xóa debugInfo cũ nếu đã tồn tại
-            const oldDebugInfo = document.getElementById('comments-debug-info');
-            if (oldDebugInfo) {
-                oldDebugInfo.remove();
-            }
-
-            // Thêm vào phần comments-section
-            const commentSection = document.querySelector('.comment-section');
-            if (commentSection) {
-                commentSection.appendChild(debugInfo);
-            } else {
-                document.body.appendChild(debugInfo);
-            }
-        }
     };
 
     return (
@@ -167,14 +126,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({blogPostId}) => {
                     <div style={{marginTop: 16, textAlign: 'center'}}>
                         <Button size="small" onClick={handleCommentUpdate}>
                             Tải lại bình luận
-                        </Button>
-                        <Button
-                            size="small"
-                            onClick={debugApiResponse}
-                            style={{marginLeft: 8}}
-                            type="dashed"
-                        >
-                            Debug API
                         </Button>
                     </div>
                 </>
