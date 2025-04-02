@@ -95,7 +95,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const handleDelete = async () => {
         const result = await deleteComment(commentId);
         if (result.success) {
-            onCommentUpdate();
+            if (level > 0 && comment.parentId) {
+                // Nếu là reply, cần thông báo cho parent để cập nhật UI
+                onCommentUpdate();
+            } else {
+                // Nếu là comment gốc, cần cập nhật UI
+                onCommentUpdate();
+            }
         }
     };
 
@@ -308,7 +314,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                     blogPostId={blogPostId}
                                     productId={productId}
                                     freePatternId={freePatternId}
-                                    onCommentUpdate={onCommentUpdate}
+                                    onCommentUpdate={() => {
+                                        // Khi một reply bị xóa, cập nhật state local để xóa nó khỏi danh sách
+                                        setReplies(prevReplies => prevReplies.filter(r => r.id !== reply.id));
+                                        // Sau đó gọi onCommentUpdate để thông báo cho component cha
+                                        onCommentUpdate();
+                                    }}
                                     level={level + 1}
                                 />
                             ))}
