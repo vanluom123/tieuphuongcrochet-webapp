@@ -25,7 +25,9 @@ export const fetchFreePatterns = async (
             next
         });
 
-        if (!res.data || !res.data.contents) throw new Error("Invalid API response");
+        if (!res.data || !res.data.contents) {
+            return {data: [], totalRecords: 0};
+        }
 
         const newData = map(res.data.contents, (item) => ({
             ...item,
@@ -55,13 +57,15 @@ export const fetchFreePatternDetail = async (
             next: {revalidate: revalidate || 0, tags: [`free-pattern-${id}`]},
         });
 
-        if (!res.data) throw new Error("Invalid API response");
+        if (!res.data) {
+            return {} as Pattern;
+        }
 
         return {
             ...res.data,
             src: getAvatar(res.data.images as FileUpload[]),
-            files: res.data.files ? map(res.data.files, (f) => ({ ...f, url: f?.fileContent })) : [],
-            images: res.data.images ? map(res.data.images, (f) => ({ ...f, url: f?.fileContent })) : [],
+            files: res.data.files ? map(res.data.files, (f) => ({...f, url: f?.fileContent})) : [],
+            images: res.data.images ? map(res.data.images, (f) => ({...f, url: f?.fileContent})) : [],
         };
     } catch (error) {
         console.error("Error fetching pattern details:", error);
@@ -70,9 +74,11 @@ export const fetchFreePatternDetail = async (
 };
 
 /** Create or update a free pattern */
-export const createUpdateFreePattern = async (data: Pattern): Promise<ResponseData> => {
+export const createUpdateFreePattern = async (
+    data: Pattern
+): Promise<ResponseData<any>> => {
     try {
-        const res: ResponseData = await apiJwtService({
+        const res: ResponseData<any> = await apiJwtService({
             endpoint: API_ROUTES.FREE_PATTERNS,
             method: "POST",
             data,
@@ -84,7 +90,7 @@ export const createUpdateFreePattern = async (data: Pattern): Promise<ResponseDa
         return res;
     } catch (error: any) {
         showNotification("error", "Failed", error.message || "An unexpected error occurred)");
-        return { success: false, message: error?.message || "API error" } as ResponseData;
+        return {success: false, message: error?.message || "API error"} as ResponseData<any>;
     }
 };
 
