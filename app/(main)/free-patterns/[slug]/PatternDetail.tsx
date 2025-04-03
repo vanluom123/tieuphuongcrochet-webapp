@@ -1,5 +1,5 @@
 'use client';
-import { Divider, Flex, Button, Tooltip } from "antd";
+import { Divider, Flex, Button, Tooltip, FloatButton } from "antd";
 import { useTranslations } from "next-intl";
 import IntroductionCard from "@/app/components/introduction-card";
 import ViewDetailWrapper from "@/app/components/view-detail-wrapper";
@@ -7,8 +7,8 @@ import { Pattern } from "@/app/lib/definitions";
 import dynamic from "next/dynamic";
 import { useBookmark } from "@/app/hooks/useBookmark";
 import Image from "next/image";
-import whiteBookmark from '@/public/white-bookmark.png';
-import '@/app/ui/components/patternDetail.scss';
+import primaryBookmark from '@/public/primary-bookmark.png';
+import bookmark from '@/public/bookmark.png';
 import CommentSection from "@/app/components/comment/CommentSection";
 
 // Lazy load ViewImagesList component
@@ -47,28 +47,18 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
 
             {/* Custom bookmark button for both desktop and mobile */}
             <Tooltip title={isBookmarked ? t("remove_from_collection") : t("save")}>
-                <Button 
-                    type="primary"
+                <FloatButton
                     shape="circle"
                     className="custom-bookmark-button"
                     onClick={() => toggleBookmark(pattern?.id?.toString() || '')}
                     icon={
-                        <div className="bookmark-icon-wrapper">
-                            <Image 
-                                width={20} 
-                                height={20} 
-                                src={whiteBookmark}
-                                alt='bookmark'
-                                priority={true}
-                                style={{ 
-                                    width: '20px', 
-                                    height: '20px', 
-                                    objectFit: 'contain',
-                                    display: 'block'
-                                }}
-                            />
-                            {isBookmarked && <span className="bookmark-dot"></span>}
-                        </div>
+                        <Image
+                            width={20}
+                            height={20}
+                            src={isBookmarked ? primaryBookmark : bookmark}
+                            alt='bookmark'
+                            priority={true}
+                        />
                     }
                 />
             </Tooltip>
