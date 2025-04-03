@@ -831,7 +831,8 @@ body {
   .layout-wrap {
 
     .ant-float-btn {
-      &.float-btn-right-bottom {
+      &.float-btn-right-bottom,
+      &.custom-bookmark-button {
         right: 7px;
         bottom: 70px;
       }
@@ -1421,6 +1422,7 @@ body {
     left: calc(50% - 20px);
   }
 
+  &.custom-bookmark-button,
   &.float-btn-right-bottom {
     bottom: 80px;
   }
