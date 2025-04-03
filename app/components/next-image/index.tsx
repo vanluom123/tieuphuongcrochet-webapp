@@ -7,16 +7,17 @@ export interface CustomNextImageProps {
     className?: string;
     onClick?: () => void;
     aspectRatio?: string;
+    objectFit?: 'cover' | 'scale-down' | 'contain' | 'none';
 }
 
-const CustomNextImage = ({ src, alt, className, onClick, aspectRatio = '100%' }: CustomNextImageProps) => {
+const CustomNextImage = ({ src, alt, className, onClick, aspectRatio = '100%', objectFit = 'cover' }: CustomNextImageProps) => {
     return (
-        <div style={{ position: 'relative', width: '100%', paddingTop: aspectRatio }}>
+        <div className="next-image-custom" style={{ position: 'relative', width: '100%', paddingTop: aspectRatio }}>
             <Image
                 fill
                 sizes="100%"
                 style={{
-                    objectFit: 'cover',
+                    objectFit: objectFit,
                 }}
                 loading='lazy'
                 src={src || IMAGE_FALLBACK}
