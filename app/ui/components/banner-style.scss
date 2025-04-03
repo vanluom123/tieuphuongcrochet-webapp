@@ -3,11 +3,10 @@
 
 .banner-item {
 	position: relative;
-
+	
 	img {
 		height: 100%;
 		width: 100%;
-		object-fit: cover;
 	}
 
 	&__infor {
@@ -16,6 +15,7 @@
 		top: 50%;
 		right: 30%;
 		transform: translate(50%, -50%);
+		margin-right: 5px;
 
 		.title {
 			color: #fff;
@@ -29,7 +29,6 @@
 			font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
 			font-weight: $fontWeight_normal;
 			margin: 5px auto;
-			max-width: 55%;
 		}
 
 		.btn-view {

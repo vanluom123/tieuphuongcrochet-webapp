@@ -22,6 +22,7 @@ const BannerItem = ({ banner, classNames }: BannerItemProps) => {
 						alt={title || "Banner"}
 						className="banner-image"
 						aspectRatio="56.25%"
+						objectFit="scale-down"
 					/>
 				</div>
 			)}
