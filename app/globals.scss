@@ -424,7 +424,8 @@ body {
 @media screen and (min-width: $screen_425) {
   .container {
     padding: 15px;
-    .patterns-tab{
+
+    .patterns-tab {
       padding-bottom: 32px;
     }
   }
@@ -433,7 +434,8 @@ body {
 @media screen and (min-width: $xs) {
   .container {
     padding: 20px;
-    .patterns-tab{
+
+    .patterns-tab {
       padding-bottom: 0px;
     }
   }
@@ -531,7 +533,6 @@ body {
 
     .banner-wrap {
       .banner-item {
-        height: calc(100vh - 194px);
 
         &__infor {
           .title {
@@ -613,7 +614,7 @@ body {
     }
 
     .ant-float-btn {
-      &.float-btn-center-bottom{
+      &.float-btn-center-bottom {
         bottom: 20px;
       }
     }
@@ -671,6 +672,18 @@ body {
 @media screen and (min-width: $screen_1024) {
   .layout-wrap {
     .banner-wrap {
+      .banner-item {
+        height: calc(100vh - 194px);
+
+        .banner-image-container {
+          height: 100%;
+
+          .next-image-custom {
+            height: 100%;
+          }
+        }
+      }
+
       .ant-carousel .slick-dots {
         &.dots-custom {
           li {
@@ -818,13 +831,14 @@ body {
   .layout-wrap {
 
     .ant-float-btn {
-      &.float-btn-right-bottom{
+      &.float-btn-right-bottom {
         right: 7px;
         bottom: 70px;
       }
+
       &.float-btn-back-top {
         right: 7px;
-        bottom:10px;
+        bottom: 10px;
       }
     }
   }
