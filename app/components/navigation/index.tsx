@@ -15,6 +15,7 @@ import SidebarNav from './Sidebar';
 import MenuNav from './MenuNav';
 import '../../ui/navigation.scss';
 import UserAccount from './UserAccount';
+import NotificationBell from '../notification/NotificationBell';
 
 interface NavigationProps {
     currentNav: string;
@@ -73,6 +74,9 @@ const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 
 						{/* Change language */}
 						<Languages />
+
+						{/* Notification bell */}
+						<NotificationBell />
 
 						{/* user icon */}
 						<UserAccount />	
