@@ -266,7 +266,10 @@ export const API_ROUTES = {
   HOMES: '/api/v1/homes',
 
   // Comment
-  COMMENTS: '/api/v1/comments'
+  COMMENTS: '/api/v1/comments',
+
+  // Notification
+  NOTIFICATIONS: '/api/v1/notifications'
 };
 
 export const PARAMS_FOR_SITEMAP: ListParams = {
