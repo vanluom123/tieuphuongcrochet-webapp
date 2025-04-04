@@ -40,7 +40,7 @@ const NotificationsPage: React.FC = () => {
     try {
       setLoading(true);
       const response = await notificationService.getNotifications(page - 1, pageSize);
-      setNotifications(response.content);
+      setNotifications(response.contents);
       setTotal(response.totalElements);
     } catch (error) {
       console.error('Error fetching notifications:', error);

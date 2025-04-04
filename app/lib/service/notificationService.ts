@@ -1,4 +1,5 @@
 import { API_ROUTES } from "../constant";
+import apiJwtService from "./apiJwtService";
 
 export interface Notification {
   id: string;
@@ -11,101 +12,64 @@ export interface Notification {
 }
 
 export interface NotificationPage {
-  content: Notification[];
+  contents: Notification[];
   totalElements: number;
   totalPages: number;
-  size: number;
-  number: number;
+  pageSize: number;
+  pageNo: number;
+  last: boolean;
 }
 
 export const notificationService = {
   async getNotifications(page: number = 0, size: number = 10): Promise<NotificationPage> {
-    const response = await fetch(`${API_ROUTES}/notifications/me?page=${page}&size=${size}`, {
+    const res = await apiJwtService({
+      endpoint: `${API_ROUTES.NOTIFICATIONS}/me`,
       method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
+      queryParams: {
+        page: page.toString(),
+        size: size.toString(),
       },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch notifications');
-    }
-
-    return await response.json();
+    return res.data;
   },
 
   async getUnreadCount(): Promise<number> {
-    const response = await fetch(`${API_ROUTES}/notifications/unread/count`, {
+    const res = await apiJwtService({
+      endpoint: `${API_ROUTES.NOTIFICATIONS}/unread/count`,
       method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch unread count');
-    }
-
-    return await response.json();
+    return res.data;
   },
 
   async markAsRead(notificationId: string): Promise<Notification> {
-    const response = await fetch(`${API_ROUTES}/notifications/${notificationId}/read`, {
+    const res = await apiJwtService({
+      endpoint: `${API_ROUTES.NOTIFICATIONS}/${notificationId}/read`,
       method: 'PUT',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to mark notification as read');
-    }
-
-    return await response.json();
+    return res.data;
   },
 
   async markAllAsRead(): Promise<void> {
-    const response = await fetch(`${API_ROUTES}/notifications/read-all`, {
+    const res = await apiJwtService({
+      endpoint: `${API_ROUTES.NOTIFICATIONS}/read-all`,
       method: 'PUT',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to mark all notifications as read');
-    }
+    return res.data;
   },
 
   async deleteNotification(notificationId: string): Promise<void> {
-    const response = await fetch(`${API_ROUTES}/notifications/${notificationId}`, {
+    const res = await apiJwtService({
+      endpoint: `${API_ROUTES.NOTIFICATIONS}/${notificationId}`,
       method: 'DELETE',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete notification');
-    }
+    return res.data;
   },
 
   async deleteAllNotifications(): Promise<void> {
-    const response = await fetch(`${API_ROUTES}/notifications/all`, {
+    const res = await apiJwtService({
+      endpoint: `${API_ROUTES.NOTIFICATIONS}/all`,
       method: 'DELETE',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete all notifications');
-    }
+    return res.data;
   }
-}; 
+};

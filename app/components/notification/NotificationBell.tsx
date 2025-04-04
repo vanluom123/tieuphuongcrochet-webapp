@@ -29,7 +29,7 @@ const NotificationBell: React.FC = () => {
     try {
       setLoading(true);
       const response = await notificationService.getNotifications(0, 5);
-      setNotifications(response.content);
+      setNotifications(response.contents);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     } finally {
