@@ -361,6 +361,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                     level={level + 1}
                                 />
                             ))}
+                            {/* Thêm nút ẩn replies rõ ràng hơn */}
+                            <Button
+                                type="text"
+                                onClick={handleLoadReplies}
+                                style={{marginTop: 8}}
+                            >
+                                Ẩn câu trả lời
+                            </Button>
                         </div>
                     )}
                 </div>
