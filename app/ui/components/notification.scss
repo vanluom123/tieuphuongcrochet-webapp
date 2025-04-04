@@ -1,0 +1,176 @@
+.notification-bell {
+  margin: 0 16px;
+  
+  .bell-icon {
+    font-size: 20px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.65);
+    
+    &:hover {
+      color: #fc8282;
+    }
+  }
+}
+
+.notification-popover {
+  width: 350px;
+  
+  .ant-popover-inner {
+    padding: 0;
+  }
+}
+
+.notification-popup {
+  width: 100%;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  
+  .notification-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    h5 {
+      margin: 0;
+    }
+  }
+  
+  .notification-content {
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 0;
+    
+    .notification-loading {
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+    
+    .notification-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      
+      &:hover {
+        background-color: #f5f5f5;
+      }
+      
+      &.unread {
+        background-color: #e6f7ff;
+        
+        &:hover {
+          background-color: #bae7ff;
+        }
+      }
+      
+      .notification-item-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        
+        .ant-typography {
+          margin-bottom: 4px;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+        
+        .notification-time {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  
+  .notification-footer {
+    padding: 12px 16px;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+  }
+}
+
+// Notification page styles
+.notifications-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  
+  .notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+  }
+  
+  .notification-list {
+    .notification-item {
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid #f0f0f0;
+      padding: 16px;
+      transition: all 0.3s;
+      
+      &.unread {
+        border-left: 3px solid #1890ff;
+      }
+      
+      &:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+      }
+      
+      .notification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        
+        .notification-type {
+          font-size: 12px;
+          padding: 2px 8px;
+          border-radius: 12px;
+          background-color: #f0f0f0;
+          
+          &.COMMENT {
+            background-color: #d9f7be;
+            color: #389e0d;
+          }
+          
+          &.SYSTEM {
+            background-color: #d6e4ff;
+            color: #1d39c4;
+          }
+          
+          &.NEW_PATTERN, &.NEW_PRODUCT, &.NEW_BLOG {
+            background-color: #fff2e8;
+            color: #d4380d;
+          }
+        }
+      }
+      
+      .notification-content {
+        margin-bottom: 12px;
+      }
+      
+      .notification-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.45);
+      }
+    }
+  }
+  
+  .ant-list-empty-text {
+    padding: 40px 0;
+  }
+} 
