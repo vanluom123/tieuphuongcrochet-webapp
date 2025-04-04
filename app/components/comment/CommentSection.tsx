@@ -3,7 +3,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Divider, Spin, Typography} from 'antd';
 import {CommentData} from '../../lib/definitions';
-import {fetchRootComments, fetchRootCommentsCount} from '../../lib/service/commentService';
+import {fetchAllCommentsCount, fetchRootComments, fetchRootCommentsCount} from '../../lib/service/commentService';
 import CommentItem from './CommentItem';
 import CommentForm from './CommentForm';
 
@@ -41,7 +41,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({id, type}) => {
         setError(null);
         try {
             // Load comment count
-            const count = await fetchRootCommentsCount(id, type);
+            const count = await fetchAllCommentsCount(id, type);
             setCommentCount(count);
 
             // Fetch comments using typed API response
