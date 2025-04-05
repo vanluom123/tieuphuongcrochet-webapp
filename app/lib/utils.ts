@@ -16,6 +16,8 @@ import {
 } from './definitions';
 import {FILTER_LOGIC, FILTER_OPERATION, TRANSLATION_STATUS_COLOR} from './constant';
 import uploadFile from './service/uploadFilesSevice';
+import { formatDistance, Locale } from 'date-fns';
+import { enUS, vi } from 'date-fns/locale';
 
 export const checkMobile = () => {
     let check = false;
@@ -486,3 +488,65 @@ export const debounce = <T extends (...args: any[]) => any>(
     }
   };
 };
+
+const localeMap: Record<string, Locale> = {
+    'en': enUS,
+    'en-US': enUS,
+    'vi': vi,
+    'vi-VN': vi,
+}
+
+export const timeUtils = {
+    /**
+     * Get the time ago for a given date input
+     * @param dateInput - The date input to get the time ago for
+     * @param localeStr - The locale string to use for the time ago
+     * @returns The time ago for the given date input
+     */
+    timeAgo: (dateInput: string | number[] | Date, localeStr = 'vi') => {
+        if (!dateInput) return '';
+    
+        try {
+            const locale = localeMap[localeStr] || vi;
+
+            // Handle array format [year, month, day, hour, minute, second]
+            if (Array.isArray(dateInput) && dateInput.length >= 3) {
+                // JavaScript months are 0-indexed, so subtract 1 from month
+                const [year, month, day, hour = 0, minute = 0, second = 0] = dateInput;
+                const date = new Date(year, month - 1, day, hour, minute, second);
+                return formatDistance(date, new Date(), {addSuffix: true, locale});
+            }
+            
+            // Handle string formats
+            if (typeof dateInput === 'string') {
+                // Check format "dd/MM/yyyy HH:mm:ss"
+                if (/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}/.test(dateInput)) {
+                    const date = new Date(dateInput.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6Z'));
+                    return formatDistance(date, new Date(), {addSuffix: true, locale});
+                }
+                
+                // Check format "yyyy-MM-dd HH:mm:ss"
+                if (/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(dateInput)) {
+                    const date = new Date(dateInput.replace(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/, '$1-$2-$3T$4:$5:$6Z'));
+                    return formatDistance(date, new Date(), {addSuffix: true, locale});
+                }
+            }
+    
+            // If it's a Date object or can be parsed as a standard date
+            let date: Date;
+            if (dateInput instanceof Date) {
+                date = dateInput;
+            } else {
+                date = new Date(dateInput as any);
+            }
+            
+            if (!isNaN(date.getTime())) {
+                return formatDistance(date, new Date(), {addSuffix: true, locale});
+            }
+    
+            return dateInput.toString();
+        } catch (e) {
+            return String(dateInput);
+        }
+    }
+}
