@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { Notification } from "@/app/lib/service/notificationService";
 import '@/app/ui/components/notificationCard.scss';
+import { timeUtils } from "@/app/lib/utils";
 
 interface NotificationCardProps {
     notification: Notification;
@@ -65,7 +66,7 @@ const NotificationCard = ({ notification, onDelete, onMarkAsRead, onNotification
         </div>
 
         <div className="notification-footer">
-            <Text type="secondary">{dayjs(notification.createdAt).fromNow()}</Text>
+            <Text type="secondary">{timeUtils.timeAgo(notification.createdAt)}</Text>
             {!notification.read && (
                 <Button
                     type="link"

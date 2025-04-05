@@ -16,6 +16,8 @@ import {
 } from './definitions';
 import {FILTER_LOGIC, FILTER_OPERATION, TRANSLATION_STATUS_COLOR} from './constant';
 import uploadFile from './service/uploadFilesSevice';
+import { formatDistance } from 'date-fns';
+import { vi } from 'date-fns/locale';
 
 export const checkMobile = () => {
     let check = false;
@@ -486,3 +488,50 @@ export const debounce = <T extends (...args: any[]) => any>(
     }
   };
 };
+
+export const timeUtils = {
+    timeAgo: (dateInput: string | number[] | Date) => {
+        if (!dateInput) return '';
+    
+        try {
+            // Handle array format [year, month, day, hour, minute, second]
+            if (Array.isArray(dateInput) && dateInput.length >= 3) {
+                // JavaScript months are 0-indexed, so subtract 1 from month
+                const [year, month, day, hour = 0, minute = 0, second = 0] = dateInput;
+                const date = new Date(year, month - 1, day, hour, minute, second);
+                return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
+            }
+            
+            // Handle string formats
+            if (typeof dateInput === 'string') {
+                // Kiểm tra định dạng "dd/MM/yyyy HH:mm:ss"
+                if (/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}/.test(dateInput)) {
+                    const date = new Date(dateInput.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6Z'));
+                    return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
+                }
+                
+                // Kiểm tra định dạng "yyyy-MM-dd HH:mm:ss"
+                if (/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(dateInput)) {
+                    const date = new Date(dateInput.replace(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/, '$1-$2-$3T$4:$5:$6Z'));
+                    return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
+                }
+            }
+    
+            // If it's a Date object or can be parsed as a standard date
+            let date: Date;
+            if (dateInput instanceof Date) {
+                date = dateInput;
+            } else {
+                date = new Date(dateInput as any);
+            }
+            
+            if (!isNaN(date.getTime())) {
+                return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
+            }
+    
+            return dateInput.toString();
+        } catch (e) {
+            return String(dateInput);
+        }
+    }
+}

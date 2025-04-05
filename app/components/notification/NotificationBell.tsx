@@ -11,6 +11,7 @@ import { useTranslations } from 'next-intl';
 
 import { notificationService, Notification } from '@/app/lib/service/notificationService';
 import '@/app/ui/components/notificationBell.scss';
+import { timeUtils } from '@/app/lib/utils';
 
 dayjs.extend(relativeTime);
 
@@ -135,7 +136,7 @@ const NotificationBell: React.FC = () => {
                   <Text strong>{notification.title}</Text>
                   <Text>{notification.message}</Text>
                   <Text type="secondary" className="notification-time">
-                    {dayjs(notification.createdAt).fromNow()}
+                    {timeUtils.timeAgo(notification.createdAt)}
                   </Text>
                 </div>
               </List.Item>
