@@ -169,20 +169,20 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
     const timeAgo = (dateString: string) => {
         if (!dateString) return '';
-
+    
         try {
             // Kiểm tra định dạng "dd/MM/yyyy HH:mm:ss"
             if (/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}/.test(dateString)) {
-                const date = new Date(dateString.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
+                const date = new Date(dateString.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6Z'));
                 return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
             }
-
+    
             // Nếu là định dạng ISO hoặc định dạng khác
             const date = new Date(dateString);
             if (!isNaN(date.getTime())) {
                 return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
             }
-
+    
             return dateString;
         } catch (e) {
             console.error('Error parsing date:', e, dateString);
