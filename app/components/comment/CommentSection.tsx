@@ -142,6 +142,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({id, type}) => {
                         <CommentItem
                             key={getCommentKey(comment, index)}
                             comment={comment}
+                            {...contentProps}
                             onCommentUpdate={handleCommentUpdate}
                         />
                     ))}
