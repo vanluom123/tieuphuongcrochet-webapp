@@ -1,11 +1,11 @@
 'use client'
 
-import React, {useState} from 'react';
-import {Button, Col, Form, Input, message, Row, Space, Spin} from 'antd';
-import {createUpdateComment} from '../../lib/service/commentService';
-import {useSession} from 'next-auth/react';
-
-const {TextArea} = Input;
+import React, { useState } from 'react';
+import { Button, Col, Form, Input, message, Row, Space, Spin } from 'antd';
+import { createUpdateComment } from '../../lib/service/commentService';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+const { TextArea } = Input;
 
 interface CommentFormProps {
     blogPostId?: string;
@@ -18,31 +18,33 @@ interface CommentFormProps {
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({
-                                                     blogPostId,
-                                                     productId,
-                                                     freePatternId,
-                                                     onSuccess,
-                                                     parentId,
-                                                     mentionedUserId,
-                                                     mentionedUsername
-                                                 }) => {
-    const {data: session, status} = useSession();
+    blogPostId,
+    productId,
+    freePatternId,
+    onSuccess,
+    parentId,
+    mentionedUserId,
+    mentionedUsername
+}) => {
+    const { data: session, status } = useSession();
     const [form] = Form.useForm();
     const [submitting, setSubmitting] = useState(false);
+    const [disabled, setDisabled] = useState(true);
+    const t = useTranslations('Comment');
 
-    const handleSubmit = async (values: { content: string }) => {
+    const handleSubmit = async (values: { content: string }) => {       
+        const contentTrim = values.content.trim();
         if (!session || status !== 'authenticated') {
-            message.error('Vui lòng đăng nhập để bình luận');
+            message.error(t('login_to_comment'));
             return;
         }
-
         setSubmitting(true);
         try {
             const result = await createUpdateComment({
                 blogPostId,
                 productId,
                 freePatternId,
-                content: values.content,
+                content: contentTrim,
                 parentId,
                 mentionedUserId
             });
@@ -50,24 +52,31 @@ const CommentForm: React.FC<CommentFormProps> = ({
             if (result.success) {
                 form.resetFields();
                 onSuccess();
-                message.success('Bình luận đã được đăng thành công');
+                message.success(t('success'));
             }
         } catch (error) {
             console.error('Error submitting comment:', error);
-            message.error('Không thể đăng bình luận. Vui lòng thử lại sau.');
+            message.error(t('error'));
         } finally {
             setSubmitting(false);
         }
     };
 
     const placeholder = mentionedUsername
-        ? `Trả lời @${mentionedUsername}...`
-        : 'Viết bình luận của bạn...';
+        ? `${t('reply')} @${mentionedUsername}...`
+        : t('placeholder');
 
-    const submitButtonText = parentId ? 'Trả lời' : 'Bình luận';
+    const submitButtonText = parentId ? t('reply') : t('comment');
+
+    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const isEmpty = e.target.value.trim() === '';
+        if (isEmpty !== disabled) {
+            setDisabled(isEmpty);
+        }
+    };
 
     if (status === 'loading') {
-        return <Spin size="small"/>;
+        return <Spin size="small" />;
     }
 
     return (
@@ -79,13 +88,13 @@ const CommentForm: React.FC<CommentFormProps> = ({
         >
             <Form.Item
                 name="content"
-                rules={[{required: true, message: 'Vui lòng nhập nội dung bình luận'}]}
-                style={{marginBottom: 12}}
+                style={{ marginBottom: 12 }}
             >
                 <TextArea
                     placeholder={placeholder}
-                    autoSize={{minRows: 2, maxRows: 6}}
+                    autoSize={{ minRows: 2, maxRows: 6 }}
                     disabled={status !== 'authenticated'}
+                    onChange={handleContentChange}
                 />
             </Form.Item>
 
@@ -94,11 +103,15 @@ const CommentForm: React.FC<CommentFormProps> = ({
                     <Space>
                         {status !== 'authenticated' && (
                             <Button type="primary" href="/login">
-                                Đăng nhập để bình luận
+                                {t('login_to_comment')}
                             </Button>
                         )}
                         {status === 'authenticated' && (
-                            <Button type="primary" htmlType="submit" loading={submitting}>
+                            <Button
+                                disabled={disabled}
+                                type="primary"
+                                htmlType="submit"
+                                loading={submitting}>
                                 {submitButtonText}
                             </Button>
                         )}
