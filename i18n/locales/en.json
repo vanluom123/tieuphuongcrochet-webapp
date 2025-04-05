@@ -531,7 +531,7 @@
   "Notification": {
     "title": "Notifications",
     "title_page": "Your notifications",
-    "description": "Notifications of website",
+    "description": "Notifications of Tieu Phuong Crochet website",
     "error": {
       "title": "Error!",
       "fetch": "Error fetching notifications. Please try again later!",
@@ -568,6 +568,7 @@
   },
   "Comment": {
     "title": "Comment",
+    "comment": "Comment",
     "login_to_comment": "Login to comment",
     "success": "Comment posted successfully",
     "error": "Error posting comment. Please try again later!",

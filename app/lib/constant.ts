@@ -24,6 +24,7 @@ export const ROUTE_PATH = {
   SITEMAP: 'sitemap',
   PROFILE: '/profile',
   COLLECTIONS: '/collections',
+  NOTIFICATIONS: '/notifications',
 };
 
 export const SOCIAL_LINKS = {
