@@ -4,14 +4,13 @@ import React, {useState} from 'react';
 import {Avatar, Button, Dropdown, Form, Input, Menu, Space, Typography} from 'antd';
 import {CommentData} from '../../lib/definitions';
 import {DeleteOutlined, EditOutlined, EllipsisOutlined, UserOutlined} from '@ant-design/icons';
-import {formatDistance} from 'date-fns';
-import {vi} from 'date-fns/locale';
 import {createUpdateComment, deleteComment, fetchCommentReplies} from '../../lib/service/commentService';
 import CommentForm from './CommentForm';
 import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/navigation';
 import {ROUTE_PATH, USER_ROLES} from '../../lib/constant';
-import { timeUtils } from '@/app/lib/utils';
+import {timeUtils} from '@/app/lib/utils';
+import {useLocale} from "next-intl";
 
 const {TextArea} = Input;
 
@@ -42,6 +41,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const [replies, setReplies] = useState<CommentData[]>(comment.replies || []);
     const [loadedReplies, setLoadedReplies] = useState(false);
     const [loadingReplies, setLoadingReplies] = useState(false);
+    const locale = useLocale();
 
     // Lấy ký tự đầu tiên của tên user nếu ảnh không tải được
     const fallbackCharacter = comment.username.charAt(0).toUpperCase();
@@ -250,7 +250,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                         Trả lời
                                     </Button>
                                     <Typography.Text type="secondary" style={{fontSize: 12}}>
-                                        {timeUtils.timeAgo(comment.createdDate)}
+                                        {timeUtils.timeAgo(comment.createdDate, locale)}
                                     </Typography.Text>
                                     {(session?.user?.id === comment.userId || session?.user?.role === USER_ROLES.ADMIN) && (
                                         <Dropdown overlay={dropdownMenu} trigger={['click']}>
