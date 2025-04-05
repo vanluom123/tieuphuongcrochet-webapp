@@ -11,6 +11,7 @@ import CommentForm from './CommentForm';
 import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/navigation';
 import {ROUTE_PATH, USER_ROLES} from '../../lib/constant';
+import { timeUtils } from '@/app/lib/utils';
 
 const {TextArea} = Input;
 
@@ -167,29 +168,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
         </Menu>
     );
 
-    const timeAgo = (dateString: string) => {
-        if (!dateString) return '';
-    
-        try {
-            // Kiểm tra định dạng "dd/MM/yyyy HH:mm:ss"
-            if (/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}/.test(dateString)) {
-                const date = new Date(dateString.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6Z'));
-                return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
-            }
-    
-            // Nếu là định dạng ISO hoặc định dạng khác
-            const date = new Date(dateString);
-            if (!isNaN(date.getTime())) {
-                return formatDistance(date, new Date(), {addSuffix: true, locale: vi});
-            }
-    
-            return dateString;
-        } catch (e) {
-            console.error('Error parsing date:', e, dateString);
-            return dateString;
-        }
-    };
-
     // Hàm tạo key duy nhất cho mỗi reply
     const getReplyKey = (reply: CommentData, index: number) => {
         return reply.id ? reply.id.toString() : `reply-${commentId}-${index}-${Date.now()}`;
@@ -272,7 +250,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                         Trả lời
                                     </Button>
                                     <Typography.Text type="secondary" style={{fontSize: 12}}>
-                                        {timeAgo(comment.createdDate || '')}
+                                        {timeUtils.timeAgo(comment.createdDate)}
                                     </Typography.Text>
                                     {(session?.user?.id === comment.userId || session?.user?.role === USER_ROLES.ADMIN) && (
                                         <Dropdown overlay={dropdownMenu} trigger={['click']}>
