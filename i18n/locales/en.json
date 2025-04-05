@@ -46,7 +46,7 @@
     "note": "If you want to order this product according to your requirements, please contact me. I will try my best to bring you the best products. Thank you!"
   },
   "FreePattern": {
-    "loading":"Loading. Waitting a minute...",
+    "loading": "Loading. Waitting a minute...",
     "title": "Free crochet patterns",
     "description": "Below are the crochet patterns that I have collected (I will translate gradually). In the near future, I will continue to update many other beautiful crochet patterns and patterns that I create myself. Please refer and choose for yourself a satisfactory model!",
     "detail": "Chart detail",
@@ -151,10 +151,6 @@
     "btn_grid": "Grid",
     "btn_list": "List",
     "all": "All"
-  },
-  "Notification": {
-    "success": "Successfully!",
-    "error": "Error!"
   },
   "Form": {
     "name": "Full name",
@@ -531,5 +527,51 @@
     "create": "Create",
     "cancel": "Cancel",
     "refresh": "Refresh"
+  },
+  "Notification": {
+    "title": "Notifications",
+    "title_page": "Your notifications",
+    "description": "Notifications of website",
+    "error": {
+      "title": "Error!",
+      "fetch": "Error fetching notifications. Please try again later!",
+      "mark_as_read": "Error marking notification as read. Please try again later!",
+      "mark_all_as_read": "Error marking all notifications as read. Please try again later!",
+      "delete": "Error deleting notification. Please try again later!",
+      "delete_all": "Error deleting all notifications. Please try again later!"
+    },
+    "success": {
+      "title": "Success!",
+      "mark_all_as_read": "All notifications marked as read",
+      "delete": "Notification deleted",
+      "delete_all": "All notifications deleted"
+    },
+    "all": "All",
+    "yes": "Yes",
+    "no": "No",
+    "delete": "Delete",
+    "delete_all": "Delete all",
+    "view_all": "View all",
+    "delete_all_confirm_title": "Are you sure you want to delete all these notifications?",
+    "mark_all_as_read": "Mark all as read",
+    "no_notifications": "You have no notifications",
+    "delete_confirm_title": "Are you sure you want to delete this notification?",
+    "mark_as_read": "Mark as read",
+    "type": {
+      "COMMENT": "Comment",
+      "SYSTEM": "System",
+      "NEW_PATTERN": "New pattern",
+      "NEW_PRODUCT": "New product",
+      "NEW_BLOG": "New blog",
+      "OTHER": "Other"
     }
+  },
+  "Comment": {
+    "title": "Comment",
+    "login_to_comment": "Login to comment",
+    "success": "Comment posted successfully",
+    "error": "Error posting comment. Please try again later!",
+    "placeholder": "Write your comment here...",
+    "reply": "Reply"
+  }
 }
