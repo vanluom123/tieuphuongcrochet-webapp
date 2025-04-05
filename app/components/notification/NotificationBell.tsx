@@ -5,15 +5,11 @@ import { Badge, Popover, List, Typography, Button, Empty, Spin } from 'antd';
 import { BellOutlined, CheckOutlined } from '@ant-design/icons';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { notificationService, Notification } from '@/app/lib/service/notificationService';
 import '@/app/ui/components/notificationBell.scss';
 import { timeUtils } from '@/app/lib/utils';
-
-dayjs.extend(relativeTime);
 
 const { Text, Title } = Typography;
 
@@ -25,6 +21,7 @@ const NotificationBell: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const t = useTranslations('Notification');
+  const locale = useLocale();
 
   const fetchNotifications = async () => {
     if (!session?.user?.id) return;
@@ -136,7 +133,7 @@ const NotificationBell: React.FC = () => {
                   <Text strong>{notification.title}</Text>
                   <Text>{notification.message}</Text>
                   <Text type="secondary" className="notification-time">
-                    {timeUtils.timeAgo(notification.createdAt)}
+                    {timeUtils.timeAgo(notification.createdAt, locale)}
                   </Text>
                 </div>
               </List.Item>
