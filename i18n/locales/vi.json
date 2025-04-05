@@ -152,10 +152,6 @@
     "btn_list": "Danh sách",
     "all": "Tất cả"
   },
-  "Notification": {
-    "success": "Thành công",
-    "error": "Lỗi"
-  },
   "Form": {
     "name": "Họ và tên",
     "email": "Email",
@@ -531,5 +527,52 @@
     "create": "Tạo",
     "cancel": "Hủy",
     "refresh": "Làm mới"
+  },
+  "Notification": {
+    "title": "Thông báo",
+    "title_page": "Thông báo của bạn",
+    "description": "Thông báo của website",
+    "error": {
+      "title": "Lỗi",
+      "fetch": "Không thể tải thông báo. Vui lòng thử lại sau!",
+      "mark_as_read": "Không thể đánh dấu thông báo đã đọc. Vui lòng thử lại sau!",
+      "mark_all_as_read": "Không thể đánh dấu tất cả thông báo đã đọc. Vui lòng thử lại sau!",
+      "delete": "Không thể xóa thông báo. Vui lòng thử lại sau!",
+      "delete_all": "Không thể xóa tất cả thông báo. Vui lòng thử lại sau!"
+    },
+    "success": {
+      "title": "Thành công",
+      "mark_all_as_read": "Đã đánh dấu tất cả thông báo là đã đọc",
+      "delete": "Đã xóa thông báo",
+      "delete_all": "Đã xóa tất cả thông báo"
+    },
+    "all": "Tất cả",
+    "delete": "Xóa",
+    "yes": "Có",
+    "no": "Không",
+    "view_all": "Xem tất cả",
+    "delete_all": "Xóa tất cả",
+    "delete_all_confirm_title": "Bạn có chắc chắn muốn xóa tất cả thông báo này không?",
+    "mark_all_as_read": "Đánh dấu tất cả đã đọc",
+    "no_notifications": "Bạn không có thông báo nào",
+    "delete_confirm_title": "Bạn có chắc chắn muốn xóa thông báo này không?",
+    "mark_as_read": "Đánh dấu đã đọc",
+    "type": {
+      "COMMENT": "Bình luận",
+      "SYSTEM": "Hệ thống",
+      "NEW_PATTERN": "Mẫu mới",
+      "NEW_PRODUCT": "Sản phẩm mới",
+      "NEW_BLOG": "Bài viết mới",
+      "OTHER": "Khác"
+    }
+  },
+  "Comment": {
+    "title": "Bình luận",
+    "login_to_comment": "Đăng nhập để bình luận",
+    "success": "Bình luận đã được đăng thành công",
+    "error": "Không thể đăng bình luận. Vui lòng thử lại sau.",
+    "placeholder": "Viết bình luận của bạn...",
+    "reply": "Trả lời",
+    "comment": "Bình luận"
   }
 }
