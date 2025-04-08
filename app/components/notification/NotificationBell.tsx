@@ -1,8 +1,8 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { Badge, Popover, List, Typography, Button, Empty, Spin } from 'antd';
-import { BellOutlined, CheckOutlined } from '@ant-design/icons';
+import { Badge, Popover, List, Typography, Button, Empty, Spin, Avatar } from 'antd';
+import { BellOutlined, CheckOutlined, CommentOutlined, FileOutlined, ShoppingOutlined, ReadOutlined } from '@ant-design/icons';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
@@ -100,6 +100,23 @@ const NotificationBell: React.FC = () => {
     setVisible(false);
   };
 
+  const getNotificationTypeIcon = (type: string) => {
+    switch (type) {
+      case 'COMMENT':
+        return <CommentOutlined />;
+      case 'SYSTEM':
+        return <BellOutlined />;
+      case 'NEW_PATTERN':
+        return <FileOutlined />;
+      case 'NEW_PRODUCT':
+        return <ShoppingOutlined />;
+      case 'NEW_BLOG':
+        return <ReadOutlined />;
+      default:
+        return <BellOutlined />;
+    }
+  };
+
   const notificationContent = (
     <div className="notification-popup">
       <div className="notification-header">
@@ -129,6 +146,20 @@ const NotificationBell: React.FC = () => {
                 className={`notification-item ${!notification.read ? 'unread' : ''}`}
                 onClick={() => handleNotificationClick(notification)}
               >
+                <div className="notification-item-avatar">
+                  <div className="avatar-container">
+                    <Avatar 
+                      size={32} 
+                      src={notification.senderImageUrl} 
+                      className="user-avatar"
+                    >
+                      {notification.senderName ? notification.senderName.charAt(0).toUpperCase() : '?'}
+                    </Avatar>
+                    <div className="notification-badge">
+                      {getNotificationTypeIcon(notification.notificationType)}
+                    </div>
+                  </div>
+                </div>
                 <div className="notification-item-content">
                   <Text strong>{notification.title}</Text>
                   <Text>{notification.message}</Text>
