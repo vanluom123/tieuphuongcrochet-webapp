@@ -32,7 +32,7 @@ const UserInfo = ({userData, setUserData}: UserInfoProps) => {
             const updatedUser = await updateUserProfile({
                 name: values.name,
                 phone: values.phone,
-                birthDate: typeof values.birthDate === 'string' ? values.birthDate : dayjs(values.birthDate).format('YYYY-MM-DD'),
+                birthDate: values.birthDate ? dayjs(values.birthDate).format('YYYY-MM-DD') : null,
                 gender: values.gender,
                 backgroundImageUrl: values.backgroundImageUrl
             });

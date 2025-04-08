@@ -1,14 +1,17 @@
 'use client'
 
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Modal, List, Button, Input, Form, Spin, Empty, message } from 'antd';
-import { PlusOutlined, BookOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { fetchUserCollections, createCollection } from '@/app/lib/service/profileService';
 import { Collection } from '@/app/lib/definitions';
 import { useTranslations } from 'next-intl';
 import { savePatternToCollection } from '../lib/service/collectionService';
 import { useSession } from 'next-auth/react';
 import { useBookmarkModal } from '@/app/context/BookmarkModalContext';
+import Image from 'next/image';
+import bookmarksImage from '@/public/Bookmarks.png';
+
 
 interface BookmarkModalProps {
     open: boolean;
@@ -174,13 +177,6 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ open, onClose, patternId,
                             {t('create_new_collection')}
                         </Button>
 
-                        <Button
-                            onClick={() => loadCollections()}
-                            style={{ marginBottom: 16 }}
-                        >
-                            {t('refresh')}
-                        </Button>
-
                         {collections.length === 0 ? (
                             <Empty description={t('no_collections')} />
                         ) : (
@@ -200,7 +196,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ open, onClose, patternId,
                                         ]}
                                     >
                                         <List.Item.Meta
-                                            avatar={<BookOutlined />}
+                                            avatar={<Image src={bookmarksImage} alt="Bookmarks" width={24} height={24} />}
                                             title={collection.name}
                                         />
                                     </List.Item>
