@@ -9,6 +9,8 @@ export interface Notification {
   read: boolean;
   createdAt: string;
   notificationType: string;
+  senderName?: string;
+  senderImageUrl?: string;
 }
 
 export interface NotificationPage {
