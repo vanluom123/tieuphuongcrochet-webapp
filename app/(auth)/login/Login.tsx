@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { LockOutlined, MailOutlined, GoogleOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Space, Spin } from 'antd';
+import { Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 import Link from 'next/link';
