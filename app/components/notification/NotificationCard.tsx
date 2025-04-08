@@ -1,7 +1,7 @@
-import { Popconfirm, Typography } from "antd";
+import { Popconfirm, Typography, Avatar } from "antd";
 import { Tag } from "antd";
 import { Button } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, CommentOutlined, BellOutlined, FileOutlined, ShoppingOutlined, ReadOutlined } from "@ant-design/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { Notification } from "@/app/lib/service/notificationService";
 import '@/app/ui/components/notificationCard.scss';
@@ -37,14 +37,45 @@ const NotificationCard = ({ notification, onDelete, onMarkAsRead, onNotification
     }
   };
 
+  const getNotificationTypeIcon = (type: string) => {
+    switch (type) {
+      case 'COMMENT':
+        return <CommentOutlined />;
+      case 'SYSTEM':
+        return <BellOutlined />;
+      case 'NEW_PATTERN':
+        return <FileOutlined />;
+      case 'NEW_PRODUCT':
+        return <ShoppingOutlined />;
+      case 'NEW_BLOG':
+        return <ReadOutlined />;
+      default:
+        return <BellOutlined />;
+    }
+  };
+
   return <div
     className={`notification-item ${!notification.read ? 'unread' : ''}`}
     key={notification.id}
   >
     <div className="notification-header">
-      <Tag className={`notification-type ${notification.notificationType}`}>
-        {getNotificationTypeDisplay(notification.notificationType)}
-      </Tag>
+      <div className="notification-info">
+        <div className="avatar-container">
+          <Avatar 
+            size={40} 
+            src={notification.senderImageUrl} 
+            className="user-avatar"
+          >
+            {notification.senderName ? notification.senderName.charAt(0).toUpperCase() : '?'}
+          </Avatar>
+          <div className="notification-badge">
+            {getNotificationTypeIcon(notification.notificationType)}
+          </div>
+        </div>
+        <Tag className={`notification-type ${notification.notificationType}`}>
+          {getNotificationTypeDisplay(notification.notificationType)}
+        </Tag>
+      </div>
       <Popconfirm
         title={t('delete_confirm_title')}
         onConfirm={() => onDelete(notification.id)}
