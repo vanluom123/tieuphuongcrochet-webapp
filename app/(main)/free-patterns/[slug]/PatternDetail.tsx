@@ -50,7 +50,6 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
                 <FloatButton
                     shape="circle"
                     className="custom-bookmark-button"
-                    style={{ right: 24, bottom: 80 }} // Điều chỉnh vị trí lên cao hơn để tránh chồng lên nút donate
                     onClick={() => toggleBookmark(pattern?.id?.toString() || '')}
                     icon={
                         <Image

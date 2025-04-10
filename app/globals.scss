@@ -831,6 +831,11 @@ body {
   .layout-wrap {
 
     .ant-float-btn {
+      &.float-btn-donate {
+        right: 7px;
+        bottom: 130px;
+      }
+
       &.float-btn-right-bottom,
       &.custom-bookmark-button {
         right: 7px;
@@ -1422,6 +1427,10 @@ body {
     left: calc(50% - 20px);
   }
 
+  &.float-btn-donate {
+    bottom: 140px;
+  }
+
   &.custom-bookmark-button,
   &.float-btn-right-bottom {
     bottom: 80px;
@@ -1435,5 +1444,34 @@ body {
 .active {
   .ant-btn-icon {
     color: $colorPrimary;
+  }
+}
+
+// Donate modal
+.donate-modal {
+  .donate-modal-title {
+    margin: 0;
+  }
+
+  .donate-modal-message {
+    line-height: 1.6;
+    white-space: pre-line;
+    font-style: italic;
+    color: #5e35b1;
+  }
+
+  @media screen and (max-width: $md) {
+    .ant-modal-content {
+      padding: 10px;
+    }
+
+    .donate-modal-message {
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+
+    .donate-modal-title {
+      font-size: $fontSize_middle;
+    }
   }
 }

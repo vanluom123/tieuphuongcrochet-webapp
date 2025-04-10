@@ -3,7 +3,7 @@ import { Content } from "antd/es/layout/layout";
 import { App, FloatButton, Layout, Tooltip } from "antd";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { DollarOutlined, HeartOutlined } from "@ant-design/icons";
+import { HeartOutlined } from "@ant-design/icons";
 import DonateModal from "../donate-modal";
 
 import { ROUTE_PATH } from "../../lib/constant";
@@ -91,7 +91,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
                     <FloatButton 
                         icon={<HeartOutlined />} 
                         type="primary" 
-                        style={{ right: 24, backgroundColor: '#ff4d4f' }}
+                        style={{ backgroundColor: '#ff4d4f' }}
                         onClick={toggleDonateModal}
                         className='float-btn-donate'
                     />
@@ -115,7 +115,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
                 <FloatButton 
                     icon={<HeartOutlined />} 
                     type="primary" 
-                    style={{ right: 24, bottom: 140, backgroundColor: '#ff4d4f' }}
+                    style={{backgroundColor: '#ff4d4f' }}
                     onClick={toggleDonateModal}
                     className='float-btn-donate'
                 />
@@ -123,7 +123,6 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
             <FloatButton.BackTop 
                 className='float-btn-back-top' 
                 visibilityHeight={0} 
-                style={{ right: 24, bottom: 24 }}
             />
             <DonateModal isOpen={isDonateModalOpen} onClose={toggleDonateModal} />
         </Layout>

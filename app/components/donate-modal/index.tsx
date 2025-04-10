@@ -17,12 +17,10 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
       open={isOpen}
       onCancel={onClose}
       footer={null}
-      style={{ maxWidth: 500 }}
-      centered
       className="donate-modal"
       title={
         <div style={{ textAlign: 'center' }}>
-          <Title level={3} style={{ marginBottom: 0 }}>
+          <Title level={3} className='donate-modal-title'>
             <HeartOutlined style={{ color: '#ff4d4f', marginRight: 8 }} />
             {t('title')}
           </Title>
@@ -30,10 +28,10 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
       }
     >
       <div style={{ padding: '0 10px' }}>
-        <p style={{ whiteSpace: 'pre-line', lineHeight: '1.6' }}>
+        <p className='donate-modal-message'>
           {t('message')}
         </p>
-        <div style={{ textAlign: 'center', marginTop: 24, marginBottom: 16 }}>
+        <div className='donate-modal-content'>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
             {/* <Button 
               type="primary" 
