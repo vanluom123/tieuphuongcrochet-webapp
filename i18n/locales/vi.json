@@ -574,5 +574,12 @@
     "placeholder": "Viết bình luận của bạn...",
     "reply": "Trả lời",
     "comment": "Bình luận"
+  },
+  "DonateModal":{
+    "web_title": "Tiểu Phương Crochet",
+    "title": " Ủng hộ Tiểu Phương Crochet",
+    "thanks": "Cảm ơn bạn từ đáy lòng! ❤️❤️",
+    "or": "hoặc chuyển khoản bằng mã QR:",
+    "message": "Trang web này được mình tạo ra và chia sẻ miễn phí với mong muốn lan toả niềm vui móc len.\n\nNếu bạn thấy chart hữu ích và muốn góp một chút động lực để mình tiếp tục duy trì web, mình rất biết ơn.\n\nMỗi sự ủng hộ, dù nhỏ thôi, đều là một niềm vui lớn với mình."
   }
 }
