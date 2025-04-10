@@ -833,13 +833,13 @@ body {
     .ant-float-btn {
       &.float-btn-donate {
         right: 7px;
-        bottom: 130px;
+        bottom: 70px;
       }
 
       &.float-btn-right-bottom,
       &.custom-bookmark-button {
         right: 7px;
-        bottom: 70px;
+        bottom: 130px;
       }
 
       &.float-btn-back-top {
@@ -1428,12 +1428,12 @@ body {
   }
 
   &.float-btn-donate {
-    bottom: 140px;
+    bottom: 80px;
   }
 
   &.custom-bookmark-button,
   &.float-btn-right-bottom {
-    bottom: 80px;
+    bottom: 140px;
   }
 
   &.float-btn-back-top {
