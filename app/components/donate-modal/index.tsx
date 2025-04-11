@@ -1,9 +1,11 @@
 "use client"
-import { Image, Modal, Space, Typography } from 'antd';
+import {Divider, Image, Modal, Space, Typography} from 'antd';
 import { DollarOutlined, HeartOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
+import PayPalDonateButton from "@/app/components/donate-modal/PayPalDonateButton";
+import QRDonate from "@/app/components/donate-modal/QRDonate";
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 interface DonateModalProps {
   isOpen: boolean;
@@ -32,39 +34,12 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
           {t('message')}
         </p>
         <div className='donate-modal-content'>
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            {/* <Button 
-              type="primary" 
-              size="large" 
-              icon={<DollarOutlined />} 
-              style={{ 
-                height: 50, 
-                fontSize: 18, 
-                backgroundColor: '#ff4d4f',
-                borderColor: '#ff4d4f'
-              }}
-              onClick={() => window.open('https://www.paypal.com', '_blank')}
-            >
-              Ủng hộ qua PayPal
-            </Button> */}
-            <div style={{ marginTop: 16 }}>
-              {/* <Text style={{ fontSize: 16, color: '#888', display: 'block', marginBottom: 12 }}>{t('or')}</Text> */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Image
-                  src="/donate-qr-702.png"
-                  alt="QR Payment"
-                  width='180px'
-                  height='auto'
-                  style={{ margin: '0 auto 16px' }}
-                  preview={false}
-                />
-                <Paragraph style={{ textAlign: 'center', fontWeight: 'bold', margin: 0 }}>
-                  <span style={{ fontSize: 18, color: '#5e35b1', display: 'block', marginBottom: 8 }}>DO THI THAM PHUONG</span>
-                  <span style={{ fontSize: 18, display: 'block' }}>0331 2912 702</span>
-                  <span style={{ fontSize: 14, color: '#666', display: 'block', marginTop: 8 }}>TPBank | VietQR</span>
-                </Paragraph>
-              </div>
-            </div>
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <PayPalDonateButton />
+            <Divider type="horizontal">
+              <Text style={{ fontSize: 16, color: '#888', display: 'block'}}>{t('or')}</Text>
+            </Divider>
+            <QRDonate />
           </Space>
         </div>
 
