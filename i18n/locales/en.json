@@ -577,9 +577,10 @@
   },
   "DonateModal": {
     "web_title": "Tieu Phuong Crochet",
-    "title": "Donate to Tieu Phuong Crochet",
+    "title": "Announcement: Temporary Website Shutdown",
     "thanks": "Many thanks!! ❤️❤️",
     "or": "or transfer by QR code:",
-    "message": "This website is a passion project where I share free crochet patterns with the hope of spreading joy through yarn.\nIf you find the patterns helpful and would like to support my effort to keep the site running, I’d be deeply grateful.\nEvery donation, no matter how small, brings me so much encouragement."
+    "message": "Hello,\nI'm truly sorry to inform you that the website will be temporarily down due to insufficient funds to keep it running.\nI deeply appreciate every visit and word of encouragement from you.\nI hope that one day soon, when the conditions allow, the website will be back online.\nIf you love this site and would like to contribute a small part to help bring it back, you can support us through a donation.\nAny form of help is greatly appreciated and gives me a lot of motivation to keep going.",
+    "message_donate": "This website is a passion project where I share free crochet patterns with the hope of spreading joy through yarn.\nIf you find the patterns helpful and would like to support my effort to keep the site running, I’d be deeply grateful.\nEvery donation, no matter how small, brings me so much encouragement."
   }
 }

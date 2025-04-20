@@ -7,7 +7,7 @@ const QRDonate = () => {
             <Image
                 src="/donate-qr-702.png"
                 alt="QR Payment"
-                width='180px'
+                width='100px'
                 height='auto'
                 style={{ margin: '0 auto 16px' }}
                 preview={false}

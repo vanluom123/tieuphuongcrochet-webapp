@@ -1,6 +1,6 @@
 "use client"
-import {Divider, Image, Modal, Space, Typography} from 'antd';
-import { DollarOutlined, HeartOutlined } from '@ant-design/icons';
+import {Divider, Modal, Space, Typography} from 'antd';
+import { HeartOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 import PayPalDonateButton from "@/app/components/donate-modal/PayPalDonateButton";
 import QRDonate from "@/app/components/donate-modal/QRDonate";
@@ -37,7 +37,7 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
           <Space direction="vertical" style={{ width: '100%' }}>
             <PayPalDonateButton />
             <Divider type="horizontal">
-              <Text style={{ fontSize: 16, color: '#888', display: 'block'}}>{t('or')}</Text>
+              <Text style={{ color: '#888', display: 'block'}}>{t('or')}</Text>
             </Divider>
             <QRDonate />
           </Space>

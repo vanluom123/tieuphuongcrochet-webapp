@@ -577,9 +577,10 @@
   },
   "DonateModal":{
     "web_title": "Tiểu Phương Crochet",
-    "title": " Ủng hộ Tiểu Phương Crochet",
+    "title": "Thông báo: Tạm ngừng hoạt động trang web",
     "thanks": "Cảm ơn bạn từ đáy lòng! ❤️❤️",
     "or": "hoặc chuyển khoản bằng mã QR:",
-    "message": "Trang web này được mình tạo ra và chia sẻ miễn phí với mong muốn lan toả niềm vui móc len.\nNếu bạn thấy chart hữu ích và muốn góp một chút động lực để mình tiếp tục duy trì web, mình rất biết ơn.\nMỗi sự ủng hộ, dù nhỏ thôi, đều là một niềm vui lớn với mình."
+    "message":"Chào bạn,\nMình rất tiếc khi phải thông báo rằng trang web sẽ tạm ngừng hoạt động trong thời gian này vì chưa đủ kinh phí để duy trì.\nMình thật sự trân trọng từng lượt truy cập, từng lời động viên của bạn.\nHy vọng một ngày không xa, khi có đủ điều kiện, trang web sẽ lại được mở lại.\nNếu bạn yêu thích và muốn góp một phần nhỏ để giúp trang web quay trở lại, bạn có thể ủng hộ bằng cách donate.\nBất kỳ sự giúp đỡ nào cũng đều đáng quý và tiếp thêm rất nhiều động lực cho mình.\n",
+    "message_donate": "Trang web này được mình tạo ra và chia sẻ miễn phí với mong muốn lan toả niềm vui móc len.\nNếu bạn thấy chart hữu ích và muốn góp một chút động lực để mình tiếp tục duy trì web, mình rất biết ơn.\nMỗi sự ủng hộ, dù nhỏ thôi, đều là một niềm vui lớn với mình."
   }
 }

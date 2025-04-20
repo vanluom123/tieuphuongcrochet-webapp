@@ -21,33 +21,37 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
     const pathname = usePathname();
     const [currentNav, setCurrentNav] = useState(ROUTE_PATH.HOME);
     const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
-    
+
     // Kiểm tra xem đã hiển thị donate modal ngày hôm nay chưa và hiển thị tự động
-    useEffect(() => {
+    const onShowDonateModal = () => {
         // Lấy ngày hiện tại dạng YYYY-MM-DD
         const today = new Date().toISOString().split('T')[0];
         // Lấy ngày đã hiển thị donate modal gần nhất
         const lastSeenDate = localStorage.getItem('lastSeenDonateModalDate');
-        
+
         // Chỉ hiển thị popup nếu chưa hiển thị ngày hôm nay
         if (lastSeenDate !== today) {
             // Đợi 1 giây sau khi trang load xong để hiển thị modal
             const timer = setTimeout(() => {
                 setIsDonateModalOpen(true);
-                
+
                 // Tự động đóng sau 8 giây
                 setTimeout(() => {
                     setIsDonateModalOpen(false);
                 }, 8000);
-                
+
                 // Đánh dấu là đã hiển thị ngày hôm nay
                 localStorage.setItem('lastSeenDonateModalDate', today);
             }, 1000);
-            
+
             return () => clearTimeout(timer);
         }
+    }
+
+    useEffect(() => {
+        setIsDonateModalOpen(true);
     }, []);
-    
+
     const toggleDonateModal = useCallback(() => {
         setIsDonateModalOpen(prev => !prev);
     }, []);
@@ -58,7 +62,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
             animationHeader();
         }
     }, []);
-    
+
     useEffect(() => {
         const navs = pathname.split('/');
 
@@ -74,12 +78,12 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
     }, [pathname, setCurrentNavCallback]);
 
     const isSpecialRoute = useMemo(() => {
-        return pathname === ROUTE_PATH.LOGIN || 
-               pathname.includes(ROUTE_PATH.DASHBOARD) || 
-               pathname === ROUTE_PATH.REGISTER ||
-               pathname.includes(ROUTE_PATH.PROFILE);
+        return pathname === ROUTE_PATH.LOGIN ||
+            pathname.includes(ROUTE_PATH.DASHBOARD) ||
+            pathname === ROUTE_PATH.REGISTER ||
+            pathname.includes(ROUTE_PATH.PROFILE);
     }, [pathname]);
-        
+
     if (isSpecialRoute) {
         return (
             <Layout className='layout-wrap'>
@@ -88,9 +92,9 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
                 </App>
                 {children}
                 <Tooltip title="Ủng hộ website" placement="left">
-                    <FloatButton 
-                        icon={<HeartOutlined />} 
-                        type="primary" 
+                    <FloatButton
+                        icon={<HeartOutlined />}
+                        type="primary"
                         style={{ backgroundColor: '#ff4d4f' }}
                         onClick={toggleDonateModal}
                         className='float-btn-donate'
@@ -112,17 +116,17 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
             </Content>
             <FooterPage currentNav={currentNav} />
             <Tooltip title="Ủng hộ website" placement="left">
-                <FloatButton 
-                    icon={<HeartOutlined />} 
-                    type="primary" 
-                    style={{backgroundColor: '#ff4d4f' }}
+                <FloatButton
+                    icon={<HeartOutlined />}
+                    type="primary"
+                    style={{ backgroundColor: '#ff4d4f' }}
                     onClick={toggleDonateModal}
                     className='float-btn-donate'
                 />
             </Tooltip>
-            <FloatButton.BackTop 
-                className='float-btn-back-top' 
-                visibilityHeight={0} 
+            <FloatButton.BackTop
+                className='float-btn-back-top'
+                visibilityHeight={0}
             />
             <DonateModal isOpen={isDonateModalOpen} onClose={toggleDonateModal} />
         </Layout>
