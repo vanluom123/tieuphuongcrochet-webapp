@@ -307,7 +307,27 @@
       "gender_other": "Other",
       "load_error": "Load user info failed"
     },
-    "back": "Back"
+    "back": "Back",
+    "delete_account": {
+      "title": "Delete Account",
+      "description": "Permanently delete your account and all associated data",
+      "warning_title": "Warning - This action cannot be undone",
+      "warning_description": "Your account will be scheduled for permanent deletion after 30 days. During this period, you can log in to cancel the deletion.",
+      "what_happens": "What happens when you delete your account?",
+      "consequence_1": "• Your profile and all personal information will be permanently deleted",
+      "consequence_2": "• All your patterns, collections and comments will be removed",
+      "consequence_3": "• You will lose access to your bookmarks and saved items",
+      "consequence_4": "• Your username will become available for others to use",
+      "confirm_download": "I understand that I should download my data before deleting my account",
+      "confirm_delete": "I understand that this action is permanent and cannot be undone",
+      "delete_button": "Delete My Account",
+      "cancel_button": "Cancel",
+      "success": "Account Deletion Initiated",
+      "success_description": "Your account has been scheduled for deletion. You can cancel this within 30 days by logging in.",
+      "error": "Error",
+      "error_description": "Something went wrong while trying to delete your account. Please try again.",
+      "check_confirmations": "Please confirm all checkboxes before proceeding"
+    }
   },
   "CategoryMenu": {
     "title": "Categories",
