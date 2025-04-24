@@ -307,7 +307,27 @@
       "gender_other": "Khác",
       "load_error": "Tải thông tin thất bại"
     },
-    "back": "Quay lại"
+    "back": "Quay lại",
+    "delete_account": {
+      "title": "Xóa tài khoản",
+      "description": "Xóa vĩnh viễn tài khoản của bạn và tất cả dữ liệu liên quan",
+      "warning_title": "Cảnh báo - Hành động này không thể hoàn tác",
+      "warning_description": "Tài khoản của bạn sẽ được lên lịch xóa vĩnh viễn sau 30 ngày. Trong thời gian này, bạn có thể đăng nhập để hủy xóa.",
+      "what_happens": "Điều gì xảy ra khi bạn xóa tài khoản?",
+      "consequence_1": "• Hồ sơ và tất cả thông tin cá nhân của bạn sẽ bị xóa vĩnh viễn",
+      "consequence_2": "• Tất cả mẫu, bộ sưu tập và bình luận của bạn sẽ bị xóa",
+      "consequence_3": "• Bạn sẽ mất quyền truy cập vào các mục đã đánh dấu và đã lưu",
+      "consequence_4": "• Tên người dùng của bạn sẽ có sẵn cho người khác sử dụng",
+      "confirm_download": "Tôi hiểu rằng tôi nên tải xuống dữ liệu của mình trước khi xóa tài khoản",
+      "confirm_delete": "Tôi hiểu rằng hành động này là vĩnh viễn và không thể hoàn tác",
+      "delete_button": "Xóa tài khoản của tôi",
+      "cancel_button": "Hủy",
+      "success": "Đã bắt đầu xóa tài khoản",
+      "success_description": "Tài khoản của bạn đã được lên lịch xóa. Bạn có thể hủy trong vòng 30 ngày bằng cách đăng nhập.",
+      "error": "Lỗi",
+      "error_description": "Đã xảy ra lỗi khi cố gắng xóa tài khoản của bạn. Vui lòng thử lại.",
+      "check_confirmations": "Vui lòng xác nhận tất cả các hộp kiểm trước khi tiến hành"
+    }
   },
   "CategoryMenu": {
     "title": "Danh mục",
