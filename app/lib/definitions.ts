@@ -234,6 +234,8 @@ export interface User {
 	provider?: string;
 	emailVerified?: boolean;
 	role?: string;
+	isVip?: boolean;
+	vipExpiryDate?: string;
 	phone?: string;
 	birthDate?: string;
 	gender?: string;

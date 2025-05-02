@@ -8,7 +8,8 @@ import {
     AppstoreOutlined,
     FileOutlined,
     UnorderedListOutlined,
-    SettingOutlined
+    SettingOutlined,
+    CrownOutlined
 } from '@ant-design/icons';
 import { Menu } from "antd";
 import { usePathname } from 'next/navigation';
@@ -75,6 +76,11 @@ export const sidebarItems = [
         key: ROUTE_PATH.DASHBOARD_USERS,
         icon: <TeamOutlined />,
         label: <Link href={ROUTE_PATH.DASHBOARD_USERS}>Users</Link>,
+    },
+    {
+        key: ROUTE_PATH.DASHBOARD_VIP,
+        icon: <CrownOutlined style={{ color: '#FFD700' }} />,
+        label: <Link href={ROUTE_PATH.DASHBOARD_VIP}>VIP Subscriptions</Link>,
     },
     {
         key: ROUTE_PATH.DASHBOARD_SETTING,

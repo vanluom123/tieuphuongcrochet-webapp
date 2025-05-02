@@ -11,6 +11,7 @@ import ReadMoreBtn from "../read-more";
 import { Pattern } from "@/app/lib/definitions";
 import { useRouter } from "next/navigation";
 import { BookmarkModalProvider } from "@/app/context/BookmarkModalContext";
+import Advertisement from "../Advertisement";
 
 const FreePatternsNode = ({patterns}: {patterns: Pattern[]}) => {
 
@@ -27,6 +28,7 @@ const FreePatternsNode = ({patterns}: {patterns: Pattern[]}) => {
 					descriptionId='Home.FreePattern.description'
 					isShowDivider
 				/>
+				<Advertisement adSlot="1234567890" format="horizontal" className="patterns-advert" />
 				<Row gutter={[{ xs: 8, sm: 16, xl: 24 }, { xs: 12, sm: 16, xl: 24 }]}>
 					{
 						map(patterns, (pattern, index) =>

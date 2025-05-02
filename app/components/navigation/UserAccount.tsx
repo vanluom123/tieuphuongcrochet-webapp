@@ -1,5 +1,5 @@
 import { Button, MenuProps, Dropdown, Modal, Avatar } from "antd";
-import { UserOutlined, LogoutOutlined, DashboardOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, DashboardOutlined, CrownOutlined } from '@ant-design/icons';
 import { signOut, useSession } from "next-auth/react";
 import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
 import { useRouter } from "next/navigation";
@@ -21,6 +21,14 @@ const UserAccount = () => {
             icon: <UserOutlined />,
             onClick: () => {
                 router.push(`${ROUTE_PATH.PROFILE}/${userId}`);
+            }
+        },
+        {
+            key: 'vip_subscription',
+            label: 'VIP',
+            icon: <CrownOutlined style={{ color: '#FFD700' }} />,
+            onClick: () => {
+                router.push(ROUTE_PATH.DASHBOARD_VIP);
             }
         },
         ...(session?.user?.role === USER_ROLES.ADMIN ? [
