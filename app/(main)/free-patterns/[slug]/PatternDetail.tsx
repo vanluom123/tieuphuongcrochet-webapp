@@ -6,6 +6,7 @@ import ViewDetailWrapper from "@/app/components/view-detail-wrapper";
 import { Pattern } from "@/app/lib/definitions";
 import dynamic from "next/dynamic";
 import { useBookmark } from "@/app/hooks/useBookmark";
+import { useViewCount } from "@/app/hooks/useViewCount";
 import Image from "next/image";
 import primaryBookmark from '@/public/primary-bookmark.png';
 import bookmark from '@/public/bookmark.png';
@@ -18,9 +19,11 @@ const ViewImagesList = dynamic(
 );
 
 const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
-
     const t = useTranslations("FreePattern");
     const { isBookmarked, toggleBookmark } = useBookmark(pattern?.id?.toString());
+    
+    // Track view count
+    useViewCount(pattern?.id?.toString() || '');
 
     return (
         <ViewDetailWrapper
@@ -37,7 +40,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
 
             <Divider />
 
-            {/* ViewImagesList sẽ chỉ được render ở client side */}
+            {/* ViewImagesList will only be rendered on client side */}
             <ViewImagesList
                 isPattern
                 name='free-patterns'

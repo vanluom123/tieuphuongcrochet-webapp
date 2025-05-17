@@ -1,10 +1,11 @@
 'use client'
 
-import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip } from 'antd';
+import { Avatar, Button, Card, Flex, Skeleton, Space, Tag, Tooltip, Typography } from 'antd';
 import {
     UserOutlined,
     EditFilled,
-    DeleteFilled
+    DeleteFilled,
+    EyeOutlined
 } from '@ant-design/icons';
 import React from 'react';
 import Link from 'next/link';
@@ -45,7 +46,7 @@ const FreePatternCard = (
     }: FreePatternCardProps) => {
 
     const { Meta } = Card;
-    const { name, src, status, username, userAvatar, userId, id } = pattern;
+    const { name, src, status, username, userAvatar, userId, id, viewCount } = pattern;
     const t = useTranslations("FreePattern");
     const profileT = useTranslations("Profile");
     const { data: session } = useSession();
@@ -110,17 +111,18 @@ const FreePatternCard = (
                                         </Tooltip>
                                     )}
                                     {isShowActions && (
-
-                                        <><Tooltip title={profileT('patterns.edit')}>
-                                            <Button
-                                                type="text"
-                                                icon={<EditFilled />}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    if (onEdit) onEdit();
-                                                }}
-                                                className="action-button" />
-                                        </Tooltip><Tooltip title={profileT('patterns.delete')}>
+                                        <>
+                                            <Tooltip title={profileT('patterns.edit')}>
+                                                <Button
+                                                    type="text"
+                                                    icon={<EditFilled />}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        if (onEdit) onEdit();
+                                                    }}
+                                                    className="action-button" />
+                                            </Tooltip>
+                                            <Tooltip title={profileT('patterns.delete')}>
                                                 <Button
                                                     type="text"
                                                     icon={<DeleteFilled />}
@@ -129,11 +131,11 @@ const FreePatternCard = (
                                                         if (onDelete) onDelete();
                                                     }}
                                                     className="action-button" />
-                                            </Tooltip></>
+                                            </Tooltip>
+                                        </>
                                     )}
                                 </Flex>
                                 <CustomNextImage src={src} alt={name} />
-
                             </div>
                         )}
                     </>
@@ -155,7 +157,6 @@ const FreePatternCard = (
                                                 />
                                                 :
                                                 <UserOutlined />
-
                                         }
                                         <Link href={`${ROUTE_PATH.PROFILE}/${userId}`}
                                             onClick={(e) => e.stopPropagation()}
@@ -164,11 +165,19 @@ const FreePatternCard = (
                                             &nbsp;{username}
                                         </Link>
                                     </div>
-                                    {
-                                        (status && status !== TRANSLATION_STATUS.NONE) &&
-                                        <Tag className='status-tag'
-                                            color={getStatusColor(status)}>{t(`status.${status}`)}</Tag>
-                                    }
+                                    <Flex gap="small" align="center">
+                                        {viewCount !== undefined && (
+                                            <Space size="small">
+                                                <EyeOutlined />
+                                                <Typography.Text>{viewCount}</Typography.Text>
+                                            </Space>
+                                        )}
+                                        {
+                                            (status && status !== TRANSLATION_STATUS.NONE) &&
+                                            <Tag className='status-tag'
+                                                color={getStatusColor(status)}>{t(`status.${status}`)}</Tag>
+                                        }
+                                    </Flex>
                                 </Flex>
                             }
                         />

@@ -86,4 +86,16 @@
       }
     }
   }
+
+  .ant-card-meta-description {
+    .ant-space {
+      color: rgba(0, 0, 0, 0.45);
+      .anticon {
+        font-size: 14px;
+      }
+      .ant-typography {
+        font-size: 12px;
+      }
+    }
+  }
 }

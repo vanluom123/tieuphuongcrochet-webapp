@@ -106,3 +106,21 @@ export const deleteFreePattern = async (id: string) => {
         showNotification("error", "Failed", error.message || "An unexpected error occurred");
     }
 };
+
+export const incrementViewCount = async (id: string): Promise<void> => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/free-pattern/${id}/view`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to increment view count');
+        }
+    } catch (error) {
+        console.error('Error incrementing view count:', error);
+        throw error;
+    }
+};

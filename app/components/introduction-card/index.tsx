@@ -1,7 +1,7 @@
 'use client'
 import { memo, useEffect, useRef, useState } from "react";
-import { Avatar, Button, Col, Divider, Flex, Row, Space, Tag } from "antd"
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Avatar, Button, Col, Divider, Flex, Row, Space, Tag, Typography } from "antd"
+import { LeftOutlined, RightOutlined, EyeOutlined } from '@ant-design/icons';
 import Link from "next/link";
 import { findIndex, map } from "lodash";
 import { useTranslations } from "next-intl";
@@ -26,7 +26,7 @@ const IMAGE_MARGIN = 10;
 const IMAGE_AMOUNT = 4;
 
 const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: IntroductionCardProps) => {
-	const { src, name, author, description, images, link, price, currency_code } = data;
+	const { src, name, author, description, images, link, price, currency_code, viewCount } = data;
 	const { status, userId, userAvatar, username } = data as Pattern;
 	const [activeThumbnail, setActiveThumbnail] = useState({ index: 0, src });
 	const t = useTranslations("IntroductionCard");
@@ -120,6 +120,12 @@ const IntroductionCard = ({ data, isShowThumbnail, isPreviewAvatar }: Introducti
 							</Link>
 						}
 					</div>
+					{viewCount !== undefined && (
+						<Space>
+							<EyeOutlined />
+							<Typography.Text>{viewCount}</Typography.Text>
+						</Space>
+					)}
 				</Flex>
 			</Col>
 			<Col xs={24} md={12}>
