@@ -260,9 +260,6 @@ export const API_ROUTES = {
   // Settings
   SETTINGS: '/api/v1/settings',
 
-  // File upload
-  FIREBASE_STORAGE: '/api/v1/firebase-storage',
-  
   // Home routes
   HOMES: '/api/v1/homes',
 

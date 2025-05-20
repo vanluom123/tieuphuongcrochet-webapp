@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.1",
+    "@aws-sdk/client-s3": "^3.812.0",
+    "@aws-sdk/s3-request-presigner": "^3.812.0",
     "@ckeditor/ckeditor5-build-classic": "^43.2.0",
     "@ckeditor/ckeditor5-react": "^9.3.0",
     "@emailjs/browser": "^4.4.1",
@@ -37,7 +39,8 @@
     "redux-saga": "^1.3.0",
     "sass": "^1.79.3",
     "sharp": "^0.33.5",
-    "spring-filter-query-builder": "^1.1.1"
+    "spring-filter-query-builder": "^1.1.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.7",
