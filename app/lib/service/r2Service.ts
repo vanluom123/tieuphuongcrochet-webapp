@@ -1,13 +1,16 @@
 import { FileUpload } from "../definitions";
 
 export async function uploadMultipleImagesToR2(
-  files: FileUpload[]
-): Promise<string[]> {
+  files: FileUpload[], 
+  page: string,
+  category: string = ''
+): Promise<FileUpload[]> {
   try {
     const formData = new FormData();
+    formData.append("page", page);
+    formData.append("category", category);
+
     for (const file of files) {
-      console.log('formData file', file);
-      
       formData.append("files", file.originFileObj as File); // same key for multiple files
     }
 
@@ -45,8 +48,7 @@ export async function deleteMultipleFilesToR2(keys: string[]): Promise<boolean> 
     }
 
     const result = await response.json();
-    console.log("Deleted files:", result.deleted);
-    return true;
+    return Array.isArray(result.deleted) && result.deleted.length > 0;
   } catch (error) {
     console.error("Error deleting files:", error);
     return false;

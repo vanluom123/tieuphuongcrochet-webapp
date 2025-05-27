@@ -552,30 +552,36 @@ export const timeUtils = {
     }
 }
 
+export const uploadMultipleImagesToServer = async (
+  currentImages: FileUpload[] = [],
+  prevImages: FileUpload[] = [],
+  page: string ='',
+  category: string = ''
+) => {
+  // Filter out images that are removed
+  const deletedImages =
+    prevImages.filter(
+      (item) =>
+        currentImages.findIndex((img) => img.fileName === item.fileName) < 0
+    ) || [];
 
-export const uploadMultipleImagesToServer = async (currentImages: FileUpload[] = [], prevImages: FileUpload[] = []) => {
+  // Delete images that are removed
+  if (deletedImages?.length > 0) {
+    await deleteMultipleFilesToR2(
+      deletedImages.map((img) => img.fileName || "")
+    );
+  }
 
-    // Filter out images that are removed
-    const deletedImages = prevImages.filter(item => currentImages.findIndex(img => img.fileName === item.fileName) < 0) || [];
-   
-    // Delete images that are removed
+  // Filter out images that was uploaded
+  const uploadedImages = currentImages.filter((img) => img.fileContent);
 
-    if(deletedImages?.length > 0) {
-        const deletedResult = await deleteMultipleFilesToR2(deletedImages.map(img => img.fileName || ''));
-        console.log('deleteResult', deletedResult);
-    }
-    
-    // Filter out images that was uploaded
-    const uploadedImages = (currentImages.filter(img => img.fileContent)).map(img => img.fileContent);
-    console.log('uploadedResult', uploadedImages);
+  // Filter out images that are already uploaded
+  const filesToUpload = currentImages.filter((img) => !img.fileContent);
 
-    // Filter out images that are already uploaded
+  let uploadedResult: FileUpload[] = [];
+  if (filesToUpload.length > 0) {
+    uploadedResult = await uploadMultipleImagesToR2(filesToUpload, page, category);
+  }
 
-
-    const filesToUpload  = currentImages.filter(img => !img.fileContent);
-    console.log('filesToUpload', filesToUpload );
-    const uploadedResult = await uploadMultipleImagesToR2(filesToUpload);
-    console.log('uploadedResult', uploadedResult);
-
-    return [ ...uploadedImages, ...uploadedResult];
-}
+  return [...uploadedImages, ...uploadedResult];
+};

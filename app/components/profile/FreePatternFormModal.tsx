@@ -11,7 +11,7 @@ import FreePatternStatus from "@/app/components/free-pattern-status";
 import UploadFiles from "@/app/components/upload-files";
 import { createUpdateFreePattern, fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
 import { UploadFile } from "antd/es/upload";
-import { uploadImageToServer } from "@/app/lib/utils";
+import { uploadMultipleImagesToServer } from "@/app/lib/utils";
 import CustomEditor from "../custom-editor";
 
 interface FreePatternFormProps {
@@ -85,10 +85,19 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
         }
 
         // Use Promise.all to handle concurrent uploads
-        const [uploadedImages, uploadedFiles] = await Promise.all([
-            uploadImageToServer(sendData.images, state.pattern.images),
-            uploadImageToServer(sendData.files, state.pattern.files)
-        ]);
+         const categoryName = categories.find(ct => ct.key === sendData.category_id)?.name;
+         const [uploadedImages, uploadedFiles] = await Promise.all([
+             uploadMultipleImagesToServer(
+                 sendData.images,
+                 state.pattern.images,
+                 'free-pattern',
+                 categoryName),
+             uploadMultipleImagesToServer(
+                 sendData.files,
+                 state.pattern.files,
+                 'free-pattern',
+                 categoryName)
+         ]);
 
         sendData.images = uploadedImages;
         sendData.files = uploadedFiles;

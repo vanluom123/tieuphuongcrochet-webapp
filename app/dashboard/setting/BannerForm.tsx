@@ -7,7 +7,7 @@ import { memo, useEffect } from "react";
 import UploadFiles from "@/app/components/upload-files";
 import { FileUpload, Banner, DataType } from "@/app/lib/definitions";
 import { notification } from "antd";
-import { uploadImageToServer } from "@/app/lib/utils";
+import { uploadMultipleImagesToServer } from "@/app/lib/utils";
 
 
 export interface EdittingBanner {
@@ -70,7 +70,7 @@ const BannerForm = ({
 		let fileName = bannerImage[0]?.fileName || bannerImage[0]?.name || '';
 
 		if (bannerImage[0]?.originFileObj) {
-			const uploadedFiles = await uploadImageToServer(bannerImage, []);
+			const uploadedFiles = await uploadMultipleImagesToServer(bannerImage, [], 'banners');
 			if (!uploadedFiles || uploadedFiles.length === 0) {
 				notification.error({ message: 'Error', description: 'Failed to upload image' });
 				return;
