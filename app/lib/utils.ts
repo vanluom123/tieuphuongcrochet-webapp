@@ -18,6 +18,7 @@ import {FILTER_LOGIC, FILTER_OPERATION, TRANSLATION_STATUS_COLOR} from './consta
 import uploadFile from './service/uploadFilesSevice';
 import { formatDistance, Locale } from 'date-fns';
 import { enUS, vi } from 'date-fns/locale';
+import { deleteMultipleFilesToR2, uploadMultipleImagesToR2 } from './service/r2Service';
 
 export const checkMobile = () => {
     let check = false;
@@ -549,4 +550,32 @@ export const timeUtils = {
             return String(dateInput);
         }
     }
+}
+
+
+export const uploadMultipleImagesToServer = async (currentImages: FileUpload[] = [], prevImages: FileUpload[] = []) => {
+
+    // Filter out images that are removed
+    const deletedImages = prevImages.filter(item => currentImages.findIndex(img => img.fileName === item.fileName) < 0) || [];
+   
+    // Delete images that are removed
+
+    if(deletedImages?.length > 0) {
+        const deletedResult = await deleteMultipleFilesToR2(deletedImages.map(img => img.fileName || ''));
+        console.log('deleteResult', deletedResult);
+    }
+    
+    // Filter out images that was uploaded
+    const uploadedImages = (currentImages.filter(img => img.fileContent)).map(img => img.fileContent);
+    console.log('uploadedResult', uploadedImages);
+
+    // Filter out images that are already uploaded
+
+
+    const filesToUpload  = currentImages.filter(img => !img.fileContent);
+    console.log('filesToUpload', filesToUpload );
+    const uploadedResult = await uploadMultipleImagesToR2(filesToUpload);
+    console.log('uploadedResult', uploadedResult);
+
+    return [ ...uploadedImages, ...uploadedResult];
 }

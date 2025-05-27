@@ -601,5 +601,14 @@
     "thanks": "Cảm ơn bạn từ đáy lòng! ❤️❤️",
     "or": "hoặc chuyển khoản bằng mã QR:",
     "message": "Trang web này được mình tạo ra và chia sẻ miễn phí với mong muốn lan toả niềm vui móc len.\nNếu bạn thấy chart hữu ích và muốn góp một chút động lực để mình tiếp tục duy trì web, mình rất biết ơn.\nMỗi sự ủng hộ, dù nhỏ thôi, đều là một niềm vui lớn với mình."
-  }
-}
+  },
+  "UploadFiles": {
+    "confirm_delete": "Bạn có chắc chắn xóa hình này?",
+    "confirm_yes": "Có",
+    "confirm_no": "Không",
+    "error_5mb": "Hình ảnh phải nhỏ hơn 5Mb!",
+    "upload": "Chọn ảnh",
+    "crop": "Cắt ảnh",
+    "normal": "Nhiều ảnh",
+    "directory": "Thư mục"
+  }}
