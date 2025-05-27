@@ -22,6 +22,21 @@ const nextConfig = {
           protocol: 'https',
           hostname: 'lh3.googleusercontent.com',
           pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'cdn.tieuphuongcrochet.com',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: '*.r2.dev',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: '*.r2.cloudflarestorage.com',
+          pathname: '/**',
         }
       ],
     },
@@ -44,9 +59,9 @@ const nextConfig = {
             {
               key: 'Access-Control-Allow-Origin',
               value: 'https://fonts.gstatic.com',
-            },
-          ],
-        },
+            }
+          ]
+        }
       ]
     }
   }
