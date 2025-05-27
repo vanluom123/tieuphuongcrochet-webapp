@@ -11,7 +11,7 @@ import { ROUTE_PATH, TRANSLATION_STATUS } from "@/app/lib/constant";
 import { fetchCategories } from "@/app/lib/service/categoryService";
 import FreePatternStatus from "@/app/components/free-pattern-status";
 import UploadFiles from "@/app/components/upload-files";
-import { uploadImageToServer } from "@/app/lib/utils";
+import { uploadMultipleImagesToServer } from "@/app/lib/utils";
 import { createUpdateFreePattern, fetchFreePatternDetail } from "@/app/lib/service/freePatternService";
 
 const CustomEditor = dynamic(
@@ -79,9 +79,20 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
         }
 
         // Use Promise.all to handle concurrent uploads
+        
+        const categoryName = categories.find(ct => ct.key === sendData.category_id)?.name;
+
         const [uploadedImages, uploadedFiles] = await Promise.all([
-            uploadImageToServer(sendData.images, state.pattern.images),
-            uploadImageToServer(sendData.files, state.pattern.files)
+            uploadMultipleImagesToServer(
+                sendData.images,
+                state.pattern.images,
+                'free-pattern',
+                categoryName),
+            uploadMultipleImagesToServer(
+                sendData.files,
+                state.pattern.files,
+                'free-pattern',
+                categoryName)
         ]);
 
         sendData.images = uploadedImages;
@@ -104,6 +115,8 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
         router.back();
     }
 
+
+
     return (<>
         <Spin spinning={state.loading} tip="Loading...">
             <div className="crupattern-page">
@@ -123,9 +136,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                     >
                         <UploadFiles
                             files={state.pattern.images || []}
-                            onChangeFile={(files: FileUpload[]) => {
-                                form.setFieldsValue({ images: files });
-                            }}
+                            onChangeFile={(files: FileUpload[]) => {form.setFieldsValue({ images: files })}}
                         />
                     </Item>
                     <Row gutter={48}>
