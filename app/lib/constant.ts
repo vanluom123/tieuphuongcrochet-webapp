@@ -260,9 +260,6 @@ export const API_ROUTES = {
   // Settings
   SETTINGS: '/api/v1/settings',
 
-  // File upload
-  FIREBASE_STORAGE: '/api/v1/firebase-storage',
-  
   // Home routes
   HOMES: '/api/v1/homes',
 
@@ -270,7 +267,10 @@ export const API_ROUTES = {
   COMMENTS: '/api/v1/comments',
 
   // Notification
-  NOTIFICATIONS: '/api/v1/notifications'
+  NOTIFICATIONS: '/api/v1/notifications',
+
+  // Cloudflare R2
+  R2_PRESIGNED : '/api/r2-presigned'
 };
 
 export const PARAMS_FOR_SITEMAP: ListParams = {

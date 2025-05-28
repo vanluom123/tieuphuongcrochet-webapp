@@ -7,7 +7,7 @@ import { Form, Input, Button, Flex, Row, Col, Switch, Spin } from "antd";
 import UploadFiles from "@/app/components/upload-files";
 import { FileUpload, Post } from "@/app/lib/definitions";
 import { createUpdatePost, fetchPostDetail } from "@/app/lib/service/blogsService";
-import { uploadImageToServer } from "@/app/lib/utils";
+import { uploadMultipleImagesToServer } from "@/app/lib/utils";
 import { ROUTE_PATH } from "@/app/lib/constant";
 
 const CustomEditor = dynamic(
@@ -69,7 +69,11 @@ const BlogForm = ({ params }: BlogFormProps) => {
         }
 
         // Handle upload, delete images
-        sendData.files = await uploadImageToServer(sendData.files, state.post.files);
+        sendData.files = await uploadMultipleImagesToServer(
+            sendData.files,
+            state.post.files,
+            'blogs',
+        )
 
         createUpdatePost(sendData).then((res) => {
             if (res.success) {
@@ -137,7 +141,8 @@ const BlogForm = ({ params }: BlogFormProps) => {
                                 const content = editor.getData();
                                 form.setFieldsValue({ content });
                                 setState(prevState => ({ ...prevState, editorContent: content }));
-                            }} 
+                            }}
+                            page="blogs"
                         />
                     </Item>
                     <Flex justify="center" gap={10} wrap="wrap">

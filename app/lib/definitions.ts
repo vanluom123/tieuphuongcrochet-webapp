@@ -169,6 +169,7 @@ export interface Pattern {
 	username?: string;
 	userAvatar?: string;
 	userId?: string;
+	category_id?:string;
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL';
@@ -200,6 +201,7 @@ export interface Product {
 	link?: string;
 	content?: string;
 	fileContent?: string;
+	category_id?: string;
 }
 
 export interface HomeData {

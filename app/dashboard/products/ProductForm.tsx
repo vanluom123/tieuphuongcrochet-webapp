@@ -10,7 +10,7 @@ import UploadFiles from "@/app/components/upload-files";
 import {createUpdateProduct, fetchProductDetail} from "@/app/lib/service/productService";
 import Select, {DefaultOptionType} from "antd/es/select";
 import CustomEditor from "@/app/components/custom-editor";
-import { uploadImageToServer } from "@/app/lib/utils";
+import { uploadMultipleImagesToServer } from "@/app/lib/utils";
 
 interface ProductFormProps {
     params?: {
@@ -44,7 +44,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
             fetchProductDetail(params.id).then(product => {
                 const newProduct = {
                     ...product,
-                    category_id: product.category?.id,
+                    category_id: product.category?.id as string,
                 }
                 form.setFieldsValue(newProduct);
                 setState(prevState => ({
@@ -69,8 +69,14 @@ const ProductForm = ({ params }: ProductFormProps) => {
         }
 
         // Handle upload, delete images
-        sendData.images = await uploadImageToServer(sendData.images, state.product.images);
-        
+        const categoryName = categories.find(ct => ct.key === sendData.category_id)?.name;
+        sendData.images = await uploadMultipleImagesToServer(
+            sendData.images,
+            state.product.images,
+            'products',
+            categoryName
+        );
+
         const res: ResponseData<any> = await createUpdateProduct(sendData);
         setState(initialState);
         if (res.success) {
@@ -189,7 +195,9 @@ const ProductForm = ({ params }: ProductFormProps) => {
                                 const content = editor.getData();
                                 form.setFieldsValue({ content });
                                 setState(prevState => ({ ...prevState, editorContent: content }));
-                            }} />
+                            }}
+                            page="products"
+                        />
                     </Item>
                     <Flex justify="center" gap={10} wrap="wrap">
                         <Button
