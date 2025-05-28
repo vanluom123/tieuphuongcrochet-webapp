@@ -121,9 +121,9 @@ const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {
             <div className="patterns-tab">
                 {patterns.totalRecords > 0 ? (
                     <div >
-                        <Row gutter={[16, 16]}>
+                        <Row gutter={[{ xs: 8, sm: 16, xl: 24 }, { xs: 12, sm: 16, xl: 24 }]}>
                             {patterns.data.map((pattern, index) => (
-                                <Col xs={12} sm={12} lg={6} key={index}>
+                                <Col xs={12} sm={8} lg={6} key={index}>                                    
                                     <FreePatternCard
                                         isShowActions={isCreator}
                                         pattern={{ ...pattern, src: pattern.fileContent || '' }}

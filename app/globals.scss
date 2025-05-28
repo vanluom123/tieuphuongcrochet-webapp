@@ -300,6 +300,17 @@ body {
   .image-detail {
     padding: 20px 0;
   }
+
+  .ant-divider{
+    border-color: $borderColor;
+    &.ant-divider-horizontal{
+      &.ant-divider-with-text{
+        &::before, &::after{
+          border-color: $borderColor;
+        }
+      }
+    }
+  }
 }
 
 // button
@@ -349,11 +360,12 @@ body {
 
   &.card-item {
     .ant-card-body {
-      padding: 8px;
+      padding: 10px 5px;
 
       .ant-card-meta-title,
       .card-title {
         font-size: $fontSize_small;
+        font-weight: $fontWeight_medium;
         -webkit-line-clamp: 2;
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -618,6 +630,20 @@ body {
         bottom: 20px;
       }
     }
+
+    .introduction-card{
+      .card-title {
+        font-size: $fontSize_large;
+      }
+    }
+  
+    .free-pattern-card{
+      .creator {
+        .creator-link {
+          font-size: $fontSize_12;
+        }
+      }
+    }
   }
 
   .header-part {
@@ -713,7 +739,7 @@ body {
     .ant-card {
       &.card-item {
         .ant-card-body {
-          padding: 24px 20px;
+          padding: 15px 8px;
 
           .ant-card-meta-title,
           .card-title {

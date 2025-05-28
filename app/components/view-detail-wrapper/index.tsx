@@ -19,7 +19,7 @@ const ViewDetailWrapper = ({
 }: ViewDetailWrapperProps) => {
     return (
         <Spin spinning={loading} tip="Loading...">
-            <Space direction="vertical" size={40} style={{ width: '100%' }} className="scroll-animate">
+            <Space direction="vertical" size={20} style={{ width: '100%' }} className="scroll-animate">
                 {isShowAlert && <Alert
                     className="animation-alert"
                     showIcon
