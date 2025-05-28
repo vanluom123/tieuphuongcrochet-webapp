@@ -246,6 +246,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                                 form.setFieldsValue({ content });
                                 setState(prevState => ({ ...prevState, editorContent: content }));
                             }}
+                            page="free-pattern"
                         />
                     </Item>
                     <Flex justify="center" gap={10} wrap="wrap">

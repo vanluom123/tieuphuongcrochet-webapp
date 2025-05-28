@@ -248,6 +248,7 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
                                     form.setFieldsValue({ content });
                                     setState(prevState => ({ ...prevState, editorContent: content }));
                                 }}
+                                page="free-pattern"
                             />
                         </Item>
                     </Form>

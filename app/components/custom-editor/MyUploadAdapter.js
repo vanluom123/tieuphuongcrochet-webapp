@@ -1,55 +1,65 @@
-import cloudflareR2Service from "@/app/lib/service/cloudflareR2Service";
+import { API_ROUTES } from "@/app/lib/constant";
+import { getSession } from "next-auth/react";
 
 class MyUploadAdapter {
-	constructor( loader ) {
-			// The file loader instance to use during the upload.
-			this.loader = loader;
-	}
+  constructor(loader) {
+    this.loader = loader;
+    this.url = API_ROUTES.R2_PRESIGNED; // API r2 server
+    this.page = page || "ckeditor";
+    this.category = category || "inline";
+  }
 
-	// Starts the upload process.
-	upload() {
-			// Return a promise that resolves when the file is uploaded
-			return this.loader.file.then(file => {
-				// Set up progress reporting
-				this._initLoader(file);
+  async upload() {
+    const file = await this.loader.file;
 
-				// Upload the file directly to Cloudflare R2
-				return cloudflareR2Service.uploadFile(file)
-					.then(response => {
-						// Return an object with the URL of the uploaded file
-						return {
-							default: response.fileContent
-						};
-					})
-					.catch(error => {
-						// Handle upload error
-						console.error('Upload error:', error);
-						throw new Error(`Couldn't upload file: ${file.name}`);
-					});
-			});
-	}
+    return new Promise(async (resolve, reject) => {
+      const formData = new FormData();
+      formData.append("files", file);
+      formData.append("page", this.page);
+      formData.append("category", this.category);
 
-	// Aborts the upload process.
-	abort() {
-			// Not applicable with direct R2 upload as we don't have an abort mechanism
-			// We could implement a cancel token pattern if needed in the future
-	}
+      const session = await getSession();
+      const token = session?.user?.accessToken;
 
-	// Set up progress tracking for the upload
-	_initLoader(file) {
-			// For direct uploads, we can't track real-time progress easily
-			// Just set the total size for the progress bar
-			const loader = this.loader;
-			loader.uploadTotal = file.size;
-			
-			// We could implement a mock progress that increases gradually
-			// But for now, we'll just show the full progress when complete
-	}
+      try {
+        const response = await fetch(this.url, {
+          method: "POST",
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || result.error) {
+          return reject(result.error || "Upload failed");
+        }
+
+        // Do API trả về dạng: { publicUrls: [...] }
+        const uploaded = result.publicUrls?.[0];
+        if (!uploaded?.fileContent) {
+          return reject("No URL returned from server");
+        }
+
+        resolve({
+          default: uploaded.fileContent, // URL ảnh được CKEditor sử dụng
+        });
+      } catch (error) {
+        console.error("Upload error:", error);
+        reject("Không thể upload ảnh.");
+      }
+    });
+  }
+
+  abort() {
+    // Tùy chọn: nếu bạn muốn xử lý cancel upload
+  }
 }
 
-export function MyCustomUploadAdapterPlugin( editor ) {
-	editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
-			// Configure the URL to the upload script in your back-end here!
-			return new MyUploadAdapter( loader );	
-	};
-}
+export function MyCustomUploadAdapterPluginWithMeta(editor) {
+  return function (editor) {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      return new MyUploadAdapter(loader, page, category);
+    };
+  };}

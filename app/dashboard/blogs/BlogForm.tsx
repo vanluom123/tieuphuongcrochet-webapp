@@ -141,7 +141,8 @@ const BlogForm = ({ params }: BlogFormProps) => {
                                 const content = editor.getData();
                                 form.setFieldsValue({ content });
                                 setState(prevState => ({ ...prevState, editorContent: content }));
-                            }} 
+                            }}
+                            page="blogs"
                         />
                     </Item>
                     <Flex justify="center" gap={10} wrap="wrap">
