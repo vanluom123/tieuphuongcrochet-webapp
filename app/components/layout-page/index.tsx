@@ -20,34 +20,8 @@ interface LayoutProps {
 const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
     const pathname = usePathname();
     const [currentNav, setCurrentNav] = useState(ROUTE_PATH.HOME);
-    const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
-    
-    // Kiểm tra xem đã hiển thị donate modal ngày hôm nay chưa và hiển thị tự động
-    useEffect(() => {
-        // Lấy ngày hiện tại dạng YYYY-MM-DD
-        const today = new Date().toISOString().split('T')[0];
-        // Lấy ngày đã hiển thị donate modal gần nhất
-        const lastSeenDate = localStorage.getItem('lastSeenDonateModalDate');
-        
-        // Chỉ hiển thị popup nếu chưa hiển thị ngày hôm nay
-        if (lastSeenDate !== today) {
-            // Đợi 1 giây sau khi trang load xong để hiển thị modal
-            const timer = setTimeout(() => {
-                setIsDonateModalOpen(true);
-                
-                // Tự động đóng sau 8 giây
-                setTimeout(() => {
-                    setIsDonateModalOpen(false);
-                }, 8000);
-                
-                // Đánh dấu là đã hiển thị ngày hôm nay
-                localStorage.setItem('lastSeenDonateModalDate', today);
-            }, 1000);
-            
-            return () => clearTimeout(timer);
-        }
-    }, []);
-    
+    const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);   
+
     const toggleDonateModal = useCallback(() => {
         setIsDonateModalOpen(prev => !prev);
     }, []);
@@ -58,7 +32,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
             animationHeader();
         }
     }, []);
-    
+
     useEffect(() => {
         const navs = pathname.split('/');
 
