@@ -44,7 +44,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
             fetchProductDetail(params.id).then(product => {
                 const newProduct = {
                     ...product,
-                    category_id: product.category?.id,
+                    category_id: product.category?.id as string,
                 }
                 form.setFieldsValue(newProduct);
                 setState(prevState => ({
