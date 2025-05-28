@@ -166,6 +166,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                                         className="profile-avatar-image-upload"
                                         onUpload={onUploadAvatar}
                                         icon={<CameraOutlined />}
+                                        page="profile"
                                     />
                                 )
                             }
@@ -191,6 +192,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                     {
                         isCreator && (
                             <SingleUpload
+                                page="profile"
                                 className="profile-cover-image-upload"
                                 onUpload={onUploadCover}
                                 icon={<CameraOutlined />}
