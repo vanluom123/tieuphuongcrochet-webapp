@@ -68,7 +68,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
         fetchUserData();
     }, [fetchUserData]);
 
-    const items: TabsProps['items'] = isCreator ? [
+    const defaultTabs: TabsProps['items'] = [
         {
             key: 'patterns',
             label: t('tabs.patterns'),
@@ -79,17 +79,17 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
             label: t('tabs.collections'),
             children: <Collections userId={userId} isCreator={isCreator} />,
         },
+    ]
+
+    const items: TabsProps['items'] = isCreator ? [
+        ...defaultTabs,
         {
             key: 'info',
             label: t('tabs.info'),
             children: <UserInfo userData={userData} setUserData={setUserData} />,
         },
     ] : [
-        {
-            key: 'patterns',
-            label: t('tabs.patterns'),
-            children: <FreePatterns userId={userId} isCreator={isCreator} />,
-        },
+        ...defaultTabs
     ];
 
     const onUploadAvatar = async (file: string) => {

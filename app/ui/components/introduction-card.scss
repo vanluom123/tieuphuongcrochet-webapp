@@ -2,13 +2,14 @@
 
 .introduction-card {
   .card-title {
-    font-size: 28px;
+    font-size: $fontSize_middle;
     font-weight: 600;
+    margin: 0;
   }
 
   .author {
     margin-top: 20px;
-    font-size: 20px;
+    font-size: $fontSize_middle;
     font-weight: 500;
     line-height: 48px;
   }
@@ -102,11 +103,16 @@
       font-size: $fontSize_middle;
       color: $textPrimaryColor;
       margin-left: 5px;
-      font-weight: $fontWeight_semibold;
+      font-weight: $fontWeight_medium;
 
       &:hover {
         text-decoration: underline;
       }
     }
+  }
+
+  .introduction-card_creator{
+    padding: 10px 0;
+    background-color: $backgroundColor;
   }
 }

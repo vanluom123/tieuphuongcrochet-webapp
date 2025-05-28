@@ -9,17 +9,19 @@ import {
 import React from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+
 import { ROUTE_PATH, TRANSLATION_STATUS } from '@/app/lib/constant';
 import { Pattern } from '@/app/lib/definitions';
 import { getStatusColor } from '@/app/lib/utils';
 import CustomNextImage from '../next-image';
 import { useBookmark } from '@/app/hooks/useBookmark';
-import '../../ui/components/freePatternCard.scss';
 import { useSession } from 'next-auth/react';
 import { removePatternFromCollection } from '@/app/lib/service/collectionService';
 import whiteBookmark from '@/public/white-bookmark.png';
 import primaryBookmark from '@/public/primary-bookmark.png';
-import Image from 'next/image';
+import { getIconTag } from '../free-pattern-status';
+import '../../ui/components/freePatternCard.scss';
 
 interface FreePatternCardProps {
     width?: string | number;
@@ -143,14 +145,20 @@ const FreePatternCard = (
                 <Skeleton loading={!name} active>
                     {name &&
                         <Meta
-                            title={<span tabIndex={1} className='card-title' onClick={onReadDetail}>{name}</span>}
+                            title={
+                                <span tabIndex={1} className='card-title' onClick={onReadDetail}>
+                                    {status && status !== TRANSLATION_STATUS.NONE && (
+                                        <Tag className="status-tag" color={getStatusColor(status)} icon={getIconTag(status)}/>
+                                    )}
+                                    {name}
+                                </span>}
                             description={
                                 <Flex justify='space-between' align='center'>
                                     <div className='creator'>
                                         {
                                             userAvatar ?
                                                 <Avatar
-                                                    size='small'
+                                                    size={20}
                                                     src={userAvatar}
                                                 />
                                                 :
@@ -164,11 +172,6 @@ const FreePatternCard = (
                                             &nbsp;{username}
                                         </Link>
                                     </div>
-                                    {
-                                        (status && status !== TRANSLATION_STATUS.NONE) &&
-                                        <Tag className='status-tag'
-                                            color={getStatusColor(status)}>{t(`status.${status}`)}</Tag>
-                                    }
                                 </Flex>
                             }
                         />

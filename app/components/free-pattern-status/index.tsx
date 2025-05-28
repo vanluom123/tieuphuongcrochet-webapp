@@ -6,9 +6,11 @@ import {
     SyncOutlined,
 } from '@ant-design/icons';
 import { SegmentedValue } from "antd/es/segmented";
+import { useTranslations } from "next-intl";
+
 import { TranslationStatus, TTranslationStatus } from "@/app/lib/definitions";
 import { TRANSLATION_STATUS_COLOR } from "@/app/lib/constant";
-import { useTranslations } from "next-intl";
+import { getStatusColor } from "@/app/lib/utils";
 
 interface PatternStatusProps {
     options: TranslationStatus[];
@@ -19,15 +21,17 @@ interface PatternStatusProps {
     value?: SegmentedValue;
 }
 
+export const getIconTag = (status: TTranslationStatus) => {
+    if (status === 'SUCCESS') {
+        return <CheckCircleOutlined color={getStatusColor(status)}/>
+    }
+    return status === 'PENDING' ? <SyncOutlined /> : <ClockCircleOutlined />
+}
+
 const FreePatternStatus = ({ size = 'large', defaultValue, options, onChange, className, value }: PatternStatusProps) => {
 
     const t = useTranslations("FreePattern");
-    const getIconTag = (status: TTranslationStatus) => {
-        if (status === 'SUCCESS') {
-            return <CheckCircleOutlined />
-        }
-        return status === 'PENDING' ? <SyncOutlined /> : <ClockCircleOutlined />
-    }
+
 
     return (
         <Segmented
