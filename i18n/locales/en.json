@@ -174,7 +174,8 @@
     "profile": "Profile",
     "logout": "Logout",
     "logout_confirm": "Are you sure you want to log out?",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "register": "Register"
   },
   "Login": {
     "title": "Login",
