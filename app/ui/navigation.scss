@@ -6,6 +6,12 @@
     height: fit-content;
     padding: 0;
 
+    .logo-wrapper {
+      position: relative;
+      width: 50px;
+      height: 50px;
+    }
+
     .header-user {
       width: 100%;
       display: flex;
@@ -14,7 +20,7 @@
       justify-content: space-between;
       padding: 5px 10px;
       position: relative;
-      height: 130px;
+      height: 65px;
 
       .header-logo {
         max-height: 120px;
@@ -27,6 +33,10 @@
           transition: all 0.5s;
           max-height: 120px;
           margin: 0;
+        }
+
+        .image-logo{
+          object-fit: contain;
         }
       }
 
@@ -173,7 +183,6 @@
 }
 
 .user-menu {
-  cursor: pointer;
   
   .ant-avatar {
       background: #fff;
@@ -184,5 +193,9 @@
           transform: scale(1.05);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
+  }
+
+  .user-menu-icon{
+    border: none;
   }
 }

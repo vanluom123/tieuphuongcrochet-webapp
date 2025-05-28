@@ -60,7 +60,15 @@ const Navigation = ({ currentNav, setCurrentNav }: NavigationProps) => {
 					</div>
 					<div className='header-logo'>
 						<Link href={ROUTE_PATH.HOME} onClick={onHome}>
-							<Image priority width={120} height={120} src={logo.src} alt='Tiệm len Tiểu Phương' />
+							<div className='logo-wrapper'>
+								<Image
+									className='image-logo'
+									fill
+									priority
+									src={logo.src}
+									sizes="(min-width: 768px) 120px, 50px"
+									alt='Tiệm len Tiểu Phương' />
+							</div>
 						</Link>
 					</div>
 					<div className='header-right'>

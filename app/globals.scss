@@ -644,6 +644,16 @@ body {
         }
       }
     }
+  
+    .header-wrap{
+      .header-user {
+        height: 130px;
+      }
+      .logo-wrapper {
+        width: 120px;
+        height: 120px;
+      }
+    }
   }
 
   .header-part {
@@ -739,7 +749,7 @@ body {
     .ant-card {
       &.card-item {
         .ant-card-body {
-          padding: 15px 8px;
+          padding: 15px ;
 
           .ant-card-meta-title,
           .card-title {

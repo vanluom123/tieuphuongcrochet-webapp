@@ -174,7 +174,8 @@
     "profile": "Hồ sơ",
     "logout": "Đăng xuất",
     "logout_confirm": "Bạn có chắc chắn muốn đăng xuất?",
-    "dashboard": "Bảng điều khiển"
+    "dashboard": "Bảng điều khiển",
+    "register": "Đăng ký"
   },
   "Login": {
     "title": "Đăng nhập",
