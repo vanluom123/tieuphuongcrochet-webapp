@@ -66,7 +66,7 @@
     "Fields": {
       "name": "Tên chart",
       "category": "Danh mục",
-      "author": "Tác giả",
+      "author": "Tác giả( Người tạo ra chart)",
       "is_home": "Hiển thị trang chủ",
       "status": "Trạng thái dịch",
       "created_date": "Ngày tạo",
@@ -264,7 +264,7 @@
     },
     "tabs": {
       "collections": "Bộ sưu tập",
-      "patterns": "Mẫu miễn phí",
+      "patterns": "Charts",
       "info": "Thông tin cá nhân"
     },
     "collections": {
