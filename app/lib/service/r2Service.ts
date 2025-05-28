@@ -1,3 +1,4 @@
+import { API_ROUTES } from "../constant";
 import { FileUpload } from "../definitions";
 
 export async function uploadMultipleImagesToR2(
@@ -14,7 +15,7 @@ export async function uploadMultipleImagesToR2(
       formData.append("files", file.originFileObj as File); // same key for multiple files
     }
 
-    const res = await fetch("/api/r2-presigned", {
+    const res = await fetch(API_ROUTES.R2_PRESIGNED, {
       method: "POST",
       body: formData,
     });
@@ -34,7 +35,7 @@ export async function uploadMultipleImagesToR2(
 
 export async function deleteMultipleFilesToR2(keys: string[]): Promise<boolean> {
   try {
-    const response = await fetch("/api/r2-presigned", {
+    const response = await fetch(API_ROUTES.R2_PRESIGNED, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
