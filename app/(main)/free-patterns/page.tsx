@@ -31,6 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 		},
 		keywords: [
 			'Chart móc len miễn phí',
+			'Web chart miễn phí',
 			t("title"),
 			t("Keywords.free_patterns"),
 			t("Keywords.sewing_patterns"),

@@ -35,6 +35,7 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
         lastModified: new Date(),
         changeFrequency: 'daily' as const,
         priority: 0.9,
+        images: [product.src], // nếu có
     }))
 
     return [...productRoutes]
