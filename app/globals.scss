@@ -873,7 +873,7 @@ body {
       }
 
       &.float-btn-right-bottom,
-      &.custom-bookmark-button {
+      &.float-share-button {
         right: 7px;
         bottom: 130px;
       }
@@ -883,7 +883,7 @@ body {
         bottom: 10px;
       }
 
-      &.float-share-button {
+      &.custom-bookmark-button{
         right: 7px;
         bottom: 190px;
       }
@@ -1472,7 +1472,7 @@ body {
     bottom: 80px;
   }
 
-  &.custom-bookmark-button,
+  &.float-share-button,
   &.float-btn-right-bottom {
     bottom: 140px;
   }
@@ -1481,7 +1481,7 @@ body {
     bottom: 20px;
   }
 
-  &.float-share-button {
+  &.custom-bookmark-button {
     bottom: 200px;
   }
 }
