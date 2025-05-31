@@ -1,6 +1,6 @@
 "use client"
-import {Divider, Image, Modal, Space, Typography} from 'antd';
-import { DollarOutlined, HeartOutlined } from '@ant-design/icons';
+import {Divider, Modal, Space, Typography} from 'antd';
+import { HeartOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 import PayPalDonateButton from "@/app/components/donate-modal/PayPalDonateButton";
 import QRDonate from "@/app/components/donate-modal/QRDonate";
@@ -20,6 +20,7 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
       onCancel={onClose}
       footer={null}
       className="donate-modal"
+      style={{zIndex: 11}}
       title={
         <div style={{ textAlign: 'center' }}>
           <Title level={3} className='donate-modal-title'>

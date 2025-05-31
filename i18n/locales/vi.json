@@ -613,4 +613,11 @@
     "crop": "Cắt ảnh",
     "normal": "Nhiều ảnh",
     "directory": "Thư mục"
-  }}
+  },
+  "ShareButton": {
+    "copySuccess": "Đã sao chép!",
+    "copyError": "Không thể sao chép!",
+    "copyText": "Sao chép",
+    "modalTitle": "Chia sẻ"
+  }
+}

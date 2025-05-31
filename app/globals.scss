@@ -882,6 +882,11 @@ body {
         right: 7px;
         bottom: 10px;
       }
+
+      &.float-share-button {
+        right: 7px;
+        bottom: 190px;
+      }
     }
   }
 }
@@ -1475,6 +1480,10 @@ body {
   &.float-btn-back-top {
     bottom: 20px;
   }
+
+  &.float-share-button {
+    bottom: 200px;
+  }
 }
 
 .active {
@@ -1508,6 +1517,23 @@ body {
 
     .donate-modal-title {
       font-size: $fontSize_middle;
+    }
+  }
+}
+
+.ant-modal-content{
+  .ant-modal-body{
+    .ant-btn{
+      &.share-social-button{
+        height: 100%;
+      }
+    }
+  }
+
+  .ant-space-compact{
+    .ant-input,
+    .ant-btn{
+      height: 44px;
     }
   }
 }

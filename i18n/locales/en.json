@@ -613,5 +613,11 @@
     "crop": "Crop",
     "normal": "Multiple",
     "directory": "Directory"
+  },
+  "ShareButton": {
+    "copySuccess": "Copied!",
+    "copyError": "Can't copy",
+    "copyText": "Copy",
+    "modalTitle":"Share"
   }
 }
