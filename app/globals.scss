@@ -873,7 +873,7 @@ body {
       }
 
       &.float-btn-right-bottom,
-      &.custom-bookmark-button {
+      &.float-share-button {
         right: 7px;
         bottom: 130px;
       }
@@ -881,6 +881,11 @@ body {
       &.float-btn-back-top {
         right: 7px;
         bottom: 10px;
+      }
+
+      &.custom-bookmark-button{
+        right: 7px;
+        bottom: 190px;
       }
     }
   }
@@ -1467,13 +1472,17 @@ body {
     bottom: 80px;
   }
 
-  &.custom-bookmark-button,
+  &.float-share-button,
   &.float-btn-right-bottom {
     bottom: 140px;
   }
 
   &.float-btn-back-top {
     bottom: 20px;
+  }
+
+  &.custom-bookmark-button {
+    bottom: 200px;
   }
 }
 
@@ -1508,6 +1517,23 @@ body {
 
     .donate-modal-title {
       font-size: $fontSize_middle;
+    }
+  }
+}
+
+.ant-modal-content{
+  .ant-modal-body{
+    .ant-btn{
+      &.share-social-button{
+        height: 100%;
+      }
+    }
+  }
+
+  .ant-space-compact{
+    .ant-input,
+    .ant-btn{
+      height: 44px;
     }
   }
 }
