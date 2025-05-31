@@ -60,6 +60,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
                             priority={true}
                         />
                     }
+                    style={{ zIndex: 10 }}
                 />
             </Tooltip>
 
