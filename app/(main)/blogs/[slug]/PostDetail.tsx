@@ -8,6 +8,7 @@ import { useLocale } from "use-intl";
 import { LANGUAGES } from "@/app/lib/constant";
 import CustomNextImage from "@/app/components/next-image";
 import CommentSection from "@/app/components/comment/CommentSection";
+import ShareButton from "@/app/components/share-button";
 
 export default function PostDetail({ post }: { post: Post }) {
 
@@ -40,6 +41,7 @@ export default function PostDetail({ post }: { post: Post }) {
 					<CommentSection id={id?.toString() || ''} type={"blog"} />
 				</Col>
 			</Row>
+			<ShareButton />
 		</ViewDetailWrapper>
 	)
 }
