@@ -1,44 +1,51 @@
 import { Row, Col, Image } from "antd";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
-import coverImg from '@/public/about.jpg';
+import coverImg from "@/public/about.jpg";
 import { ROUTE_PATH } from "@/app/lib/constant";
-
+import StructuredData, {
+  createAboutPageSchema,
+} from "@/app/components/StructureData";
 
 export async function generateMetadata(): Promise<Metadata> {
-	const t = await getTranslations("About");
-	return {
-		title: t("title"),
-		description: t("description"),
+  const t = await getTranslations("About");
+  return {
+    title: t("title"),
+    description: t("description"),
 
-		openGraph: {
-			title: t("title"),
-			description: t("description"),
-			url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.ABOUT}`,
-		},
-	};
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.ABOUT}`,
+    },
+  };
 }
 
 const About = async () => {
-
-    const t = await getTranslations("About");
-    return (
+  const t = await getTranslations("About");
+  return (
+    <>
+      <StructuredData
+        data={createAboutPageSchema({
+          title: t("title"),
+          description: t("description"),
+        })}
+      />
       <div className="about-page scroll-animate">
-        <div className='animation-wrap'>
-          <h1 className="content-title align-center">
-            {t('message')}
-          </h1>
+        <div className="animation-wrap">
+          <h1 className="content-title align-center">{t("message")}</h1>
         </div>
         <Row gutter={50}>
           <Col xs={24} md={12}>
-            <p className="content-text">{t('content')}</p>
+            <p className="content-text">{t("content")}</p>
           </Col>
-          <Col xs={24} md={12} className='animation-wrap'>
-            <Image className='img-about' src={coverImg.src} alt='cover' />
+          <Col xs={24} md={12} className="animation-wrap">
+            <Image className="img-about" src={coverImg.src} alt="cover" />
           </Col>
         </Row>
       </div>
-    );
-  };
-  
-  export default About;
+    </>
+  );
+};
+
+export default About;
