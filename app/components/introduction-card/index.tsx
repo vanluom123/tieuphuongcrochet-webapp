@@ -29,6 +29,7 @@ import {
 } from "@/app/lib/constant";
 import FormattedCurrency from "../forrmat-currency";
 import "../../ui/components/introduction-card.scss";
+import ShareButton from "../share-button";
 
 interface IntroductionCardProps {
   data: Pattern | Product;
@@ -44,8 +45,7 @@ const IntroductionCard = ({
   isShowThumbnail,
   isPreviewAvatar,
 }: IntroductionCardProps) => {
-  const { src, name, author, description, images, link, price, currency_code } =
-    data;
+  const { src, name, author, description, images, link, price, currency_code, id } = data;
   const { status, userId, userAvatar, username } = data as Pattern;
   const [activeThumbnail, setActiveThumbnail] = useState({ index: 0, src });
   const t = useTranslations("IntroductionCard");
@@ -246,6 +246,7 @@ const IntroductionCard = ({
           </div>
         </Col>
       </Row>
+      <ShareButton />
     </div>
   );
 };
