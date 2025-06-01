@@ -5,10 +5,9 @@ import { useState } from "react";
 
 import { message } from "@/app/lib/notify";
 import share from "@/public/share.png";
-import facebook from "@/public/facebook.png";
-import twitter from "@/public/twitter.png";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import SharePopupButton from "./SharePopupButton";
 
 const ShareButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,24 +25,6 @@ const ShareButton = () => {
     }
   };
 
-  const handleShareFacebook = () => {
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-    window.open(
-      facebookShareUrl,
-      "_blank",
-      "noopener,noreferrer,width=600,height=400"
-    );
-  };
-
-  const handleShareTwitter = () => {
-    const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`;
-    window.open(
-      twitterShareUrl,
-      "_blank",
-      "noopener,noreferrer,width=600,height=400"
-    );
-  };
-
   return (
     <>
       <FloatButton
@@ -53,9 +34,10 @@ const ShareButton = () => {
         icon={<Image width={20} height={20} src={share} alt="Share icon" />}
       />
       <Modal
-        title={t('modalTitle')}
+        title={t("modalTitle")}
         open={isModalOpen}
         width={400}
+        centered
         footer={
           <Space.Compact style={{ width: "100%" }}>
             <Input readOnly value={url} style={{ width: "100%" }} />
@@ -65,36 +47,10 @@ const ShareButton = () => {
         onCancel={() => setIsModalOpen(false)}
       >
         <Flex align="center" justify="center">
-          <Button
-            type="text"
-            onClick={handleShareFacebook}
-            className="share-social-button"
-          >
-            <Flex vertical justify="center" align="center" gap="small">
-              <Image
-                width={32}
-                height={32}
-                src={facebook}
-                alt="Share to facebook"
-              />
-              <span>Facebook</span>
-            </Flex>
-          </Button>
-          <Button
-            type="text"
-            onClick={handleShareTwitter}
-            className="share-social-button"
-          >
-            <Flex vertical justify="center" align="center" gap="small">
-              <Image
-                width={32}
-                height={32}
-                src={twitter}
-                alt="Share to twitter"
-              />
-              <span>Twitter</span>
-            </Flex>
-          </Button>
+          <SharePopupButton platform="facebook" />
+          {/* Phải cài đặt Facebook Developer Console*/}
+          <SharePopupButton platform="messenger" />
+          <SharePopupButton platform="zalo" />
         </Flex>
       </Modal>
     </>
