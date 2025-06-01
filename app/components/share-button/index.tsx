@@ -49,7 +49,7 @@ const ShareButton = () => {
         <Flex align="center" justify="center">
           <SharePopupButton platform="facebook" />
           {/* Phải cài đặt Facebook Developer Console*/}
-          <SharePopupButton platform="messenger" />
+          {/* <SharePopupButton platform="messenger" /> */}
           <SharePopupButton platform="zalo" />
         </Flex>
       </Modal>
