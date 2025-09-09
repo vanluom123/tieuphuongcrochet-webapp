@@ -10,6 +10,7 @@ export const savePatternToCollection = async (
     endpoint: `${API_ROUTES.COLLECTIONS}/${collectionId}/add-pattern/${patternId}`,
     method: 'POST',
   })
+
   return res
 }
 
@@ -20,5 +21,6 @@ export const removePatternFromCollection = async (
     endpoint: `${API_ROUTES.COLLECTIONS}/remove-pattern/${patternId}`,
     method: 'DELETE',
   })
+
   return res
 }

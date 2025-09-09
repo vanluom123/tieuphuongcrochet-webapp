@@ -119,8 +119,10 @@ const CollectionPopup = ({
         maxWidth: '95vw',
         margin: '0 auto',
       }}
-      bodyStyle={{
-        padding: typeof window !== 'undefined' && window.innerWidth < 768 ? '16px' : '24px',
+      styles={{
+        body: {
+          padding: typeof window !== 'undefined' && window.innerWidth < 768 ? '16px' : '24px',
+        },
       }}
     >
       <div style={{ marginBottom: 16 }}>

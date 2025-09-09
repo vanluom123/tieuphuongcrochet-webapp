@@ -42,7 +42,6 @@ export async function handleTokenRefresh() {
         return null
       }
 
-      const oldToken = accessToken
       accessToken = res.data.accessToken
       session.user.accessToken = res.data.accessToken
       session.user.refreshToken = res.data.refreshToken
@@ -92,7 +91,6 @@ async function apiJwtService({
     method,
     data,
     headers: computedHeaders,
-    cache: 'no-store',
     queryParams,
     formData,
     next,

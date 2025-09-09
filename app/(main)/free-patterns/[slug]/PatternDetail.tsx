@@ -9,12 +9,13 @@ import Image from 'next/image'
 import primaryBookmark from '@/public/primary-bookmark.png'
 import bookmark from '@/public/bookmark.png'
 import CommentSection from '@/app/components/comment/CommentSection'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { removePatternFromCollection } from '@/app/lib/service/collectionService'
 import CollectionPopup from '@/app/components/collection-popup'
 import { ROUTE_PATH } from '@/app/lib/constant'
+import { existInCollection } from '@/app/lib/service/freePatternService'
 
 // Lazy load ViewImagesList component
 const ViewImagesList = dynamic(
@@ -30,18 +31,28 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const [isInCollection, setIsInCollection] = useState(pattern?.in_collection || false)
   const [showCollectionPopup, setShowCollectionPopup] = useState(false)
 
-  // Hàm xử lý bookmark
+  useEffect(() => {
+    const fetchExistInCollection = async () => {
+      if (!pattern?.id) return
+
+      const res = await existInCollection(pattern?.id?.toString() || '')
+      setIsInCollection(res.data || false)
+    }
+
+    if (session?.user && pattern?.id) {
+      fetchExistInCollection()
+    }
+  }, [pattern?.id, session?.user?.id])
+
   const toggleBookmark = async (patternId: string) => {
     if (!patternId) return
 
-    // Kiểm tra nếu user chưa đăng nhập
     if (!session?.user) {
       router.push(ROUTE_PATH.LOGIN)
       return
     }
 
     if (isInCollection) {
-      // Nếu đã trong collection, xóa khỏi collection
       setIsLoading(true)
       try {
         await removePatternFromCollection(patternId)
@@ -52,12 +63,10 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
         setIsLoading(false)
       }
     } else {
-      // Nếu chưa trong collection, hiển thị popup để chọn collection
       setShowCollectionPopup(true)
     }
   }
 
-  // Xử lý khi lưu thành công từ popup
   const handleSaveSuccess = () => {
     setIsInCollection(true)
   }

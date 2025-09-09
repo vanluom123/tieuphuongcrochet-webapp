@@ -51,7 +51,10 @@ export const fetchFreePatternDetail = async (id: string, revalidate?: number): P
     const res = await apiJwtService({
       endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}`,
       method: 'GET',
-      next: { revalidate: revalidate || 0, tags: [`free-pattern-${id}`] },
+      next: {
+        revalidate: revalidate || 0,
+        tags: [`free-pattern-${id}`],
+      },
     })
 
     if (!res.data) {
@@ -100,4 +103,12 @@ export const deleteFreePattern = async (id: string) => {
   } catch (error: any) {
     showNotification('error', 'Failed', error.message || 'An unexpected error occurred')
   }
+}
+
+export const existInCollection = async (id: string): Promise<ResponseData<boolean>> => {
+  const res = await apiJwtService({
+    endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}/exist`,
+    method: 'GET',
+  })
+  return res
 }

@@ -119,16 +119,16 @@ const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
     }
   }, [memoizedParams, loadPatterns])
 
-  // Sử dụng session để theo dõi thay đổi user
+  // Use session to track user changes
   const { data: session, status: sessionStatus } = useSession()
 
   useEffect(() => {
-    // Trì hoãn fetch cho đến khi session đã xác định (authenticated hoặc unauthenticated)
+    // Delay fetch until session is determined (authenticated or unauthenticated)
     if (sessionStatus === 'loading') {
       return
     }
 
-    // Chỉ skip loading nếu có initial data VÀ không có session (user chưa đăng nhập)
+    // Skip loading if there is initial data AND no session (user is not authenticated)
     if (initialData && initialData.data.length > 0 && !session?.user?.accessToken) {
       return
     }
@@ -168,9 +168,6 @@ const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
     sessionStatus,
     loadPatterns,
   ])
-
-  // Xóa effect load lại bookmark status khi user thay đổi
-  // Bây giờ bookmark status được lấy trực tiếp từ API
 
   const onAddPattern = useCallback(async () => {
     await handleTokenRefresh()
