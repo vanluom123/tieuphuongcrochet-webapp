@@ -619,5 +619,23 @@
     "copyError": "Không thể sao chép!",
     "copyText": "Sao chép",
     "modalTitle": "Chia sẻ"
+  },
+  "CollectionPopup": {
+    "title": "Chọn bộ sưu tập",
+    "description": "Lưu \"{patternName}\" vào bộ sưu tập",
+    "thisPattern": "mẫu này",
+    "save": "Lưu",
+    "patterns": "mẫu",
+    "noCollections": "Chưa có bộ sưu tập nào",
+    "createNewCollection": "Tạo bộ sưu tập mới",
+    "collectionName": "Tên bộ sưu tập",
+    "nameRequired": "Vui lòng nhập tên bộ sưu tập",
+    "create": "Tạo",
+    "cancel": "Hủy",
+    "fetchError": "Lỗi khi tải danh sách bộ sưu tập",
+    "createSuccess": "Tạo bộ sưu tập thành công",
+    "createError": "Lỗi khi tạo bộ sưu tập",
+    "saveSuccess": "Đã lưu vào bộ sưu tập",
+    "saveError": "Lỗi khi lưu vào bộ sưu tập"
   }
 }

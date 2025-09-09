@@ -619,5 +619,23 @@
     "copyError": "Can't copy",
     "copyText": "Copy",
     "modalTitle":"Share"
+  },
+  "CollectionPopup": {
+    "title": "Choose Collection",
+    "description": "Save \"{patternName}\" to collection",
+    "thisPattern": "this pattern",
+    "save": "Save",
+    "patterns": "patterns",
+    "noCollections": "No collections yet",
+    "createNewCollection": "Create new collection",
+    "collectionName": "Collection name",
+    "nameRequired": "Please enter collection name",
+    "create": "Create",
+    "cancel": "Cancel",
+    "fetchError": "Error loading collections",
+    "createSuccess": "Collection created successfully",
+    "createError": "Error creating collection",
+    "saveSuccess": "Saved to collection",
+    "saveError": "Error saving to collection"
   }
 }
