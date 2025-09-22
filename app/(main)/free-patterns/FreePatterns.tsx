@@ -17,34 +17,25 @@ import FreePatternFormModal from '@/app/components/profile/FreePatternFormModal'
 
 interface FreePatternProps {
   categories: Category[]
-  initialData?: {
-    loading: boolean
-    data: DataType[]
-    totalRecord: number
-  }
+  initialData: DataTableState
 }
 
 const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
   const router = useRouter()
-
-  const [state, setState] = useState<DataTableState>({
-    loading: initialData?.loading ?? false,
-    data: initialData?.data ?? [],
-    totalRecord: initialData?.totalRecord ?? 0,
-  })
-
+  const [state, setState] = useState<DataTableState>(initialData)
   const [filters, setFilters] = useState({
     status: '',
     search: '',
   })
-
   const [params, setParams] = useState(initialListParams)
   const [modalData, setModalData] = useState({
     open: false,
     id: '',
   })
-
   const memoizedParams = useMemo(() => params, [params])
+
+  // Use session to track user changes
+  const { data: session, status: sessionStatus } = useSession()
 
   // Helper function để load patterns
   const loadPatterns = useCallback(async (fetchParams: typeof params) => {
@@ -95,7 +86,10 @@ const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
       setParams((preParams) => {
         return {
           ...preParams,
-          filter: combineFilters(newFilters),
+          filter: combineFilters({
+            ...newFilters,
+            searchFields: ['name', 'description', 'author'],
+          }),
         }
       })
       return newFilters
@@ -119,27 +113,16 @@ const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
     }
   }, [memoizedParams, loadPatterns])
 
-  // Use session to track user changes
-  const { data: session, status: sessionStatus } = useSession()
-
   useEffect(() => {
     // Delay fetch until session is determined (authenticated or unauthenticated)
     if (sessionStatus === 'loading') {
       return
     }
 
-    // Skip loading if there is initial data AND no session (user is not authenticated)
-    if (initialData && initialData.data.length > 0 && !session?.user?.accessToken) {
-      return
-    }
-
-    let isMounted = true
-
     const loadData = async () => {
       setState((prev) => ({ ...prev, loading: true }))
       try {
         const response = await loadPatterns(memoizedParams)
-        if (!isMounted) return
         if (!response) throw new Error('No response from server')
 
         setState({
@@ -148,18 +131,12 @@ const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
           totalRecord: response.totalRecords || 0,
         })
       } catch (error) {
-        console.error('❌ Error fetching free patterns:', error)
-        if (isMounted) {
-          setState({ loading: false, data: [], totalRecord: 0 })
-        }
+        console.error('Error fetching free patterns:', error)
+        setState({ loading: false, data: [], totalRecord: 0 })
       }
     }
 
     loadData()
-
-    return () => {
-      isMounted = false
-    }
   }, [
     memoizedParams,
     initialData,

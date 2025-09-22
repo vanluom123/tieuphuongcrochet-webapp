@@ -274,7 +274,8 @@
       "name": "Collection name",
       "nameRequired": "Please enter the collection name",
       "itemCount": "Item count",
-      "no_collections": "No collections"
+      "no_collections": "No collections",
+      "no_patterns": "No patterns"
     },
     "patterns": {
       "empty": "No patterns yet",

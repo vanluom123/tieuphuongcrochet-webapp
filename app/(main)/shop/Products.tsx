@@ -39,24 +39,17 @@ const Products = ({initialData, categories}: ProductsProps) => {
         });
     }, [params]);
 
-    const debouncedSearch = useCallback(
-        debounce((value: string) => {
-            setParams(prevParams => {
-                const newFilter = sfOr([
-                    sfLike('name', value),
-                    sfLike('description', value)
-                ]).toString();
-                return {
-                    ...prevParams,
-                    filter: newFilter
-                }
-            })
-        }, 500),
-        []
-    );
-
     const onSearchProducts = (value: string) => {
-        debouncedSearch(value);
+        setParams(prevParams => {
+            const newFilter = sfOr([
+                sfLike('name', value),
+                sfLike('description', value)
+            ]).toString();
+            return {
+                ...prevParams,
+                filter: newFilter
+            }
+        })
     }
 
     const onViewProduct = (id: React.Key) => {

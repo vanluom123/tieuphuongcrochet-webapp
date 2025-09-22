@@ -13,7 +13,7 @@ export async function handleTokenRefresh() {
   const session = await getSession()
 
   if (!session || !session.user || !session.user.accessToken) {
-    console.warn('❌ No session or access token found.') // Log cảnh báo
+    console.warn('No session or access token found.')
     return null
   }
 
@@ -28,7 +28,7 @@ export async function handleTokenRefresh() {
   if (isTokenExpired) {
     try {
       if (!session.user.refreshToken) {
-        console.warn('❌ No refresh token available.') // Log cảnh báo
+        console.warn('No refresh token available.')
         await handleTokenRefreshFailure()
         return null
       }
@@ -37,7 +37,7 @@ export async function handleTokenRefresh() {
 
       const res = await refreshAccessToken(refreshToken as string)
       if (!res.success) {
-        console.error('❌ Failed to refresh access token.') // Log lỗi
+        console.error('Failed to refresh access token.')
         await handleTokenRefreshFailure()
         return null
       }
@@ -48,7 +48,7 @@ export async function handleTokenRefresh() {
 
       return accessToken
     } catch (e) {
-      console.error('💥 Error during token refresh:', e) // Log lỗi
+      console.error('Error during token refresh:', e)
       await handleTokenRefreshFailure()
       return null
     }
