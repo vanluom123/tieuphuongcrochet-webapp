@@ -9,7 +9,6 @@ export const combineFilters = ({
                         }: {
     status?: string;
     search?: string;
-    categoryId?: string;
     isHome?: string;
     searchFields?: string[];
 }) => {
