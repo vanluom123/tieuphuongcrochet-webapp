@@ -1,13 +1,14 @@
 'use client'
 
-import { Button, Empty, Form, Input, List, message, Modal, Spin } from 'antd'
-import { FolderOutlined, PlusOutlined } from '@ant-design/icons'
+import { Button, Col, Empty, Form, Input, List, message, Modal, Row, Spin } from 'antd'
+import { FolderOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
 import { Collection } from '@/app/lib/definitions'
 import { createCollection, fetchUserCollections } from '@/app/lib/service/profileService'
 import { savePatternToCollection } from '@/app/lib/service/collectionService'
+import '../../ui/components/collections-popup.scss'
 
 interface CollectionPopupProps {
   isOpen: boolean
@@ -111,205 +112,130 @@ const CollectionPopup = ({
       }
       open={isOpen}
       onCancel={handleClose}
-      footer={null}
       width={typeof window !== 'undefined' && window.innerWidth < 768 ? '95%' : 500}
       centered
       destroyOnClose
-      style={{
-        maxWidth: '95vw',
-        margin: '0 auto',
-      }}
-      styles={{
-        body: {
-          padding: typeof window !== 'undefined' && window.innerWidth < 768 ? '16px' : '24px',
-        },
-      }}
-    >
-      <div style={{ marginBottom: 16 }}>
-        <p style={{ margin: 0, color: '#666' }}>
-          {t('description', { patternName: patternName || t('thisPattern') })}
-        </p>
-      </div>
-
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '40px 0' }}>
-          <Spin size="large" />
-        </div>
-      ) : (
-        <>
-          {/* Collections List */}
-          {collections.length > 0 ? (
-            <List
-              dataSource={collections}
-              renderItem={(collection) => (
-                <List.Item
-                  style={{
-                    cursor: saving === collection.id ? 'not-allowed' : 'pointer',
-                    opacity: saving === collection.id ? 0.6 : 1,
-                    padding:
-                      typeof window !== 'undefined' && window.innerWidth < 768
-                        ? '16px 12px'
-                        : '12px 16px',
-                    borderRadius: '6px',
-                    transition: 'all 0.2s ease',
-                    marginBottom:
-                      typeof window !== 'undefined' && window.innerWidth < 768 ? '8px' : '4px',
-                    backgroundColor: '#fafafa',
-                    border: '1px solid #f0f0f0',
-                  }}
-                  onClick={() => {
-                    if (saving !== collection.id) {
-                      handleSaveToCollection(collection.id)
-                    }
-                  }}
-                >
-                  <List.Item.Meta
-                    avatar={
-                      saving === collection.id ? (
-                        <Spin size="small" />
-                      ) : (
-                        <FolderOutlined
-                          style={{
-                            fontSize:
-                              typeof window !== 'undefined' && window.innerWidth < 768 ? 24 : 20,
-                            color: '#1890ff',
-                          }}
-                        />
-                      )
-                    }
-                    title={
-                      <span
-                        style={{
-                          fontSize:
-                            typeof window !== 'undefined' && window.innerWidth < 768
-                              ? '16px'
-                              : '14px',
-                          fontWeight: 500,
-                        }}
-                      >
-                        {collection.name}
-                      </span>
-                    }
-                    description={
-                      <span
-                        style={{
-                          color: '#666',
-                          fontSize:
-                            typeof window !== 'undefined' && window.innerWidth < 768
-                              ? '14px'
-                              : '12px',
-                        }}
-                      >
-                        {collection.totalPatterns || 0} {t('patterns')}
-                      </span>
-                    }
-                  />
-                </List.Item>
-              )}
-            />
-          ) : (
-            <Empty description={t('noCollections')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
-          )}
-
+      // style={{
+      //   maxWidth: '95vw',
+      //   margin: '0 auto',
+      // }}
+      className="collectionsPopup"
+      footer={
+        <div className="collectionsPopup__footer">
           {/* Create New Collection Form */}
           {showCreateForm ? (
-            <div
-              style={{
-                marginTop: 16,
-                padding: typeof window !== 'undefined' && window.innerWidth < 768 ? '12px' : '16px',
-                border: '1px solid #f0f0f0',
-                borderRadius: 6,
-              }}
+            <Form
+              form={form}
+              className="collectionsPopup__footer-Form"
+              onFinish={handleCreateCollection}
             >
-              <Form
-                form={form}
-                onFinish={handleCreateCollection}
-                layout={
-                  typeof window !== 'undefined' && window.innerWidth < 768 ? 'vertical' : 'inline'
-                }
-                style={{ width: '100%' }}
-              >
-                <Form.Item
-                  name="name"
-                  rules={[{ required: true, message: t('nameRequired') }]}
-                  style={
-                    typeof window !== 'undefined' && window.innerWidth < 768
-                      ? { marginBottom: 12 }
-                      : { flex: 1, marginRight: 8 }
-                  }
-                >
-                  <Input
-                    placeholder={t('collectionName')}
-                    disabled={creating}
-                    size={
-                      typeof window !== 'undefined' && window.innerWidth < 768 ? 'large' : 'middle'
-                    }
-                  />
-                </Form.Item>
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: 8,
-                    flexDirection:
-                      typeof window !== 'undefined' && window.innerWidth < 768 ? 'column' : 'row',
-                  }}
-                >
-                  <Form.Item style={{ margin: 0, flex: 1 }}>
+              <Form.Item name="name" rules={[{ required: true, message: t('nameRequired') }]}>
+                <Input placeholder={t('collectionName')} disabled={creating} />
+              </Form.Item>
+              <Row gutter={5}>
+                <Col span={16}>
+                  <Form.Item>
                     <Button
                       type="primary"
                       htmlType="submit"
                       loading={creating}
-                      icon={<PlusOutlined />}
-                      size={
-                        typeof window !== 'undefined' && window.innerWidth < 768
-                          ? 'large'
-                          : 'middle'
-                      }
-                      style={{ width: '100%' }}
-                    >
-                      {t('create')}
-                    </Button>
+                      icon={<CheckOutlined />}
+                    />
                   </Form.Item>
-                  <Form.Item style={{ margin: 0, flex: 1 }}>
+                </Col>
+                <Col span={8}>
+                  <Form.Item>
                     <Button
                       onClick={() => {
                         setShowCreateForm(false)
                         form.resetFields()
                       }}
                       disabled={creating}
-                      size={
-                        typeof window !== 'undefined' && window.innerWidth < 768
-                          ? 'large'
-                          : 'middle'
-                      }
-                      style={{ width: '100%' }}
-                    >
-                      {t('cancel')}
-                    </Button>
+                      icon={<CloseOutlined />}
+                    />
                   </Form.Item>
-                </div>
-              </Form>
-            </div>
+                </Col>
+              </Row>
+            </Form>
           ) : (
-            <div style={{ textAlign: 'center', marginTop: 16 }}>
-              <Button
-                type="dashed"
-                icon={<PlusOutlined />}
-                onClick={() => setShowCreateForm(true)}
-                style={{
-                  width: '100%',
-                  height:
-                    typeof window !== 'undefined' && window.innerWidth < 768 ? '48px' : '40px',
-                  fontSize:
-                    typeof window !== 'undefined' && window.innerWidth < 768 ? '16px' : '14px',
-                }}
-                size={typeof window !== 'undefined' && window.innerWidth < 768 ? 'large' : 'middle'}
-              >
-                {t('createNewCollection')}
-              </Button>
-            </div>
+            <Button
+              type="dashed"
+              icon={<PlusOutlined />}
+              className="collectionsPopup__footer-btn"
+              onClick={() => setShowCreateForm(true)}
+              style={{
+                width: '100%',
+                fontSize:
+                  typeof window !== 'undefined' && window.innerWidth < 768 ? '16px' : '14px',
+              }}
+            >
+              {t('createNewCollection')}
+            </Button>
           )}
-        </>
+        </div>
+      }
+    >
+      <div>{t('description', { patternName: patternName || t('thisPattern') })}:</div>
+      {/* Collections List */}
+      {collections.length > 0 ? (
+        <List
+          loading={loading}
+          className="collectionsPopup__items"
+          dataSource={collections}
+          renderItem={(collection) => (
+            <List.Item
+              style={{
+                cursor: saving === collection.id ? 'not-allowed' : 'pointer',
+                opacity: saving === collection.id ? 0.6 : 1,
+              }}
+              onClick={() => {
+                if (saving !== collection.id) {
+                  handleSaveToCollection(collection.id)
+                }
+              }}
+            >
+              <List.Item.Meta
+                avatar={
+                  saving === collection.id ? (
+                    <Spin size="small" />
+                  ) : (
+                    <FolderOutlined
+                      style={{
+                        fontSize:
+                          typeof window !== 'undefined' && window.innerWidth < 768 ? 24 : 20,
+                        color: '#1890ff',
+                      }}
+                    />
+                  )
+                }
+                title={
+                  <span
+                    style={{
+                      fontWeight: 400
+                    }}
+                  >
+                    {collection.name}
+                  </span>
+                }
+                // description={
+                //   <span
+                //     style={{
+                //       color: '#666',
+                //       fontSize:
+                //         typeof window !== 'undefined' && window.innerWidth < 768
+                //           ? '14px'
+                //           : '12px',
+                //     }}
+                //   >
+                //     {collection.totalPatterns || 0} {t('patterns')}
+                //   </span>
+                // }
+              />
+            </List.Item>
+          )}
+        />
+      ) : (
+        <Empty description={t('noCollections')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
       )}
     </Modal>
   )

@@ -1,0 +1,29 @@
+@import '../../variables.module.scss';
+
+.collectionsPopup {
+  ~ * {
+    color: $textPrimaryColor;
+  }
+  .collectionsPopup__items {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .collectionsPopup__footer {
+    margin: 0;
+
+    &-Form {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .ant-form-item {
+        margin-bottom: 0;
+      }
+    }
+
+    &-btn {
+      height: 44px;
+    }
+  }
+}
