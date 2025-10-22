@@ -17,10 +17,10 @@ interface BlogCardProps {
 
 const BlogCard = ({ item, onReadDetail }: BlogCardProps) => {
 	const { Meta } = Card;
-	const { createdDate, title, src, id } = item;
+	const { createdAt, title, src, id } = item;
 	const detailPath = `${ROUTE_PATH.BLOG}/${id}`;
 
-	const date = new Date(createdDate);
+	const date = new Date(createdAt);
 	const month = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
 	const day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
 

@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           title: post.title,
           url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.BLOG}/${params.slug}`,
           image: post.src,
-          datePublished: post.createdDate,
+          datePublished: post.createdAt,
           articleBody: post.content,
         })}
       />

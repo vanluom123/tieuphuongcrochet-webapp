@@ -87,11 +87,11 @@ const Users = () => {
         },
         {
             title: 'Created date',
-            dataIndex: 'createdDate',
+            dataIndex: 'createdAt',
         },
         {
             title: 'Last modified date',
-            dataIndex: 'lastModifiedDate',
+            dataIndex: 'lastModifiedAt',
         },
     ]
     return (

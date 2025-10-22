@@ -10,7 +10,7 @@ export const fetchBannerTypes = async (): Promise<DataType[]> => {
         id,
         name,
         key: id || '',
-        createdDate
+        createdAt: createdDate
     }));
 };
 

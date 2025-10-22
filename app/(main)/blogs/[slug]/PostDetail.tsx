@@ -14,16 +14,16 @@ export default function PostDetail({ post }: { post: Post }) {
 
 	const locale = useLocale();
 
-	const { id, title, content, createdDate, src } = post;
+	const { id, title, content, createdAt, src } = post;
 
 	return (
 		<ViewDetailWrapper>
 			<Row gutter={[30, 30]}>
 				<Col xs={24} sm={12} className="text-box">
 					<h1>{title}</h1>
-					{createdDate &&
+					{createdAt &&
 						<Flex justify="flex-end">
-							{getDateFormatted(createdDate, locale === LANGUAGES.VN ? 'vi' : 'en')}
+							{getDateFormatted(createdAt, locale === LANGUAGES.VN ? 'vi' : 'en')}
 						</Flex>
 					}
 				</Col>

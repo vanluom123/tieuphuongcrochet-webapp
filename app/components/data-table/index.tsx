@@ -59,7 +59,7 @@ const DataTable = ({
     },
     {
       title: t('created_date'),
-      dataIndex: 'createdDate',
+      dataIndex: 'createdAt',
       render: ((value: any) => (
         value ? getCurrentDate(value) : null
       ))

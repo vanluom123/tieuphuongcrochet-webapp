@@ -76,7 +76,7 @@ const Blogs = () => {
         },
         {
             title: 'Created Date',
-            dataIndex: 'createdDate',
+            dataIndex: 'createdAt',
         }
     ];
 

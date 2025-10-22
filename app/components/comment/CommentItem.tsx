@@ -250,7 +250,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                         Trả lời
                                     </Button>
                                     <Typography.Text type="secondary" style={{fontSize: 12}}>
-                                        {timeUtils.timeAgo(comment.createdDate, locale)}
+                                        {timeUtils.timeAgo(comment.createdAt, locale)}
                                     </Typography.Text>
                                     {(session?.user?.id === comment.userId || session?.user?.role === USER_ROLES.ADMIN) && (
                                         <Dropdown overlay={dropdownMenu} trigger={['click']}>

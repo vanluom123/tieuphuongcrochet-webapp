@@ -30,7 +30,7 @@ export interface ListParams {
 export const initialListParams: ListParams = {
   pageNo: 0,
   pageSize: Number(process.env.NEXT_PUBLIC_PAGE_SIZE),
-  sortBy: 'createdDate',
+  sortBy: 'createdAt',
   sortDir: 'desc',
   categoryId: '',
   filter: '',
@@ -84,7 +84,7 @@ export interface DataType {
   link?: string
   title?: string
   content?: string
-  createdDate?: string
+  createdAt?: string
   imagesPreview?: { src: string; alt: string }[]
   in_collection?: boolean // Trạng thái đã bookmark hay chưa
 }
@@ -131,7 +131,7 @@ export interface Banner {
 export interface IBannerType {
   id?: React.Key
   name: TBannerType
-  createdDate?: string
+  createdAt?: string
 }
 
 export interface SettingState {
@@ -254,8 +254,8 @@ export interface User {
   collections?: Collection[]
   recentComments?: Comment[]
   password?: string
-  createdDate?: string
-  lastModifiedDate?: string
+  createdAt?: string
+  lastModifiedAt?: string
 }
 
 //------------------------Blogs--------------------------
@@ -264,7 +264,7 @@ export interface Post {
   id?: React.Key
   title: string
   content: string
-  createdDate: string
+  createdAt: string
   files?: FileUpload[]
   src?: string
   is_home?: boolean
@@ -279,7 +279,7 @@ export interface Collection {
   description?: string
   totalPatterns?: number
   avatar?: string
-  createdDate?: string
+  createdAt?: string
   userId?: string
 }
 
@@ -288,7 +288,7 @@ export interface Collection {
 export interface Comment {
   id: string
   content: string
-  createdDate: string
+  createdAt: string
 }
 
 export interface ResponseData<T> {
@@ -307,7 +307,7 @@ export interface IResponseList<T> {
 export interface CommentData {
   id: string
   content: string
-  createdDate: string
+  createdAt: string
   userId: string
   username: string
   userAvatar?: string | null

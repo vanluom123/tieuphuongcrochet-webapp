@@ -242,13 +242,13 @@ export const API_ROUTES = {
   PRODUCTS: '/api/v1/products',
 
   // Blog routes
-  BLOGS: '/api/v1/blogs',
+  BLOGS: '/api/v1/posts',
   
   // Category routes
   CATEGORIES: '/api/v1/categories',
   
   // Blog category routes
-  BLOG_CATEGORIES: '/api/v1/blog-categories',
+  BLOG_CATEGORIES: '/api/v1/post-categories',
 
   // Collection routes
   COLLECTIONS: '/api/v1/collections',
@@ -266,6 +266,9 @@ export const API_ROUTES = {
   // Comment
   COMMENTS: '/api/v1/comments',
 
+  // Post comment
+  POST_COMMENT: 'api/v1/post-comments',
+
   // Notification
   NOTIFICATIONS: '/api/v1/notifications',
 
@@ -276,7 +279,7 @@ export const API_ROUTES = {
 export const PARAMS_FOR_SITEMAP: ListParams = {
 	pageNo: 0,
 	pageSize: parseInt(process.env.NEXT_PUBLIC_RECORDS_PER_SITEMAP || '300'),
-	sortBy: 'createdDate',
+	sortBy: 'createdAt',
 	sortDir: 'desc',
     categoryId: '',
 	filter: ''

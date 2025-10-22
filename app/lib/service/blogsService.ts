@@ -11,6 +11,7 @@ export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConf
     totalRecords: number
 }> => {
     const res: ResponseData<any> = await apiService({
+        baseUrl: process.env.POST_SERVICE_API_URL,
         endpoint: API_ROUTES.BLOGS,
         method: 'GET',
         queryParams: {
@@ -43,6 +44,7 @@ export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConf
 
 export const fetchPostDetail = async (id: string, next?: NextFetchRequestConfig): Promise<Post> => {
     const res: ResponseData<any> = await apiService({
+        baseUrl: process.env.POST_SERVICE_API_URL,
         endpoint: `${API_ROUTES.BLOGS}/${id}`,
         method: 'GET',
         next
@@ -62,6 +64,7 @@ export const fetchPostDetail = async (id: string, next?: NextFetchRequestConfig)
 
 export const deletePost = async (id: string): Promise<void> => {
     const res: ResponseData<any> = await apiJwtService({
+        baseUrl: process.env.POST_SERVICE_API_URL,
         endpoint: `${API_ROUTES.BLOGS}/${id}`,
         method: 'DELETE'
     });
@@ -75,6 +78,7 @@ export const deletePost = async (id: string): Promise<void> => {
 
 export const createUpdatePost = async (data: Post): Promise<ResponseData<any>> => {
     const res: ResponseData<any> = await apiJwtService({
+        baseUrl: process.env.POST_SERVICE_API_URL,
         endpoint: API_ROUTES.BLOGS,
         method: 'POST',
         data,
