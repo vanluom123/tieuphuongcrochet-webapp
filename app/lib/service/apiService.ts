@@ -1,53 +1,50 @@
 interface ApiServiceParams {
-  baseUrl?: string
-  endpoint?: string
-  method?: string
-  data?: any
-  headers?: Record<string, string>
-  next?: NextFetchRequestConfig
-  queryParams?: Record<string, string>
-  formData?: FormData
+    baseUrl?: string
+    endpoint?: string
+    method?: string
+    data?: any
+    headers?: Record<string, string>
+    next?: NextFetchRequestConfig
+    queryParams?: Record<string, string>
+    formData?: FormData
 }
 
 async function apiService({
-  baseUrl = process.env.NEXT_PUBLIC_API_URL,
-  endpoint = '',
-  method = 'GET',
-  data = null,
-  headers = {},
-  next,
-  queryParams = {},
-  formData,
+    baseUrl = process.env.NEXT_PUBLIC_API_URL,
+    endpoint = '',
+    method = 'GET',
+    data = null,
+    headers = {},
+    next,
+    queryParams = {},
+    formData,
 }: ApiServiceParams): Promise<any> {
-  const url = new URL(endpoint, baseUrl)
+    const url = new URL(endpoint, baseUrl)
 
-  Object.entries(queryParams).forEach(([key, value]) => {
-    url.searchParams.append(key, value)
-  })
-
-  try {
-    const response = await fetch(url.toString(), {
-      method,
-      headers: formData
-        ? {
-            ...headers,
-          }
-        : {
-            'Content-Type': 'application/json',
-            ...headers,
-          },
-      body: formData || (data ? JSON.stringify(data) : undefined),
-      next,
+    Object.entries(queryParams).forEach(([key, value]) => {
+        url.searchParams.append(key, value)
     })
 
-    if (!response.ok) {
-      throw new Error(await response.text())
-    }
+    try {
+        const response = await fetch(url.toString(), {
+            method,
+            headers: formData
+                ? {
+                      ...headers,
+                  }
+                : {
+                      'Content-Type': 'application/json',
+                      ...headers,
+                  },
+            body: formData || (data ? JSON.stringify(data) : undefined),
+            next,
+        })
 
-    return await response.json()
-  } catch (error) {
-    throw error
-  }
+        return await response.json()
+    } catch (error) {
+        console.log('error', error)
+        throw error
+    }
 }
 
 export default apiService

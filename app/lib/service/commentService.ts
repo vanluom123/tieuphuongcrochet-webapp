@@ -16,7 +16,6 @@ export const createUpdateComment = async (data: {
     mentionedUserId?: string
 }): Promise<ResponseData<any>> => {
     if (data.postId) {
-        console.log('createUpdateComment---> Blog service createUpdateComment')
         return postCommentApi.createUpdateComment(data)
     }
 
@@ -34,8 +33,6 @@ export const fetchRootComments = async (
     pageNo: number = 0,
     pageSize: number = 10,
 ): Promise<PageResponse<CommentData>> => {
-    console.log('fetchRootComments---> id: ', id)
-    console.log('fetchRootComments---> type: ', type)
     if (type === 'blog') {
         return postCommentApi.fetchRootComments(id, pageNo, pageSize)
     }
@@ -75,26 +72,18 @@ export const fetchAllComments = async (
 
 // Get replies for a comment
 export const fetchCommentReplies = async (commentId: string): Promise<CommentData[]> => {
-    try {
-        const res: ResponseData<CommentData[]> = await apiService({
-            endpoint: `${API_ROUTES.COMMENTS}/replies/${commentId}`,
-            method: 'GET',
-        })
-        if (!res.success) {
-            console.log('Failed to fetch comment replies from main-service')
-            return []
-        }
-        return res.data
-    } catch (error) {
-        console.log('fetchCommentReplies---> Fetching comment replies from blog-service...')
+    const res: ResponseData<CommentData[]> = await apiService({
+        endpoint: `${API_ROUTES.COMMENTS}/replies/${commentId}`,
+        method: 'GET',
+    })
+    if (!res.success) {
         const res_2 = await postCommentApi.fetchCommentReplies(commentId)
-        if (res_2.length) {
-            console.log('fetchCommentReplies---> Fetching comment replies from blog-service...')
+        if (res_2.length > 0) {
             return res_2
-        } else {
-            return []
         }
+        return []
     }
+    return res.data
 }
 
 // Delete a comment
@@ -105,12 +94,9 @@ export const deleteComment = async (commentId: string): Promise<ResponseData<any
     })
 
     if (!res.success) {
-        console.log('Failed to delete comment from main-service')
         const res_2 = await postCommentApi.deleteComment(commentId)
         if (res_2.success) {
             return res_2
-        } else {
-            console.log('Failed to delete comment from blog-service')
         }
     }
 
@@ -137,12 +123,8 @@ export const fetchRootCommentsCount = async (id: string, type: string): Promise<
 
 // Get count of all comments for a blog post
 export const fetchAllCommentsCount = async (id: string, type: string): Promise<number> => {
-    console.log('fetchAllCommentsCount--> id: ', id)
-    console.log('fetchAllCommentsCount--> type: ', type)
-
     if (type === 'blog') {
         const count = await postCommentApi.fetchAllCommentsCount(id)
-        console.log('fetchAllCommentsCount--> count: ', count)
         return count
     }
 
