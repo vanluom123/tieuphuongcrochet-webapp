@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { fetchProducts } from '@/app/lib/service/productService'
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService'
 import { PARAMS_FOR_SITEMAP, ROUTE_PATH } from '@/app/lib/constant'
-import { fetchBlogs } from '@/app/lib/service/blogsService'
+import { fetchPosts } from '@/app/lib/service/postService'
 
 // Calculate and output sitemap URLs ex sitemap/1.xml
 async function generateSitemaps({
@@ -37,7 +37,7 @@ const generateFreePatternSitemaps = async () => {
 }
 
 const generateBlogSitemaps = async () => {
-  const { totalRecords } = await fetchBlogs(PARAMS_FOR_SITEMAP)
+  const { totalRecords } = await fetchPosts(PARAMS_FOR_SITEMAP)
   return generateSitemaps({ totalRecords, pathname: ROUTE_PATH.BLOG })
 }
 

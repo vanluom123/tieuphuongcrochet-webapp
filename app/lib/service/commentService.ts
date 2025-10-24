@@ -1,123 +1,159 @@
 // commentService.ts
-import {API_ROUTES} from "../constant";
-import apiService from "./apiService";
-import apiJwtService from "./apiJwtService";
-import {notification} from "../notify";
-import {CommentData, PageResponse, ResponseData} from "../definitions";
+import { API_ROUTES } from '../constant'
+import apiService from './apiService'
+import apiJwtService from './apiJwtService'
+import { CommentData, PageResponse, ResponseData } from '../definitions'
+import { postCommentApi } from './postCommentService'
 
 // Create or update comment
 export const createUpdateComment = async (data: {
-    id?: string;
-    blogPostId?: string;
-    productId?: string;
-    freePatternId?: string;
-    content: string;
-    parentId?: string;
-    mentionedUserId?: string;
+    id?: string
+    postId?: string
+    productId?: string
+    freePatternId?: string
+    content: string
+    parentId?: string
+    mentionedUserId?: string
 }): Promise<ResponseData<any>> => {
+    if (data.postId) {
+        console.log('createUpdateComment---> Blog service createUpdateComment')
+        return postCommentApi.createUpdateComment(data)
+    }
+
     return await apiJwtService({
         endpoint: API_ROUTES.COMMENTS,
         method: 'POST',
-        data
-    });
-};
+        data,
+    })
+}
 
 // Get root comments for a blog post
 export const fetchRootComments = async (
     id: string,
     type: string,
     pageNo: number = 0,
-    pageSize: number = 10
+    pageSize: number = 10,
 ): Promise<PageResponse<CommentData>> => {
+    console.log('fetchRootComments---> id: ', id)
+    console.log('fetchRootComments---> type: ', type)
+    if (type === 'blog') {
+        return postCommentApi.fetchRootComments(id, pageNo, pageSize)
+    }
+
     const res: ResponseData<PageResponse<CommentData>> = await apiService({
         endpoint: `${API_ROUTES.COMMENTS}/${type}/${id}/root`,
         method: 'GET',
         queryParams: {
             pageNo: pageNo.toString(),
-            pageSize: pageSize.toString()
-        }
-    });
-    return res.data;
-};
+            pageSize: pageSize.toString(),
+        },
+    })
+    return res.data
+}
 
 // Get all comments for a blog post
 export const fetchAllComments = async (
     id: string,
     type: string,
     pageNo: number = 0,
-    pageSize: number = 10
+    pageSize: number = 10,
 ): Promise<PageResponse<CommentData>> => {
+    if (type === 'blog') {
+        return postCommentApi.fetchAllComments(id, pageNo, pageSize)
+    }
+
     const res: ResponseData<PageResponse<CommentData>> = await apiService({
         endpoint: `${API_ROUTES.COMMENTS}/${type}/${id}`,
         method: 'GET',
         queryParams: {
             pageNo: pageNo.toString(),
-            pageSize: pageSize.toString()
-        }
-    });
-    return res.data;
-};
+            pageSize: pageSize.toString(),
+        },
+    })
+    return res.data
+}
 
 // Get replies for a comment
-export const fetchCommentReplies = async (
-    commentId: string
-): Promise<CommentData[]> => {
-    const res: ResponseData<CommentData[]> = await apiService({
-        endpoint: `${API_ROUTES.COMMENTS}/replies/${commentId}`,
-        method: 'GET'
-    });
-    if (!res.success) {
-        return [];
+export const fetchCommentReplies = async (commentId: string): Promise<CommentData[]> => {
+    try {
+        const res: ResponseData<CommentData[]> = await apiService({
+            endpoint: `${API_ROUTES.COMMENTS}/replies/${commentId}`,
+            method: 'GET',
+        })
+        if (!res.success) {
+            console.log('Failed to fetch comment replies from main-service')
+            return []
+        }
+        return res.data
+    } catch (error) {
+        console.log('fetchCommentReplies---> Fetching comment replies from blog-service...')
+        const res_2 = await postCommentApi.fetchCommentReplies(commentId)
+        if (res_2.length) {
+            console.log('fetchCommentReplies---> Fetching comment replies from blog-service...')
+            return res_2
+        } else {
+            return []
+        }
     }
-    return res.data;
-};
+}
 
 // Delete a comment
-export const deleteComment = async (
-    commentId: string
-): Promise<ResponseData<any>> => {
+export const deleteComment = async (commentId: string): Promise<ResponseData<any>> => {
     const res: ResponseData<any> = await apiJwtService({
         endpoint: `${API_ROUTES.COMMENTS}/${commentId}`,
-        method: 'DELETE'
-    });
+        method: 'DELETE',
+    })
 
     if (!res.success) {
-        notification.error({message: 'Failed', description: res.message});
+        console.log('Failed to delete comment from main-service')
+        const res_2 = await postCommentApi.deleteComment(commentId)
+        if (res_2.success) {
+            return res_2
+        } else {
+            console.log('Failed to delete comment from blog-service')
+        }
     }
 
-    return res;
-};
+    return res
+}
 
 // Get count of root comments for a blog post
-export const fetchRootCommentsCount = async (
-    id: string,
-    type: string
-): Promise<number> => {
+export const fetchRootCommentsCount = async (id: string, type: string): Promise<number> => {
+    if (type === 'blog') {
+        return postCommentApi.fetchRootCommentsCount(id)
+    }
+
     const res: ResponseData<any> = await apiService({
         endpoint: `${API_ROUTES.COMMENTS}/${type}/${id}/root/count`,
-        method: 'GET'
-    });
+        method: 'GET',
+    })
 
     if (!res.success) {
-        return 0;
+        return 0
     }
 
-    return res.data;
-};
+    return res.data
+}
 
 // Get count of all comments for a blog post
-export const fetchAllCommentsCount = async (
-    id: string,
-    type: string
-): Promise<number> => {
-    const res: ResponseData<any> = await apiService({
-        endpoint: `${API_ROUTES.COMMENTS}/${type}/${id}/count`,
-        method: 'GET'
-    });
+export const fetchAllCommentsCount = async (id: string, type: string): Promise<number> => {
+    console.log('fetchAllCommentsCount--> id: ', id)
+    console.log('fetchAllCommentsCount--> type: ', type)
 
-    if (!res.success) {
-        return 0;
+    if (type === 'blog') {
+        const count = await postCommentApi.fetchAllCommentsCount(id)
+        console.log('fetchAllCommentsCount--> count: ', count)
+        return count
     }
 
-    return res.data;
-};
+    const res: ResponseData<any> = await apiService({
+        endpoint: `${API_ROUTES.COMMENTS}/${type}/${id}/count`,
+        method: 'GET',
+    })
+
+    if (!res.success) {
+        return 0
+    }
+
+    return res.data
+}
