@@ -4,6 +4,7 @@ import apiService from './apiService'
 import apiJwtService from './apiJwtService'
 import { CommentData, PageResponse, ResponseData } from '../definitions'
 import { postCommentApi } from './postCommentService'
+import { notification } from 'antd'
 
 // Create or update comment
 export const createUpdateComment = async (data: {
@@ -76,14 +77,15 @@ export const fetchCommentReplies = async (commentId: string): Promise<CommentDat
         endpoint: `${API_ROUTES.COMMENTS}/replies/${commentId}`,
         method: 'GET',
     })
-    if (!res.success) {
-        const res_2 = await postCommentApi.fetchCommentReplies(commentId)
-        if (res_2.length > 0) {
-            return res_2
-        }
-        return []
+    if (res.success) {
+        return res.data
     }
-    return res.data
+
+    const fallbackRes = await postCommentApi.fetchCommentReplies(commentId)
+    if (fallbackRes.length > 0) {
+        return fallbackRes
+    }
+    return []
 }
 
 // Delete a comment
@@ -93,14 +95,23 @@ export const deleteComment = async (commentId: string): Promise<ResponseData<any
         method: 'DELETE',
     })
 
-    if (!res.success) {
-        const res_2 = await postCommentApi.deleteComment(commentId)
-        if (res_2.success) {
-            return res_2
-        }
+    if (res.success) {
+        notification.success({
+            message: 'Success',
+            description: 'Deleted comment',
+        })
+        return res
     }
 
-    return res
+    const fallbackRes = await postCommentApi.deleteComment(commentId)
+    if (fallbackRes.success) {
+        notification.success({
+            message: 'Success',
+            description: 'Deleted comment',
+        })
+    }
+
+    return fallbackRes
 }
 
 // Get count of root comments for a blog post

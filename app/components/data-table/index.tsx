@@ -61,7 +61,7 @@ const DataTable = ({
       title: t('created_date'),
       dataIndex: 'createdAt',
       render: ((value: any) => (
-        value ? getCurrentDate(value) : null
+        value ? getCurrentDate(value * 1000) : null
       ))
     },
     {

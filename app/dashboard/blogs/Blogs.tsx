@@ -9,7 +9,8 @@ import DataTable from '@/app/components/data-table'
 import { ROUTE_PATH } from '@/app/lib/constant'
 import { useRouter } from 'next/navigation'
 import { sfLike } from 'spring-filter-query-builder'
-import { debounce } from '@/app/lib/utils'
+import { debounce, getCurrentDate } from '@/app/lib/utils'
+import { render } from 'sass'
 
 const initialState: DataTableState = {
     loading: false,
@@ -77,6 +78,7 @@ const Blogs = () => {
         {
             title: 'Created Date',
             dataIndex: 'createdAt',
+            render: (value: any) => value ? getCurrentDate(new Date(value * 1000)) : '',
         },
     ]
 

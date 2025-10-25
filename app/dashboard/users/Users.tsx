@@ -18,7 +18,7 @@ const initialState: DataTableState = {
 };
 
 const Users = () => {
-    const [params, setParams] = useState(initialListParams)
+    const [params, setParams] = useState({...initialListParams, sortBy: 'id'})
     const router = useRouter();
     const [state, setState] = useState(initialState);
     useEffect(() => {
@@ -84,14 +84,6 @@ const Users = () => {
         {
             title: 'Role',
             dataIndex: 'role',
-        },
-        {
-            title: 'Created date',
-            dataIndex: 'createdAt',
-        },
-        {
-            title: 'Last modified date',
-            dataIndex: 'lastModifiedAt',
         },
     ]
     return (
