@@ -5,7 +5,7 @@ import { DeleteOutlined, CommentOutlined, BellOutlined, FileOutlined, ShoppingOu
 import { useLocale, useTranslations } from "next-intl";
 import { Notification } from "@/app/lib/service/notificationService";
 import '@/app/ui/components/notificationCard.scss';
-import { timeUtils } from "@/app/lib/utils";
+import { useTimeAgo } from "next-timeago";
 
 interface NotificationCardProps {
   notification: Notification;
@@ -18,7 +18,8 @@ const NotificationCard = ({ notification, onDelete, onMarkAsRead, onNotification
   const { Title, Text } = Typography;
 
   const t = useTranslations('Notification');
-  const locale = useLocale();
+  const currentLocale = useLocale();
+  const { TimeAgo } = useTimeAgo();
 
   const getNotificationTypeDisplay = (type: string) => {
     switch (type) {
@@ -98,7 +99,9 @@ const NotificationCard = ({ notification, onDelete, onMarkAsRead, onNotification
     </div>
 
     <div className="notification-footer">
-      <Text type="secondary">{timeUtils.timeAgo(notification.createdAt, locale)}</Text>
+      <Text type="secondary">
+        <TimeAgo date={new Date(Number(notification.createdAt) * 1000)} locale={currentLocale} />
+      </Text>
       {!notification.read && (
         <Button
           type="link"

@@ -13,8 +13,8 @@ import CommentForm from './CommentForm'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { ROUTE_PATH, USER_ROLES } from '../../lib/constant'
-import { timeUtils } from '@/app/lib/utils'
 import { useLocale } from 'next-intl'
+import { useTimeAgo } from 'next-timeago'
 
 const { TextArea } = Input
 
@@ -45,7 +45,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const [replies, setReplies] = useState<CommentData[]>(comment.replies || [])
     const [loadedReplies, setLoadedReplies] = useState(false)
     const [loadingReplies, setLoadingReplies] = useState(false)
-    const locale = useLocale()
+    const currentLocale = useLocale()
+    const { TimeAgo } = useTimeAgo()
 
     // Lấy ký tự đầu tiên của tên user nếu ảnh không tải được
     const fallbackCharacter = comment.username.charAt(0).toUpperCase()
@@ -267,7 +268,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                         Trả lời
                                     </Button>
                                     <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                                        {timeUtils.timeAgo(comment.createdAt, locale)}
+                                        <TimeAgo date={new Date(Number(comment.createdAt) * 1000)} locale={currentLocale} />
                                     </Typography.Text>
                                     {(session?.user?.id === comment.userId ||
                                         session?.user?.role === USER_ROLES.ADMIN) && (
