@@ -175,7 +175,8 @@
     "logout": "Logout",
     "logout_confirm": "Are you sure you want to log out?",
     "dashboard": "Dashboard",
-    "register": "Register"
+    "register": "Register",
+    "upgrade_premium": "Upgrade Premium"
   },
   "Login": {
     "title": "Login",

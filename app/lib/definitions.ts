@@ -326,3 +326,20 @@ export interface PageResponse<T> {
   totalPages: number
   last: boolean
 }
+
+// -------------------------- Payments --------------------------
+
+export interface PaymentOrderRequest {
+  planType: 'MONTHLY' | 'YEARLY'
+  returnUrl: string
+  cancelUrl: string
+}
+
+export interface PaymentOrderResponse {
+  orderId: string
+  approveUrl: string
+}
+
+export interface CapturePaymentRequest {
+  orderId: string
+}

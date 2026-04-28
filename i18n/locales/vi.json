@@ -175,7 +175,8 @@
     "logout": "Đăng xuất",
     "logout_confirm": "Bạn có chắc chắn muốn đăng xuất?",
     "dashboard": "Bảng điều khiển",
-    "register": "Đăng ký"
+    "register": "Đăng ký",
+    "upgrade_premium": "Nâng cấp Premium"
   },
   "Login": {
     "title": "Đăng nhập",
