@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { paymentService } from "@/app/lib/service/paymentService";
 import { Spin, Typography, Result, Button } from "antd";
 import { useSession } from "next-auth/react";
 import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
+import styles from "./page.module.scss";
 
 const { Title, Text } = Typography;
 
@@ -14,7 +15,7 @@ export default function PremiumCapturePage() {
   const router = useRouter();
   const token = searchParams.get("token");
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const { update } = useSession();
+  const { status: sessionStatus, update } = useSession();
   const hasCaptured = useRef(false);
 
   useEffect(() => {
@@ -23,8 +24,15 @@ export default function PremiumCapturePage() {
       return;
     }
 
+    // Wait for session to be loaded before attempting payment capture.
+    // The update() function silently returns early when session is still loading,
+    // which would cause the role update to be skipped.
+    if (sessionStatus === "loading") {
+      return;
+    }
+
     if (hasCaptured.current) {
-        return;
+      return;
     }
     hasCaptured.current = true;
 
@@ -32,8 +40,22 @@ export default function PremiumCapturePage() {
       try {
         const response = await paymentService.capturePayment({ orderId: token });
         if (response && response.status === "SUCCESS") {
-          // Update the session role to reflect Premium status
-          await update({ role: USER_ROLES.PREMIUM_USER });
+          // Update the session role to reflect Premium status.
+          // update() only works when the session is already loaded (not in loading state).
+          // It returns the updated session on success, or null on failure.
+          const updatedSession = await update({ role: USER_ROLES.PREMIUM_USER });
+
+          if (updatedSession?.user?.role !== USER_ROLES.PREMIUM_USER) {
+            // If client-side update failed, force a hard session refresh
+            // by navigating with a full page reload so the server re-reads
+            // the JWT with the updated role from the backend.
+            console.warn(
+              "Session update did not reflect premium role. Forcing session refresh."
+            );
+          }
+
+          // Invalidate Router Cache so the server re-fetches fresh session data
+          router.refresh();
           setStatus("success");
         } else {
           setStatus("error");
@@ -45,37 +67,42 @@ export default function PremiumCapturePage() {
     };
 
     capturePayment();
-  }, [token, update]);
+  }, [token, sessionStatus, update, router]);
+
+  const successExtra = useMemo(() => [
+    <Button
+      key="home"
+      type="primary"
+      size="large"
+      onClick={() => (window.location.href = ROUTE_PATH.HOME)}
+      className={styles.captureButton}
+    >
+      Go to Homepage
+    </Button>,
+  ], []);
+
+  const errorExtra = useMemo(() => [
+    <Button
+      key="retry"
+      type="primary"
+      size="large"
+      onClick={() => router.push(ROUTE_PATH.HOME)}
+      className={styles.captureButton}
+    >
+      Return Home
+    </Button>,
+  ], [router]);
 
   return (
-    <div
-      style={{
-        minHeight: "calc(100vh - 200px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#fdf9f4", // surface color
-      }}
-    >
-      <div
-        style={{
-          background: "#ffffff",
-          borderRadius: "24px",
-          padding: "48px",
-          boxShadow: "0 8px 32px rgba(28, 28, 25, 0.08)",
-          border: "1px solid rgba(217, 193, 188, 0.2)",
-          textAlign: "center",
-          maxWidth: "480px",
-          width: "100%",
-        }}
-      >
+    <div className={styles.captureContainer}>
+      <div className={styles.captureCard}>
         {status === "loading" && (
           <>
-            <Spin size="large" style={{ marginBottom: "24px" }} />
-            <Title level={3} style={{ color: "#8e4838", fontFamily: "'Noto Serif', serif" }}>
+            <Spin size="large" className={styles.captureSpin} />
+            <Title level={3} className={styles.captureTitle}>
               Processing your upgrade...
             </Title>
-            <Text style={{ color: "#665a4a" }}>
+            <Text className={styles.captureText}>
               Please wait while we confirm your payment with PayPal. Do not close this page.
             </Text>
           </>
@@ -85,32 +112,16 @@ export default function PremiumCapturePage() {
           <Result
             status="success"
             title={
-              <span style={{ color: "#8e4838", fontFamily: "'Noto Serif', serif", fontWeight: 600 }}>
+              <span className={styles.captureResultTitle}>
                 Welcome to Premium!
               </span>
             }
             subTitle={
-              <span style={{ color: "#665a4a" }}>
+              <span className={styles.captureResultSubtitle}>
                 Your payment was successful and your account has been upgraded. Enjoy the ad-free experience and exclusive patterns.
               </span>
             }
-            extra={[
-              <Button
-                key="home"
-                type="primary"
-                size="large"
-                onClick={() => router.push(ROUTE_PATH.HOME)}
-                style={{
-                  backgroundColor: "#8e4838",
-                  borderColor: "#8e4838",
-                  borderRadius: "12px",
-                  fontWeight: 600,
-                  boxShadow: "0 4px 12px rgba(142, 72, 56, 0.2)",
-                }}
-              >
-                Go to Homepage
-              </Button>,
-            ]}
+            extra={successExtra}
           />
         )}
 
@@ -118,32 +129,16 @@ export default function PremiumCapturePage() {
           <Result
             status="error"
             title={
-              <span style={{ color: "#8e4838", fontFamily: "'Noto Serif', serif", fontWeight: 600 }}>
+              <span className={styles.captureResultTitle}>
                 Upgrade Failed
               </span>
             }
             subTitle={
-              <span style={{ color: "#665a4a" }}>
+              <span className={styles.captureResultSubtitle}>
                 There was an issue processing your payment. Your account was not charged. Please try again.
               </span>
             }
-            extra={[
-              <Button
-                key="retry"
-                type="primary"
-                size="large"
-                onClick={() => router.push(ROUTE_PATH.HOME)} // Could also go back to profile or retry
-                style={{
-                  backgroundColor: "#8e4838",
-                  borderColor: "#8e4838",
-                  borderRadius: "12px",
-                  fontWeight: 600,
-                  boxShadow: "0 4px 12px rgba(142, 72, 56, 0.2)",
-                }}
-              >
-                Return Home
-              </Button>,
-            ]}
+            extra={errorExtra}
           />
         )}
       </div>

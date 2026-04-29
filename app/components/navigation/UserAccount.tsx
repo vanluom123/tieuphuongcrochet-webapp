@@ -1,5 +1,5 @@
 import { Button, MenuProps, Dropdown, Modal, Avatar } from "antd";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   UserOutlined,
   LogoutOutlined,
@@ -7,6 +7,7 @@ import {
   LoginOutlined,
   UserAddOutlined,
   StarOutlined,
+  StarFilled,
 } from "@ant-design/icons";
 import { signOut, useSession } from "next-auth/react";
 import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
@@ -24,7 +25,20 @@ const UserAccount = () => {
   const userAvatar = session?.user.imageUrl;
   const userId = session?.user.id;
 
-  const items: MenuProps["items"] = [
+  const items = useMemo<MenuProps["items"]>(() => [
+    ...(session?.user?.role === USER_ROLES.PREMIUM_USER
+      ? [
+          {
+            key: "premium_badge",
+            label: (
+              <span className="premium-badge-label">
+                <StarFilled /> Premium
+              </span>
+            ),
+            disabled: true,
+          },
+        ]
+      : []),
     {
       key: "user_profile",
       label: t("profile"),
@@ -50,7 +64,7 @@ const UserAccount = () => {
           {
             key: "upgrade_premium",
             label: t("upgrade_premium") || "Upgrade Premium",
-            icon: <StarOutlined style={{ color: "#775a19" }} />,
+            icon: <StarOutlined className="upgrade-premium-icon" />,
             onClick: () => {
               setIsPremiumModalOpen(true);
             },
@@ -70,9 +84,9 @@ const UserAccount = () => {
         });
       },
     },
-  ];
+  ], [session?.user?.role, userId, t, router, setIsPremiumModalOpen]);
 
-  const loginMenu = [
+  const loginMenu = useMemo(() => [
     {
       key: "login",
       label: t("sign_in"),
@@ -89,7 +103,7 @@ const UserAccount = () => {
         router.push(ROUTE_PATH.REGISTER);
       },
     },
-  ];
+  ], [t, router]);
 
   return (
     <>
@@ -106,7 +120,7 @@ const UserAccount = () => {
                   <Avatar src={userAvatar} size={32} />
                   ) : (
                   <Avatar
-                      style={{ backgroundColor: "#fc8282" }}
+                      className="default-user-avatar"
                       icon={<UserOutlined />}
                       size={32}
                   />
