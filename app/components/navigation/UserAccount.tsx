@@ -26,19 +26,6 @@ const UserAccount = () => {
   const userId = session?.user.id;
 
   const items = useMemo<MenuProps["items"]>(() => [
-    ...(session?.user?.role === USER_ROLES.PREMIUM_USER
-      ? [
-          {
-            key: "premium_badge",
-            label: (
-              <span className="premium-badge-label">
-                <StarFilled /> Premium
-              </span>
-            ),
-            disabled: true,
-          },
-        ]
-      : []),
     {
       key: "user_profile",
       label: t("profile"),
@@ -84,7 +71,7 @@ const UserAccount = () => {
         });
       },
     },
-  ], [session?.user?.role, userId, t, router, setIsPremiumModalOpen]);
+  ], [userId, t, router, setIsPremiumModalOpen]);
 
   const loginMenu = useMemo(() => [
     {
@@ -116,15 +103,22 @@ const UserAccount = () => {
               shape="circle"
               className="user-menu-icon"
               icon={
-                  userAvatar ? (
-                  <Avatar src={userAvatar} size={32} />
-                  ) : (
-                  <Avatar
-                      className="default-user-avatar"
-                      icon={<UserOutlined />}
-                      size={32}
-                  />
-                  )
+                  <span className={`user-avatar-container ${session?.user?.role === USER_ROLES.PREMIUM_USER ? 'premium-avatar' : ''}`}>
+                    {userAvatar ? (
+                    <Avatar src={userAvatar} size={32} />
+                    ) : (
+                    <Avatar
+                        className="default-user-avatar"
+                        icon={<UserOutlined />}
+                        size={32}
+                    />
+                    )}
+                    {session?.user?.role === USER_ROLES.PREMIUM_USER && (
+                      <span className="premium-avatar-badge">
+                        <StarFilled />
+                      </span>
+                    )}
+                  </span>
             }
           />
         </Dropdown>
