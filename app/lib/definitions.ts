@@ -143,6 +143,11 @@ export interface SettingState {
   banners: Banner[]
 }
 
+export interface Setting {
+  key: string
+  value: string
+}
+
 // ---------------------------------- Category ----------------------------------
 
 export interface Category {
