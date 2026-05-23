@@ -271,6 +271,9 @@ export const API_ROUTES = {
   // Notification
   NOTIFICATIONS: '/api/v1/notifications',
 
+  // Interaction
+  INTERACTIONS: '/api/v1/interactions',
+
   // Cloudflare R2
   R2_PRESIGNED : '/api/r2-presigned',
 

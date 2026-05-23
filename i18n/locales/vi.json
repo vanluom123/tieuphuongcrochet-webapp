@@ -55,8 +55,11 @@
     "createPattern": "Tạo chart mới",
     "updatePattern": "Cập nhật chart",
     "login_to_save": "Đăng nhập để lưu",
+    "login_to_like": "Đăng nhập để thích",
     "save": "Lưu vào bộ sưu tập",
     "remove_from_collection": "Xóa khỏi bộ sưu tập",
+    "like": "Thích",
+    "unlike": "Bỏ thích",
     "status": {
       "ALL": "Tất cả",
       "SUCCESS": "Đã dịch",
