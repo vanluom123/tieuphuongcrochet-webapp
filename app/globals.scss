@@ -883,9 +883,14 @@ body {
         bottom: 10px;
       }
 
-      &.custom-bookmark-button{
+      &.custom-like-button {
         right: 7px;
         bottom: 190px;
+      }
+
+      &.custom-bookmark-button{
+        right: 7px;
+        bottom: 250px;
       }
     }
   }
@@ -1481,9 +1486,6 @@ body {
     bottom: 20px;
   }
 
-  &.custom-bookmark-button {
-    bottom: 200px;
-  }
 }
 
 .active {
