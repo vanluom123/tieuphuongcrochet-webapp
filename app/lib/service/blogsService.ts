@@ -5,6 +5,24 @@ import {getAvatar} from "../utils";
 import apiJwtService from "./apiJwtService";
 import {notification} from "../notify";
 import {map} from "lodash";
+import {sfEqual} from "spring-filter-query-builder";
+import {ALL_ITEM} from "../constant";
+
+const buildBlogFilter = (params: ListParams): string => {
+    const filterParts: string[] = [];
+
+    // Add search filter if exists
+    if (params.filter) {
+        filterParts.push(params.filter);
+    }
+
+    // Add category filter if exists and not 'all'
+    if (params.categoryId && params.categoryId !== ALL_ITEM.key) {
+        filterParts.push(sfEqual('blogCategory.id', params.categoryId).toString());
+    }
+
+    return filterParts.length > 0 ? filterParts.join(' and ') : '';
+};
 
 export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConfig): Promise<{
     data: DataType[],
@@ -18,7 +36,7 @@ export const fetchBlogs = async (params: ListParams, next?: NextFetchRequestConf
             pageSize: params.pageSize.toString(),
             sortBy: params.sortBy as string,
             sortDir: params.sortDir as string,
-            filter: params.filter
+            filter: buildBlogFilter(params),
         },
         next,
     });
