@@ -115,3 +115,11 @@ export const existInCollection = async (id: string): Promise<ResponseData<boolea
   })
   return res
 }
+
+export const checkIsPatternLiked = async (id: string): Promise<ResponseData<boolean>> => {
+  const res = await apiJwtService({
+    endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}/is-liked`,
+    method: 'GET',
+  })
+  return res
+}

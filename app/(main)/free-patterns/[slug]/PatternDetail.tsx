@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation'
 import { removePatternFromCollection } from '@/app/lib/service/collectionService'
 import CollectionPopup from '@/app/components/collection-popup'
 import { ROUTE_PATH } from '@/app/lib/constant'
-import { existInCollection } from '@/app/lib/service/freePatternService'
+import { existInCollection, checkIsPatternLiked } from '@/app/lib/service/freePatternService'
 import { toggleLike } from '@/app/lib/service/interactionService'
 
 // Lazy load ViewImagesList component
@@ -38,15 +38,19 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const [likeLoading, setLikeLoading] = useState(false)
 
   useEffect(() => {
-    const fetchExistInCollection = async () => {
+    const fetchUserStatus = async () => {
       if (!pattern?.id) return
 
-      const res = await existInCollection(pattern?.id?.toString() || '')
-      setIsInCollection(res.data || false)
+      const [collectionRes, likedRes] = await Promise.all([
+        existInCollection(pattern.id.toString()),
+        checkIsPatternLiked(pattern.id.toString()).catch(() => ({ data: false })),
+      ])
+      setIsInCollection(collectionRes.data || false)
+      setIsLiked(likedRes.data || false)
     }
 
     if (session?.user && pattern?.id) {
-      fetchExistInCollection()
+      fetchUserStatus()
     }
   }, [pattern?.id, session?.user?.id])
 
