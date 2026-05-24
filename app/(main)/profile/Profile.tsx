@@ -1,19 +1,19 @@
 'use client'
 
-import { Button, Flex, Skeleton, Tabs, TabsProps } from 'antd';
+import { Button, Flex, Skeleton, Tabs, TabsProps, Tag } from 'antd';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { CameraOutlined, LeftOutlined, UserOutlined } from '@ant-design/icons';
+import { CameraOutlined, LeftOutlined, StarFilled, UserOutlined } from '@ant-design/icons';
 import { useSession } from 'next-auth/react';
 
 import { User } from '@/app/lib/definitions';
 import { loadUserInfo, updateUserProfile } from '@/app/lib/service/profileService';
 import { notification } from '@/app/lib/notify';
 import SingleUpload from '@/app/components/upload-files/SingleUpload';
-import { GENDER } from '@/app/lib/constant';
+import { GENDER, USER_ROLES } from '@/app/lib/constant';
 import UserInfo from '../../components/profile/UserInfo';
 import defaultUser from '../../../public/default-user.png';
 import defaultBackground from '../../../public/default-background.jpg';
@@ -21,12 +21,6 @@ import '../../ui/components/profile.scss';
 import Collections from "@/app/components/profile/Collections";
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
-
-interface ProfileDetailProps {
-    params: {
-        slug: string;
-    }
-}
 
 interface ProfileDetailProps {
     params: {
@@ -68,60 +62,58 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
         fetchUserData();
     }, [fetchUserData]);
 
-    const defaultTabs: TabsProps['items'] = [
-        {
-            key: 'patterns',
-            label: t('tabs.patterns'),
-            children: <FreePatterns userId={userId} isCreator={isCreator} />,
-        },
-        {
-            key: 'collections',
-            label: t('tabs.collections'),
-            children: <Collections userId={userId} isCreator={isCreator} />,
-        },
-    ]
+    const items = useMemo<TabsProps['items']>(() => {
+        const defaultTabs: TabsProps['items'] = [
+            {
+                key: 'patterns',
+                label: t('tabs.patterns'),
+                children: <FreePatterns userId={userId} isCreator={isCreator} />,
+            },
+            {
+                key: 'collections',
+                label: t('tabs.collections'),
+                children: <Collections userId={userId} isCreator={isCreator} />,
+            },
+        ];
 
-    const items: TabsProps['items'] = isCreator ? [
-        ...defaultTabs,
-        {
-            key: 'info',
-            label: t('tabs.info'),
-            children: <UserInfo userData={userData} setUserData={setUserData} />,
-        },
-    ] : [
-        ...defaultTabs
-    ];
+        return isCreator ? [
+            ...defaultTabs,
+            {
+                key: 'info',
+                label: t('tabs.info'),
+                children: <UserInfo userData={userData} setUserData={setUserData} />,
+            },
+        ] : defaultTabs;
+    }, [isCreator, userId, t, userData]);
 
-    const onUploadAvatar = async (file: string) => {
-        if (file) {
-            setLoading({ ...loading, avatar: true });
-            const updatedUser = await updateUserProfile({
-                imageUrl: file
-            });
+    const onUploadAvatar = useCallback(async (file: string) => {
+        if (!file) return;
+        setLoading(prev => ({ ...prev, avatar: true }));
+        const updatedUser = await updateUserProfile({
+            imageUrl: file
+        });
 
-            if (updatedUser) {
-                notification.success({
-                    message: t('message.upload_avatar_success')
-                });
-                setUserData(updatedUser);
-            }
-            setLoading({ ...loading, avatar: false });
-        }
-    }
-
-    const onUploadCover = async (file: string) => {
-        if (file) {
-            setLoading({ ...loading, cover: true });
-            const updatedUser = await updateUserProfile({
-                backgroundImageUrl: file
+        if (updatedUser) {
+            notification.success({
+                message: t('message.upload_avatar_success')
             });
             setUserData(updatedUser);
-            setLoading({ ...loading, cover: false });
-            notification.success({
-                message: t('message.upload_cover_success')
-            });
         }
-    }
+        setLoading(prev => ({ ...prev, avatar: false }));
+    }, [t]);
+
+    const onUploadCover = useCallback(async (file: string) => {
+        if (!file) return;
+        setLoading(prev => ({ ...prev, cover: true }));
+        const updatedUser = await updateUserProfile({
+            backgroundImageUrl: file
+        });
+        setUserData(updatedUser);
+        setLoading(prev => ({ ...prev, cover: false }));
+        notification.success({
+            message: t('message.upload_cover_success')
+        });
+    }, [t]);
 
     return (
         <div className="profile-container">
@@ -135,12 +127,12 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                         className="profile-back-button"
                     />
                     {
-                        loading.cover ? <Skeleton.Node className='skeleton-cover' style={{ width: '100%', height: '100%' }} active={loading.cover} /> :
+                        loading.cover ? <Skeleton.Node className='skeleton-cover' active={loading.cover} /> :
                             <Image
                                 src={userData?.backgroundImageUrl && userData.backgroundImageUrl.trim() ? userData.backgroundImageUrl : defaultBackground}
                                 alt="User cover image"
                                 layout="fill"
-                                style={{ objectFit: 'cover' }} 
+                                className="cover-image"
                             />
                     }
 
@@ -149,7 +141,6 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                             {
                                 loading.avatar ? <Skeleton.Image
                                     active
-                                    style={{ width: 120, height: 120, lineHeight: '120px', borderRadius: '50%' }}
                                     className='skeleton-avatar'
                                 /> :
                                     <Image
@@ -176,7 +167,14 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                                 !userData?.name ? <Skeleton active title={{ width: '240px' }} paragraph={{ rows: 1 }} /> :
 
                                     <>
-                                        <div className="profile-info-name">{userData?.name}</div>
+                                        <div className="profile-info-name">
+                                            {userData?.name}
+                                            {userData?.role === USER_ROLES.PREMIUM_USER && (
+                                                <Tag color="gold" className="premium-tag">
+                                                    <StarFilled /> Premium
+                                                </Tag>
+                                            )}
+                                        </div>
 
                                         {
                                             userData?.gender &&

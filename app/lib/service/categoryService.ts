@@ -7,7 +7,8 @@ import { notification } from "../notify";
 
 export const fetchCategories = async () => {
     const res = await apiService({
-        endpoint: API_ROUTES.CATEGORIES
+        endpoint: API_ROUTES.CATEGORIES,
+        next: { revalidate: 0 }
     });
     const newData = mapTreeData(res.data);
     return newData;

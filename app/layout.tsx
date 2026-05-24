@@ -74,9 +74,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <GoogleTag /> 
       <body>
         <AuthProvider>
+          <GoogleTag />
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ThemeProvider>
               <AntdRegistry>
