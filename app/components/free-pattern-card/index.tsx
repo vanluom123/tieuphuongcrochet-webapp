@@ -213,37 +213,6 @@ const FreePatternCard = ({
                     </Tooltip>
                   )}
 
-                  {/* Like / Heart button */}
-                  <Tooltip
-                    title={
-                      !session?.user
-                        ? t('login_to_like')
-                        : isLiked
-                          ? t('unlike')
-                          : t('like')
-                    }
-                  >
-                    <Button
-                      type="text"
-                      loading={likeLoading}
-                      disabled={likeLoading}
-                      onClick={handleToggleLike}
-                      className={`action-button like-button ${isLiked ? 'liked' : ''}`}
-                      icon={
-                        isLiked ? (
-                          <HeartFilled style={{ color: '#ff4d4f' }} />
-                        ) : (
-                          <HeartOutlined style={{ color: '#fff' }} />
-                        )
-                      }
-                    />
-                  </Tooltip>
-
-                  {/* Like count */}
-                  {likeCount > 0 && (
-                    <span className="like-count">{likeCount}</span>
-                  )}
-
                   {isShowActions && (
                     <>
                       <Tooltip title={profileT('patterns.edit')}>
@@ -305,6 +274,36 @@ const FreePatternCard = ({
                       &nbsp;{username}
                     </Link>
                   </div>
+                  <Flex align="center" gap={2} onClick={(e) => e.stopPropagation()}>
+                    <Tooltip
+                      title={
+                        !session?.user
+                          ? t('login_to_like')
+                          : isLiked
+                            ? t('unlike')
+                            : t('like')
+                      }
+                    >
+                      <Button
+                        type="text"
+                        size="small"
+                        loading={likeLoading}
+                        disabled={likeLoading}
+                        onClick={handleToggleLike}
+                        className={`like-button ${isLiked ? 'liked' : ''}`}
+                        icon={
+                          isLiked ? (
+                            <HeartFilled style={{ color: '#ff4d4f', fontSize: 14 }} />
+                          ) : (
+                            <HeartOutlined style={{ fontSize: 14 }} />
+                          )
+                        }
+                      />
+                    </Tooltip>
+                    {likeCount > 0 && (
+                      <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{likeCount}</span>
+                    )}
+                  </Flex>
                 </Flex>
               }
             />
