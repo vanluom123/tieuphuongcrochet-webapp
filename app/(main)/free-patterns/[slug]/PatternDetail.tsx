@@ -139,25 +139,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
         images={pattern?.files}
       />
 
-      {/* Like count displayed above the like button */}
-      {likeCount > 0 && (
-        <span
-          style={{
-            position: 'fixed',
-            right: 30,
-            bottom: 294,
-            zIndex: 10,
-            fontSize: 11,
-            color: '#666',
-            fontWeight: 600,
-            lineHeight: 1,
-          }}
-        >
-          {likeCount}
-        </span>
-      )}
-
-      {/* Floating like button */}
+      {/* Floating like button with count */}
       <Tooltip
         title={
           !session?.user
@@ -214,6 +196,23 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
           style={{ right: 24, bottom: 240, zIndex: 10 }}
         />
       </Tooltip>
+
+      {/* Like count text */}
+      {likeCount > 0 && (
+        <span
+          style={{
+            position: 'fixed',
+            right: 28,
+            bottom: 275,
+            fontSize: 12,
+            color: '#666',
+            zIndex: 10,
+            lineHeight: 1,
+          }}
+        >
+          {likeCount}
+        </span>
+      )}
 
       {/* Custom bookmark button for both desktop and mobile */}
       <Tooltip title={isInCollection ? t('remove_from_collection') : t('save')}>
