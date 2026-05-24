@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import { API_ROUTES } from "../constant";
-import { Banner, DataType, IBannerType } from "../definitions";
+import { Banner, DataType, IBannerType, Setting } from "../definitions";
 import { notification } from "../notify";
 import apiJwtService from "./apiJwtService";
 
@@ -63,5 +63,23 @@ export const createUpdateBannerType = async (data: IBannerType): Promise<void> =
         notification.success({ message: 'Success', description: 'Create banner type successfully' });
     } else {
         notification.error({ message: 'Failed', description: 'An error occurred while creating the banner type' });
+    }
+};
+
+export const fetchSettings = async (): Promise<Setting[]> => {
+    const res = await apiJwtService({ endpoint: API_ROUTES.SETTINGS });
+    return res.data;
+};
+
+export const updateSetting = async (data: Setting): Promise<void> => {
+    const res = await apiJwtService({
+        endpoint: API_ROUTES.SETTINGS,
+        method: 'POST',
+        data
+    });
+    if (res.success) {
+        notification.success({ message: 'Success', description: 'Update setting successfully' });
+    } else {
+        notification.error({ message: 'Failed', description: 'An error occurred while updating the setting' });
     }
 };

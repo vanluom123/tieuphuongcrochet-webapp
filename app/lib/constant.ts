@@ -25,6 +25,7 @@ export const ROUTE_PATH = {
   PROFILE: '/profile',
   COLLECTIONS: '/collections',
   NOTIFICATIONS: '/notifications',
+  PREMIUM_CAPTURE: '/premium/capture',
 };
 
 export const SOCIAL_LINKS = {
@@ -65,6 +66,7 @@ export const LANGUAGES_LIST = [
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
   USER: 'USER',
+  PREMIUM_USER: 'PREMIUM_USER',
 };
 
 export const LOCAL_STORAGE_NAMES = {
@@ -270,7 +272,12 @@ export const API_ROUTES = {
   NOTIFICATIONS: '/api/v1/notifications',
 
   // Cloudflare R2
-  R2_PRESIGNED : '/api/r2-presigned'
+  R2_PRESIGNED : '/api/r2-presigned',
+
+  // Payments
+  PAYMENTS_CREATE: '/api/v1/payments/create',
+  PAYMENTS_CAPTURE: '/api/v1/payments/capture',
+  PAYMENTS_PRICES: '/api/v1/payments/prices',
 };
 
 export const PARAMS_FOR_SITEMAP: ListParams = {

@@ -143,6 +143,11 @@ export interface SettingState {
   banners: Banner[]
 }
 
+export interface Setting {
+  key: string
+  value: string
+}
+
 // ---------------------------------- Category ----------------------------------
 
 export interface Category {
@@ -325,4 +330,21 @@ export interface PageResponse<T> {
   totalElements: number
   totalPages: number
   last: boolean
+}
+
+// -------------------------- Payments --------------------------
+
+export interface PaymentOrderRequest {
+  planType: 'MONTHLY' | 'YEARLY'
+  returnUrl: string
+  cancelUrl: string
+}
+
+export interface PaymentOrderResponse {
+  orderId: string
+  approveUrl: string
+}
+
+export interface CapturePaymentRequest {
+  orderId: string
 }
