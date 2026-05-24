@@ -91,7 +91,7 @@ export const deletePost = async (id: string): Promise<void> => {
     }
 };
 
-export const createUpdatePost = async (data: Post): Promise<ResponseData<any>> => {
+export const createUpdatePost = async (data: Post & { blogCategoryId?: string }): Promise<ResponseData<any>> => {
     const res: ResponseData<any> = await apiJwtService({
         endpoint: API_ROUTES.BLOGS,
         method: 'POST',
