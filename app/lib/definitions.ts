@@ -278,6 +278,8 @@ export interface Post {
   src?: string
   is_home?: boolean
   fileContent?: string
+  blogCategoryId?: string
+  blogCategory?: { id: string }
 }
 
 // -------------------------- Collection --------------------------

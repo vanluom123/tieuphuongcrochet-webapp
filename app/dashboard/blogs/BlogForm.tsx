@@ -58,7 +58,8 @@ const BlogForm = ({ params }: BlogFormProps) => {
             setState(prevState => ({ ...prevState, loading: true }));
             fetchPostDetail(params.id).then((data) => {
                 const newPost = {
-                    ...data
+                    ...data,
+                    blogCategoryId: data.blogCategory?.id
                 }
                 form.setFieldsValue(newPost);
                 setState(prevState => ({
@@ -185,27 +186,27 @@ const BlogForm = ({ params }: BlogFormProps) => {
                             </Item>
                         </Col>
                         <Col xs={24} md={12}>
-                            <Item
-                                name="blogCategoryId"
-                                label="Blog Category"
-                            >
-                                <Flex gap={8} align="center">
+                            <Flex gap={8} align="center" style={{ width: '100%' }}>
+                                <Item
+                                    name="blogCategoryId"
+                                    label="Blog Category"
+                                    style={{ flex: 1, marginBottom: 0 }}
+                                >
                                     <Select
                                         allowClear
                                         placeholder="Select category"
                                         options={categoryOptions}
-                                        style={{ flex: 1 }}
                                     />
-                                    <Button
-                                        type="primary"
-                                        icon={<PlusOutlined />}
-                                        onClick={() => {
-                                            setNewCategoryName('');
-                                            setCategoryModalOpen(true);
-                                        }}
-                                    />
-                                </Flex>
-                            </Item>
+                                </Item>
+                                <Button
+                                    type="primary"
+                                    icon={<PlusOutlined />}
+                                    onClick={() => {
+                                        setNewCategoryName('');
+                                        setCategoryModalOpen(true);
+                                    }}
+                                />
+                            </Flex>
                         </Col>
                     </Row>
                     <Item
