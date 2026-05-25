@@ -26,9 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function getBlogs() {
   const { data, totalRecords } = await fetchBlogs(initialListParams, {
-    // Revalidate at 24 hours
-    revalidate: 86400,
-    tags: ["blogs"],
+    revalidate: 0,
   });
   return { data, totalRecords };
 }
@@ -36,7 +34,7 @@ async function getBlogs() {
 async function getCategories(): Promise<DataType[]> {
   const categories = await fetchBlogCategories({
     // Revalidate at 24 hours
-    revalidate: 86400,
+    revalidate: 0,
     tags: ["blog-categories"],
   });
   return mapBlogCategoriesToDataType(categories);
