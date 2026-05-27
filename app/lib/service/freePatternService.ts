@@ -3,6 +3,7 @@ import { API_ROUTES } from '../constant'
 import { DataType, FileUpload, ListParams, Pattern, ResponseData } from '../definitions'
 import { getAvatar, showNotification } from '../utils'
 import apiJwtService from './apiJwtService'
+import apiService from './apiService'
 
 /** Fetch paginated list of free patterns */
 export const fetchFreePatterns = async (
@@ -32,7 +33,9 @@ export const fetchFreePatterns = async (
       ...item,
       key: item.id,
       src: item.fileContent || getAvatar(item?.images as FileUpload[]),
-      in_collection: item.in_collection || false, // Sử dụng trạng thái từ backend hoặc mặc định là false
+      in_collection: item.in_collection || false,
+      likeCount: item.likeCount || 0,
+      is_liked: item.is_liked || false,
     }))
 
     return {
@@ -48,7 +51,7 @@ export const fetchFreePatterns = async (
 /** Fetch free pattern details by ID */
 export const fetchFreePatternDetail = async (id: string, revalidate?: number): Promise<Pattern> => {
   try {
-    const res = await apiJwtService({
+    const res = await apiService({
       endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}`,
       method: 'GET',
       next: {
@@ -108,6 +111,14 @@ export const deleteFreePattern = async (id: string) => {
 export const existInCollection = async (id: string): Promise<ResponseData<boolean>> => {
   const res = await apiJwtService({
     endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}/exist`,
+    method: 'GET',
+  })
+  return res
+}
+
+export const checkIsPatternLiked = async (id: string): Promise<ResponseData<boolean>> => {
+  const res = await apiJwtService({
+    endpoint: `${API_ROUTES.FREE_PATTERNS}/${id}/is-liked`,
     method: 'GET',
   })
   return res

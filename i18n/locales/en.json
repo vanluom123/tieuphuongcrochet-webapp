@@ -55,8 +55,11 @@
     "createPattern": "Create new chart",
     "updatePattern": "Update chart",
     "login_to_save": "Login to save",
+    "login_to_like": "Login to like",
     "save": "Save to collection",
     "remove_from_collection": "Remove from collection",
+    "like": "Like",
+    "unlike": "Unlike",
     "status": {
       "ALL": "ALL",
       "SUCCESS": "TRANSLATED",
