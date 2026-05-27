@@ -27,6 +27,8 @@ export const fetchHomeData = async (): Promise<HomeData> => {
         username: pt.username,
         userAvatar: pt.userAvatar,
         userId: pt.userId,
+        likeCount: pt.likeCount || 0,
+        is_liked: pt.is_liked || false,
     }));
 
     const products: Product[] = map(res.data.products, prod => ({

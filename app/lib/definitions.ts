@@ -87,6 +87,8 @@ export interface DataType {
   createdDate?: string
   imagesPreview?: { src: string; alt: string }[]
   in_collection?: boolean // Trạng thái đã bookmark hay chưa
+  likeCount?: number
+  is_liked?: boolean
 }
 
 export interface SearchParams {
@@ -187,6 +189,8 @@ export interface Pattern {
   userId?: string
   category_id?: string
   in_collection?: boolean // Trạng thái đã bookmark hay chưa
+  likeCount?: number
+  is_liked?: boolean
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL'
@@ -274,6 +278,8 @@ export interface Post {
   src?: string
   is_home?: boolean
   fileContent?: string
+  blogCategoryId?: string
+  blogCategory?: { id: string }
 }
 
 // -------------------------- Collection --------------------------

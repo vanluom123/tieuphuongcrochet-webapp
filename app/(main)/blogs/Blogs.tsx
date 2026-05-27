@@ -1,20 +1,21 @@
 'use client'
 import {Alert, Flex} from "antd";
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import {useTranslations} from "next-intl";
 
 import ViewTable from '@/app/components/view-table';
-import {DataTableState, initialListParams} from '@/app/lib/definitions';
+import {DataTableState, DataType, initialListParams} from '@/app/lib/definitions';
 import {fetchBlogs} from '@/app/lib/service/blogsService';
-import {ROUTE_PATH} from '@/app/lib/constant';
+import {ROUTE_PATH, ALL_ITEM} from '@/app/lib/constant';
 import {sfLike} from "spring-filter-query-builder";
 
 interface BlogsProps {
     initialData: DataTableState
+    blogCategories: DataType[]
 }
 
-const Blogs = ({initialData}: BlogsProps) => {
+const Blogs = ({initialData, blogCategories}: BlogsProps) => {
 
     const [state, setState] = useState(initialData);
     const [params, setParams] = useState(initialListParams);
@@ -25,8 +26,8 @@ const Blogs = ({initialData}: BlogsProps) => {
     const onPageChange = (current: number, pageSize: number) => {
         const newParams = {
             ...params,
-            _pageNo: current - 1,
-            _pageSize: pageSize,
+            pageNo: current - 1,
+            pageSize: pageSize,
         }
         setParams(newParams);
     }
@@ -51,6 +52,13 @@ const Blogs = ({initialData}: BlogsProps) => {
         })
     }
 
+    const onTabChange = useCallback((key: React.Key) => {
+        setParams((prev) => ({
+            ...prev,
+            categoryId: key === ALL_ITEM.key ? '' : (key as string),
+        }));
+    }, []);
+
     const onViewBlog = (id: React.Key) => {
         router.push(`${ROUTE_PATH.BLOG}/${id}`);
     };
@@ -73,6 +81,9 @@ const Blogs = ({initialData}: BlogsProps) => {
                 onSearch={onSearchPosts}
                 total={state.totalRecord}
                 loading={state.loading}
+                isShowTabs
+                itemsTabs={blogCategories}
+                onTabChange={onTabChange}
             />
         </Flex>
     )
