@@ -50,11 +50,17 @@ export async function POST(request: NextRequest) {
 
     // 6. Call Java API to increment view count in DB
     const javaApiUrl = `${NEXT_PUBLIC_API_URL}/api/v1/interactions/view/${type}/${id}`
-    const res = await fetch(javaApiUrl, { method: 'POST', cache: 'no-store' })
-    if (!res.ok) {
-      // Rollback dedup if Java API fails
-      await redis.del(dedupKey)
-      return NextResponse.json({ error: 'Backend error' }, { status: 502 })
+    try {
+      const res = await fetch(javaApiUrl, { method: 'POST', cache: 'no-store' })
+      if (!res.ok) {
+        console.error('Java API returned non-OK status:', res.status)
+        // Do NOT delete dedup key on backend error — the view may have already
+        // been persisted before the error occurred in response serialization.
+        return NextResponse.json({ error: 'Backend error' }, { status: 502 })
+      }
+    } catch (error) {
+      console.error('Failed to call Java API:', error)
+      return NextResponse.json({ error: 'Backend unreachable' }, { status: 503 })
     }
 
     return NextResponse.json({ success: true }, { status: 200 })
