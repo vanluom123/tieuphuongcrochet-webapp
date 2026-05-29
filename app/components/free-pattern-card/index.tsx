@@ -276,41 +276,43 @@ const FreePatternCard = ({
                       &nbsp;{username}
                     </Link>
                   </div>
-                  <Flex align="center" gap={2} onClick={(e) => e.stopPropagation()}>
-                    <Tooltip
-                      title={
-                        !session?.user
-                          ? t('login_to_like')
-                          : isLiked
-                            ? t('unlike')
-                            : t('like')
-                      }
-                    >
-                      <Button
-                        type="text"
-                        size="small"
-                        loading={likeLoading}
-                        disabled={likeLoading}
-                        onClick={handleToggleLike}
-                        className={`like-button ${isLiked ? 'liked' : ''}`}
-                        icon={
-                          isLiked ? (
-                            <HeartFilled style={{ color: '#ff4d4f', fontSize: 14 }} />
-                          ) : (
-                            <HeartOutlined style={{ fontSize: 14 }} />
-                          )
+                  <Flex align="center" gap={16} onClick={(e) => e.stopPropagation()}>
+                    <Flex align="center" gap={2}>
+                      <Tooltip
+                        title={
+                          !session?.user
+                            ? t('login_to_like')
+                            : isLiked
+                              ? t('unlike')
+                              : t('like')
                         }
-                      />
-                    </Tooltip>
-                    {likeCount > 0 && (
-                      <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{likeCount}</span>
-                    )}
-                  </Flex>
-                  <Flex align="center" gap={2} onClick={(e) => e.stopPropagation()}>
-                    <EyeOutlined style={{ fontSize: 14, color: '#666' }} />
-                    {(viewCount || 0) > 0 && (
-                      <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{viewCount}</span>
-                    )}
+                      >
+                        <Button
+                          type="text"
+                          size="small"
+                          loading={likeLoading}
+                          disabled={likeLoading}
+                          onClick={handleToggleLike}
+                          className={`like-button ${isLiked ? 'liked' : ''}`}
+                          icon={
+                            isLiked ? (
+                              <HeartFilled style={{ color: '#ff4d4f', fontSize: 14 }} />
+                            ) : (
+                              <HeartOutlined style={{ fontSize: 14 }} />
+                            )
+                          }
+                        />
+                      </Tooltip>
+                      {likeCount > 0 && (
+                        <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{likeCount}</span>
+                      )}
+                    </Flex>
+                    <Flex align="center" gap={2}>
+                      <EyeOutlined style={{ fontSize: 14, color: '#666' }} />
+                      {(viewCount || 0) > 0 && (
+                        <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{viewCount}</span>
+                      )}
+                    </Flex>
                   </Flex>
                 </Flex>
               }
