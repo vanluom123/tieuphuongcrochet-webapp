@@ -270,6 +270,7 @@
     "tabs": {
       "collections": "Collections",
       "patterns": "Charts",
+      "like": "Liked",
       "info": "User info"
     },
     "collections": {
