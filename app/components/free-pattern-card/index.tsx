@@ -4,6 +4,7 @@ import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip } from 'antd'
 import {
   DeleteFilled,
   EditFilled,
+  EyeOutlined,
   HeartFilled,
   HeartOutlined,
   UserOutlined,
@@ -60,6 +61,7 @@ const FreePatternCard = ({
     in_collection,
     likeCount: initialLikeCount,
     is_liked: initialIsLiked,
+    viewCount,
   } = pattern
   const t = useTranslations('FreePattern')
   const profileT = useTranslations('Profile')
@@ -302,6 +304,12 @@ const FreePatternCard = ({
                     </Tooltip>
                     {likeCount > 0 && (
                       <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{likeCount}</span>
+                    )}
+                  </Flex>
+                  <Flex align="center" gap={2} onClick={(e) => e.stopPropagation()}>
+                    <EyeOutlined style={{ fontSize: 14, color: '#666' }} />
+                    {(viewCount || 0) > 0 && (
+                      <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{viewCount}</span>
                     )}
                   </Flex>
                 </Flex>

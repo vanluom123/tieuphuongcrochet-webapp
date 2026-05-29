@@ -36,6 +36,7 @@ export const fetchFreePatterns = async (
       in_collection: item.in_collection || false,
       likeCount: item.likeCount || 0,
       is_liked: item.is_liked || false,
+      viewCount: item.viewCount || 0,
     }))
 
     return {

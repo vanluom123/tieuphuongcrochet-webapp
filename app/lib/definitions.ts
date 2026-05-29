@@ -191,6 +191,7 @@ export interface Pattern {
   in_collection?: boolean // Trạng thái đã bookmark hay chưa
   likeCount?: number
   is_liked?: boolean
+  viewCount?: number
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL'
