@@ -42,6 +42,26 @@ export const createBlogCategory = async (data: { name: string; nameEn?: string }
     return res;
 };
 
+export const updateBlogCategory = async (data: { id: string; name: string; nameEn?: string }): Promise<ResponseData<any>> => {
+    const res: ResponseData<any> = await apiJwtService({
+        endpoint: API_ROUTES.BLOG_CATEGORIES,
+        method: 'POST',
+        data,
+    });
+
+    if (!res.success) {
+        notification.error({message: 'Failed', description: res.message})
+    }
+
+    if (res.success) {
+        notification.success({message: 'Success', description: 'Update blog category successfully'})
+    }
+
+    return res;
+};
+
+
+
 export const deleteBlogCategory = async (id: string): Promise<void> => {
     const res: ResponseData<any> = await apiJwtService({
         endpoint: `${API_ROUTES.BLOG_CATEGORIES}/${id}`,
