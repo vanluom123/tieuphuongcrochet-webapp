@@ -355,7 +355,8 @@ export const mapTabsData = (data: DataType[]): TabsItem[] => {
             key: key || 'N/A',
             icon: icon,
             nameEn: (c as any).nameEn,
-        };
+            name: name, // Preserve original Vietnamese/default name
+        } as any;
 
         if (children && children.length > 0) {
             newTab = {

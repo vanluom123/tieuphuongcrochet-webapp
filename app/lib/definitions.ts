@@ -243,6 +243,7 @@ export interface TabsItem {
   icon?: React.ReactNode
   children?: TabsItem[]
   nameEn?: string
+  name?: string
 }
 
 // -------------------------- Direction --------------------------

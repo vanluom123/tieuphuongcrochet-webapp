@@ -25,15 +25,11 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
 
     const getLabel = useCallback((item: TabsItem, childItem?: TabsItem) => {
         const target = childItem || item;
-        if (target.nameEn) {
-            return target.nameEn;
+        if (isEn) {
+            return target.nameEn || target.name || target.label;
         }
-        // Fallback to i18n key for predefined categories
-        if (childItem) {
-            return t(`${item.label}.${childItem.label}`);
-        }
-        return t(target.label);
-    }, [locale, t]);
+        return target.name || target.nameEn || target.label;
+    }, [isEn]);
 
     useEffect(() => {
         setItemSelected({ key: ALL_ITEM.key, childKey: '' });
@@ -81,19 +77,28 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
     }, [onClickMenu, scrollToItem]);
 
     const getDisplayLabel = useCallback((item: TabsItem) => {
-        if (isEn && item.nameEn) return item.nameEn;
-        return t(item.label);
-    }, [isEn, t]);
+        if (item.key === ALL_ITEM.key) {
+            return isEn ? 'All' : 'Tất cả';
+        }
+        if (isEn) {
+            return item.nameEn || (item as any).name || item.label;
+        }
+        return (item as any).name || item.nameEn || item.label;
+    }, [isEn]);
 
     const getChildDisplayLabel = useCallback((parent: TabsItem, child: TabsItem) => {
-        if (isEn && child.nameEn) return child.nameEn;
-        return t(`${parent.label}.${child.label}`);
-    }, [isEn, t]);
+        if (isEn) {
+            return child.nameEn || (child as any).name || child.label;
+        }
+        return (child as any).name || child.nameEn || child.label;
+    }, [isEn]);
 
     const getTitleLabel = useCallback((item: TabsItem) => {
-        if (isEn && item.nameEn) return item.nameEn;
-        return t(`${item.label}.title`);
-    }, [isEn, t]);
+        if (isEn) {
+            return item.nameEn || (item as any).name || item.label;
+        }
+        return (item as any).name || item.nameEn || item.label;
+    }, [isEn]);
 
     const categoriesTabNode = (
         <ul

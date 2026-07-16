@@ -29,15 +29,14 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
 
     const getLabel = useCallback((item: TabsItem, childItem?: TabsItem) => {
         const target = childItem || item;
-        if (isEn && (target as any).nameEn) return (target as any).nameEn;
-        if (childItem) return t(`${item.label}.${childItem.label}`);
-        return t(target.label);
-    }, [isEn, t]);
+        if (isEn) return (target as any).nameEn || (target as any).name || target.label;
+        return (target as any).name || (target as any).nameEn || target.label;
+    }, [isEn]);
 
     const getTitle = useCallback((item: TabsItem) => {
-        if (isEn && (item as any).nameEn) return (item as any).nameEn;
-        return t(`${item.label}.title`);
-    }, [isEn, t]);
+        if (isEn) return (item as any).nameEn || (item as any).name || item.label;
+        return (item as any).name || (item as any).nameEn || item.label;
+    }, [isEn]);
 
     const onClose = useCallback(() => {
         setOpen(false);
