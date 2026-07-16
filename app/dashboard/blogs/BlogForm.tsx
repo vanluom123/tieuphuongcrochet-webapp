@@ -42,6 +42,7 @@ const BlogForm = ({ params }: BlogFormProps) => {
     const [blogCategories, setBlogCategories] = useState<BlogCategory[]>([]);
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState('');
+    const [newCategoryNameEn, setNewCategoryNameEn] = useState('');
     const [categoryLoading, setCategoryLoading] = useState(false);
 
     const loadCategories = async () => {
@@ -115,9 +116,13 @@ const BlogForm = ({ params }: BlogFormProps) => {
         if (!newCategoryName.trim()) return;
         setCategoryLoading(true);
         try {
-            const res = await createBlogCategory({ name: newCategoryName });
+            const res = await createBlogCategory({ 
+                name: newCategoryName,
+                nameEn: newCategoryNameEn.trim() || undefined
+            });
             if (res.success) {
                 setNewCategoryName('');
+                setNewCategoryNameEn('');
                 await loadCategories();
             }
         } finally {
@@ -248,10 +253,18 @@ const BlogForm = ({ params }: BlogFormProps) => {
             <Flex vertical gap={12}>
                 <Flex gap={8} align="center">
                     <Input
-                        placeholder="Enter new category name"
+                        placeholder="Enter new category name (VI)"
                         value={newCategoryName}
                         onChange={(e) => setNewCategoryName(e.target.value)}
                         onPressEnter={handleAddCategory}
+                        style={{ flex: 1 }}
+                    />
+                </Flex>
+                <Flex gap={8} align="center">
+                    <Input
+                        placeholder="Enter new category name (EN)"
+                        value={newCategoryNameEn}
+                        onChange={(e) => setNewCategoryNameEn(e.target.value)}
                         style={{ flex: 1 }}
                     />
                     <Button

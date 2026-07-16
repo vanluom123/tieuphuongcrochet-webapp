@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Button, Col, Drawer, Dropdown, Row } from 'antd';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { CloseOutlined } from '@ant-design/icons';
 
 interface ItemSelected {
@@ -24,6 +24,20 @@ interface CategoryDrawerProps {
 
 const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: CategoryDrawerProps) => {
     const t = useTranslations('CategoryMenu');
+    const locale = useLocale();
+    const isEn = locale === 'en';
+
+    const getLabel = useCallback((item: TabsItem, childItem?: TabsItem) => {
+        const target = childItem || item;
+        if (isEn && (target as any).nameEn) return (target as any).nameEn;
+        if (childItem) return t(`${item.label}.${childItem.label}`);
+        return t(target.label);
+    }, [isEn, t]);
+
+    const getTitle = useCallback((item: TabsItem) => {
+        if (isEn && (item as any).nameEn) return (item as any).nameEn;
+        return t(`${item.label}.title`);
+    }, [isEn, t]);
 
     const onClose = useCallback(() => {
         setOpen(false);
@@ -55,7 +69,7 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
                         key: i.key,
                         label: (
                             <a onClick={(e) => onClickItemBtn(item.key, i.key, index)}>
-                                {t(`${item.label}.${i.label}`)}
+                                {getLabel(item, i)}
                             </a>
                         ),
                     })) || [];
@@ -72,7 +86,7 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
                                         onClick={(e) => onClickItemBtn(item.key, undefined, index)}
                                         className={`${itemSelected.key === item.key ? 'active' : ''}`}
                                     >
-                                        <span>{t(`${item.label}.title`)}</span>
+                                        <span>{getTitle(item)}</span>
                                     </Button>
                                 </Dropdown>
                             ) : (
@@ -81,7 +95,7 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
                                     type="default"
                                     className={`${itemSelected.key === item.key ? 'active' : ''}`}
                                 >
-                                    {t(item.label)}
+                                    {getLabel(item)}
                                 </Button>
                             )}
                         </Col>

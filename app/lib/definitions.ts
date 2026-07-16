@@ -155,6 +155,7 @@ export interface Setting {
 export interface Category {
   id?: React.Key
   name: string
+  nameEn?: string
   children?: unknown[]
   parentIds?: unknown[]
   key?: string
@@ -241,6 +242,7 @@ export interface TabsItem {
   key: React.Key
   icon?: React.ReactNode
   children?: TabsItem[]
+  nameEn?: string
 }
 
 // -------------------------- Direction --------------------------

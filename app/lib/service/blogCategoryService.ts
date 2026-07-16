@@ -7,6 +7,7 @@ import {notification} from "../notify";
 export interface BlogCategory {
     id: string;
     name: string;
+    nameEn?: string;
 }
 
 export const fetchBlogCategories = async (next?: NextFetchRequestConfig): Promise<BlogCategory[]> => {
@@ -23,7 +24,7 @@ export const fetchBlogCategories = async (next?: NextFetchRequestConfig): Promis
     return res.data || [];
 };
 
-export const createBlogCategory = async (data: { name: string }): Promise<ResponseData<any>> => {
+export const createBlogCategory = async (data: { name: string; nameEn?: string }): Promise<ResponseData<any>> => {
     const res: ResponseData<any> = await apiJwtService({
         endpoint: API_ROUTES.BLOG_CATEGORIES,
         method: 'POST',
@@ -60,5 +61,6 @@ export const mapBlogCategoriesToDataType = (categories: BlogCategory[]): DataTyp
     return categories.map(cat => ({
         key: cat.id,
         name: cat.name,
+        nameEn: cat.nameEn,
     }));
 };

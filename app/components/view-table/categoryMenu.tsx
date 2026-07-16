@@ -5,7 +5,7 @@ import { Button, Dropdown } from "antd";
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DownOutlined } from '@ant-design/icons';
 import CategoryDrawer from "./CategoryDrawer";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface CategoryMenuProps {
     items: TabsItem[];
@@ -20,6 +20,20 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
     });
     const [open, setOpen] = useState(false);
     const t = useTranslations('CategoryMenu');
+    const locale = useLocale();
+    const isEn = locale === 'en';
+
+    const getLabel = useCallback((item: TabsItem, childItem?: TabsItem) => {
+        const target = childItem || item;
+        if (target.nameEn) {
+            return target.nameEn;
+        }
+        // Fallback to i18n key for predefined categories
+        if (childItem) {
+            return t(`${item.label}.${childItem.label}`);
+        }
+        return t(target.label);
+    }, [locale, t]);
 
     useEffect(() => {
         setItemSelected({ key: ALL_ITEM.key, childKey: '' });
@@ -66,6 +80,21 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
         }
     }, [onClickMenu, scrollToItem]);
 
+    const getDisplayLabel = useCallback((item: TabsItem) => {
+        if (isEn && item.nameEn) return item.nameEn;
+        return t(item.label);
+    }, [isEn, t]);
+
+    const getChildDisplayLabel = useCallback((parent: TabsItem, child: TabsItem) => {
+        if (isEn && child.nameEn) return child.nameEn;
+        return t(`${parent.label}.${child.label}`);
+    }, [isEn, t]);
+
+    const getTitleLabel = useCallback((item: TabsItem) => {
+        if (isEn && item.nameEn) return item.nameEn;
+        return t(`${item.label}.title`);
+    }, [isEn, t]);
+
     const categoriesTabNode = (
         <ul
             ref={scrollContainerRef}
@@ -83,7 +112,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                                 }}
                                 className='menu-title-content'
                             >
-                                {t(`${c.label}.${i.label}`)}
+                                {getChildDisplayLabel(c, i)}
                             </a>
                         )
                     })) || [];
@@ -100,7 +129,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                                 selectedKeys: [(itemSelected.childKey || itemSelected.key) as string]
                             }}>
                                 <a>
-                                    <span className="menu-title-content">{t(`${c.label}.title`)}</span>
+                                    <span className="menu-title-content">{getTitleLabel(c)}</span>
                                 </a>
                             </Dropdown>
                         </li>
@@ -112,7 +141,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                         onClick={(e) => onClickItem(c.key, undefined, e.currentTarget)}
                         className={`menu-overflow-item menu-item-only-child ${c.key === itemSelected.key && 'menu-item-selected'}`}
                     >
-                        <span className="menu-title-content">{t(c.label)}</span>
+                        <span className="menu-title-content">{getDisplayLabel(c)}</span>
                     </li>
                 );
             })}

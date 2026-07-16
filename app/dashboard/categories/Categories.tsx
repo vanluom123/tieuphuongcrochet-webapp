@@ -33,6 +33,7 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 		if (isEditing) {
 			const formData: Category = {
 				name: categorySelected.name,
+				nameEn: (categorySelected as any).nameEn,
 			}
 			form.setFieldsValue(formData);
 		}
@@ -45,9 +46,10 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 
 				let sendData: Category = {
 					name: values.name,
+					nameEn: values.nameEn,
 				}
 
-				if (isEditing && sendData.name !== categorySelected.name) {
+				if (isEditing) {
 					sendData = {
 						...sendData,
 						id: categorySelected.key
@@ -143,12 +145,18 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 					form={form}
 					disabled={loading}
 				>
-					<Form.Item
+				<Form.Item
 						name="name"
-						label="Category name "
+						label="Category name (VI)"
 						rules={[{ required: true, message: 'Please enter category name' }]}
 					>
-						<Input placeholder="Category name" />
+						<Input placeholder="Category name (Vietnamese)" />
+					</Form.Item>
+					<Form.Item
+						name="nameEn"
+						label="Category name (EN)"
+					>
+						<Input placeholder="Category name (English)" />
 					</Form.Item>
 
 					{
