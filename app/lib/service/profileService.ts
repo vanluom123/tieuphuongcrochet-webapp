@@ -49,6 +49,27 @@ export async function fetchUserCollections(userId: string): Promise<Collection[]
     return response.data;
 }
 
+export async function fetchLikedFreePatterns(
+    userId: string,
+    params: ListParams
+): Promise<IResponseList<Pattern>> {
+    const res = await apiJwtService({
+        endpoint: `${API_ROUTES.USERS}/${userId}/liked-free-patterns`,
+        method: 'GET',
+        queryParams: {
+            'pageNo': params?.pageNo.toString(),
+            'pageSize': params?.pageSize.toString(),
+            'sortBy': params?.sortBy as string,
+            'sortDir': params?.sortDir as string
+        }
+    });
+
+    return {
+        data: res.data.contents || [],
+        totalRecords: res.data.totalElements || 0
+    }
+}
+
 export async function fetchUserPatterns(
     userId: string,
     params: ListParams

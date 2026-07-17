@@ -155,6 +155,7 @@ export interface Setting {
 export interface Category {
   id?: React.Key
   name: string
+  nameEn?: string
   children?: unknown[]
   parentIds?: unknown[]
   key?: string
@@ -191,6 +192,7 @@ export interface Pattern {
   in_collection?: boolean // Trạng thái đã bookmark hay chưa
   likeCount?: number
   is_liked?: boolean
+  viewCount?: number
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL'
@@ -240,6 +242,8 @@ export interface TabsItem {
   key: React.Key
   icon?: React.ReactNode
   children?: TabsItem[]
+  nameEn?: string
+  name?: string
 }
 
 // -------------------------- Direction --------------------------

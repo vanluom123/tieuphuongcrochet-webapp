@@ -16,6 +16,7 @@
     "@ckeditor/ckeditor5-react": "^9.3.0",
     "@emailjs/browser": "^4.4.1",
     "@formatjs/intl-localematcher": "^0.5.4",
+    "@upstash/redis": "^1.34.3",
     "antd": "^5.21.1",
     "antd-img-crop": "^4.23.0",
     "ckeditor5": "^43.2.0",

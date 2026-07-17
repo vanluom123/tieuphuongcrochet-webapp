@@ -5,7 +5,7 @@ import { Button, Dropdown } from "antd";
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DownOutlined } from '@ant-design/icons';
 import CategoryDrawer from "./CategoryDrawer";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface CategoryMenuProps {
     items: TabsItem[];
@@ -20,6 +20,16 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
     });
     const [open, setOpen] = useState(false);
     const t = useTranslations('CategoryMenu');
+    const locale = useLocale();
+    const isEn = locale === 'en';
+
+    const getLabel = useCallback((item: TabsItem, childItem?: TabsItem) => {
+        const target = childItem || item;
+        if (isEn) {
+            return target.nameEn || target.name || target.label;
+        }
+        return target.name || target.nameEn || target.label;
+    }, [isEn]);
 
     useEffect(() => {
         setItemSelected({ key: ALL_ITEM.key, childKey: '' });
@@ -66,6 +76,30 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
         }
     }, [onClickMenu, scrollToItem]);
 
+    const getDisplayLabel = useCallback((item: TabsItem) => {
+        if (item.key === ALL_ITEM.key) {
+            return isEn ? 'All' : 'Tất cả';
+        }
+        if (isEn) {
+            return item.nameEn || (item as any).name || item.label;
+        }
+        return (item as any).name || item.nameEn || item.label;
+    }, [isEn]);
+
+    const getChildDisplayLabel = useCallback((parent: TabsItem, child: TabsItem) => {
+        if (isEn) {
+            return child.nameEn || (child as any).name || child.label;
+        }
+        return (child as any).name || child.nameEn || child.label;
+    }, [isEn]);
+
+    const getTitleLabel = useCallback((item: TabsItem) => {
+        if (isEn) {
+            return item.nameEn || (item as any).name || item.label;
+        }
+        return (item as any).name || item.nameEn || item.label;
+    }, [isEn]);
+
     const categoriesTabNode = (
         <ul
             ref={scrollContainerRef}
@@ -83,7 +117,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                                 }}
                                 className='menu-title-content'
                             >
-                                {t(`${c.label}.${i.label}`)}
+                                {getChildDisplayLabel(c, i)}
                             </a>
                         )
                     })) || [];
@@ -100,7 +134,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                                 selectedKeys: [(itemSelected.childKey || itemSelected.key) as string]
                             }}>
                                 <a>
-                                    <span className="menu-title-content">{t(`${c.label}.title`)}</span>
+                                    <span className="menu-title-content">{getTitleLabel(c)}</span>
                                 </a>
                             </Dropdown>
                         </li>
@@ -112,7 +146,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
                         onClick={(e) => onClickItem(c.key, undefined, e.currentTarget)}
                         className={`menu-overflow-item menu-item-only-child ${c.key === itemSelected.key && 'menu-item-selected'}`}
                     >
-                        <span className="menu-title-content">{t(c.label)}</span>
+                        <span className="menu-title-content">{getDisplayLabel(c)}</span>
                     </li>
                 );
             })}

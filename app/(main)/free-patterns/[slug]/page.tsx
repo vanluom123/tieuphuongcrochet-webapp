@@ -8,6 +8,7 @@ import StructureData, {
   createBreadcrumbSchema,
   createCreativeWorkSchema,
 } from '@/app/components/StructureData'
+import { ReportView } from '@/app/components/ReportView'
 
 // Define metadata props
 type Props = {
@@ -43,6 +44,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   return (
     <>
+      <ReportView id={params.slug} type="FREE_PATTERN" />
       <StructureData
         data={createBreadcrumbSchema([
           {
