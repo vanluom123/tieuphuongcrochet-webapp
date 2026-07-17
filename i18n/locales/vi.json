@@ -202,6 +202,36 @@
     "btn_google_login": "Đăng nhập với Google",
     "text_Or": "Hoặc"
   },
+  "ForgotPassword": {
+    "title": "Quên mật khẩu",
+    "description": "Yêu cầu liên kết đặt lại mật khẩu",
+    "instruction": "Nhập địa chỉ email đã đăng ký của bạn. Chúng tôi sẽ gửi một liên kết để đặt lại mật khẩu của bạn.",
+    "input_email": "Nhập email của bạn",
+    "error_msg_required_email": "Vui lòng nhập email",
+    "error_msg_incorrect_email": "Định dạng email không chính xác!",
+    "btn_submit": "Gửi yêu cầu",
+    "back_to_login": "Quay lại Đăng nhập",
+    "success_title": "Đã gửi yêu cầu thành công",
+    "success_description": "Vui lòng kiểm tra email của bạn để nhận liên kết đặt lại mật khẩu.",
+    "error_title": "Gửi yêu cầu thất bại",
+    "error_description": "Không thể xử lý yêu cầu đặt lại mật khẩu. Vui lòng thử lại sau."
+  },
+  "ResetPassword": {
+    "title": "Đặt lại mật khẩu",
+    "description": "Nhập mật khẩu mới của bạn",
+    "token_missing": "Token đặt lại mật khẩu bị thiếu. Vui lòng sử dụng liên kết trong email của bạn.",
+    "token_invalid_or_missing": "Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.",
+    "input_new_password": "Mật khẩu mới",
+    "input_confirm_password": "Xác nhận mật khẩu mới",
+    "error_msg_required_password": "Vui lòng nhập mật khẩu mới",
+    "error_msg_required_confirm_password": "Vui lòng xác nhận mật khẩu mới",
+    "password_pattern_msg": "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt",
+    "passwords_do_not_match": "Mật khẩu mới và xác nhận mật khẩu không khớp",
+    "btn_submit": "Cập nhật mật khẩu",
+    "back_to_login": "Quay lại Đăng nhập",
+    "success_title": "Đổi mật khẩu thành công",
+    "success_description": "Mật khẩu của bạn đã được cập nhật thành công. Đang chuyển hướng về trang đăng nhập..."
+  },
   "Register": {
     "title": "Đăng ký",
     "account_exist": "Đã có tài khoản?",

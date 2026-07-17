@@ -119,7 +119,7 @@ const Login = () => {
                                     <Checkbox>{t('remember_me')}</Checkbox>
                                 </Form.Item>
 
-                                <Link className="login-form-forgot" href="#">
+                                <Link className="login-form-forgot" href="/forgot-password">
                                     {t('forgot_password')}
                                 </Link>
                             </Form.Item>
