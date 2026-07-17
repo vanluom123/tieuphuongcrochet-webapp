@@ -232,6 +232,7 @@ export const API_ROUTES = {
   USER_PROFILE: '/api/v1/user-profile',
   USER_COLLECTIONS: '/api/v1/users/{userId}/collections',
   USER_FREE_PATTERNS: '/api/v1/users/{userId}/free-pattern',
+  USER_LIKED_FREE_PATTERNS: '/api/v1/users/{userId}/liked-free-patterns',
 
   // Pattern routes
   PATTERNS: '/api/v1/patterns',

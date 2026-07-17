@@ -15,9 +15,10 @@ interface CUCategoryProps {
 	isModalOpen: boolean;
 	setIsModalOpen: (open: boolean) => void;
 	categories: CheckboxOptionType[];
+	reloadCategories: () => void;
 }
 
-const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCategorySelected, categories }: CUCategoryProps) => {
+const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCategorySelected, categories, reloadCategories }: CUCategoryProps) => {
 	const [form] = Form.useForm();
 	const [childForm] = Form.useForm();
 	const [checkedList, setCheckedList] = useState<string[]>([]);
@@ -33,6 +34,7 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 		if (isEditing) {
 			const formData: Category = {
 				name: categorySelected.name,
+				nameEn: (categorySelected as any).nameEn,
 			}
 			form.setFieldsValue(formData);
 		}
@@ -45,9 +47,10 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 
 				let sendData: Category = {
 					name: values.name,
+					nameEn: values.nameEn,
 				}
 
-				if (isEditing && sendData.name !== categorySelected.name) {
+				if (isEditing) {
 					sendData = {
 						...sendData,
 						id: categorySelected.key
@@ -61,6 +64,8 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 					};
 					await createCategory(sendData);
 				}
+				reloadCategories();
+				setCategorySelected({} as DataType);
 				form.resetFields();
 				setIsModalOpen(false);
 				setLoading(false);
@@ -71,9 +76,7 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 	};
 
 	const handleCancel = () => {
-		if (categorySelected) {
-			setCategorySelected({} as DataType);
-		}
+		setCategorySelected({} as DataType);
 		childForm.resetFields();
 		form.resetFields();
 		setCheckedList([]);
@@ -82,6 +85,9 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 
 	const onDelete = async (id: string) => {
 		await deleteCategory(id);
+		reloadCategories();
+		setCategorySelected({} as DataType);
+		setIsModalOpen(false);
 	}
 
 	const onUpdateChildCategory = (index: string) => {
@@ -95,6 +101,8 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 
 				if (sendData.name !== categorySelected[`children${index}` as keyof typeof categorySelected]) {
 					await updateCategory(sendData);
+					reloadCategories();
+					setCategorySelected({} as DataType);
 					childForm.resetFields();
 					setIsModalOpen(false);
 				}
@@ -143,12 +151,18 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 					form={form}
 					disabled={loading}
 				>
-					<Form.Item
+				<Form.Item
 						name="name"
-						label="Category name "
+						label="Category name (VI)"
 						rules={[{ required: true, message: 'Please enter category name' }]}
 					>
-						<Input placeholder="Category name" />
+						<Input placeholder="Category name (Vietnamese)" />
+					</Form.Item>
+					<Form.Item
+						name="nameEn"
+						label="Category name (EN)"
+					>
+						<Input placeholder="Category name (English)" />
 					</Form.Item>
 
 					{
@@ -222,30 +236,20 @@ const CategoriesList = () => {
 	const [categorySelected, setCategorySelected] = useState({} as DataType);
 	const { data: session, status } = useSession();
 
+	const loadCategories = async () => {
+		setState(prevState => ({ ...prevState, loading: true }));
+		try {
+			fetchCategories().then((data) => {
+				setState(prevState => ({ ...prevState, data: data as DataType[], loading: false }));
+			});
+		} catch (error) {
+			console.error('Error fetching categories:', error);
+			setState(prevState => ({ ...prevState, loading: false }));
+		}
+	};
+
 	useEffect(() => {
-		let isMounted = true;
-
-		const loadCategories = async () => {
-			setState(prevState => ({ ...prevState, loading: true }));
-			try {
-				fetchCategories().then((data) => {
-					if (isMounted) {
-						setState(prevState => ({ ...prevState, data: data as DataType[], loading: false }));
-					}
-				});
-			} catch (error) {
-				console.error('Error fetching categories:', error);
-				if (isMounted) {
-					setState(prevState => ({ ...prevState, loading: false }));
-				}
-			}
-		};
-
 		loadCategories();
-
-		return () => {
-			isMounted = false;
-		};
 	}, []);
 
 	const showModal = () => {
@@ -259,6 +263,7 @@ const CategoriesList = () => {
 
 	const onDeleteRecord = async (key: React.Key) => {
 		await deleteCategory(key as string);
+		loadCategories();
 	}
 
 	return (
@@ -280,6 +285,7 @@ const CategoriesList = () => {
 				isModalOpen={isModalOpen}
 				setIsModalOpen={setIsModalOpen}
 				categories={map(state.data, (item: DataType) => ({ value: item.key, label: item.name })) as CheckboxOptionType[]}
+				reloadCategories={loadCategories}
 			/>
 		</>
 	)

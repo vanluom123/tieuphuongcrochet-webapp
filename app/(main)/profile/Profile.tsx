@@ -21,6 +21,7 @@ import '../../ui/components/profile.scss';
 import Collections from "@/app/components/profile/Collections";
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
+const LikedPatterns = dynamic(() => import('../../components/profile/LikedPatterns'), { ssr: false });
 
 interface ProfileDetailProps {
     params: {
@@ -78,6 +79,11 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
 
         return isCreator ? [
             ...defaultTabs,
+            {
+                key: 'likes',
+                label: t('tabs.like'),
+                children: <LikedPatterns userId={userId} />,
+            },
             {
                 key: 'info',
                 label: t('tabs.info'),
