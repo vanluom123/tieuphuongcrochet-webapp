@@ -22,6 +22,7 @@ import Collections from "@/app/components/profile/Collections";
 
 const FreePatterns = dynamic(() => import('../../components/profile/FreePatterns'), { ssr: false });
 const LikedPatterns = dynamic(() => import('../../components/profile/LikedPatterns'), { ssr: false });
+const ChangePassword = dynamic(() => import('../../components/profile/ChangePassword'), { ssr: false });
 
 interface ProfileDetailProps {
     params: {
@@ -88,6 +89,11 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                 key: 'info',
                 label: t('tabs.info'),
                 children: <UserInfo userData={userData} setUserData={setUserData} />,
+            },
+            {
+                key: 'change_password',
+                label: t('tabs.change_password'),
+                children: <ChangePassword />,
             },
         ] : defaultTabs;
     }, [isCreator, userId, t, userData]);

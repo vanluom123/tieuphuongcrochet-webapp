@@ -223,6 +223,7 @@ export const API_ROUTES = {
   SIGNUP: '/api/v1/auth/signup', 
   LOGOUT: '/api/v1/auth/logout',
   RESET_PASSWORD: '/api/v1/auth/password-reset-request',
+  RESET_PASSWORD_SUBMIT: '/api/v1/auth/reset-password',
   CONFIRM: '/api/v1/auth/confirm',
   RESEND_VERIFICATION: '/api/v1/auth/resend-verification-email',
   REFRESH_TOKEN: '/api/v1/auth/refresh-token',
@@ -230,6 +231,7 @@ export const API_ROUTES = {
   // User routes
   USERS: '/api/v1/users',
   USER_PROFILE: '/api/v1/user-profile',
+  USER_CHANGE_PASSWORD: '/api/v1/user-profile/change-password',
   USER_COLLECTIONS: '/api/v1/users/{userId}/collections',
   USER_FREE_PATTERNS: '/api/v1/users/{userId}/free-pattern',
   USER_LIKED_FREE_PATTERNS: '/api/v1/users/{userId}/liked-free-patterns',

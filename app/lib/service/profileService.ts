@@ -172,3 +172,13 @@ export async function loadUserInfo(id: string = '') {
         backgroundImageUrl: res.data.backgroundImageUrl
     };
 }
+
+export async function changeUserPassword(data: any) {
+    const res = await apiJwtService({
+        endpoint: API_ROUTES.USER_CHANGE_PASSWORD,
+        method: 'PUT',
+        data
+    });
+    return res;
+}
+
