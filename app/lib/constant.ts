@@ -230,6 +230,7 @@ export const API_ROUTES = {
   // User routes
   USERS: '/api/v1/users',
   USER_PROFILE: '/api/v1/user-profile',
+  USER_CHANGE_PASSWORD: '/api/v1/user-profile/change-password',
   USER_COLLECTIONS: '/api/v1/users/{userId}/collections',
   USER_FREE_PATTERNS: '/api/v1/users/{userId}/free-pattern',
   USER_LIKED_FREE_PATTERNS: '/api/v1/users/{userId}/liked-free-patterns',

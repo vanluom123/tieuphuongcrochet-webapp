@@ -271,7 +271,21 @@
       "collections": "Collections",
       "patterns": "Charts",
       "like": "Liked",
-      "info": "User info"
+      "info": "User info",
+      "change_password": "Change password"
+    },
+    "change_password": {
+      "old_password": "Old password",
+      "old_password_required": "Please enter your old password",
+      "new_password": "New password",
+      "new_password_required": "Please enter your new password",
+      "confirm_password": "Confirm new password",
+      "confirm_password_required": "Please confirm your new password",
+      "password_pattern_msg": "Password must be at least 8 characters long, and include uppercase, lowercase, digit, and a special character",
+      "passwords_do_not_match": "The new password and confirmation password do not match",
+      "submit": "Change password",
+      "success_msg": "Password changed successfully",
+      "error_msg": "Failed to change password"
     },
     "collections": {
       "empty": "No collections yet",

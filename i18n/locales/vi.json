@@ -271,7 +271,21 @@
       "collections": "Bộ sưu tập",
       "patterns": "Charts",
       "like": "Đã thích",
-      "info": "Thông tin cá nhân"
+      "info": "Thông tin cá nhân",
+      "change_password": "Đổi mật khẩu"
+    },
+    "change_password": {
+      "old_password": "Mật khẩu cũ",
+      "old_password_required": "Vui lòng nhập mật khẩu cũ",
+      "new_password": "Mật khẩu mới",
+      "new_password_required": "Vui lòng nhập mật khẩu mới",
+      "confirm_password": "Xác nhận mật khẩu mới",
+      "confirm_password_required": "Vui lòng xác nhận mật khẩu mới",
+      "password_pattern_msg": "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt",
+      "passwords_do_not_match": "Mật khẩu mới và xác nhận mật khẩu không khớp",
+      "submit": "Đổi mật khẩu",
+      "success_msg": "Đổi mật khẩu thành công",
+      "error_msg": "Đổi mật khẩu thất bại"
     },
     "collections": {
       "empty": "Chưa có bộ sưu tập nào",
