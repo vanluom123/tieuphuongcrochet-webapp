@@ -202,6 +202,36 @@
     "btn_google_login": "Login with Google",
     "text_Or": "Or"
   },
+  "ForgotPassword": {
+    "title": "Forgot Password",
+    "description": "Request a password reset link",
+    "instruction": "Enter your registered email address. We will send you a link to reset your password.",
+    "input_email": "Enter your email",
+    "error_msg_required_email": "Please enter your email",
+    "error_msg_incorrect_email": "Incorrect email format!",
+    "btn_submit": "Send Reset Link",
+    "back_to_login": "Back to Login",
+    "success_title": "Request Sent Successfully",
+    "success_description": "Please check your email for the password reset link.",
+    "error_title": "Request Failed",
+    "error_description": "Could not process password reset request. Please try again later."
+  },
+  "ResetPassword": {
+    "title": "Reset Password",
+    "description": "Enter your new password",
+    "token_missing": "Password reset token is missing. Please use the link in your email.",
+    "token_invalid_or_missing": "The password reset link is invalid or has expired.",
+    "input_new_password": "New password",
+    "input_confirm_password": "Confirm new password",
+    "error_msg_required_password": "Please enter your new password",
+    "error_msg_required_confirm_password": "Please confirm your new password",
+    "password_pattern_msg": "Password must be at least 8 characters long, and include uppercase, lowercase, digit, and a special character",
+    "passwords_do_not_match": "The new password and confirmation password do not match",
+    "btn_submit": "Update Password",
+    "back_to_login": "Back to Login",
+    "success_title": "Password Reset Successful",
+    "success_description": "Your password has been successfully updated. Redirecting to login page..."
+  },
   "Register": {
     "title": "Register account",
     "btn_sign_in": "Sign in!",
@@ -271,7 +301,21 @@
       "collections": "Collections",
       "patterns": "Charts",
       "like": "Liked",
-      "info": "User info"
+      "info": "User info",
+      "change_password": "Change password"
+    },
+    "change_password": {
+      "old_password": "Old password",
+      "old_password_required": "Please enter your old password",
+      "new_password": "New password",
+      "new_password_required": "Please enter your new password",
+      "confirm_password": "Confirm new password",
+      "confirm_password_required": "Please confirm your new password",
+      "password_pattern_msg": "Password must be at least 8 characters long, and include uppercase, lowercase, digit, and a special character",
+      "passwords_do_not_match": "The new password and confirmation password do not match",
+      "submit": "Change password",
+      "success_msg": "Password changed successfully",
+      "error_msg": "Failed to change password"
     },
     "collections": {
       "empty": "No collections yet",
