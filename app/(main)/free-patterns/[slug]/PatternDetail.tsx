@@ -1,6 +1,6 @@
 'use client'
 import { Divider, Flex, FloatButton, Tooltip } from 'antd'
-import { HeartFilled, HeartOutlined } from '@ant-design/icons'
+import { HeartFilled, HeartOutlined, FilePdfOutlined } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
 import IntroductionCard from '@/app/components/introduction-card'
 import ViewDetailWrapper from '@/app/components/view-detail-wrapper'
@@ -15,9 +15,12 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { removePatternFromCollection } from '@/app/lib/service/collectionService'
 import CollectionPopup from '@/app/components/collection-popup'
-import { ROUTE_PATH } from '@/app/lib/constant'
+import { ROUTE_PATH, USER_ROLES } from '@/app/lib/constant'
 import { existInCollection, checkIsPatternLiked } from '@/app/lib/service/freePatternService'
 import { toggleLike } from '@/app/lib/service/interactionService'
+import { notification } from '@/app/lib/notify'
+import { handleTokenRefresh } from '@/app/lib/service/apiJwtService'
+import PremiumUpgradeModal from '@/app/components/premium/PremiumUpgradeModal'
 
 // Lazy load ViewImagesList component
 const ViewImagesList = dynamic(
@@ -36,6 +39,53 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const [isLiked, setIsLiked] = useState(pattern?.is_liked || false)
   const [likeCount, setLikeCount] = useState(pattern?.likeCount || 0)
   const [likeLoading, setLikeLoading] = useState(false)
+
+  const [isExporting, setIsExporting] = useState(false)
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false)
+
+  const isOwner = session?.user?.id && pattern?.userId && session.user.id === pattern.userId;
+
+  const handleSingleExport = async () => {
+    const isPremium = session?.user?.role === USER_ROLES.PREMIUM_USER || session?.user?.role === USER_ROLES.ADMIN;
+    if (!isPremium) {
+      setIsPremiumModalOpen(true);
+      return;
+    }
+
+    setIsExporting(true);
+    try {
+      const token = await handleTokenRefresh();
+      const patternId = pattern?.id?.toString() || '';
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/v1/free-pattern/${patternId}/pdf`, {
+        method: 'GET',
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+      });
+
+      if (!response.ok) throw new Error('Export failed');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${pattern.name.replaceAll("[\\\\/:*?\"<>|]", "_")}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      notification.success({
+        message: t('export_success') || 'Tải file PDF thành công!'
+      });
+    } catch (error: any) {
+      notification.error({
+        message: t('export_error') || 'Xuất file PDF thất bại',
+        description: error.message
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   useEffect(() => {
     const fetchUserStatus = async () => {
@@ -268,6 +318,56 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
         />
       </Tooltip>
 
+      {/* Custom PDF Export button */}
+      {isOwner && (
+        <Tooltip title={t('export_pdf') || 'Xuất PDF (Premium)'}>
+          <FloatButton
+            shape="circle"
+            className="custom-pdf-button"
+            onClick={isExporting ? undefined : handleSingleExport}
+            icon={
+              isExporting ? (
+                <span
+                  className="pdf-loading-spinner"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 20,
+                    height: 20,
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 50 50">
+                    <circle
+                      cx="25"
+                      cy="25"
+                      r="20"
+                      fill="none"
+                      stroke="#999"
+                      strokeWidth="5"
+                      strokeDasharray="31.415, 31.415"
+                      transform="rotate(72.0001 25 25)"
+                    >
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 25 25"
+                        to="360 25 25"
+                        dur="1s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                  </svg>
+                </span>
+              ) : (
+                <FilePdfOutlined />
+              )
+            }
+            style={{ right: 24, bottom: 140, zIndex: 10 }}
+          />
+        </Tooltip>
+      )}
+
       <CommentSection id={pattern?.id?.toString() || ''} type={'free-pattern'} />
 
       {/* Collection Popup */}
@@ -277,6 +377,11 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
         patternId={pattern?.id?.toString() || ''}
         patternName={pattern?.name}
         onSuccess={handleSaveSuccess}
+      />
+
+      <PremiumUpgradeModal 
+        open={isPremiumModalOpen} 
+        onClose={() => setIsPremiumModalOpen(false)} 
       />
     </ViewDetailWrapper>
   )
