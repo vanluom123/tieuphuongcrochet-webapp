@@ -19,7 +19,7 @@ const PremiumUpgradeModal: React.FC<PremiumUpgradeModalProps> = ({
   open,
   onClose,
 }) => {
-  const t = useTranslations("UserAccount");
+  const t = useTranslations("Premium");
   const [loading, setLoading] = useState(false);
   const [planType, setPlanType] = useState<"MONTHLY" | "YEARLY">("MONTHLY");
   const [prices, setPrices] = useState<{ MONTHLY: number; YEARLY: number }>({
@@ -63,11 +63,11 @@ const PremiumUpgradeModal: React.FC<PremiumUpgradeModalProps> = ({
         // Redirect to PayPal
         window.location.href = response.approveUrl;
       } else {
-        message.error("Failed to initiate payment. Please try again.");
+        message.error(t("payment_error"));
       }
     } catch (error) {
       console.error("Payment initiation error:", error);
-      message.error("An error occurred while initiating payment.");
+      message.error(t("payment_error_generic"));
     } finally {
       setLoading(false);
     }
@@ -102,13 +102,13 @@ const PremiumUpgradeModal: React.FC<PremiumUpgradeModalProps> = ({
         level={2}
         className="premium-modal-title"
       >
-        {t("upgrade_premium") || "Upgrade to Premium"}
+        {t("title")}
       </Title>
 
       <Paragraph
         className="premium-modal-description"
       >
-        Unlock the full potential of Artisan Thread with our premium membership. Enjoy an elevated, uninterrupted crafting experience.
+        {t("description")}
       </Paragraph>
 
       <Space
@@ -119,22 +119,22 @@ const PremiumUpgradeModal: React.FC<PremiumUpgradeModalProps> = ({
         <div className="feature-item">
           <CheckCircleFilled className="feature-icon" />
           <div>
-            <Text className="feature-title">Ad-Free Experience</Text>
-            <Text className="feature-desc">Browse patterns and tutorials without any distractions.</Text>
+            <Text className="feature-title">{t("features.ad_free.title")}</Text>
+            <Text className="feature-desc">{t("features.ad_free.description")}</Text>
           </div>
         </div>
         <div className="feature-item">
           <CheckCircleFilled className="feature-icon" />
           <div>
-            <Text className="feature-title">Exclusive Patterns</Text>
-            <Text className="feature-desc">Gain access to our premium library of handcrafted designs.</Text>
+            <Text className="feature-title">{t("features.exclusive_patterns.title")}</Text>
+            <Text className="feature-desc">{t("features.exclusive_patterns.description")}</Text>
           </div>
         </div>
         <div className="feature-item">
           <CheckCircleFilled className="feature-icon" />
           <div>
-            <Text className="feature-title">Priority Support</Text>
-            <Text className="feature-desc">Get your questions answered first by our expert artisan team.</Text>
+            <Text className="feature-title">{t("features.priority_support.title")}</Text>
+            <Text className="feature-desc">{t("features.priority_support.description")}</Text>
           </div>
         </div>
       </Space>
@@ -145,18 +145,18 @@ const PremiumUpgradeModal: React.FC<PremiumUpgradeModalProps> = ({
           onClick={() => setPlanType('MONTHLY')}
           className={`plan-card ${planType === 'MONTHLY' ? 'active' : ''}`}
         >
-          <Text className="plan-card-title">Monthly</Text>
+          <Text className="plan-card-title">{t("plans.monthly")}</Text>
           <Text className="plan-card-price">${prices.MONTHLY}</Text>
-          <Text className="plan-card-billing">billed monthly</Text>
+          <Text className="plan-card-billing">{t("plans.monthly_billing")}</Text>
         </div>
         <div 
           onClick={() => setPlanType('YEARLY')}
           className={`plan-card ${planType === 'YEARLY' ? 'active' : ''}`}
         >
-          {discount > 0 && <span className="save-badge">Save {discount}%</span>}
-          <Text className="plan-card-title">Yearly</Text>
+          {discount > 0 && <span className="save-badge">{t("plans.save", { discount })}</span>}
+          <Text className="plan-card-title">{t("plans.yearly")}</Text>
           <Text className="plan-card-price">${prices.YEARLY}</Text>
-          <Text className="plan-card-billing">billed yearly</Text>
+          <Text className="plan-card-billing">{t("plans.yearly_billing")}</Text>
         </div>
       </div>
 
@@ -169,7 +169,7 @@ const PremiumUpgradeModal: React.FC<PremiumUpgradeModalProps> = ({
           disabled={loading}
           className="upgrade-button"
         >
-          {loading ? <Spin size="small" /> : "Upgrade Now with PayPal"}
+          {loading ? <Spin size="small" /> : t("upgrade_button")}
         </Button>
         <Button
           type="text"
@@ -178,7 +178,7 @@ const PremiumUpgradeModal: React.FC<PremiumUpgradeModalProps> = ({
           disabled={loading}
           className="cancel-button"
         >
-          Cancel
+          {t("cancel_button")}
         </Button>
       </Space>
     </Modal>
