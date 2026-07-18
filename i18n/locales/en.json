@@ -171,6 +171,45 @@
       "NONE": "NONE"
     }
   },
+  "Premium": {
+    "title": "Upgrade to Premium",
+    "description": "Unlock the full potential of the website with our premium membership. Enjoy an elevated, uninterrupted crafting experience.",
+    "upgrade_button": "Upgrade Now with PayPal",
+    "cancel_button": "Cancel",
+    "features": {
+      "ad_free": {
+        "title": "Ad-Free Experience",
+        "description": "Browse patterns and tutorials without any distractions."
+      },
+      "exclusive_patterns": {
+        "title": "Exclusive Patterns",
+        "description": "Gain access to our premium library of handcrafted designs."
+      },
+      "priority_support": {
+        "title": "Priority Support",
+        "description": "Get your questions answered first by our expert artisan team."
+      }
+    },
+    "plans": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "monthly_billing": "billed monthly",
+      "yearly_billing": "billed yearly",
+      "save": "Save {discount}%"
+    },
+    "payment_error": "Failed to initiate payment. Please try again.",
+    "payment_error_generic": "An error occurred while initiating payment.",
+    "capture": {
+      "loading_title": "Processing your upgrade...",
+      "loading_description": "Please wait while we confirm your payment with PayPal. Do not close this page.",
+      "success_title": "Welcome to Premium!",
+      "success_description": "Your payment was successful and your account has been upgraded. Enjoy the ad-free experience and exclusive patterns.",
+      "success_button": "Go to Homepage",
+      "error_title": "Upgrade Failed",
+      "error_description": "There was an issue processing your payment. Your account was not charged. Please try again.",
+      "error_button": "Return Home"
+    }
+  },
   "UserAccount": {
     "sign_in": "Sign in",
     "sign_out": "Sign out",

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { paymentService } from "@/app/lib/service/paymentService";
 import { Spin, Typography, Result, Button } from "antd";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
 import styles from "./page.module.scss";
 
@@ -13,6 +14,7 @@ const { Title, Text } = Typography;
 export default function PremiumCapturePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const t = useTranslations("Premium");
   const token = searchParams.get("token");
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const { status: sessionStatus, update } = useSession();
@@ -77,9 +79,9 @@ export default function PremiumCapturePage() {
       onClick={() => (window.location.href = ROUTE_PATH.HOME)}
       className={styles.captureButton}
     >
-      Go to Homepage
+      {t("capture.success_button")}
     </Button>,
-  ], []);
+  ], [t]);
 
   const errorExtra = useMemo(() => [
     <Button
@@ -89,9 +91,9 @@ export default function PremiumCapturePage() {
       onClick={() => router.push(ROUTE_PATH.HOME)}
       className={styles.captureButton}
     >
-      Return Home
+      {t("capture.error_button")}
     </Button>,
-  ], [router]);
+  ], [router, t]);
 
   return (
     <div className={styles.captureContainer}>
@@ -100,10 +102,10 @@ export default function PremiumCapturePage() {
           <>
             <Spin size="large" className={styles.captureSpin} />
             <Title level={3} className={styles.captureTitle}>
-              Processing your upgrade...
+              {t("capture.loading_title")}
             </Title>
             <Text className={styles.captureText}>
-              Please wait while we confirm your payment with PayPal. Do not close this page.
+              {t("capture.loading_description")}
             </Text>
           </>
         )}
@@ -113,12 +115,12 @@ export default function PremiumCapturePage() {
             status="success"
             title={
               <span className={styles.captureResultTitle}>
-                Welcome to Premium!
+                {t("capture.success_title")}
               </span>
             }
             subTitle={
               <span className={styles.captureResultSubtitle}>
-                Your payment was successful and your account has been upgraded. Enjoy the ad-free experience and exclusive patterns.
+                {t("capture.success_description")}
               </span>
             }
             extra={successExtra}
@@ -130,12 +132,12 @@ export default function PremiumCapturePage() {
             status="error"
             title={
               <span className={styles.captureResultTitle}>
-                Upgrade Failed
+                {t("capture.error_title")}
               </span>
             }
             subTitle={
               <span className={styles.captureResultSubtitle}>
-                There was an issue processing your payment. Your account was not charged. Please try again.
+                {t("capture.error_description")}
               </span>
             }
             extra={errorExtra}

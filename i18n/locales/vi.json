@@ -171,6 +171,45 @@
       "NONE": "Chưa dịch"
     }
   },
+  "Premium": {
+    "title": "Nâng cấp lên Premium",
+    "description": "Mở khóa toàn bộ tiềm năng của website với gói thành viên Premium. Trải nghiệm crafting mượt mà, không bị gián đoạn.",
+    "upgrade_button": "Nâng cấp ngay bằng PayPal",
+    "cancel_button": "Hủy",
+    "features": {
+      "ad_free": {
+        "title": "Trải nghiệm không quảng cáo",
+        "description": "Duyệt mẫu và hướng dẫn mà không bị làm phiền bởi quảng cáo."
+      },
+      "exclusive_patterns": {
+        "title": "Mẫu độc quyền",
+        "description": "Được truy cập thư viện mẫu thủ công độc quyền của chúng tôi."
+      },
+      "priority_support": {
+        "title": "Hỗ trợ ưu tiên",
+        "description": "Nhận câu trả lời nhanh nhất từ đội ngũ nghệ nhân giàu kinh nghiệm."
+      }
+    },
+    "plans": {
+      "monthly": "Hàng tháng",
+      "yearly": "Hàng năm",
+      "monthly_billing": "thanh toán hàng tháng",
+      "yearly_billing": "thanh toán hàng năm",
+      "save": "Tiết kiệm {discount}%"
+    },
+    "payment_error": "Không thể khởi tạo thanh toán. Vui lòng thử lại.",
+    "payment_error_generic": "Đã xảy ra lỗi khi khởi tạo thanh toán.",
+    "capture": {
+      "loading_title": "Đang xử lý nâng cấp của bạn...",
+      "loading_description": "Vui lòng đợi trong khi chúng tôi xác nhận thanh toán qua PayPal. Đừng đóng trang này.",
+      "success_title": "Chào mừng bạn đến với Premium!",
+      "success_description": "Thanh toán của bạn đã thành công và tài khoản của bạn đã được nâng cấp. Hãy tận hưởng trải nghiệm không quảng cáo và các mẫu độc quyền.",
+      "success_button": "Về trang chủ",
+      "error_title": "Nâng cấp thất bại",
+      "error_description": "Đã xảy ra lỗi trong quá trình xử lý thanh toán. Tài khoản của bạn chưa bị tính phí. Vui lòng thử lại.",
+      "error_button": "Quay lại trang chủ"
+    }
+  },
   "UserAccount": {
     "sign_in": "Đăng nhập",
     "sign_out": "Đăng xuất",
