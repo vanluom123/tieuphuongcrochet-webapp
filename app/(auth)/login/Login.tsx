@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { LockOutlined, MailOutlined, GoogleOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
+import { LockOutlined, MailOutlined, GoogleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Alert, Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 import Link from 'next/link';
@@ -12,6 +12,8 @@ import { useTranslations } from 'next-intl';
 import { User } from '@/app/lib/definitions';
 import logo from '@/public/logo.png';
 import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
+import { resendVerificationEmail } from '@/app/lib/service/registerService';
+import { useResendCooldown } from '@/app/hooks/useResendCooldown';
 import { notification } from '@/app/lib/notify';
 import '../../ui/components/login.scss';
 
@@ -22,6 +24,11 @@ const Login = () => {
     const t = useTranslations('Login');
 
     const [isLoading, setIsLoading] = useState(false);
+    const [unverifiedEmail, setUnverifiedEmail] = useState('');
+    const [isResending, setIsResending] = useState(false);
+    const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown(
+        unverifiedEmail ? `login_${unverifiedEmail}` : 'login_default'
+    );
 
     useEffect(() => {
         if (session?.user?.email && status === 'authenticated') {
@@ -37,8 +44,14 @@ const Login = () => {
                 password: values.password,
                 redirect: false,
             });
-            // Handle successful login
-            if (result?.error) {
+            
+            if (result?.error === 'EMAIL_NOT_VERIFIED' || result?.error?.includes('not verified')) {
+                setUnverifiedEmail(values.email);
+                notification.warning({
+                    message: t('unverified_account_alert'),
+                    description: t('unverified_account_desc'),
+                });
+            } else if (result?.error) {
                 const description = result.status === 401 ? t('error_login_401_description') : result.error;
                 notification.error({ message: t('error_login_title'), description });
             }
@@ -50,6 +63,36 @@ const Login = () => {
                 notification.error({ message: t('error_login_title'), description: t('error_login_unknown_error') });
             }
             setIsLoading(false);
+        }
+    };
+
+    const handleResendFromLogin = async () => {
+        if (!unverifiedEmail) return;
+        setIsResending(true);
+        try {
+            const res = await resendVerificationEmail(unverifiedEmail);
+            if (res.status) {
+                notification.success({
+                    message: t('btn_resend_verification'),
+                    description: t('unverified_account_desc'),
+                });
+                startCooldown(60);
+            } else {
+                notification.error({
+                    message: t('error_login_title'),
+                    description: res.data?.message || t('error_login_unknown_error'),
+                });
+                if (res.statusCode === 429) {
+                    startCooldown(60);
+                }
+            }
+        } catch {
+            notification.error({
+                message: t('error_login_title'),
+                description: t('error_login_unknown_error'),
+            });
+        } finally {
+            setIsResending(false);
         }
     };
 
@@ -68,6 +111,34 @@ const Login = () => {
             <Spin spinning={isLoading} tip="Loading...">
                 <Row >
                     <Col xs={20} sm={18} md={10}>
+                        {unverifiedEmail && (
+                            <Alert
+                                type="warning"
+                                showIcon
+                                closable
+                                onClose={() => setUnverifiedEmail('')}
+                                message={t('unverified_account_alert')}
+                                description={
+                                    <div style={{ marginTop: 8 }}>
+                                        <p style={{ margin: '0 0 10px 0' }}>{t('unverified_account_desc')}</p>
+                                        <Button
+                                            size="small"
+                                            type="primary"
+                                            className="btn-border"
+                                            icon={<ReloadOutlined spin={isResending} />}
+                                            loading={isResending}
+                                            disabled={isCooldownActive || isResending}
+                                            onClick={handleResendFromLogin}
+                                        >
+                                            {isCooldownActive
+                                                ? t('btn_resend_cooldown', { seconds: secondsLeft })
+                                                : t('btn_resend_verification')}
+                                        </Button>
+                                    </div>
+                                }
+                                style={{ marginBottom: 20 }}
+                            />
+                        )}
                         <Form
                             form={form}
                             name="normal_login"
@@ -115,13 +186,15 @@ const Login = () => {
                                     placeholder={t('input_password')} />
                             </Form.Item>
                             <Form.Item>
-                                <Form.Item name="remember" valuePropName="checked" noStyle>
-                                    <Checkbox>{t('remember_me')}</Checkbox>
-                                </Form.Item>
+                                <Flex justify="space-between" align="center" style={{ width: '100%' }}>
+                                    <Form.Item name="remember" valuePropName="checked" noStyle>
+                                        <Checkbox>{t('remember_me')}</Checkbox>
+                                    </Form.Item>
 
-                                <Link className="login-form-forgot" href="/forgot-password">
-                                    {t('forgot_password')}
-                                </Link>
+                                    <Link className="login-form-forgot" href="/forgot-password">
+                                        {t('forgot_password')}
+                                    </Link>
+                                </Flex>
                             </Form.Item>
                             <Form.Item name='actions' className='actions'>
                                 <Row gutter={[10, 20]} align='middle'>
@@ -145,6 +218,16 @@ const Login = () => {
                                 </Row>
                             </Form.Item>
                         </Form>
+
+                        <div style={{ textAlign: 'center', marginTop: 14, marginBottom: 14 }}>
+                            <Link
+                                href={unverifiedEmail ? `${ROUTE_PATH.RESEND_VERIFICATION}?email=${encodeURIComponent(unverifiedEmail)}` : ROUTE_PATH.RESEND_VERIFICATION}
+                                style={{ fontSize: 13, color: '#707070' }}
+                            >
+                                {t('resend_verification_link')}
+                            </Link>
+                        </div>
+
                         <Divider>{t('text_Or')}</Divider>
                         <Link
                             href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorize/google?redirect_uri=${process.env.NEXT_PUBLIC_URL}/oauth2/redirect`}
@@ -169,4 +252,3 @@ const Login = () => {
 };
 
 export default Login;
-

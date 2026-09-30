@@ -240,7 +240,29 @@
     "error_login_title": "Đăng nhập thất bại",
     "error_login_unknown_error": "Đã có lỗi xảy ra",
     "btn_google_login": "Đăng nhập với Google",
-    "text_Or": "Hoặc"
+    "text_Or": "Hoặc",
+    "unverified_account_alert": "Tài khoản của bạn chưa được kích hoạt.",
+    "unverified_account_desc": "Vui lòng xác thực email để có thể đăng nhập.",
+    "resend_verification_link": "Chưa nhận được email kích hoạt?",
+    "btn_resend_verification": "Gửi lại email kích hoạt",
+    "btn_resend_cooldown": "Gửi lại sau {seconds}s"
+  },
+  "ResendVerification": {
+    "title": "Gửi lại email kích hoạt",
+    "description": "Yêu cầu gửi lại email kích hoạt tài khoản",
+    "instruction": "Nhập địa chỉ email bạn đã đăng ký để nhận liên kết kích hoạt mới.",
+    "input_email": "Nhập email của bạn",
+    "error_msg_required_email": "Vui lòng nhập email",
+    "error_msg_incorrect_email": "Định dạng email không chính xác!",
+    "btn_submit": "Gửi email kích hoạt",
+    "btn_resend_cooldown": "Gửi lại sau {seconds}s",
+    "back_to_login": "Quay lại Đăng nhập",
+    "back_to_register": "Tạo tài khoản mới",
+    "success_title": "Đã gửi email thành công",
+    "success_description": "Liên kết kích hoạt mới đã được gửi. Vui lòng kiểm tra hộp thư đến và mục thư rác.",
+    "error_title": "Gửi yêu cầu thất bại",
+    "error_description": "Không thể gửi email kích hoạt. Vui lòng kiểm tra lại email hoặc thử lại sau.",
+    "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát."
   },
   "ForgotPassword": {
     "title": "Quên mật khẩu",
@@ -299,7 +321,16 @@
     "ActiveModal": {
       "title": "Kích hoạt tài khoản",
       "description": "Hệ thống đã gửi email kích hoạt đến bạn. Bạn vui lòng kiểm tra email và kích hoạt tài khoản của bạn, và quay lại đăng nhập nha!!!",
-      "btn_sign_in": "Đăng nhập"
+      "sent_to": "Đã gửi tới:",
+      "spam_note": "Nếu không thấy trong hộp thư chính, vui lòng kiểm tra mục Thư rác/Spam.",
+      "btn_resend": "Gửi lại email kích hoạt",
+      "btn_resend_cooldown": "Gửi lại sau {seconds}s",
+      "resend_success_title": "Đã gửi lại email",
+      "resend_success_description": "Liên kết kích hoạt mới đã được gửi tới hộp thư của bạn.",
+      "resend_error_title": "Gửi lại thất bại",
+      "resend_error_description": "Không thể gửi lại email kích hoạt. Vui lòng thử lại sau.",
+      "btn_sign_in": "Đăng nhập",
+      "btn_edit_email": "Sai địa chỉ email? Chỉnh sửa"
     }
   },
   "Category": {
