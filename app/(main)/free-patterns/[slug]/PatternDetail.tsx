@@ -18,6 +18,7 @@ import CollectionPopup from '@/app/components/collection-popup'
 import { ROUTE_PATH } from '@/app/lib/constant'
 import { existInCollection, checkIsPatternLiked } from '@/app/lib/service/freePatternService'
 import { toggleLike } from '@/app/lib/service/interactionService'
+import { ReportView } from '@/app/components/ReportView'
 
 // Lazy load ViewImagesList component
 const ViewImagesList = dynamic(
@@ -36,6 +37,13 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const [isLiked, setIsLiked] = useState(pattern?.is_liked || false)
   const [likeCount, setLikeCount] = useState(pattern?.likeCount || 0)
   const [likeLoading, setLikeLoading] = useState(false)
+  const [viewCount, setViewCount] = useState(pattern?.viewCount || 0)
+
+  useEffect(() => {
+    if (pattern?.viewCount !== undefined) {
+      setViewCount(pattern.viewCount)
+    }
+  }, [pattern?.viewCount])
 
   useEffect(() => {
     const fetchUserStatus = async () => {
@@ -121,10 +129,23 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
 
   return (
     <ViewDetailWrapper isShowAlert alertMessage={t('note')} alertType="warning">
+      {pattern?.id && (
+        <ReportView
+          id={pattern.id.toString()}
+          type="FREE_PATTERN"
+          onViewCounted={() => setViewCount((prev) => prev + 1)}
+        />
+      )}
       {/* Introducing the free pattern */}
       <div className="pattern-header">
         <Flex vertical gap="small">
-          <IntroductionCard isPreviewAvatar data={pattern} isShowThumbnail />
+          <IntroductionCard
+            isPreviewAvatar
+            data={pattern}
+            isShowThumbnail
+            viewCount={viewCount}
+            likeCount={likeCount}
+          />
         </Flex>
       </div>
 
