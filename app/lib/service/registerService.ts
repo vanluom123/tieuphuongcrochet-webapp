@@ -60,4 +60,29 @@ export const resetPassword = async (token: string, newPassword: string) => {
   } catch (error: any) {
     return { status: false, data: null }
   }
-}
+}
+
+export const resendVerificationEmail = async (email: string) => {
+  try {
+    const url = new URL(API_ROUTES.RESEND_VERIFICATION, process.env.NEXT_PUBLIC_API_URL)
+    url.searchParams.append('email', email.trim().toLowerCase())
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+    })
+
+    const data = await response.json().catch(() => null)
+    return {
+      status: response.ok,
+      statusCode: response.status,
+      data,
+    }
+  } catch (error: any) {
+    return {
+      status: false,
+      statusCode: 500,
+      data: { message: error?.message || 'Network error' },
+    }
+  }
+}
+

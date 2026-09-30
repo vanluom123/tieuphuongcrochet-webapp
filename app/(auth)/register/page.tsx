@@ -18,6 +18,7 @@ import ActiveAccountModal from "./ActiveAccountModal";
 const RegisterPage = () => {
 
     const [formState, setFormState] = useState({ isDisable: false, isModalVisible: false, isLoading: false });
+    const [registeredEmail, setRegisteredEmail] = useState('');
     const [form] = Form.useForm();
     const router = useRouter();
     const t = useTranslations('Register');
@@ -28,6 +29,7 @@ const RegisterPage = () => {
 
     const onSubmitRegister = async (values: User) => {
         setFormState({ ...formState, isDisable: true, isLoading: true });
+        setRegisteredEmail(values.email);
         const res = await registerService(values);
         if (res?.status) {
             setFormState({ ...formState, isModalVisible: true });
@@ -161,8 +163,10 @@ const RegisterPage = () => {
             </div>
             <ActiveAccountModal
                 isOpen={formState.isModalVisible}
+                email={registeredEmail}
                 onClick={onSignIn}
                 onCancel={() => setFormState({ ...formState, isModalVisible: false })}
+                onEditEmail={() => setFormState({ ...formState, isModalVisible: false })}
             />
         </div>
     )
