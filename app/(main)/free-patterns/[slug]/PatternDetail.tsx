@@ -10,7 +10,7 @@ import Image from 'next/image'
 import primaryBookmark from '@/public/primary-bookmark.png'
 import bookmark from '@/public/bookmark.png'
 import CommentSection from '@/app/components/comment/CommentSection'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { removePatternFromCollection } from '@/app/lib/service/collectionService'
@@ -44,6 +44,12 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
       setViewCount(pattern.viewCount)
     }
   }, [pattern?.viewCount])
+
+  // Keep a stable reference so ReportView's effect does not re-run (and abort
+  // its request) on every render.
+  const handleViewCounted = useCallback(() => {
+    setViewCount((prev) => prev + 1)
+  }, [])
 
   useEffect(() => {
     const fetchUserStatus = async () => {
@@ -133,7 +139,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
         <ReportView
           id={pattern.id.toString()}
           type="FREE_PATTERN"
-          onViewCounted={() => setViewCount((prev) => prev + 1)}
+          onViewCounted={handleViewCounted}
         />
       )}
       {/* Introducing the free pattern */}
