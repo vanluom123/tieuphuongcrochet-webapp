@@ -11,7 +11,7 @@ import {
   Space,
   Tag,
 } from "antd";
-import { EyeOutlined, LeftOutlined, RightOutlined, UserOutlined } from "@ant-design/icons";
+import { EyeOutlined, LeftOutlined, RightOutlined, UserOutlined, HeartOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { findIndex, map } from "lodash";
 import { useTranslations } from "next-intl";
@@ -51,6 +51,7 @@ const IntroductionCard = ({
   const { src, name, author, description, images, link, price, currency_code, id } = data;
   const { status, userId, userAvatar, username } = data as Pattern;
   const currentViewCount = viewCount !== undefined ? viewCount : data.viewCount;
+  const currentLikeCount = likeCount !== undefined ? likeCount : (data as any).likeCount;
   const [activeThumbnail, setActiveThumbnail] = useState({ index: 0, src });
   const t = useTranslations("IntroductionCard");
   const sliderRef = useRef(null);
@@ -150,12 +151,20 @@ const IntroductionCard = ({
                 </Link>
               )}
             </div>
-            {typeof currentViewCount === "number" && (
-              <Flex align="center" gap={4} className="creator-views" style={{ color: "#666", fontSize: 13 }}>
-                <EyeOutlined style={{ fontSize: 15 }} />
-                <span>{currentViewCount}</span>
-              </Flex>
-            )}
+            <Flex align="center" gap={12}>
+              {typeof currentViewCount === "number" && (
+                <Flex align="center" gap={4} className="creator-views" style={{ color: "#666", fontSize: 13 }}>
+                  <EyeOutlined style={{ fontSize: 15 }} />
+                  <span>{currentViewCount}</span>
+                </Flex>
+              )}
+              {typeof currentLikeCount === "number" && (
+                <Flex align="center" gap={4} className="creator-likes" style={{ color: "#666", fontSize: 13 }}>
+                  <HeartOutlined style={{ fontSize: 15 }} />
+                  <span>{currentLikeCount}</span>
+                </Flex>
+              )}
+            </Flex>
           </Flex>
         </Affix>
       )}
@@ -229,6 +238,12 @@ const IntroductionCard = ({
                 <Flex align="center" gap={4} style={{ color: "#666", fontSize: 13 }}>
                   <EyeOutlined style={{ fontSize: 14 }} />
                   <span>{currentViewCount} {t("views")}</span>
+                </Flex>
+              )}
+              {typeof currentLikeCount === "number" && (
+                <Flex align="center" gap={4} style={{ color: "#666", fontSize: 13 }}>
+                  <HeartOutlined style={{ fontSize: 14 }} />
+                  <span>{currentLikeCount}</span>
                 </Flex>
               )}
             </Flex>

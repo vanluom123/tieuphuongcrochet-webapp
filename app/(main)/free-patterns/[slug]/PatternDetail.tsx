@@ -180,6 +180,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
           shape="circle"
           className="custom-like-button"
           onClick={handleToggleLike}
+          badge={{ count: likeCount }}
           icon={
             likeLoading ? (
               <span
@@ -220,26 +221,9 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
               <HeartOutlined />
             )
           }
-          style={{ right: 24, bottom: 240, zIndex: 10 }}
+          style={{ zIndex: 10 }}
         />
       </Tooltip>
-
-      {/* Like count text */}
-      {likeCount > 0 && (
-        <span
-          style={{
-            position: 'fixed',
-            right: 28,
-            bottom: 275,
-            fontSize: 12,
-            color: '#666',
-            zIndex: 10,
-            lineHeight: 1,
-          }}
-        >
-          {likeCount}
-        </span>
-      )}
 
       {/* Custom bookmark button for both desktop and mobile */}
       <Tooltip title={isInCollection ? t('remove_from_collection') : t('save')}>
@@ -291,7 +275,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
               />
             )
           }
-          style={{ right: 24, bottom: 190, zIndex: 10 }}
+          style={{ zIndex: 10 }}
         />
       </Tooltip>
 
