@@ -225,6 +225,8 @@ export interface Product {
   content?: string
   fileContent?: string
   category_id?: string
+  viewCount?: number
+  likeCount?: number
 }
 
 export interface HomeData {

@@ -164,6 +164,7 @@
   "IntroductionCard": {
     "author": "Tác giả",
     "btn_order": "Nhắn tin Shop",
+    "views": "lượt xem",
     "status": {
       "ALL": "Tất cả",
       "SUCCESS": "Đã dịch",

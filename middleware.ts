@@ -4,6 +4,11 @@ import { withAuth, NextRequestWithAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import { ROUTE_PATH, USER_ROLES } from "./app/lib/constant";
 
+// API routes that must stay reachable without authentication. Anonymous view
+// tracking (POST /api/views) lives here: the route itself is safe to be public
+// because it is rate-limited, deduplicated and only ever increments a counter.
+const PUBLIC_API_PATHS = ["/api/views"];
+
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   async function middleware(request: NextRequestWithAuth) {
@@ -45,7 +50,14 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      // `authorized` runs before the middleware function above, so the public
+      // allowlist has to be enforced here as well.
+      authorized: ({ token, req }) => {
+        if (PUBLIC_API_PATHS.some((path) => req.nextUrl.pathname.startsWith(path))) {
+          return true;
+        }
+        return !!token;
+      },
     },
   }
 );

@@ -164,6 +164,7 @@
   "IntroductionCard": {
     "author": "Author",
     "btn_order": "Message",
+    "views": "views",
     "status": {
       "ALL": "ALL",
       "SUCCESS": "TRANSLATED",
