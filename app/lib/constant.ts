@@ -26,6 +26,7 @@ export const ROUTE_PATH = {
   COLLECTIONS: '/collections',
   NOTIFICATIONS: '/notifications',
   PREMIUM_CAPTURE: '/premium/capture',
+  RESEND_VERIFICATION: '/resend-verification',
 };
 
 export const SOCIAL_LINKS = {

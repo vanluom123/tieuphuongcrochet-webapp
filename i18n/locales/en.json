@@ -164,6 +164,7 @@
   "IntroductionCard": {
     "author": "Author",
     "btn_order": "Message",
+    "views": "views",
     "status": {
       "ALL": "ALL",
       "SUCCESS": "TRANSLATED",
@@ -239,7 +240,29 @@
     "error_login_title": "Login failed",
     "error_login_unknown_error": "An unknown error occurred",
     "btn_google_login": "Login with Google",
-    "text_Or": "Or"
+    "text_Or": "Or",
+    "unverified_account_alert": "Your account has not been activated yet.",
+    "unverified_account_desc": "Please verify your email address before logging in.",
+    "resend_verification_link": "Didn't receive verification email?",
+    "btn_resend_verification": "Resend activation email",
+    "btn_resend_cooldown": "Resend in {seconds}s"
+  },
+  "ResendVerification": {
+    "title": "Resend Activation Email",
+    "description": "Request a new account activation email",
+    "instruction": "Enter your registered email address. We will send you a new activation link.",
+    "input_email": "Enter your email",
+    "error_msg_required_email": "Please enter your email",
+    "error_msg_incorrect_email": "Email format is incorrect!",
+    "btn_submit": "Send Activation Email",
+    "btn_resend_cooldown": "Resend in {seconds}s",
+    "back_to_login": "Back to Login",
+    "back_to_register": "Create a new account",
+    "success_title": "Email Sent Successfully",
+    "success_description": "A new activation link has been sent. Please check your inbox and spam folder.",
+    "error_title": "Request Failed",
+    "error_description": "Could not send activation email. Please check your email or try again later.",
+    "rate_limit_error": "Request limit exceeded. Please wait a moment before trying again."
   },
   "ForgotPassword": {
     "title": "Forgot Password",
@@ -296,9 +319,18 @@
     "error_register_title": "Register failed!",
     "success_register_title": "Successfully!",
     "ActiveModal": {
-      "title": "Active your account",
+      "title": "Activate your account",
       "description": "An email has been sent to your inbox with an activation link. Please click the link to verify your account.",
-      "btn_sign_in": "Sign in"
+      "sent_to": "Sent to:",
+      "spam_note": "If you don't see the email, please check your Spam/Junk folder.",
+      "btn_resend": "Resend activation email",
+      "btn_resend_cooldown": "Resend in {seconds}s",
+      "resend_success_title": "Email Resent Successfully",
+      "resend_success_description": "A new activation link has been sent to your inbox.",
+      "resend_error_title": "Resend Failed",
+      "resend_error_description": "Unable to resend activation email. Please try again later.",
+      "btn_sign_in": "Sign in",
+      "btn_edit_email": "Wrong email? Back to edit"
     }
   },
   "Category": {
