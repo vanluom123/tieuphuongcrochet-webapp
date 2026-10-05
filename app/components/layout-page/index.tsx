@@ -3,7 +3,7 @@ import { Content } from "antd/es/layout/layout";
 import { App, FloatButton, Layout, Tooltip } from "antd";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { HeartOutlined } from "@ant-design/icons";
+import { GiftOutlined } from "@ant-design/icons";
 import DonateModal from "../donate-modal";
 
 import { ROUTE_PATH } from "../../lib/constant";
@@ -49,7 +49,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
   const donationNode = (
     <Tooltip title="Ủng hộ website" placement="left">
       <FloatButton
-        icon={<HeartOutlined />}
+        icon={<GiftOutlined />}
         type="primary"
         style={{ backgroundColor: "#ff4d4f" }}
         onClick={toggleDonateModal}
