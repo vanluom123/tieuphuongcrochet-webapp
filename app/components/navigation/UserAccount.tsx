@@ -1,26 +1,31 @@
 import { Button, MenuProps, Dropdown, Modal, Avatar } from "antd";
+import { useState, useMemo } from "react";
 import {
   UserOutlined,
   LogoutOutlined,
   DashboardOutlined,
   LoginOutlined,
   UserAddOutlined,
+  StarOutlined,
+  StarFilled,
 } from "@ant-design/icons";
 import { signOut, useSession } from "next-auth/react";
 import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import "../../ui/navigation.scss";
+import PremiumUpgradeModal from "../premium/PremiumUpgradeModal";
 
 const UserAccount = () => {
   const { data: session } = useSession();
   const t = useTranslations("UserAccount");
   const router = useRouter();
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
 
   const userAvatar = session?.user.imageUrl;
   const userId = session?.user.id;
 
-  const items: MenuProps["items"] = [
+  const items = useMemo<MenuProps["items"]>(() => [
     {
       key: "user_profile",
       label: t("profile"),
@@ -41,6 +46,18 @@ const UserAccount = () => {
           },
         ]
       : []),
+    ...(session?.user?.role === USER_ROLES.USER
+      ? [
+          {
+            key: "upgrade_premium",
+            label: t("upgrade_premium") || "Upgrade Premium",
+            icon: <StarOutlined className="upgrade-premium-icon" />,
+            onClick: () => {
+              setIsPremiumModalOpen(true);
+            },
+          },
+        ]
+      : []),
     {
       key: "logout",
       label: t("logout"),
@@ -54,9 +71,9 @@ const UserAccount = () => {
         });
       },
     },
-  ];
+  ], [userId, t, router, setIsPremiumModalOpen]);
 
-  const loginMenu = [
+  const loginMenu = useMemo(() => [
     {
       key: "login",
       label: t("sign_in"),
@@ -73,31 +90,44 @@ const UserAccount = () => {
         router.push(ROUTE_PATH.REGISTER);
       },
     },
-  ];
+  ], [t, router]);
 
   return (
-    <span className="user-menu">
-      <Dropdown
-        arrow
-        menu={{ items: session?.user?.email ? items : loginMenu }}
-      >
-        <Button
-            shape="circle"
-            className="user-menu-icon"
-            icon={
-                userAvatar ? (
-                <Avatar src={userAvatar} size={32} />
-                ) : (
-                <Avatar
-                    style={{ backgroundColor: "#fc8282" }}
-                    icon={<UserOutlined />}
-                    size={32}
-                />
-                )
-          }
-        />
-      </Dropdown>
-    </span>
+    <>
+      <span className="user-menu">
+        <Dropdown
+          arrow
+          menu={{ items: session?.user?.email ? items : loginMenu }}
+        >
+          <Button
+              shape="circle"
+              className="user-menu-icon"
+              icon={
+                  <span className={`user-avatar-container ${session?.user?.role === USER_ROLES.PREMIUM_USER ? 'premium-avatar' : ''}`}>
+                    {userAvatar ? (
+                    <Avatar src={userAvatar} size={32} />
+                    ) : (
+                    <Avatar
+                        className="default-user-avatar"
+                        icon={<UserOutlined />}
+                        size={32}
+                    />
+                    )}
+                    {session?.user?.role === USER_ROLES.PREMIUM_USER && (
+                      <span className="premium-avatar-badge">
+                        <StarFilled />
+                      </span>
+                    )}
+                  </span>
+            }
+          />
+        </Dropdown>
+      </span>
+      <PremiumUpgradeModal 
+        open={isPremiumModalOpen} 
+        onClose={() => setIsPremiumModalOpen(false)} 
+      />
+    </>
   );
 };
 

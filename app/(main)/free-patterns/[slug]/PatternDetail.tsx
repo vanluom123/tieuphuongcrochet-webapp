@@ -1,5 +1,6 @@
 'use client'
 import { Divider, Flex, FloatButton, Tooltip } from 'antd'
+import { HeartFilled, HeartOutlined } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
 import IntroductionCard from '@/app/components/introduction-card'
 import ViewDetailWrapper from '@/app/components/view-detail-wrapper'
@@ -9,13 +10,15 @@ import Image from 'next/image'
 import primaryBookmark from '@/public/primary-bookmark.png'
 import bookmark from '@/public/bookmark.png'
 import CommentSection from '@/app/components/comment/CommentSection'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { removePatternFromCollection } from '@/app/lib/service/collectionService'
 import CollectionPopup from '@/app/components/collection-popup'
 import { ROUTE_PATH } from '@/app/lib/constant'
-import { existInCollection } from '@/app/lib/service/freePatternService'
+import { existInCollection, checkIsPatternLiked } from '@/app/lib/service/freePatternService'
+import { toggleLike } from '@/app/lib/service/interactionService'
+import { ReportView } from '@/app/components/ReportView'
 
 // Lazy load ViewImagesList component
 const ViewImagesList = dynamic(
@@ -31,16 +34,37 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const [isInCollection, setIsInCollection] = useState(pattern?.in_collection || false)
   const [showCollectionPopup, setShowCollectionPopup] = useState(false)
 
+  const [isLiked, setIsLiked] = useState(pattern?.is_liked || false)
+  const [likeCount, setLikeCount] = useState(pattern?.likeCount || 0)
+  const [likeLoading, setLikeLoading] = useState(false)
+  const [viewCount, setViewCount] = useState(pattern?.viewCount || 0)
+
   useEffect(() => {
-    const fetchExistInCollection = async () => {
+    if (pattern?.viewCount !== undefined) {
+      setViewCount(pattern.viewCount)
+    }
+  }, [pattern?.viewCount])
+
+  // Keep a stable reference so ReportView's effect does not re-run (and abort
+  // its request) on every render.
+  const handleViewCounted = useCallback(() => {
+    setViewCount((prev) => prev + 1)
+  }, [])
+
+  useEffect(() => {
+    const fetchUserStatus = async () => {
       if (!pattern?.id) return
 
-      const res = await existInCollection(pattern?.id?.toString() || '')
-      setIsInCollection(res.data || false)
+      const [collectionRes, likedRes] = await Promise.all([
+        existInCollection(pattern.id.toString()),
+        checkIsPatternLiked(pattern.id.toString()).catch(() => ({ data: false })),
+      ])
+      setIsInCollection(collectionRes.data || false)
+      setIsLiked(likedRes.data || false)
     }
 
     if (session?.user && pattern?.id) {
-      fetchExistInCollection()
+      fetchUserStatus()
     }
   }, [pattern?.id, session?.user?.id])
 
@@ -71,12 +95,63 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
     setIsInCollection(true)
   }
 
+  const handleToggleLike = async () => {
+    if (!session?.user) {
+      router.push(ROUTE_PATH.LOGIN)
+      return
+    }
+
+    const patternId = pattern?.id?.toString() || ''
+    if (!patternId) return
+
+    setLikeLoading(true)
+
+    // Optimistic update
+    const wasLiked = isLiked
+    const optimisticIsLiked = !wasLiked
+    setIsLiked(optimisticIsLiked)
+    setLikeCount((prev) => (optimisticIsLiked ? prev + 1 : prev - 1))
+
+    try {
+      const newIsLiked = await toggleLike(patternId, 'FREE_PATTERN')
+      // Sync with server response
+      if (newIsLiked !== optimisticIsLiked) {
+        // Server rejected the toggle, revert count
+        setIsLiked(newIsLiked)
+        setLikeCount((prev) => (wasLiked ? prev + 1 : prev - 1))
+      }
+      // If server matches optimistic, count is already correct
+      // but ensure isLiked is synced
+      setIsLiked(newIsLiked)
+    } catch (error) {
+      // Revert optimistic update on error
+      setIsLiked(wasLiked)
+      setLikeCount((prev) => (wasLiked ? prev + 1 : prev - 1))
+      console.error('Error toggling like:', error)
+    } finally {
+      setLikeLoading(false)
+    }
+  }
+
   return (
     <ViewDetailWrapper isShowAlert alertMessage={t('note')} alertType="warning">
+      {pattern?.id && (
+        <ReportView
+          id={pattern.id.toString()}
+          type="FREE_PATTERN"
+          onViewCounted={handleViewCounted}
+        />
+      )}
       {/* Introducing the free pattern */}
       <div className="pattern-header">
         <Flex vertical gap="small">
-          <IntroductionCard isPreviewAvatar data={pattern} isShowThumbnail />
+          <IntroductionCard
+            isPreviewAvatar
+            data={pattern}
+            isShowThumbnail
+            viewCount={viewCount}
+            likeCount={likeCount}
+          />
         </Flex>
       </div>
 
@@ -90,6 +165,65 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
         content={pattern?.content}
         images={pattern?.files}
       />
+
+      {/* Floating like button with count */}
+      <Tooltip
+        title={
+          !session?.user
+            ? t('login_to_like')
+            : isLiked
+              ? t('unlike')
+              : t('like')
+        }
+      >
+        <FloatButton
+          shape="circle"
+          className="custom-like-button"
+          onClick={handleToggleLike}
+          badge={{ count: likeCount }}
+          icon={
+            likeLoading ? (
+              <span
+                className="like-loading-spinner"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 20,
+                  height: 20,
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 50 50">
+                  <circle
+                    cx="25"
+                    cy="25"
+                    r="20"
+                    fill="none"
+                    stroke="#999"
+                    strokeWidth="5"
+                    strokeDasharray="31.415, 31.415"
+                    transform="rotate(72.0001 25 25)"
+                  >
+                    <animateTransform
+                      attributeName="transform"
+                      type="rotate"
+                      from="0 25 25"
+                      to="360 25 25"
+                      dur="1s"
+                      repeatCount="indefinite"
+                    />
+                  </circle>
+                </svg>
+              </span>
+            ) : isLiked ? (
+              <HeartFilled style={{ color: '#ff4d4f' }} />
+            ) : (
+              <HeartOutlined />
+            )
+          }
+          style={{ zIndex: 10 }}
+        />
+      </Tooltip>
 
       {/* Custom bookmark button for both desktop and mobile */}
       <Tooltip title={isInCollection ? t('remove_from_collection') : t('save')}>

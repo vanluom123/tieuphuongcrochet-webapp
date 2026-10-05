@@ -87,6 +87,8 @@ export interface DataType {
   createdDate?: string
   imagesPreview?: { src: string; alt: string }[]
   in_collection?: boolean // Trạng thái đã bookmark hay chưa
+  likeCount?: number
+  is_liked?: boolean
 }
 
 export interface SearchParams {
@@ -143,11 +145,17 @@ export interface SettingState {
   banners: Banner[]
 }
 
+export interface Setting {
+  key: string
+  value: string
+}
+
 // ---------------------------------- Category ----------------------------------
 
 export interface Category {
   id?: React.Key
   name: string
+  nameEn?: string
   children?: unknown[]
   parentIds?: unknown[]
   key?: string
@@ -182,6 +190,9 @@ export interface Pattern {
   userId?: string
   category_id?: string
   in_collection?: boolean // Trạng thái đã bookmark hay chưa
+  likeCount?: number
+  is_liked?: boolean
+  viewCount?: number
 }
 
 export type TTranslationStatus = 'PENDING' | 'SUCCESS' | 'NONE' | 'ALL'
@@ -214,6 +225,8 @@ export interface Product {
   content?: string
   fileContent?: string
   category_id?: string
+  viewCount?: number
+  likeCount?: number
 }
 
 export interface HomeData {
@@ -231,6 +244,8 @@ export interface TabsItem {
   key: React.Key
   icon?: React.ReactNode
   children?: TabsItem[]
+  nameEn?: string
+  name?: string
 }
 
 // -------------------------- Direction --------------------------
@@ -269,6 +284,8 @@ export interface Post {
   src?: string
   is_home?: boolean
   fileContent?: string
+  blogCategoryId?: string
+  blogCategory?: { id: string }
 }
 
 // -------------------------- Collection --------------------------
@@ -325,4 +342,21 @@ export interface PageResponse<T> {
   totalElements: number
   totalPages: number
   last: boolean
+}
+
+// -------------------------- Payments --------------------------
+
+export interface PaymentOrderRequest {
+  planType: 'MONTHLY' | 'YEARLY'
+  returnUrl: string
+  cancelUrl: string
+}
+
+export interface PaymentOrderResponse {
+  orderId: string
+  approveUrl: string
+}
+
+export interface CapturePaymentRequest {
+  orderId: string
 }

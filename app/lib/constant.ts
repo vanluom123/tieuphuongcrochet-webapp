@@ -25,6 +25,8 @@ export const ROUTE_PATH = {
   PROFILE: '/profile',
   COLLECTIONS: '/collections',
   NOTIFICATIONS: '/notifications',
+  PREMIUM_CAPTURE: '/premium/capture',
+  RESEND_VERIFICATION: '/resend-verification',
 };
 
 export const SOCIAL_LINKS = {
@@ -65,6 +67,7 @@ export const LANGUAGES_LIST = [
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
   USER: 'USER',
+  PREMIUM_USER: 'PREMIUM_USER',
 };
 
 export const LOCAL_STORAGE_NAMES = {
@@ -221,6 +224,7 @@ export const API_ROUTES = {
   SIGNUP: '/api/v1/auth/signup', 
   LOGOUT: '/api/v1/auth/logout',
   RESET_PASSWORD: '/api/v1/auth/password-reset-request',
+  RESET_PASSWORD_SUBMIT: '/api/v1/auth/reset-password',
   CONFIRM: '/api/v1/auth/confirm',
   RESEND_VERIFICATION: '/api/v1/auth/resend-verification-email',
   REFRESH_TOKEN: '/api/v1/auth/refresh-token',
@@ -228,8 +232,10 @@ export const API_ROUTES = {
   // User routes
   USERS: '/api/v1/users',
   USER_PROFILE: '/api/v1/user-profile',
+  USER_CHANGE_PASSWORD: '/api/v1/user-profile/change-password',
   USER_COLLECTIONS: '/api/v1/users/{userId}/collections',
   USER_FREE_PATTERNS: '/api/v1/users/{userId}/free-pattern',
+  USER_LIKED_FREE_PATTERNS: '/api/v1/users/{userId}/liked-free-patterns',
 
   // Pattern routes
   PATTERNS: '/api/v1/patterns',
@@ -269,8 +275,16 @@ export const API_ROUTES = {
   // Notification
   NOTIFICATIONS: '/api/v1/notifications',
 
+  // Interaction
+  INTERACTIONS: '/api/v1/interactions',
+
   // Cloudflare R2
-  R2_PRESIGNED : '/api/r2-presigned'
+  R2_PRESIGNED : '/api/r2-presigned',
+
+  // Payments
+  PAYMENTS_CREATE: '/api/v1/payments/create',
+  PAYMENTS_CAPTURE: '/api/v1/payments/capture',
+  PAYMENTS_PRICES: '/api/v1/payments/prices',
 };
 
 export const PARAMS_FOR_SITEMAP: ListParams = {

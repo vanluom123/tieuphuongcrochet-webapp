@@ -62,3 +62,69 @@ form {
     }
   }
 }
+
+.active-account-modal {
+  .modal-icon-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    .icon-wrapper {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: #fff1f0;
+      color: $colorPrimary;
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid $borderColor;
+    }
+  }
+
+  .registered-email-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 14px 0 10px;
+
+    .email-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: $textPrimaryColor;
+      font-weight: 500;
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      .mail-icon {
+        color: $colorPrimary;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .spam-note {
+    font-size: 12px;
+    color: $textSecondColor;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .resend-section {
+    margin-bottom: 20px;
+    padding: 12px;
+    background: #fdfdfd;
+    border-radius: 8px;
+    border: 1px dashed #e8e8e8;
+  }
+}

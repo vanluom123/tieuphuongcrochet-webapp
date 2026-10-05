@@ -55,8 +55,11 @@
     "createPattern": "Create new chart",
     "updatePattern": "Update chart",
     "login_to_save": "Login to save",
+    "login_to_like": "Login to like",
     "save": "Save to collection",
     "remove_from_collection": "Remove from collection",
+    "like": "Like",
+    "unlike": "Unlike",
     "status": {
       "ALL": "ALL",
       "SUCCESS": "TRANSLATED",
@@ -161,11 +164,51 @@
   "IntroductionCard": {
     "author": "Author",
     "btn_order": "Message",
+    "views": "views",
     "status": {
       "ALL": "ALL",
       "SUCCESS": "TRANSLATED",
       "PENDING": "PENDING",
       "NONE": "NONE"
+    }
+  },
+  "Premium": {
+    "title": "Upgrade to Premium",
+    "description": "Unlock the full potential of the website with our premium membership. Enjoy an elevated, uninterrupted crafting experience.",
+    "upgrade_button": "Upgrade Now with PayPal",
+    "cancel_button": "Cancel",
+    "features": {
+      "ad_free": {
+        "title": "Ad-Free Experience",
+        "description": "Browse patterns and tutorials without any distractions."
+      },
+      "exclusive_patterns": {
+        "title": "Exclusive Patterns",
+        "description": "Gain access to our premium library of handcrafted designs."
+      },
+      "priority_support": {
+        "title": "Priority Support",
+        "description": "Get your questions answered first by our expert artisan team."
+      }
+    },
+    "plans": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "monthly_billing": "billed monthly",
+      "yearly_billing": "billed yearly",
+      "save": "Save {discount}%"
+    },
+    "payment_error": "Failed to initiate payment. Please try again.",
+    "payment_error_generic": "An error occurred while initiating payment.",
+    "capture": {
+      "loading_title": "Processing your upgrade...",
+      "loading_description": "Please wait while we confirm your payment with PayPal. Do not close this page.",
+      "success_title": "Welcome to Premium!",
+      "success_description": "Your payment was successful and your account has been upgraded. Enjoy the ad-free experience and exclusive patterns.",
+      "success_button": "Go to Homepage",
+      "error_title": "Upgrade Failed",
+      "error_description": "There was an issue processing your payment. Your account was not charged. Please try again.",
+      "error_button": "Return Home"
     }
   },
   "UserAccount": {
@@ -175,7 +218,8 @@
     "logout": "Logout",
     "logout_confirm": "Are you sure you want to log out?",
     "dashboard": "Dashboard",
-    "register": "Register"
+    "register": "Register",
+    "upgrade_premium": "Upgrade Premium"
   },
   "Login": {
     "title": "Login",
@@ -196,7 +240,59 @@
     "error_login_title": "Login failed",
     "error_login_unknown_error": "An unknown error occurred",
     "btn_google_login": "Login with Google",
-    "text_Or": "Or"
+    "text_Or": "Or",
+    "unverified_account_alert": "Your account has not been activated yet.",
+    "unverified_account_desc": "Please verify your email address before logging in.",
+    "resend_verification_link": "Didn't receive verification email?",
+    "btn_resend_verification": "Resend activation email",
+    "btn_resend_cooldown": "Resend in {seconds}s"
+  },
+  "ResendVerification": {
+    "title": "Resend Activation Email",
+    "description": "Request a new account activation email",
+    "instruction": "Enter your registered email address. We will send you a new activation link.",
+    "input_email": "Enter your email",
+    "error_msg_required_email": "Please enter your email",
+    "error_msg_incorrect_email": "Email format is incorrect!",
+    "btn_submit": "Send Activation Email",
+    "btn_resend_cooldown": "Resend in {seconds}s",
+    "back_to_login": "Back to Login",
+    "back_to_register": "Create a new account",
+    "success_title": "Email Sent Successfully",
+    "success_description": "A new activation link has been sent. Please check your inbox and spam folder.",
+    "error_title": "Request Failed",
+    "error_description": "Could not send activation email. Please check your email or try again later.",
+    "rate_limit_error": "Request limit exceeded. Please wait a moment before trying again."
+  },
+  "ForgotPassword": {
+    "title": "Forgot Password",
+    "description": "Request a password reset link",
+    "instruction": "Enter your registered email address. We will send you a link to reset your password.",
+    "input_email": "Enter your email",
+    "error_msg_required_email": "Please enter your email",
+    "error_msg_incorrect_email": "Incorrect email format!",
+    "btn_submit": "Send Reset Link",
+    "back_to_login": "Back to Login",
+    "success_title": "Request Sent Successfully",
+    "success_description": "Please check your email for the password reset link.",
+    "error_title": "Request Failed",
+    "error_description": "Could not process password reset request. Please try again later."
+  },
+  "ResetPassword": {
+    "title": "Reset Password",
+    "description": "Enter your new password",
+    "token_missing": "Password reset token is missing. Please use the link in your email.",
+    "token_invalid_or_missing": "The password reset link is invalid or has expired.",
+    "input_new_password": "New password",
+    "input_confirm_password": "Confirm new password",
+    "error_msg_required_password": "Please enter your new password",
+    "error_msg_required_confirm_password": "Please confirm your new password",
+    "password_pattern_msg": "Password must be at least 8 characters long, and include uppercase, lowercase, digit, and a special character",
+    "passwords_do_not_match": "The new password and confirmation password do not match",
+    "btn_submit": "Update Password",
+    "back_to_login": "Back to Login",
+    "success_title": "Password Reset Successful",
+    "success_description": "Your password has been successfully updated. Redirecting to login page..."
   },
   "Register": {
     "title": "Register account",
@@ -223,9 +319,18 @@
     "error_register_title": "Register failed!",
     "success_register_title": "Successfully!",
     "ActiveModal": {
-      "title": "Active your account",
+      "title": "Activate your account",
       "description": "An email has been sent to your inbox with an activation link. Please click the link to verify your account.",
-      "btn_sign_in": "Sign in"
+      "sent_to": "Sent to:",
+      "spam_note": "If you don't see the email, please check your Spam/Junk folder.",
+      "btn_resend": "Resend activation email",
+      "btn_resend_cooldown": "Resend in {seconds}s",
+      "resend_success_title": "Email Resent Successfully",
+      "resend_success_description": "A new activation link has been sent to your inbox.",
+      "resend_error_title": "Resend Failed",
+      "resend_error_description": "Unable to resend activation email. Please try again later.",
+      "btn_sign_in": "Sign in",
+      "btn_edit_email": "Wrong email? Back to edit"
     }
   },
   "Category": {
@@ -266,7 +371,22 @@
     "tabs": {
       "collections": "Collections",
       "patterns": "Charts",
-      "info": "User info"
+      "like": "Liked",
+      "info": "User info",
+      "change_password": "Change password"
+    },
+    "change_password": {
+      "old_password": "Old password",
+      "old_password_required": "Please enter your old password",
+      "new_password": "New password",
+      "new_password_required": "Please enter your new password",
+      "confirm_password": "Confirm new password",
+      "confirm_password_required": "Please confirm your new password",
+      "password_pattern_msg": "Password must be at least 8 characters long, and include uppercase, lowercase, digit, and a special character",
+      "passwords_do_not_match": "The new password and confirmation password do not match",
+      "submit": "Change password",
+      "success_msg": "Password changed successfully",
+      "error_msg": "Failed to change password"
     },
     "collections": {
       "empty": "No collections yet",

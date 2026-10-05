@@ -10,6 +10,7 @@ import { uid } from "@/app/lib/utils";
 import BannerType from "./BannerType";
 import BannerForm, { EdittingBanner, initialEdittingBanner } from "./BannerForm";
 import { createUpdateBanners, fetchBanners, fetchBannerTypes } from "@/app/lib/service/settingService";
+import SubscriptionPricingForm from "./SubscriptionPricingForm";
 
 const Setting = () => {
     const [isUpdatedBList, setIsUpdatedBList] = useState(false);
@@ -105,6 +106,8 @@ const Setting = () => {
                 onRefresh={handleRefreshBannerTypes}
                 loading={loading}
             />
+            <Divider style={{ margin: '30px 0' }} />
+            <SubscriptionPricingForm />
             <Divider style={{ margin: '30px 0' }} />
             <Title level={2} className="align-center">Banners</Title>
             <Collapse

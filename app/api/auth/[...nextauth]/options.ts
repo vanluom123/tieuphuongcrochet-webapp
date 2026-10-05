@@ -29,18 +29,27 @@ export const options: NextAuthOptions = {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
-                const res = await apiService({
-                    baseUrl: process.env.NEXT_PUBLIC_API_URL,
-                    endpoint: API_ROUTES.LOGIN,
-                    method: 'POST',
-                    data: credentials
-                }).catch(() => {
-                    return null;
-                });
-                if (res.success == false) {
+                try {
+                    const res = await apiService({
+                        baseUrl: process.env.NEXT_PUBLIC_API_URL,
+                        endpoint: API_ROUTES.LOGIN,
+                        method: 'POST',
+                        data: credentials
+                    });
+                    if (res?.success === false) {
+                        if (res.code === 6 || res.message?.includes('not verified')) {
+                            throw new Error('EMAIL_NOT_VERIFIED');
+                        }
+                        return null;
+                    }
+                    return res.data;
+                } catch (error: any) {
+                    const msg = error?.message || '';
+                    if (msg === 'EMAIL_NOT_VERIFIED' || msg.includes('not verified') || msg.includes('"code":6') || msg.includes('code: 6')) {
+                        throw new Error('EMAIL_NOT_VERIFIED');
+                    }
                     return null;
                 }
-                return res.data;
             }
         }),
         CredentialsProvider({
@@ -70,13 +79,16 @@ export const options: NextAuthOptions = {
         })
     ],
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger, session }) {
             if (user) {
-                return {
+                token = {
                     ...token,
                     ...user,
                     picture: user.imageUrl
                 };
+            }
+            if (trigger === "update" && session?.role) {
+                token.role = session.role;
             }
             return token;
         },

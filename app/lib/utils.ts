@@ -97,6 +97,7 @@ export const mapTreeData = (data: Category[]): DefaultOptionType[] => {
         const {children, ...rest} = item;
         let newItem: DefaultOptionType = {
             name: rest.name,
+            nameEn: rest.nameEn,
             key: rest.id,
             title: rest.name,
             value: rest.id as string | number,
@@ -353,7 +354,9 @@ export const mapTabsData = (data: DataType[]): TabsItem[] => {
             label: name.toLowerCase(),
             key: key || 'N/A',
             icon: icon,
-        };
+            nameEn: (c as any).nameEn,
+            name: name, // Preserve original Vietnamese/default name
+        } as any;
 
         if (children && children.length > 0) {
             newTab = {

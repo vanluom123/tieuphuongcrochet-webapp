@@ -3,8 +3,12 @@ import { getTranslations } from "next-intl/server";
 import { ROUTE_PATH } from "@/app/lib/constant";
 import Blogs from "./Blogs";
 import { fetchBlogs } from "@/app/lib/service/blogsService";
-import { initialListParams } from "@/app/lib/definitions";
+import { initialListParams, DataType } from "@/app/lib/definitions";
 import StructureData, { createArticleSchemaShort } from "@/app/components/StructureData";
+import {
+  fetchBlogCategories,
+  mapBlogCategoriesToDataType,
+} from "@/app/lib/service/blogCategoryService";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Blog");
@@ -22,15 +26,25 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function getBlogs() {
   const { data, totalRecords } = await fetchBlogs(initialListParams, {
-    // Revalidate at 24 hours
-    revalidate: 86400,
-    tags: ["blogs"],
+    revalidate: 0,
   });
   return { data, totalRecords };
 }
 
+async function getCategories(): Promise<DataType[]> {
+  const categories = await fetchBlogCategories({
+    // Revalidate at 24 hours
+    revalidate: 0,
+    tags: ["blog-categories"],
+  });
+  return mapBlogCategoriesToDataType(categories);
+}
+
 const Blog = async () => {
-  const initialData = await getBlogs();
+  const [initialData, blogCategories] = await Promise.all([
+    getBlogs(),
+    getCategories(),
+  ]);
 
   const schemaList = initialData.data.map((item) =>
     createArticleSchemaShort({
@@ -51,6 +65,7 @@ const Blog = async () => {
           data: initialData.data,
           totalRecord: initialData.totalRecords,
         }}
+        blogCategories={blogCategories}
       />
     </>
   );

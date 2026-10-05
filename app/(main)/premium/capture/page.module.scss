@@ -1,0 +1,56 @@
+.captureContainer {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fdf9f4;
+}
+
+.captureCard {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 48px;
+  box-shadow: 0 8px 32px rgba(28, 28, 25, 0.08);
+  border: 1px solid rgba(217, 193, 188, 0.2);
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+}
+
+.captureSpin {
+  margin-bottom: 24px;
+}
+
+.captureTitle {
+  color: #8e4838;
+  font-family: 'Noto Serif', serif;
+}
+
+.captureText {
+  color: #665a4a;
+}
+
+.captureResultTitle {
+  color: #8e4838;
+  font-family: 'Noto Serif', serif;
+  font-weight: 600;
+}
+
+.captureResultSubtitle {
+  color: #665a4a;
+}
+
+.captureButton {
+  &:global(.ant-btn-primary) {
+    background-color: #8e4838;
+    border-color: #8e4838;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(142, 72, 56, 0.2);
+
+    &:hover {
+      background-color: #a05241;
+      border-color: #a05241;
+    }
+  }
+}
