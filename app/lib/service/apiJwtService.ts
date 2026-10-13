@@ -3,21 +3,22 @@ import * as jwtDecode from 'jsonwebtoken'
 import { JwtPayload } from 'jsonwebtoken'
 
 import apiService from './apiService'
-import refreshAccessToken from '@/app/lib/service/refreshTokenService'
 import { ROUTE_PATH } from '../constant'
 
 // With expiration buffer
 const EXPIRATION_BUFFER_SECONDS = 30 // 30 seconds before actual expiration
 
 export async function handleTokenRefresh() {
+  // getSession() hits /api/auth/session, which runs the NextAuth jwt callback
+  // server-side; the jwt callback refreshes the backend access token there.
+  // The refresh token is never exposed to the client.
   const session = await getSession()
 
-  if (!session || !session.user || !session.user.accessToken) {
+  const accessToken = session?.user?.accessToken
+  if (!accessToken) {
     console.warn('No session or access token found.')
     return null
   }
-
-  let accessToken = session.user.accessToken
 
   // Decode the access token
   const decoded = jwtDecode.decode(accessToken as string) as JwtPayload
@@ -26,32 +27,10 @@ export async function handleTokenRefresh() {
     (decoded.exp && Date.now() >= ((decoded.exp as number) - EXPIRATION_BUFFER_SECONDS) * 1000)
 
   if (isTokenExpired) {
-    try {
-      if (!session.user.refreshToken) {
-        console.warn('No refresh token available.')
-        await handleTokenRefreshFailure()
-        return null
-      }
-
-      const refreshToken = session.user.refreshToken
-
-      const res = await refreshAccessToken(refreshToken as string)
-      if (!res.success) {
-        console.error('Failed to refresh access token.')
-        await handleTokenRefreshFailure()
-        return null
-      }
-
-      accessToken = res.data.accessToken
-      session.user.accessToken = res.data.accessToken
-      session.user.refreshToken = res.data.refreshToken
-
-      return accessToken
-    } catch (e) {
-      console.error('Error during token refresh:', e)
-      await handleTokenRefreshFailure()
-      return null
-    }
+    // Server-side refresh failed or no refresh token exists
+    console.error('Access token expired after server-side refresh attempt.')
+    await handleTokenRefreshFailure()
+    return null
   }
 
   return accessToken
