@@ -320,6 +320,8 @@
     "note_content_1": "Các trường bắt buộc",
     "note_content_2": "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 ký tự đặc biệt, chữ thường và số.",
     "error_register_400": "Email đã tồn tại!",
+    "error_register_500": "Lỗi máy chủ hoặc kết nối mạng, vui lòng thử lại sau.",
+    "error_register_default": "Đã có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại.",
     "success_register_msg": "Đăng ký tài khoản thành công!",
     "error_register_title": "Đăng ký thất bại",
     "success_register_title": "Thành công!",

@@ -5,16 +5,22 @@ import {getAvatar} from "../utils";
 import apiService from "./apiService";
 
 export const fetchHomeData = async (): Promise<HomeData> => {
-    const res: ResponseData<any> = await apiService({
-        endpoint: API_ROUTES.HOMES,
-        method: 'GET',
-        next: {
-            revalidate: 60, // 1 minute
-            tags: ['home'],
-        }
-    });
+    let res: ResponseData<any>;
+    try {
+        res = await apiService({
+            endpoint: API_ROUTES.HOMES,
+            method: 'GET',
+            next: {
+                revalidate: 60, // 1 minute
+                tags: ['home'],
+            }
+        });
+    } catch {
+        // Public landing data: degrade to empty instead of crashing the page
+        return {} as HomeData;
+    }
 
-    if (!res.success) {
+    if (!res?.success || !res.data) {
         return {} as HomeData;
     }
 

@@ -34,9 +34,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigateLogin }) => {
     } else {
       const hasStatusCodeKey =
         res?.statusCode && (res.statusCode === 400 || res.statusCode === 500);
-      const description = hasStatusCodeKey
-        ? t(`error_register_${res.statusCode}`)
-        : t('error_register_default');
+      const description =
+        res?.data?.message ||
+        (hasStatusCodeKey
+          ? t(`error_register_${res.statusCode}`)
+          : t('error_register_default'));
       notification.error({
         message: t('error_register_title'),
         description,

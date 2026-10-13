@@ -320,6 +320,8 @@
     "note_content_1": "required fields",
     "note_content_2": "Password must contain at least 8 characters, including at least 1 uppercase letter, 1 special character, lowercase letter and number.",
     "error_register_400": "Email already exists",
+    "error_register_500": "Server or network error, please try again.",
+    "error_register_default": "An error occurred during registration. Please try again.",
     "success_register_msg": "Account registration successful!",
     "error_register_title": "Register failed!",
     "success_register_title": "Successfully!",
