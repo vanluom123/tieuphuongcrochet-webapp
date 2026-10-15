@@ -6,10 +6,10 @@ import {
   Divider,
   Form,
   Input,
-  notification,
   Row,
   Space,
 } from "antd";
+import { notification } from '@/app/lib/notify';
 import emailjs from "@emailjs/browser";
 import SocialBox from "@/app/components/social-box";
 import { REGEX, ROUTE_PATH, SOCIALS } from "@/app/lib/constant";

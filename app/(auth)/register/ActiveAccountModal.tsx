@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Modal, Typography, Flex } from 'antd';
+import { Button, Modal, Typography, Flex, theme } from 'antd';
 import { MailOutlined, ReloadOutlined, InfoCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 import { useResendCooldown } from '@/app/hooks/useResendCooldown';
@@ -26,6 +26,7 @@ const ActiveAccountModal: React.FC<ActiveAccountModalProps> = ({
   onEditEmail,
 }) => {
   const t = useTranslations('Register.ActiveModal');
+  const { token } = theme.useToken();
   const [isResending, setIsResending] = useState(false);
   const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown(
     email ? `active_modal_${email}` : 'active_modal_default'
@@ -135,7 +136,7 @@ const ActiveAccountModal: React.FC<ActiveAccountModalProps> = ({
       )}
 
       <div className="spam-note">
-        <InfoCircleOutlined style={{ color: '#faad14' }} />
+        <InfoCircleOutlined style={{ color: token.colorWarning }} />
         <span>{t('spam_note')}</span>
       </div>
 

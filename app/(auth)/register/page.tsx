@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Form, Input, Button, Row, Col, Flex, Spin } from 'antd';
+import { Form, Input, Button, Row, Col, Flex, Spin, theme } from 'antd';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -22,6 +22,7 @@ const RegisterPage = () => {
     const [form] = Form.useForm();
     const router = useRouter();
     const t = useTranslations('Register');
+    const { token } = theme.useToken();
 
     const onCancel = () => {
         router.push(ROUTE_PATH.LOGIN);
@@ -143,7 +144,7 @@ const RegisterPage = () => {
                                             <strong>{t('note_title')}:</strong>
                                         </p>
                                         <div>
-                                            <p>- <span style={{ color: '#ff4d4f' }}>(*)</span>: {t('note_content_1')}</p>
+                                            <p>- <span style={{ color: token.colorError }}>(*)</span>: {t('note_content_1')}</p>
                                             <p>- {t('note_content_2')}</p>
                                         </div>
                                     </div>

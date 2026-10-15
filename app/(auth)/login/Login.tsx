@@ -222,7 +222,7 @@ const Login = () => {
                         <div style={{ textAlign: 'center', marginTop: 14, marginBottom: 14 }}>
                             <Link
                                 href={unverifiedEmail ? `${ROUTE_PATH.RESEND_VERIFICATION}?email=${encodeURIComponent(unverifiedEmail)}` : ROUTE_PATH.RESEND_VERIFICATION}
-                                style={{ fontSize: 13, color: '#707070' }}
+                                style={{ fontSize: 14, color: '#707070' }}
                             >
                                 {t('resend_verification_link')}
                             </Link>

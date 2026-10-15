@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react';
-import { Card, Skeleton, Tooltip } from 'antd';
+import { Card, Skeleton, Tooltip, theme } from 'antd';
 import { useTranslations } from 'next-intl';
 import { EditOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import Link from 'next/link'
@@ -35,6 +35,7 @@ const ProductCard = (
 	}: ProductCardProps) => {
 	const t = useTranslations("Btn");
 	const { Meta } = Card;
+	const { token } = theme.useToken();
 	const { currency_code, price, name, src, link, id } = product;
 
 	const onClickBtn = () => {
@@ -69,14 +70,14 @@ const ProductCard = (
 				</>
 			}
 			actions={[
-				<Tooltip key="buy-tooltip" color='#fc8282' title="Buy">
+				<Tooltip key="buy-tooltip" color={token.colorPrimary} title="Buy">
 					<a key='shopping' target='_blank' href={link || '#'} rel="noopener noreferrer">
-						<ShoppingCartOutlined style={{ fontSize: 18 }} />
+						<ShoppingCartOutlined style={{ fontSize: token.fontSizeLG }} />
 					</a>
 				</Tooltip>,
-				<Tooltip key="view-detail-tooltip" color='#fc8282' title={t('btn_view_detail')}>
+				<Tooltip key="view-detail-tooltip" color={token.colorPrimary} title={t('btn_view_detail')}>
 					<Link key="edit" href={`${parentLink}/${id}`}>
-						<EditOutlined style={{ fontSize: 18 }} />
+						<EditOutlined style={{ fontSize: token.fontSizeLG }} />
 					</Link>
 				</Tooltip>
 			]}

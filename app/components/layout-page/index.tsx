@@ -1,6 +1,6 @@
 "use client";
 import { Content } from "antd/es/layout/layout";
-import { App, FloatButton, Layout, Tooltip } from "antd";
+import { App, FloatButton, Layout, Tooltip, theme } from "antd";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { GiftOutlined } from "@ant-design/icons";
@@ -21,6 +21,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const [currentNav, setCurrentNav] = useState(ROUTE_PATH.HOME);
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
+  const { token } = theme.useToken();
 
   const toggleDonateModal = useCallback(() => {
     setIsDonateModalOpen((prev) => !prev);
@@ -51,7 +52,7 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
       <FloatButton
         icon={<GiftOutlined />}
         type="primary"
-        style={{ backgroundColor: "#ff4d4f" }}
+        style={{ backgroundColor: token.colorError }}
         onClick={toggleDonateModal}
         className="float-btn-donate"
       />

@@ -1,7 +1,7 @@
 'use client'
 
 import React, {useState} from 'react';
-import {Avatar, Button, Dropdown, Form, Input, Menu, Space, Typography} from 'antd';
+import {Avatar, Button, Dropdown, Form, Input, Menu, Space, Typography, theme} from 'antd';
 import {CommentData} from '../../lib/definitions';
 import {DeleteOutlined, EditOutlined, EllipsisOutlined, UserOutlined} from '@ant-design/icons';
 import {createUpdateComment, deleteComment, fetchCommentReplies} from '../../lib/service/commentService';
@@ -11,6 +11,7 @@ import {useRouter} from 'next/navigation';
 import {ROUTE_PATH, USER_ROLES} from '../../lib/constant';
 import {timeUtils} from '@/app/lib/utils';
 import {useLocale} from "next-intl";
+import '../../ui/components/comment.scss';
 
 const {TextArea} = Input;
 
@@ -42,6 +43,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     const [loadedReplies, setLoadedReplies] = useState(false);
     const [loadingReplies, setLoadingReplies] = useState(false);
     const locale = useLocale();
+    const {token} = theme.useToken();
 
     // Lấy ký tự đầu tiên của tên user nếu ảnh không tải được
     const fallbackCharacter = comment.username.charAt(0).toUpperCase();
@@ -174,11 +176,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
     };
 
     return (
-        <div className="comment-item" style={{marginBottom: 16, marginLeft: level > 0 ? 40 : 0}}>
-            <div className="comment-content" style={{display: 'flex'}}>
+        <div className={level > 0 ? 'comment-item comment-item--reply' : 'comment-item'}>
+            <div className="comment-content">
                 <Avatar
                     src={comment.userAvatar}
-                    style={{backgroundColor: '#FF8282', verticalAlign: 'middle', cursor: 'pointer'}}
+                    className="comment-avatar"
+                    style={{backgroundColor: token.colorPrimary}}
                     icon={!comment.userAvatar && <UserOutlined/>}
                     alt={comment.username || 'Ẩn danh'}
                     onClick={() => navigateToUserProfile(comment.userId)}
@@ -186,18 +189,18 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     {fallbackCharacter}
                 </Avatar>
 
-                <div style={{marginLeft: 12, flex: 1}}>
+                <div className="comment-main">
                     {isEditing ? (
-                        <div className="comment-edit-form" style={{marginTop: 8}}>
+                        <div className="comment-edit-form">
                             <Form layout="vertical">
-                                <Form.Item style={{marginBottom: 12}}>
+                                <Form.Item>
                                     <TextArea
                                         value={editContent}
                                         onChange={(e) => setEditContent(e.target.value)}
                                         autoSize={{minRows: 2, maxRows: 6}}
                                     />
                                 </Form.Item>
-                                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                <div className="comment-edit-actions">
                                     <Space>
                                         <Button size="small" onClick={handleCancelEdit}>
                                             Hủy
@@ -216,16 +219,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         </div>
                     ) : (
                         <>
-                            <div className="comment-bubble" style={{
-                                backgroundColor: '#f0f2f5',
-                                borderRadius: 18,
-                                padding: '8px 12px',
-                                display: 'inline-block',
-                                maxWidth: '100%'
-                            }}>
+                            <div className="comment-bubble" style={{backgroundColor: token.colorBgLayout}}>
                                 <Typography.Text
                                     strong
-                                    style={{cursor: 'pointer'}}
+                                    className="comment-username"
                                     onClick={() => navigateToUserProfile(comment.userId)}
                                 >
                                     {comment.username || 'Ẩn danh'}
@@ -233,23 +230,23 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                 {comment.mentionedUsername && comment.mentionedUserId && (
                                     <Typography.Text
                                         type="secondary"
-                                        style={{marginLeft: 4, cursor: 'pointer'}}
+                                        className="comment-mentioned"
                                         onClick={() => navigateToUserProfile(comment.mentionedUserId || '')}
                                     >
                                         @{comment.mentionedUsername}
                                     </Typography.Text>
                                 )}
-                                <Typography.Paragraph style={{marginBottom: 0, whiteSpace: 'pre-wrap'}}>
+                                <Typography.Paragraph className="comment-text">
                                     {comment.content || ''}
                                 </Typography.Paragraph>
                             </div>
 
-                            <div className="comment-actions" style={{marginTop: 4}}>
+                            <div className="comment-actions">
                                 <Space size="middle">
                                     <Button type="link" size="small" onClick={handleReplyClick}>
                                         Trả lời
                                     </Button>
-                                    <Typography.Text type="secondary" style={{fontSize: 12}}>
+                                    <Typography.Text type="secondary" className="comment-time">
                                         {timeUtils.timeAgo(comment.createdDate, locale)}
                                     </Typography.Text>
                                     {(session?.user?.id === comment.userId || session?.user?.role === USER_ROLES.ADMIN) && (
@@ -263,7 +260,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     )}
 
                     {isReplying && (
-                        <div style={{marginTop: 8}}>
+                        <div className="comment-reply-form">
                             <CommentForm
                                 blogPostId={blogPostId}
                                 productId={productId}
@@ -300,7 +297,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         <Button
                             type="link"
                             onClick={handleLoadReplies}
-                            style={{paddingLeft: 0}}
+                            className="comment-load-replies"
                             loading={loadingReplies}
                         >
                             Xem {comment.replyCount} {comment.replyCount === 1 ? 'câu trả lời' : 'câu trả lời'}
@@ -308,7 +305,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     )}
 
                     {showReplies && replies.length > 0 && (
-                        <div className="comment-replies" style={{marginTop: 8}}>
+                        <div className="comment-replies">
                             {replies.map((reply, index) => (
                                 <CommentItem
                                     key={getReplyKey(reply, index)}
@@ -343,7 +340,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                             <Button
                                 type="text"
                                 onClick={handleLoadReplies}
-                                style={{marginTop: 8}}
+                                className="comment-hide-replies"
                             >
                                 Ẩn câu trả lời
                             </Button>

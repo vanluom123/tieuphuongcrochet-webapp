@@ -29,6 +29,7 @@ import {
 import FormattedCurrency from "../forrmat-currency";
 import "../../ui/components/introduction-card.scss";
 import ShareButton from "../share-button";
+import StatBadge from "../stat-badge";
 
 interface IntroductionCardProps {
   data: Pattern | Product;
@@ -153,16 +154,10 @@ const IntroductionCard = ({
             </div>
             <Flex align="center" gap={12}>
               {typeof currentViewCount === "number" && (
-                <Flex align="center" gap={4} className="creator-views" style={{ color: "#666", fontSize: 13 }}>
-                  <EyeOutlined style={{ fontSize: 15 }} />
-                  <span>{currentViewCount}</span>
-                </Flex>
+                <StatBadge icon={<EyeOutlined />} count={currentViewCount} />
               )}
               {typeof currentLikeCount === "number" && (
-                <Flex align="center" gap={4} className="creator-likes" style={{ color: "#666", fontSize: 13 }}>
-                  <HeartOutlined style={{ fontSize: 15 }} />
-                  <span>{currentLikeCount}</span>
-                </Flex>
+                <StatBadge icon={<HeartOutlined />} count={currentLikeCount} />
               )}
             </Flex>
           </Flex>
@@ -235,16 +230,10 @@ const IntroductionCard = ({
                 </div>
               )}
               {typeof currentViewCount === "number" && (
-                <Flex align="center" gap={4} style={{ color: "#666", fontSize: 13 }}>
-                  <EyeOutlined style={{ fontSize: 14 }} />
-                  <span>{currentViewCount} {t("views")}</span>
-                </Flex>
+                <StatBadge icon={<EyeOutlined />} count={currentViewCount} suffix={t("views")} />
               )}
               {typeof currentLikeCount === "number" && (
-                <Flex align="center" gap={4} style={{ color: "#666", fontSize: 13 }}>
-                  <HeartOutlined style={{ fontSize: 14 }} />
-                  <span>{currentLikeCount}</span>
-                </Flex>
+                <StatBadge icon={<HeartOutlined />} count={currentLikeCount} />
               )}
             </Flex>
 

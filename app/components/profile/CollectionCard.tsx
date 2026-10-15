@@ -1,6 +1,6 @@
 'use client'
 
-import {Card, Flex, Tooltip, Typography} from 'antd';
+import {Card, Flex, Tooltip, Typography, theme} from 'antd';
 import {DeleteOutlined, EditOutlined, FolderOutlined} from '@ant-design/icons';
 import {useTranslations} from 'next-intl';
 import {Collection} from '@/app/lib/definitions';
@@ -25,6 +25,7 @@ const CollectionCard = ({
                             isShowActions = false
                         }: CollectionCardProps) => {
     const t = useTranslations('Profile');
+    const {token} = theme.useToken();
     const {name, description, totalPatterns, avatar} = collection;
 
     const handleEdit = (e: React.MouseEvent) => {
@@ -60,14 +61,14 @@ const CollectionCard = ({
                 )
             }
             actions={isShowActions ? [
-                <Tooltip key="edit-tooltip" color='#fc8282' title={'edit'}>
+                <Tooltip key="edit-tooltip" color={token.colorPrimary} title={'edit'}>
                 	<span key="edit" onClick={handleEdit}>
-                		<EditOutlined style={{fontSize: 18}}/>
+                		<EditOutlined style={{fontSize: token.fontSizeLG}}/>
                 	</span>
                 </Tooltip>,
-                <Tooltip key="delete-tooltip" color='#fc8282' title={'delete'}>
+                <Tooltip key="delete-tooltip" color={token.colorPrimary} title={'delete'}>
 					<span key='delete' onClick={handleDelete}>
-						<DeleteOutlined style={{fontSize: 18}}/>
+						<DeleteOutlined style={{fontSize: token.fontSizeLG}}/>
 					</span>
                 </Tooltip>
             ] : []}

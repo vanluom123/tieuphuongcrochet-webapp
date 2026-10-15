@@ -23,7 +23,7 @@
     color: $textSecondColor;
 
     .creator-link {
-      font-size: $fontSize_10;
+      font-size: $fontSize_12;
       color: $textSecondColor;
 
       &:hover {
@@ -92,5 +92,12 @@
       }
 
     }
+  }
+}
+
+@media (pointer: coarse) {
+  .free-pattern-card .like-button {
+    min-width: 44px;
+    min-height: 44px;
   }
 }

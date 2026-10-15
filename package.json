@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:styles": "stylelint \"app/**/*.scss\""
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.1",
@@ -55,7 +56,9 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
+    "postcss-scss": "^4.0.9",
     "prettier": "^3.6.2",
+    "stylelint": "^17.16.0",
     "typescript": "^5"
   }
 }

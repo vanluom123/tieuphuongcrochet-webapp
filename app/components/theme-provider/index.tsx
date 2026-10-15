@@ -12,7 +12,9 @@ export function ThemeProvider({ children }: Props) {
 		<ConfigProvider
 			theme={{
 				token: {
-					colorPrimary: '#fc8282',
+					colorPrimary: '#d43d3d',
+					colorPrimaryHover: '#c93333',
+					colorPrimaryActive: '#ad2b2b',
 				},
 				/* here is your component tokens */
 				components: {

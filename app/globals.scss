@@ -1019,6 +1019,35 @@ body {
   // }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .slick-list .slick-slide {
+    transition-duration: 0.01ms !important;
+
+    &.slick-active .banner-item__infor {
+
+      .title,
+      .content,
+      .btn-view {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+      }
+    }
+  }
+
+  .scroll-animate {
+
+    .animation-wrap,
+    .animation-alert,
+    .form-contact {
+      transition-duration: 0.01ms !important;
+    }
+
+    &.scrolling .animation-wrap .img-about {
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
 // Editor view
 .editor-view {
   a {

@@ -16,7 +16,7 @@ const CopyRight = () => (
 			<SocialLink
 				href={SOCIAL_LINKS.FACEBOOK}
 				icon={<FacebookOutlined
-					style={{ fontSize: 22 }} />}
+					style={{ fontSize: 20 }} />}
 			/>
 			<Divider type='vertical' />
 			<SocialLink

@@ -54,6 +54,20 @@
   100% { transform: rotate(360deg); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .premium-modal-container {
+    animation: none !important;
+  }
+
+  .premium-modal-container::before {
+    animation: none !important;
+  }
+
+  .save-badge {
+    animation: none !important;
+  }
+}
+
 .premium-modal-title {
   color: #8e4838 !important;
   font-family: 'Noto Serif', serif !important;

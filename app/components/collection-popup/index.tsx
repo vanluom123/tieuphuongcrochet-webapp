@@ -1,6 +1,7 @@
 'use client'
 
-import { Button, Col, Empty, Form, Input, List, message, Modal, Row, Spin } from 'antd'
+import { Button, Col, Empty, Form, Input, List, Modal, Row, Spin, theme } from 'antd'
+import { message } from '@/app/lib/notify'
 import { FolderOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
@@ -26,6 +27,7 @@ const CollectionPopup = ({
   onSuccess,
 }: CollectionPopupProps) => {
   const t = useTranslations('CollectionPopup')
+  const { token } = theme.useToken()
   const { data: session } = useSession()
   const [form] = Form.useForm()
 
@@ -203,7 +205,7 @@ const CollectionPopup = ({
                       style={{
                         fontSize:
                           typeof window !== 'undefined' && window.innerWidth < 768 ? 24 : 20,
-                        color: '#1890ff',
+                        color: token.colorInfo,
                       }}
                     />
                   )

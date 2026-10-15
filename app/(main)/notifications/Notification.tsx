@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { Typography, List, Button, Pagination, Tag, Empty, message, Popconfirm } from 'antd';
+import { Typography, List, Button, Pagination, Tag, Empty, Popconfirm } from 'antd';
+import { message } from '@/app/lib/notify';
 import { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

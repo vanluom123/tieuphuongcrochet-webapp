@@ -1,0 +1,14 @@
+{
+  "customSyntax": "postcss-scss",
+  "rules": {
+    "color-no-hex": [true, { "severity": "warning" }]
+  },
+  "overrides": [
+    {
+      "files": ["**/variables.module.scss"],
+      "rules": {
+        "color-no-hex": null
+      }
+    }
+  ]
+}

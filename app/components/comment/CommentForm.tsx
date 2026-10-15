@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, message, Row, Space, Spin } from 'antd';
+import { Button, Col, Form, Input, Row, Space, Spin } from 'antd';
+import { message } from '@/app/lib/notify';
 import { createUpdateComment } from '../../lib/service/commentService';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';

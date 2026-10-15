@@ -1,0 +1,88 @@
+@import "../../variables.module.scss";
+
+.comment-item {
+  margin-bottom: 16px;
+
+  &.comment-item--reply {
+    margin-left: 32px;
+  }
+
+  .comment-content {
+    display: flex;
+  }
+
+  .comment-avatar {
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  .comment-main {
+    margin-left: 12px;
+    flex: 1;
+  }
+
+  .comment-bubble {
+    border-radius: 18px;
+    padding: 8px 12px;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .comment-username {
+    cursor: pointer;
+  }
+
+  .comment-mentioned {
+    margin-left: 4px;
+    cursor: pointer;
+  }
+
+  .comment-text {
+    margin-bottom: 0;
+    white-space: pre-wrap;
+  }
+
+  .comment-actions {
+    margin-top: 4px;
+
+    .comment-time {
+      font-size: $fontSize_12;
+    }
+  }
+
+  .comment-edit-form {
+    margin-top: 8px;
+
+    .ant-form-item {
+      margin-bottom: 12px;
+    }
+  }
+
+  .comment-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .comment-reply-form {
+    margin-top: 8px;
+  }
+
+  .comment-load-replies {
+    padding-left: 0;
+  }
+
+  .comment-replies {
+    margin-top: 8px;
+  }
+
+  .comment-hide-replies {
+    margin-top: 8px;
+  }
+}
+
+@media (pointer: coarse) {
+  .comment-item .comment-actions .ant-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

@@ -145,6 +145,14 @@ const NotificationBell: React.FC = () => {
               <List.Item
                 className={`notification-item ${!notification.read ? 'unread' : ''}`}
                 onClick={() => handleNotificationClick(notification)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleNotificationClick(notification);
+                  }
+                }}
+                tabIndex={0}
+                role="button"
               >
                 <div className="notification-item-avatar">
                   <div className="avatar-container">
@@ -194,9 +202,16 @@ const NotificationBell: React.FC = () => {
         onOpenChange={setVisible}
         overlayClassName="notification-popover"
       >
-        <Badge count={unreadCount} overflowCount={99}>
-          <BellOutlined className="bell-icon" />
-        </Badge>
+        <Button
+          type="text"
+          className="bell-button"
+          aria-label={t('title')}
+          aria-expanded={visible}
+        >
+          <Badge count={unreadCount} overflowCount={99}>
+            <BellOutlined className="bell-icon" />
+          </Badge>
+        </Button>
       </Popover>
     </div>
   );

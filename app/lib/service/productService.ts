@@ -3,7 +3,7 @@ import {API_ROUTES} from "../constant";
 import {DataType, FileUpload, ListParams, Product, ResponseData} from "../definitions";
 import {getAvatar} from "../utils";
 import apiService from "./apiService";
-import {notification} from "antd";
+import {notification} from "../notify";
 import apiJwtService from "./apiJwtService";
 
 export const fetchProducts = async (

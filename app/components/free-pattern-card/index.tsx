@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip } from 'antd'
+import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip, theme } from 'antd'
 import {
   DeleteFilled,
   EditFilled,
@@ -26,6 +26,7 @@ import whiteBookmark from '@/public/white-bookmark.png'
 import primaryBookmark from '@/public/primary-bookmark.png'
 import { getIconTag } from '../free-pattern-status'
 import CollectionPopup from '../collection-popup'
+import StatBadge from '../stat-badge'
 import '../../ui/components/freePatternCard.scss'
 
 interface FreePatternCardProps {
@@ -65,6 +66,7 @@ const FreePatternCard = ({
   } = pattern
   const t = useTranslations('FreePattern')
   const profileT = useTranslations('Profile')
+  const { token } = theme.useToken()
   const { data: session } = useSession()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -277,42 +279,42 @@ const FreePatternCard = ({
                     </Link>
                   </div>
                   <Flex align="center" gap={16} onClick={(e) => e.stopPropagation()}>
-                    <Flex align="center" gap={2}>
-                      <Tooltip
-                        title={
-                          !session?.user
-                            ? t('login_to_like')
-                            : isLiked
-                              ? t('unlike')
-                              : t('like')
-                        }
-                      >
-                        <Button
-                          type="text"
-                          size="small"
-                          loading={likeLoading}
-                          disabled={likeLoading}
-                          onClick={handleToggleLike}
-                          className={`like-button ${isLiked ? 'liked' : ''}`}
-                          icon={
-                            isLiked ? (
-                              <HeartFilled style={{ color: '#ff4d4f', fontSize: 14 }} />
-                            ) : (
-                              <HeartOutlined style={{ fontSize: 14 }} />
-                            )
+                    <StatBadge
+                      gap={2}
+                      icon={
+                        <Tooltip
+                          title={
+                            !session?.user
+                              ? t('login_to_like')
+                              : isLiked
+                                ? t('unlike')
+                                : t('like')
                           }
-                        />
-                      </Tooltip>
-                      {likeCount > 0 && (
-                        <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{likeCount}</span>
-                      )}
-                    </Flex>
-                    <Flex align="center" gap={2}>
-                      <EyeOutlined style={{ fontSize: 14, color: '#666' }} />
-                      {(viewCount || 0) > 0 && (
-                        <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{viewCount}</span>
-                      )}
-                    </Flex>
+                        >
+                          <Button
+                            type="text"
+                            size="small"
+                            loading={likeLoading}
+                            disabled={likeLoading}
+                            onClick={handleToggleLike}
+                            className={`like-button ${isLiked ? 'liked' : ''}`}
+                            icon={
+                              isLiked ? (
+                                <HeartFilled style={{ color: token.colorError, fontSize: 14 }} />
+                              ) : (
+                                <HeartOutlined style={{ fontSize: 14 }} />
+                              )
+                            }
+                          />
+                        </Tooltip>
+                      }
+                      count={likeCount > 0 ? likeCount : undefined}
+                    />
+                    <StatBadge
+                      gap={2}
+                      icon={<EyeOutlined />}
+                      count={(viewCount || 0) > 0 ? viewCount : undefined}
+                    />
                   </Flex>
                 </Flex>
               }

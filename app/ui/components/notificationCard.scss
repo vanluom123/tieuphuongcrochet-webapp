@@ -79,6 +79,12 @@
 
     .notification-content {
         margin-bottom: 12px;
+        border-radius: 4px;
+
+        &:focus-visible {
+            outline: 2px solid $colorPrimary;
+            outline-offset: 2px;
+        }
     }
 
     .notification-footer {

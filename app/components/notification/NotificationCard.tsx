@@ -92,7 +92,18 @@ const NotificationCard = ({ notification, onDelete, onMarkAsRead, onNotification
       </Popconfirm>
     </div>
 
-    <div className="notification-content" onClick={() => onNotificationClick(notification)}>
+    <div
+      className="notification-content"
+      role="button"
+      tabIndex={0}
+      onClick={() => onNotificationClick(notification)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onNotificationClick(notification);
+        }
+      }}
+    >
       <Title level={5}>{notification.title}</Title>
       <Text>{notification.message}</Text>
     </div>

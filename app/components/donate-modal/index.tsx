@@ -1,5 +1,5 @@
 "use client"
-import {Divider, Modal, Space, Typography} from 'antd';
+import {Divider, Modal, Space, Typography, theme} from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 import PayPalDonateButton from "@/app/components/donate-modal/PayPalDonateButton";
@@ -14,6 +14,7 @@ interface DonateModalProps {
 
 const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
   const t = useTranslations('DonateModal');
+  const { token } = theme.useToken();
   return (
     <Modal
       open={isOpen}
@@ -24,7 +25,7 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
       title={
         <div style={{ textAlign: 'center' }}>
           <Title level={3} className='donate-modal-title'>
-            <HeartOutlined style={{ color: '#ff4d4f', marginRight: 8 }} />
+            <HeartOutlined style={{ color: token.colorError, marginRight: 8 }} />
             {t('title')}
           </Title>
         </div>
@@ -38,7 +39,7 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
           <Space direction="vertical" style={{ width: '100%' }}>
             <PayPalDonateButton />
             <Divider type="horizontal">
-              <Text style={{ fontSize: 16, color: '#888', display: 'block'}}>{t('or')}</Text>
+              <Text style={{ fontSize: 16, color: token.colorTextSecondary, display: 'block'}}>{t('or')}</Text>
             </Divider>
             <QRDonate />
           </Space>

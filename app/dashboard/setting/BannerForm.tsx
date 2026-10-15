@@ -4,7 +4,6 @@ import {
   ColorPicker,
   Form,
   Input,
-  notification,
   Row,
   Select,
   Space,
@@ -12,6 +11,7 @@ import {
   Typography,
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+import { notification } from '@/app/lib/notify'
 
 import { map } from 'lodash'
 import { memo, useEffect } from 'react'

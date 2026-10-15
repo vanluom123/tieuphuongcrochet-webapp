@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Typography, Space, message, Spin } from "antd";
+import { Modal, Button, Typography, Space, Spin } from "antd";
+import { message } from '@/app/lib/notify';
 import { CheckCircleFilled } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import { paymentService } from "@/app/lib/service/paymentService";

@@ -1,5 +1,5 @@
 'use client'
-import { Divider, Flex, FloatButton, Tooltip } from 'antd'
+import { Divider, Flex, FloatButton, Tooltip, theme } from 'antd'
 import { HeartFilled, HeartOutlined } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
 import IntroductionCard from '@/app/components/introduction-card'
@@ -28,6 +28,7 @@ const ViewImagesList = dynamic(
 
 const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const t = useTranslations('FreePattern')
+  const { token } = theme.useToken()
   const { data: session } = useSession()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -199,7 +200,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
                     cy="25"
                     r="20"
                     fill="none"
-                    stroke="#999"
+                    stroke={token.colorTextTertiary}
                     strokeWidth="5"
                     strokeDasharray="31.415, 31.415"
                     transform="rotate(72.0001 25 25)"
@@ -216,7 +217,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
                 </svg>
               </span>
             ) : isLiked ? (
-              <HeartFilled style={{ color: '#ff4d4f' }} />
+              <HeartFilled style={{ color: token.colorError }} />
             ) : (
               <HeartOutlined />
             )
@@ -249,7 +250,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
                     cy="25"
                     r="20"
                     fill="none"
-                    stroke="#999"
+                    stroke={token.colorTextTertiary}
                     strokeWidth="5"
                     strokeDasharray="31.415, 31.415"
                     transform="rotate(72.0001 25 25)"

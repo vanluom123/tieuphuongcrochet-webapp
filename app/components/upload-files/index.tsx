@@ -2,12 +2,12 @@ import { memo, useEffect, useState } from "react";
 import ImgCrop from "antd-img-crop";
 import { filter, map } from "lodash";
 import { UploadOutlined } from "@ant-design/icons";
-import { Modal, Radio, Upload, UploadFile, UploadProps, message } from "antd";
+import { Modal, Radio, Upload, UploadFile, UploadProps } from "antd";
 
 import { FileUpload, UPLOAD_MODES } from "@/app/lib/definitions";
 import { UploadMode } from "@/app/lib/definitions";
 import { getBase64, uid } from "@/app/lib/utils";
-import { notification } from "@/app/lib/notify";
+import { message, notification } from "@/app/lib/notify";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 

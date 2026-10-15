@@ -218,3 +218,10 @@
     transition: all .3s;
   }
 }
+
+@media (pointer: coarse) {
+  .data-list .direction-icon .ant-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
