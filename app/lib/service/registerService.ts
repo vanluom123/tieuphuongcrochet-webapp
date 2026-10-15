@@ -16,7 +16,7 @@ function toAuthResult(error: unknown): AuthResult {
       data: error.data ?? { message: error.message },
     }
   }
-  return { status: false, data: { message: 'Network error' } }
+  return { status: false, statusCode: 500, data: { message: 'Network error' } }
 }
 
 export const registerService = async (data: User): Promise<AuthResult> => {

@@ -33,8 +33,15 @@ const RegisterPage = () => {
         const res = await registerService(values);
         if (res?.status) {
             setFormState({ ...formState, isModalVisible: true });
-        } else if (res?.statusCode) {
-            notification.error({ message: t('error_register_title'), description: t(`error_register_${res.statusCode}`) });
+        } else {
+            const hasStatusCodeKey = res?.statusCode && (res.statusCode === 400 || res.statusCode === 500);
+            const description = hasStatusCodeKey
+                ? t(`error_register_${res.statusCode}`)
+                : res?.data?.message || t('error_register_default');
+            notification.error({
+                message: t('error_register_title'),
+                description,
+            });
         }
         setFormState({ ...formState, isDisable: false, isLoading: false });
     }

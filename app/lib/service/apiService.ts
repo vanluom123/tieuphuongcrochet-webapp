@@ -51,7 +51,9 @@ async function parseResponse(response: Response): Promise<any> {
 }
 
 function isRetryable(error: unknown): boolean {
-  if (error instanceof ApiError) return false
+  if (error instanceof ApiError) {
+    return error.statusCode !== undefined && [502, 503, 504].includes(error.statusCode)
+  }
   if (error instanceof DOMException && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
     return true
   }

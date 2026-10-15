@@ -9,11 +9,31 @@ import refreshAccessToken from '@/app/lib/service/refreshTokenService';
 
 const EXPIRATION_BUFFER_SECONDS = 30
 
+interface RefreshResult {
+    accessToken: string;
+    refreshToken?: string;
+}
+
+// In-flight refresh promises map to prevent race conditions on concurrent requests
+const inFlightRefreshMap = new Map<string, Promise<RefreshResult | null>>();
+
+async function doRefreshAccessToken(refreshToken: string): Promise<RefreshResult | null> {
+    const res = await refreshAccessToken(refreshToken);
+    if (res?.success && res.data?.accessToken) {
+        return {
+            accessToken: res.data.accessToken,
+            refreshToken: res.data.refreshToken,
+        };
+    }
+    return null;
+}
+
 // Runs server-side inside the NextAuth JWT flow: the refresh token never leaves
 // the encrypted session cookie, only the access token is handed to the client.
 async function ensureFreshAccessToken(token: JWT): Promise<JWT> {
     const accessToken = token.accessToken as string | null | undefined;
-    if (!accessToken || !token.refreshToken) {
+    const refreshToken = token.refreshToken as string | null | undefined;
+    if (!accessToken || !refreshToken) {
         return token;
     }
 
@@ -27,17 +47,27 @@ async function ensureFreshAccessToken(token: JWT): Promise<JWT> {
     }
 
     try {
-        const res = await refreshAccessToken(token.refreshToken as string);
-        if (res?.success && res.data?.accessToken) {
-            token.accessToken = res.data.accessToken;
-            if (res.data.refreshToken) {
-                token.refreshToken = res.data.refreshToken;
-            }
+        let refreshPromise = inFlightRefreshMap.get(refreshToken);
+        if (!refreshPromise) {
+            refreshPromise = doRefreshAccessToken(refreshToken).finally(() => {
+                inFlightRefreshMap.delete(refreshToken);
+            });
+            inFlightRefreshMap.set(refreshToken, refreshPromise);
         }
-        // On failure keep the current token: the client expiry check in
-        // apiJwtService decides when to sign out.
+
+        const freshTokens = await refreshPromise;
+        if (freshTokens?.accessToken) {
+            token.accessToken = freshTokens.accessToken;
+            if (freshTokens.refreshToken) {
+                token.refreshToken = freshTokens.refreshToken;
+            }
+            delete token.error;
+        } else {
+            token.error = 'RefreshAccessTokenError';
+        }
     } catch (e) {
         console.error('Server-side token refresh failed:', e);
+        token.error = 'RefreshAccessTokenError';
     }
 
     return token;
@@ -139,6 +169,9 @@ export const options: NextAuthOptions = {
             return ensureFreshAccessToken(token);
         },
         async session({ session, token }) {
+            if (token.error) {
+                session.error = token.error;
+            }
             if (session.user) {
                 session.user.accessToken = token.accessToken;
                 session.user.name = token.name;
