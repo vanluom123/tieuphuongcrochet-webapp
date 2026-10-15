@@ -221,6 +221,11 @@
     "register": "Register",
     "upgrade_premium": "Upgrade Premium"
   },
+  "Auth": {
+    "intent_save_pattern": "Sign in to save this pattern.",
+    "intent_like": "Sign in to like this pattern.",
+    "intent_comment": "Sign in to comment."
+  },
   "Login": {
     "title": "Login",
     "description": "Login to your account",

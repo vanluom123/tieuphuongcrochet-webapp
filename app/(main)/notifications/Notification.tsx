@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { Typography, List, Button, Pagination, Tag, Empty, message, Popconfirm } from 'antd';
 import { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import { useSession } from 'next-auth/react';
+import { useAuthModal } from '@/app/context/AuthModalProvider';
+import { ROUTE_PATH } from '@/app/lib/constant';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -18,6 +20,7 @@ const { Title } = Typography;
 
 const NotificationsPage: React.FC = () => {
     const { data: session, status } = useSession();
+    const { openAuth } = useAuthModal();
     const router = useRouter();
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -28,9 +31,9 @@ const NotificationsPage: React.FC = () => {
 
     useEffect(() => {
         if (status === 'unauthenticated') {
-            router.push('/login');
+            openAuth('login', { callbackUrl: ROUTE_PATH.NOTIFICATIONS });
         }
-    }, [status, router]);
+    }, [status, openAuth]);
 
     useEffect(() => {
         if (session?.user?.id) {

@@ -13,8 +13,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-
+import { useRequireAuth } from '@/app/hooks/useRequireAuth'
 import { ROUTE_PATH, TRANSLATION_STATUS } from '@/app/lib/constant'
 import { Pattern } from '@/app/lib/definitions'
 import { getStatusColor } from '@/app/lib/utils'
@@ -66,7 +65,7 @@ const FreePatternCard = ({
   const t = useTranslations('FreePattern')
   const profileT = useTranslations('Profile')
   const { data: session } = useSession()
-  const router = useRouter()
+  const { requireAuth } = useRequireAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [isInCollection, setIsInCollection] = useState(in_collection || false)
   const [showCollectionPopup, setShowCollectionPopup] = useState(false)
@@ -90,8 +89,7 @@ const FreePatternCard = ({
     if (!patternId) return
 
     // Check if user is not logged in
-    if (!session?.user) {
-      router.push(ROUTE_PATH.LOGIN)
+    if (!requireAuth('save_pattern')) {
       return
     }
 
@@ -125,8 +123,7 @@ const FreePatternCard = ({
   const handleToggleLike = async (e: React.MouseEvent) => {
     e.stopPropagation()
 
-    if (!session?.user) {
-      router.push(ROUTE_PATH.LOGIN)
+    if (!requireAuth('like')) {
       return
     }
 

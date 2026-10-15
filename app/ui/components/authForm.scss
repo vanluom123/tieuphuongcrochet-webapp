@@ -1,0 +1,75 @@
+@import "../../variables.module.scss";
+
+.auth-form {
+  font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
+
+  label {
+    color: $textPrimaryColor;
+  }
+
+  .note {
+    font-style: italic;
+    color: $textSecondColor;
+    font-size: $fontSize_small;
+    margin-bottom: 16px;
+  }
+}
+
+.auth-text-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: $secondColor;
+  font-size: $fontSize_middle;
+  font-family: inherit;
+  text-align: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $colorPrimary;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+.auth-form-switch {
+  margin: 14px 0 0;
+  font-size: $fontSize_small;
+  color: $textSecondColor;
+}
+
+.auth-form-instruction {
+  margin: 0 0 20px;
+  font-size: $fontSize_small;
+  color: $textSecondColor;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.auth-form-back {
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+.auth-resend-link {
+  text-align: center;
+  margin-top: 14px;
+  margin-bottom: 4px;
+
+  a {
+    font-size: 13px;
+    color: $textSecondColor;
+
+    &:hover {
+      color: $secondColor;
+    }
+  }
+}
+
+.auth-form-register .auth-form-switch {
+  margin-bottom: 16px;
+}
