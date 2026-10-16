@@ -221,6 +221,11 @@
     "register": "Đăng ký",
     "upgrade_premium": "Nâng cấp Premium"
   },
+  "Auth": {
+    "intent_save_pattern": "Đăng nhập để lưu mẫu này.",
+    "intent_like": "Đăng nhập để thích mẫu này.",
+    "intent_comment": "Đăng nhập để bình luận."
+  },
   "Login": {
     "title": "Đăng nhập",
     "description": "Đăng nhập vào tài khoản của bạn",

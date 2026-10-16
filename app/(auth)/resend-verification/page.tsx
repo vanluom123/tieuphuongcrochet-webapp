@@ -1,8 +1,7 @@
 import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next/types';
-import { Spin } from 'antd';
-import ResendVerification from './ResendVerification';
+import AuthRouteRedirect from '@/app/components/auth/AuthRouteRedirect';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('ResendVerification');
@@ -26,18 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const ResendVerificationPage = () => {
-  return (
-    <Suspense
-      fallback={
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-          <Spin size="large" />
-        </div>
-      }
-    >
-      <ResendVerification />
-    </Suspense>
-  );
-};
+const ResendVerificationPage = () => (
+  <Suspense fallback={null}>
+    <AuthRouteRedirect auth="resend_verification" />
+  </Suspense>
+);
 
 export default ResendVerificationPage;
