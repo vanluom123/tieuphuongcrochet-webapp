@@ -36,12 +36,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
     getResendCooldownStorageKey(unverifiedEmail)
   );
 
-  const onFinish = async (values: User) => {
+  const onFinish = async (values: User & { remember?: boolean }) => {
     setIsLoading(true);
     try {
       const result = await signIn('credentials', {
         email: values.email,
         password: values.password,
+        remember: values.remember ? 'true' : 'false',
         redirect: false,
       });
 
