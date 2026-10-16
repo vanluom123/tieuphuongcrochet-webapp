@@ -1,35 +1,14 @@
 import CredentialsProvider from 'next-auth/providers/credentials'
-import * as jwtDecode from 'jsonwebtoken'
-import { JwtPayload } from 'jsonwebtoken'
 import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
 import { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import apiService, { ApiError } from '../../../lib/service/apiService';
 import refreshAccessToken from '@/app/lib/service/refreshTokenService';
+import { isAccessTokenExpired } from '@/app/lib/auth/jwt';
+import { isEmailNotVerified } from '@/app/lib/auth/emailVerification';
 
-const EXPIRATION_BUFFER_SECONDS = 30
+const inFlightRefreshMap = new Map<string, Promise<{ accessToken: string; refreshToken?: string } | null>>();
 
-interface RefreshResult {
-    accessToken: string;
-    refreshToken?: string;
-}
-
-// In-flight refresh promises map to prevent race conditions on concurrent requests
-const inFlightRefreshMap = new Map<string, Promise<RefreshResult | null>>();
-
-async function doRefreshAccessToken(refreshToken: string): Promise<RefreshResult | null> {
-    const res = await refreshAccessToken(refreshToken);
-    if (res?.success && res.data?.accessToken) {
-        return {
-            accessToken: res.data.accessToken,
-            refreshToken: res.data.refreshToken,
-        };
-    }
-    return null;
-}
-
-// Runs server-side inside the NextAuth JWT flow: the refresh token never leaves
-// the encrypted session cookie, only the access token is handed to the client.
 async function ensureFreshAccessToken(token: JWT): Promise<JWT> {
     const accessToken = token.accessToken as string | null | undefined;
     const refreshToken = token.refreshToken as string | null | undefined;
@@ -37,19 +16,22 @@ async function ensureFreshAccessToken(token: JWT): Promise<JWT> {
         return token;
     }
 
-    const decoded = jwtDecode.decode(accessToken) as JwtPayload | null
-    const isExpired =
-        !decoded ||
-        (decoded.exp && Date.now() >= ((decoded.exp as number) - EXPIRATION_BUFFER_SECONDS) * 1000)
-
-    if (!isExpired) {
+    if (!isAccessTokenExpired(accessToken)) {
         return token;
     }
 
     try {
         let refreshPromise = inFlightRefreshMap.get(refreshToken);
         if (!refreshPromise) {
-            refreshPromise = doRefreshAccessToken(refreshToken).finally(() => {
+            refreshPromise = refreshAccessToken(refreshToken).then((res) => {
+                if (res?.success && res.data?.accessToken) {
+                    return {
+                        accessToken: res.data.accessToken,
+                        refreshToken: res.data.refreshToken,
+                    };
+                }
+                return null;
+            }).finally(() => {
                 inFlightRefreshMap.delete(refreshToken);
             });
             inFlightRefreshMap.set(refreshToken, refreshPromise);
@@ -107,20 +89,17 @@ export const options: NextAuthOptions = {
                         data: credentials
                     });
                     if (res?.success === false) {
-                        if (res.code === 6 || res.message?.includes('not verified')) {
+                        if (isEmailNotVerified(res)) {
                             throw new Error('EMAIL_NOT_VERIFIED');
                         }
                         return null;
                     }
                     return res.data;
-                } catch (error: any) {
-                    if (error instanceof ApiError) {
-                        if (error.code === 6 || error.message?.includes('not verified')) {
-                            throw new Error('EMAIL_NOT_VERIFIED');
-                        }
-                        return null;
+                } catch (error: unknown) {
+                    if (error instanceof ApiError && isEmailNotVerified(error)) {
+                        throw new Error('EMAIL_NOT_VERIFIED');
                     }
-                    if (error?.message === 'EMAIL_NOT_VERIFIED') {
+                    if (error instanceof Error && error.message === 'EMAIL_NOT_VERIFIED') {
                         throw error;
                     }
                     return null;

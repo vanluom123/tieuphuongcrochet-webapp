@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useMessages, useTranslations } from "next-intl";
 import { Form, Input, Button, Row, Col, Flex, Spin } from 'antd';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -22,6 +22,7 @@ const RegisterPage = () => {
     const [form] = Form.useForm();
     const router = useRouter();
     const t = useTranslations('Register');
+    const messages = useMessages() as { Register?: Record<string, string> };
 
     const onCancel = () => {
         router.push(ROUTE_PATH.LOGIN);
@@ -34,10 +35,12 @@ const RegisterPage = () => {
         if (res?.status) {
             setFormState({ ...formState, isModalVisible: true });
         } else {
-            const hasStatusCodeKey = res?.statusCode && (res.statusCode === 400 || res.statusCode === 500);
-            const description = hasStatusCodeKey
-                ? t(`error_register_${res.statusCode}`)
-                : res?.data?.message || t('error_register_default');
+            const code = res?.statusCode;
+            const i18nKey = code ? `error_register_${code}` : null;
+            const hasI18n = i18nKey && messages.Register?.[i18nKey];
+            const description =
+                res?.data?.message ||
+                (hasI18n ? t(i18nKey) : t('error_register_default'));
             notification.error({
                 message: t('error_register_title'),
                 description,

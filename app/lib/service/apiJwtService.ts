@@ -1,49 +1,14 @@
+import type { Session } from 'next-auth'
 import { getSession, signOut } from 'next-auth/react'
 
+import { isAccessTokenFresh } from '@/app/lib/auth/jwt'
 import apiService from './apiService'
 import { ROUTE_PATH } from '../constant'
 
-// With expiration buffer
-const EXPIRATION_BUFFER_SECONDS = 30 // 30 seconds before actual expiration
-
-export interface JwtTokenPayload {
-  exp?: number
-  [key: string]: any
-}
-
-// Lightweight JWT payload parser without Node.js dependencies/bundle bloat
-export function decodeJwtPayload(token: string): JwtTokenPayload | null {
-  try {
-    const parts = token.split('.')
-    if (parts.length !== 3) return null
-    const base64Url = parts[1]
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-    const binaryStr =
-      typeof atob === 'function'
-        ? atob(base64)
-        : Buffer.from(base64, 'base64').toString('binary')
-    const jsonPayload = decodeURIComponent(
-      binaryStr
-        .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    )
-    return JSON.parse(jsonPayload)
-  } catch {
-    return null
-  }
-}
-
-function isTokenValid(token: string): boolean {
-  const decoded = decodeJwtPayload(token)
-  if (!decoded || !decoded.exp) return false
-  return Date.now() < (decoded.exp - EXPIRATION_BUFFER_SECONDS) * 1000
-}
-
 let cachedAccessToken: string | null = null
-let sessionPromise: Promise<any> | null = null
+let sessionPromise: Promise<Session | null> | null = null
 
-async function getSharedSession() {
+async function getSharedSession(): Promise<Session | null> {
   if (!sessionPromise) {
     sessionPromise = getSession().finally(() => {
       sessionPromise = null
@@ -52,25 +17,21 @@ async function getSharedSession() {
   return sessionPromise
 }
 
-export function clearCachedAccessToken() {
+function clearCachedAccessToken() {
   cachedAccessToken = null
 }
 
-export async function handleTokenRefresh(): Promise<string | null> {
-  // If we already have a valid token in memory, reuse it immediately (0 network calls)
-  if (cachedAccessToken && isTokenValid(cachedAccessToken)) {
+export async function getValidAccessToken(): Promise<string | null> {
+  if (cachedAccessToken && isAccessTokenFresh(cachedAccessToken)) {
     return cachedAccessToken
   }
 
-  // getSession() hits /api/auth/session, which runs the NextAuth jwt callback
-  // server-side; the jwt callback refreshes the backend access token there.
-  // The refresh token is never exposed to the client.
   const session = await getSharedSession()
 
   if (session?.error === 'RefreshAccessTokenError') {
     console.error('Session error: RefreshAccessTokenError detected.')
     clearCachedAccessToken()
-    await handleTokenRefreshFailure()
+    await signOutOnAuthFailure()
     return null
   }
 
@@ -81,11 +42,10 @@ export async function handleTokenRefresh(): Promise<string | null> {
     return null
   }
 
-  if (!isTokenValid(accessToken)) {
-    // Server-side refresh failed or no refresh token exists
+  if (!isAccessTokenFresh(accessToken)) {
     console.error('Access token expired after server-side refresh attempt.')
     clearCachedAccessToken()
-    await handleTokenRefreshFailure()
+    await signOutOnAuthFailure()
     return null
   }
 
@@ -112,7 +72,7 @@ async function apiJwtService({
   formData?: FormData
   next?: NextFetchRequestConfig
 }): Promise<any> {
-  const accessToken = await handleTokenRefresh()
+  const accessToken = await getValidAccessToken()
 
   const computedHeaders: Record<string, string> = {
     ...headers,
@@ -133,9 +93,8 @@ async function apiJwtService({
   })
 }
 
-export async function handleTokenRefreshFailure() {
+export async function signOutOnAuthFailure() {
   clearCachedAccessToken()
-  // Logout the user and redirect to login page
   await signOut({
     redirect: true,
     callbackUrl: ROUTE_PATH.LOGIN,
