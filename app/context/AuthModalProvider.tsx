@@ -4,9 +4,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
   Suspense,
 } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -27,9 +25,10 @@ interface AuthModalContextValue {
   view: AuthView;
   callbackUrl?: string;
   intent?: AuthIntent;
+  prefillEmail?: string;
   openAuth: (view: AuthView, options?: OpenAuthOptions) => void;
   closeAuth: () => void;
-  setAuthView: (view: AuthView) => void;
+  setAuthView: (view: AuthView, options?: OpenAuthOptions) => void;
   handleLoginSuccess: () => Promise<void>;
 }
 
@@ -40,22 +39,12 @@ function AuthModalUrlBridge({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [open, setOpen] = useState(false);
-  const [view, setView] = useState<AuthView>('login');
-  const [callbackUrl, setCallbackUrl] = useState<string | undefined>();
-  const [intent, setIntent] = useState<AuthIntent | undefined>();
-
-  useEffect(() => {
-    const authView = parseAuthView(searchParams.get('auth'));
-    if (authView) {
-      setView(authView);
-      setOpen(true);
-      setCallbackUrl(searchParams.get('callbackUrl') ?? undefined);
-      setIntent(parseAuthIntent(searchParams.get('intent')));
-    } else {
-      setOpen(false);
-    }
-  }, [searchParams]);
+  const parsedView = parseAuthView(searchParams.get('auth'));
+  const open = !!parsedView;
+  const view: AuthView = parsedView ?? 'login';
+  const callbackUrl = searchParams.get('callbackUrl') ?? undefined;
+  const intent = parseAuthIntent(searchParams.get('intent'));
+  const prefillEmail = searchParams.get('email') ?? undefined;
 
   const replaceAuthParams = useCallback(
     (nextView: AuthView | null, options?: OpenAuthOptions) => {
@@ -67,6 +56,7 @@ function AuthModalUrlBridge({ children }: { children: React.ReactNode }) {
         params.delete('auth');
         params.delete('callbackUrl');
         params.delete('intent');
+        params.delete('email');
       }
 
       if (options?.callbackUrl !== undefined) {
@@ -85,6 +75,16 @@ function AuthModalUrlBridge({ children }: { children: React.ReactNode }) {
         }
       }
 
+      if (options?.email !== undefined) {
+        if (options.email) {
+          params.set('email', options.email);
+        } else {
+          params.delete('email');
+        }
+      } else if (nextView && nextView !== 'resend_verification') {
+        params.delete('email');
+      }
+
       const qs = params.toString();
       router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     },
@@ -93,14 +93,6 @@ function AuthModalUrlBridge({ children }: { children: React.ReactNode }) {
 
   const openAuth = useCallback(
     (nextView: AuthView, options?: OpenAuthOptions) => {
-      setView(nextView);
-      setOpen(true);
-      if (options?.callbackUrl !== undefined) {
-        setCallbackUrl(options.callbackUrl);
-      }
-      if (options?.intent !== undefined) {
-        setIntent(options.intent);
-      }
       replaceAuthParams(nextView, options);
     },
     [replaceAuthParams]
@@ -111,16 +103,15 @@ function AuthModalUrlBridge({ children }: { children: React.ReactNode }) {
   }, [replaceAuthParams]);
 
   const setAuthView = useCallback(
-    (nextView: AuthView) => {
-      setView(nextView);
-      replaceAuthParams(nextView);
+    (nextView: AuthView, options?: OpenAuthOptions) => {
+      replaceAuthParams(nextView, options);
     },
     [replaceAuthParams]
   );
 
   const handleLoginSuccess = useCallback(async () => {
     const session = await getSession();
-    const targetCallback = callbackUrl;
+    const targetCallback = searchParams.get('callbackUrl') ?? undefined;
 
     closeAuth();
 
@@ -132,7 +123,7 @@ function AuthModalUrlBridge({ children }: { children: React.ReactNode }) {
     if (session?.user?.role === USER_ROLES.ADMIN) {
       router.push(ROUTE_PATH.DASHBOARD);
     }
-  }, [callbackUrl, closeAuth, router]);
+  }, [closeAuth, router, searchParams]);
 
   const value = useMemo(
     () => ({
@@ -140,6 +131,7 @@ function AuthModalUrlBridge({ children }: { children: React.ReactNode }) {
       view,
       callbackUrl,
       intent,
+      prefillEmail,
       openAuth,
       closeAuth,
       setAuthView,
@@ -150,6 +142,7 @@ function AuthModalUrlBridge({ children }: { children: React.ReactNode }) {
       view,
       callbackUrl,
       intent,
+      prefillEmail,
       openAuth,
       closeAuth,
       setAuthView,

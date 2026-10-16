@@ -8,7 +8,8 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { User } from '@/app/lib/definitions';
-import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
+import { REGEX } from '@/app/lib/constant';
+import { getResendCooldownStorageKey } from '@/app/lib/auth/resendCooldown';
 import { resendVerificationEmail } from '@/app/lib/service/registerService';
 import { useResendCooldown } from '@/app/hooks/useResendCooldown';
 import { notification } from '@/app/lib/notify';
@@ -16,10 +17,15 @@ import AuthTextLink from '../primitives/AuthTextLink';
 
 interface LoginFormProps {
   onNavigate: (view: 'register' | 'forgot') => void;
+  onOpenResendVerification: (email?: string) => void;
   onLoginSuccess: () => void | Promise<void>;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => {
+const LoginForm: React.FC<LoginFormProps> = ({
+  onNavigate,
+  onOpenResendVerification,
+  onLoginSuccess,
+}) => {
   const [form] = Form.useForm();
   const t = useTranslations('Login');
 
@@ -27,7 +33,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
   const [unverifiedEmail, setUnverifiedEmail] = useState('');
   const [isResending, setIsResending] = useState(false);
   const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown(
-    unverifiedEmail ? `login_${unverifiedEmail}` : 'login_default'
+    getResendCooldownStorageKey(unverifiedEmail)
   );
 
   const onFinish = async (values: User) => {
@@ -197,15 +203,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
         </Form>
 
         <div className="auth-resend-link">
-          <Link
-            href={
-              unverifiedEmail
-                ? `${ROUTE_PATH.RESEND_VERIFICATION}?email=${encodeURIComponent(unverifiedEmail)}`
-                : ROUTE_PATH.RESEND_VERIFICATION
+          <AuthTextLink
+            onClick={() =>
+              onOpenResendVerification(unverifiedEmail || form.getFieldValue('email'))
             }
           >
             {t('resend_verification_link')}
-          </Link>
+          </AuthTextLink>
         </div>
 
         <Divider>{t('text_Or')}</Divider>

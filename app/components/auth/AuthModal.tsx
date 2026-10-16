@@ -11,6 +11,7 @@ import { AuthIntent } from '@/app/lib/auth/types';
 import LoginForm from './forms/LoginForm';
 import RegisterForm from './forms/RegisterForm';
 import ForgotPasswordForm from './forms/ForgotPasswordForm';
+import ResendVerificationForm from './forms/ResendVerificationForm';
 import '@/app/ui/components/authModal.scss';
 import '@/app/ui/components/authForm.scss';
 
@@ -21,17 +22,20 @@ const INTENT_KEYS: Record<AuthIntent, string> = {
 };
 
 const AuthModal: React.FC = () => {
-  const { open, view, intent, closeAuth, setAuthView, handleLoginSuccess } = useAuthModal();
+  const { open, view, intent, prefillEmail, closeAuth, setAuthView, handleLoginSuccess } =
+    useAuthModal();
   const tLogin = useTranslations('Login');
   const tRegister = useTranslations('Register');
   const tForgot = useTranslations('ForgotPassword');
+  const tResend = useTranslations('ResendVerification');
   const tAuth = useTranslations('Auth');
 
   const title = useMemo(() => {
     if (view === 'register') return tRegister('title');
     if (view === 'forgot') return tForgot('title');
+    if (view === 'resend_verification') return tResend('title');
     return tLogin('title');
-  }, [view, tLogin, tRegister, tForgot]);
+  }, [view, tLogin, tRegister, tForgot, tResend]);
 
   const subtitle = useMemo(() => {
     if (view !== 'login' || !intent) return null;
@@ -64,6 +68,9 @@ const AuthModal: React.FC = () => {
           {view === 'login' && (
             <LoginForm
               onNavigate={setAuthView}
+              onOpenResendVerification={(email) =>
+                setAuthView('resend_verification', email ? { email } : undefined)
+              }
               onLoginSuccess={handleLoginSuccess}
             />
           )}
@@ -72,6 +79,13 @@ const AuthModal: React.FC = () => {
           )}
           {view === 'forgot' && (
             <ForgotPasswordForm onBackToLogin={() => setAuthView('login')} />
+          )}
+          {view === 'resend_verification' && (
+            <ResendVerificationForm
+              initialEmail={prefillEmail}
+              onBackToLogin={() => setAuthView('login', { email: '' })}
+              onNavigateRegister={() => setAuthView('register', { email: '' })}
+            />
           )}
         </div>
       </div>

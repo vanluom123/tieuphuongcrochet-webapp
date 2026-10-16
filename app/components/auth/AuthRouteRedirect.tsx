@@ -21,6 +21,10 @@ const AuthRouteRedirect: React.FC<AuthRouteRedirectProps> = ({ auth }) => {
     if (callbackUrl) {
       params.set('callbackUrl', callbackUrl);
     }
+    const email = searchParams.get('email');
+    if (email) {
+      params.set('email', email);
+    }
     router.replace(`${ROUTE_PATH.HOME}?${params.toString()}`);
   }, [auth, router, searchParams]);
 

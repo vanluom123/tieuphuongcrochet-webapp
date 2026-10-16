@@ -1,13 +1,14 @@
-export type AuthView = 'login' | 'register' | 'forgot';
+export type AuthView = 'login' | 'register' | 'forgot' | 'resend_verification';
 
 export type AuthIntent = 'save_pattern' | 'like' | 'comment';
 
 export interface OpenAuthOptions {
   callbackUrl?: string;
   intent?: AuthIntent;
+  email?: string;
 }
 
-const AUTH_VIEWS: AuthView[] = ['login', 'register', 'forgot'];
+const AUTH_VIEWS: AuthView[] = ['login', 'register', 'forgot', 'resend_verification'];
 const AUTH_INTENTS: AuthIntent[] = ['save_pattern', 'like', 'comment'];
 
 export function parseAuthView(value: string | null): AuthView | null {
