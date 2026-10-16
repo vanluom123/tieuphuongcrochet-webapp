@@ -5,6 +5,7 @@ import { Button, Col, Form, Input, message, Row, Space, Spin } from 'antd';
 import { createUpdateComment } from '../../lib/service/commentService';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
+import { useRequireAuth } from '@/app/hooks/useRequireAuth';
 const { TextArea } = Input;
 
 interface CommentFormProps {
@@ -27,6 +28,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
     mentionedUsername
 }) => {
     const { data: session, status } = useSession();
+    const { requireAuth } = useRequireAuth();
     const [form] = Form.useForm();
     const [submitting, setSubmitting] = useState(false);
     const [disabled, setDisabled] = useState(true);
@@ -102,7 +104,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
                 <Col>
                     <Space>
                         {status !== 'authenticated' && (
-                            <Button type="primary" href="/login">
+                            <Button type="primary" onClick={() => requireAuth('comment')}>
                                 {t('login_to_comment')}
                             </Button>
                         )}

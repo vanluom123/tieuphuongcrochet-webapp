@@ -12,10 +12,9 @@ import bookmark from '@/public/bookmark.png'
 import CommentSection from '@/app/components/comment/CommentSection'
 import { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { removePatternFromCollection } from '@/app/lib/service/collectionService'
 import CollectionPopup from '@/app/components/collection-popup'
-import { ROUTE_PATH } from '@/app/lib/constant'
+import { useRequireAuth } from '@/app/hooks/useRequireAuth'
 import { existInCollection, checkIsPatternLiked } from '@/app/lib/service/freePatternService'
 import { toggleLike } from '@/app/lib/service/interactionService'
 import { ReportView } from '@/app/components/ReportView'
@@ -29,7 +28,7 @@ const ViewImagesList = dynamic(
 const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const t = useTranslations('FreePattern')
   const { data: session } = useSession()
-  const router = useRouter()
+  const { requireAuth } = useRequireAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [isInCollection, setIsInCollection] = useState(pattern?.in_collection || false)
   const [showCollectionPopup, setShowCollectionPopup] = useState(false)
@@ -71,8 +70,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const toggleBookmark = async (patternId: string) => {
     if (!patternId) return
 
-    if (!session?.user) {
-      router.push(ROUTE_PATH.LOGIN)
+    if (!requireAuth('save_pattern')) {
       return
     }
 
@@ -96,8 +94,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   }
 
   const handleToggleLike = async () => {
-    if (!session?.user) {
-      router.push(ROUTE_PATH.LOGIN)
+    if (!requireAuth('like')) {
       return
     }
 

@@ -12,6 +12,7 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
 import { useRouter } from "next/navigation";
+import { useAuthModal } from "@/app/context/AuthModalProvider";
 import { useTranslations } from "next-intl";
 import "../../ui/navigation.scss";
 import PremiumUpgradeModal from "../premium/PremiumUpgradeModal";
@@ -20,6 +21,7 @@ const UserAccount = () => {
   const { data: session } = useSession();
   const t = useTranslations("UserAccount");
   const router = useRouter();
+  const { openAuth } = useAuthModal();
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
 
   const userAvatar = session?.user.imageUrl;
@@ -66,7 +68,7 @@ const UserAccount = () => {
         Modal.confirm({
           title: t("logout_confirm"),
           onOk: () => {
-            signOut({ callbackUrl: ROUTE_PATH.LOGIN });
+            signOut({ callbackUrl: ROUTE_PATH.HOME });
           },
         });
       },
@@ -79,7 +81,7 @@ const UserAccount = () => {
       label: t("sign_in"),
       icon: <LoginOutlined />,
       onClick: () => {
-        router.push(ROUTE_PATH.LOGIN);
+        openAuth("login");
       },
     },
     {
@@ -87,10 +89,10 @@ const UserAccount = () => {
       label: t("register"),
       icon: <UserAddOutlined />,
       onClick: () => {
-        router.push(ROUTE_PATH.REGISTER);
+        openAuth("register");
       },
     },
-  ], [t, router]);
+  ], [t, openAuth]);
 
   return (
     <>

@@ -29,6 +29,11 @@ export const ROUTE_PATH = {
   RESEND_VERIFICATION: '/resend-verification',
 };
 
+/** NextAuth JWT/session: checked «Ghi nhớ tôi» */
+export const AUTH_SESSION_MAX_AGE_REMEMBER = 30 * 24 * 60 * 60;
+/** NextAuth JWT/session: không ghi nhớ (1 ngày) */
+export const AUTH_SESSION_MAX_AGE_DEFAULT = 24 * 60 * 60;
+
 export const SOCIAL_LINKS = {
   FACEBOOK: 'https://www.facebook.com/tieuconuong.tiemlen/',
   SOPEE: 'https://shopee.vn/littlegirl.crochet',

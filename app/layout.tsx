@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "./components/theme-provider";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import AuthProvider from "./context/AuthProvider";
+import { AuthModalProvider } from "./context/AuthModalProvider";
 import GoogleTag from "./components/GoogleTag";
 import "./globals.scss";
 
@@ -80,9 +81,11 @@ export default async function RootLayout({
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ThemeProvider>
               <AntdRegistry>
-                <LayoutPage>
-                  {children}
-                </LayoutPage>
+                <AuthModalProvider>
+                  <LayoutPage>
+                    {children}
+                  </LayoutPage>
+                </AuthModalProvider>
               </AntdRegistry>
             </ThemeProvider>
           </NextIntlClientProvider>
