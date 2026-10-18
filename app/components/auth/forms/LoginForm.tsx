@@ -9,9 +9,7 @@ import { useTranslations } from 'next-intl';
 
 import { User } from '@/app/lib/definitions';
 import { REGEX } from '@/app/lib/constant';
-import { getResendCooldownStorageKey } from '@/app/lib/auth/resendCooldown';
 import { resendVerificationEmail } from '@/app/lib/service/registerService';
-import { useResendCooldown } from '@/app/hooks/useResendCooldown';
 import { notification } from '@/app/lib/notify';
 import AuthTextLink from '../primitives/AuthTextLink';
 
@@ -32,9 +30,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [unverifiedEmail, setUnverifiedEmail] = useState('');
   const [isResending, setIsResending] = useState(false);
-  const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown(
-    getResendCooldownStorageKey(unverifiedEmail)
-  );
 
   const onFinish = async (values: User & { remember?: boolean }) => {
     setIsLoading(true);
@@ -83,15 +78,15 @@ const LoginForm: React.FC<LoginFormProps> = ({
           message: t('btn_resend_verification'),
           description: t('unverified_account_desc'),
         });
-        startCooldown(60);
       } else {
+        const description =
+          res.statusCode === 429
+            ? res.data?.message || t('rate_limit_error')
+            : res.data?.message || t('error_login_unknown_error');
         notification.error({
           message: t('error_login_title'),
-          description: res.data?.message || t('error_login_unknown_error'),
+          description,
         });
-        if (res.statusCode === 429) {
-          startCooldown(60);
-        }
       }
     } catch {
       notification.error({
@@ -122,12 +117,10 @@ const LoginForm: React.FC<LoginFormProps> = ({
                   className="btn-border"
                   icon={<ReloadOutlined spin={isResending} />}
                   loading={isResending}
-                  disabled={isCooldownActive || isResending}
+                  disabled={isResending}
                   onClick={handleResendFromLogin}
                 >
-                  {isCooldownActive
-                    ? t('btn_resend_cooldown', { seconds: secondsLeft })
-                    : t('btn_resend_verification')}
+                  {t('btn_resend_verification')}
                 </Button>
               </div>
             }

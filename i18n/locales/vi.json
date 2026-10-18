@@ -250,7 +250,7 @@
     "unverified_account_desc": "Vui lòng xác thực email để có thể đăng nhập.",
     "resend_verification_link": "Chưa nhận được email kích hoạt?",
     "btn_resend_verification": "Gửi lại email kích hoạt",
-    "btn_resend_cooldown": "Gửi lại sau {seconds}s"
+    "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát."
   },
   "ResendVerification": {
     "title": "Gửi lại email kích hoạt",
@@ -260,7 +260,6 @@
     "error_msg_required_email": "Vui lòng nhập email",
     "error_msg_incorrect_email": "Định dạng email không chính xác!",
     "btn_submit": "Gửi email kích hoạt",
-    "btn_resend_cooldown": "Gửi lại sau {seconds}s",
     "back_to_login": "Quay lại Đăng nhập",
     "back_to_register": "Tạo tài khoản mới",
     "success_title": "Đã gửi email thành công",
@@ -281,7 +280,8 @@
     "success_title": "Đã gửi yêu cầu thành công",
     "success_description": "Vui lòng kiểm tra email của bạn để nhận liên kết đặt lại mật khẩu.",
     "error_title": "Gửi yêu cầu thất bại",
-    "error_description": "Không thể xử lý yêu cầu đặt lại mật khẩu. Vui lòng thử lại sau."
+    "error_description": "Không thể xử lý yêu cầu đặt lại mật khẩu. Vui lòng thử lại sau.",
+    "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát."
   },
   "ResetPassword": {
     "title": "Đặt lại mật khẩu",
@@ -331,7 +331,7 @@
       "sent_to": "Đã gửi tới:",
       "spam_note": "Nếu không thấy trong hộp thư chính, vui lòng kiểm tra mục Thư rác/Spam.",
       "btn_resend": "Gửi lại email kích hoạt",
-      "btn_resend_cooldown": "Gửi lại sau {seconds}s",
+      "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát.",
       "resend_success_title": "Đã gửi lại email",
       "resend_success_description": "Liên kết kích hoạt mới đã được gửi tới hộp thư của bạn.",
       "resend_error_title": "Gửi lại thất bại",

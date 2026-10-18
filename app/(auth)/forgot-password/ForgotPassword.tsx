@@ -29,9 +29,13 @@ const ForgotPassword = () => {
                 });
                 form.resetFields();
             } else {
+                const description =
+                    res.statusCode === 429
+                        ? res.data?.message || t('rate_limit_error')
+                        : res.data?.message || t('error_description');
                 notification.error({
                     message: t('error_title'),
-                    description: res.data?.message || t('error_description')
+                    description,
                 });
             }
         } catch (error: any) {
