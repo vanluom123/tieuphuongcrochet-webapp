@@ -15,15 +15,10 @@ import AuthTextLink from '../primitives/AuthTextLink';
 
 interface LoginFormProps {
   onNavigate: (view: 'register' | 'forgot') => void;
-  onOpenResendVerification: (email?: string) => void;
   onLoginSuccess: () => void | Promise<void>;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({
-  onNavigate,
-  onOpenResendVerification,
-  onLoginSuccess,
-}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => {
   const [form] = Form.useForm();
   const t = useTranslations('Login');
 
@@ -195,16 +190,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
             </p>
           </Form.Item>
         </Form>
-
-        <div className="auth-resend-link">
-          <AuthTextLink
-            onClick={() =>
-              onOpenResendVerification(unverifiedEmail || form.getFieldValue('email'))
-            }
-          >
-            {t('resend_verification_link')}
-          </AuthTextLink>
-        </div>
 
         <Divider>{t('text_Or')}</Divider>
         <Link
