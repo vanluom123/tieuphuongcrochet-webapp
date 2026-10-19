@@ -6,7 +6,59 @@ import {
     ROUTE_PATH,
 } from '@/app/lib/constant';
 import { NextAuthOptions } from 'next-auth';
-import apiService from '../../../lib/service/apiService';
+import { JWT } from 'next-auth/jwt';
+import apiService, { ApiError } from '../../../lib/service/apiService';
+import refreshAccessToken from '@/app/lib/service/refreshTokenService';
+import { isAccessTokenExpired } from '@/app/lib/auth/jwt';
+import { isEmailNotVerified } from '@/app/lib/auth/emailVerification';
+
+const inFlightRefreshMap = new Map<string, Promise<{ accessToken: string; refreshToken?: string } | null>>();
+
+async function ensureFreshAccessToken(token: JWT): Promise<JWT> {
+    const accessToken = token.accessToken as string | null | undefined;
+    const refreshToken = token.refreshToken as string | null | undefined;
+    if (!accessToken || !refreshToken) {
+        return token;
+    }
+
+    if (!isAccessTokenExpired(accessToken)) {
+        return token;
+    }
+
+    try {
+        let refreshPromise = inFlightRefreshMap.get(refreshToken);
+        if (!refreshPromise) {
+            refreshPromise = refreshAccessToken(refreshToken).then((res) => {
+                if (res?.success && res.data?.accessToken) {
+                    return {
+                        accessToken: res.data.accessToken,
+                        refreshToken: res.data.refreshToken,
+                    };
+                }
+                return null;
+            }).finally(() => {
+                inFlightRefreshMap.delete(refreshToken);
+            });
+            inFlightRefreshMap.set(refreshToken, refreshPromise);
+        }
+
+        const freshTokens = await refreshPromise;
+        if (freshTokens?.accessToken) {
+            token.accessToken = freshTokens.accessToken;
+            if (freshTokens.refreshToken) {
+                token.refreshToken = freshTokens.refreshToken;
+            }
+            delete token.error;
+        } else {
+            token.error = 'RefreshAccessTokenError';
+        }
+    } catch (e) {
+        console.error('Server-side token refresh failed:', e);
+        token.error = 'RefreshAccessTokenError';
+    }
+
+    return token;
+}
 
 export const options: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
@@ -55,7 +107,7 @@ export const options: NextAuthOptions = {
                         },
                     });
                     if (res?.success === false) {
-                        if (res.code === 6 || res.message?.includes('not verified')) {
+                        if (isEmailNotVerified(res)) {
                             throw new Error('EMAIL_NOT_VERIFIED');
                         }
                         return null;
@@ -64,8 +116,11 @@ export const options: NextAuthOptions = {
                         ...res.data,
                         rememberMe,
                     };
-                } catch (error: any) {
-                    const msg = error?.message || '';
+                } catch (error: unknown) {
+                    if (error instanceof ApiError && (isEmailNotVerified(error) || isEmailNotVerified(error.data))) {
+                        throw new Error('EMAIL_NOT_VERIFIED');
+                    }
+                    const msg = error instanceof Error ? error.message : '';
                     if (msg === 'EMAIL_NOT_VERIFIED' || msg.includes('not verified') || msg.includes('"code":6') || msg.includes('code: 6')) {
                         throw new Error('EMAIL_NOT_VERIFIED');
                     }
@@ -88,9 +143,10 @@ export const options: NextAuthOptions = {
                         baseUrl: process.env.NEXT_PUBLIC_API_URL,
                         endpoint: '/api/v1/auth/me',
                         method: 'GET',
-                        queryParams: {
-                            accessToken: credentials.token
-                        }
+                        headers: {
+                            Authorization: `Bearer ${credentials.token}`
+                        },
+                        retry: 0
                     });
                     return res.data;
                 } catch (error) {
@@ -118,12 +174,14 @@ export const options: NextAuthOptions = {
             if (trigger === "update" && session?.role) {
                 token.role = session.role;
             }
-            return token;
+            return ensureFreshAccessToken(token);
         },
         async session({ session, token }) {
+            if (token.error) {
+                session.error = token.error;
+            }
             if (session.user) {
                 session.user.accessToken = token.accessToken;
-                session.user.refreshToken = token.refreshToken;
                 session.user.name = token.name;
                 session.user.email = token.email;
                 session.user.imageUrl = token.picture;

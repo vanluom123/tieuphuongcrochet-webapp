@@ -11,7 +11,6 @@ import { useTranslations } from 'next-intl';
 import logo from '@/public/logo.png';
 import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
 import { resendVerificationEmail } from '@/app/lib/service/registerService';
-import { useResendCooldown } from '@/app/hooks/useResendCooldown';
 import { notification } from '@/app/lib/notify';
 import '../../ui/components/login.scss';
 
@@ -20,7 +19,6 @@ const ResendVerification = () => {
   const searchParams = useSearchParams();
   const t = useTranslations('ResendVerification');
   const [isLoading, setIsLoading] = useState(false);
-  const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown('page_resend_verification');
 
   useEffect(() => {
     const emailParam = searchParams.get('email');
@@ -38,10 +36,9 @@ const ResendVerification = () => {
           message: t('success_title'),
           description: t('success_description'),
         });
-        startCooldown(60);
       } else {
         const errorDesc =
-          res.statusCode === 429 || res.data?.message?.includes?.('limit')
+          res.statusCode === 429
             ? res.data?.message || t('rate_limit_error')
             : res.data?.message || t('error_description');
 
@@ -49,10 +46,6 @@ const ResendVerification = () => {
           message: t('error_title'),
           description: errorDesc,
         });
-
-        if (res.statusCode === 429 || res.data?.message?.includes?.('limit')) {
-          startCooldown(60);
-        }
       }
     } catch {
       notification.error({
@@ -116,12 +109,10 @@ const ResendVerification = () => {
                       loading={isLoading}
                       htmlType="submit"
                       className="login-form-button btn-border"
-                      disabled={isLoading || isCooldownActive}
+                      disabled={isLoading}
                       icon={<ReloadOutlined spin={isLoading} />}
                     >
-                      {isCooldownActive
-                        ? t('btn_resend_cooldown', { seconds: secondsLeft })
-                        : t('btn_submit')}
+                      {t('btn_submit')}
                     </Button>
                   </Col>
                   <Col xs={24} style={{ textAlign: 'center', marginTop: 12 }}>
