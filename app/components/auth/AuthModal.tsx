@@ -66,13 +66,7 @@ const AuthModal: React.FC = () => {
         </header>
         <div className="auth-modal-body" key={view}>
           {view === 'login' && (
-            <LoginForm
-              onNavigate={setAuthView}
-              onOpenResendVerification={(email) =>
-                setAuthView('resend_verification', email ? { email } : undefined)
-              }
-              onLoginSuccess={handleLoginSuccess}
-            />
+            <LoginForm onNavigate={setAuthView} onLoginSuccess={handleLoginSuccess} />
           )}
           {view === 'register' && (
             <RegisterForm onNavigateLogin={() => setAuthView('login')} />

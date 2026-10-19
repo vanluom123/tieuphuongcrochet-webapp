@@ -9,7 +9,7 @@ import { ALL_ITEM, ROUTE_PATH, TRANSLATION_STATUS } from '@/app/lib/constant'
 import { useSession } from 'next-auth/react'
 import { Category, DataTableState, DataType, initialListParams } from '@/app/lib/definitions'
 import { fetchFreePatterns } from '@/app/lib/service/freePatternService'
-import { handleTokenRefresh } from '@/app/lib/service/apiJwtService'
+import { getValidAccessToken } from '@/app/lib/service/apiJwtService'
 import { combineFilters } from '@/app/lib/filter-utils'
 import HeaderPart from '@/app/components/header-part'
 import ViewTable from '@/app/components/view-table'
@@ -147,7 +147,7 @@ const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
   ])
 
   const onAddPattern = useCallback(async () => {
-    await handleTokenRefresh()
+    await getValidAccessToken()
     setModalData({ open: true, id: '' })
   }, [])
 

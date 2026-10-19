@@ -6,9 +6,7 @@ import { Button, Flex, Form, Input, Spin } from 'antd';
 import { useTranslations } from 'next-intl';
 
 import { REGEX } from '@/app/lib/constant';
-import { getResendCooldownStorageKey } from '@/app/lib/auth/resendCooldown';
 import { resendVerificationEmail } from '@/app/lib/service/registerService';
-import { useResendCooldown } from '@/app/hooks/useResendCooldown';
 import { notification } from '@/app/lib/notify';
 import AuthTextLink from '../primitives/AuthTextLink';
 
@@ -27,12 +25,6 @@ const ResendVerificationForm: React.FC<ResendVerificationFormProps> = ({
   const t = useTranslations('ResendVerification');
   const [isLoading, setIsLoading] = useState(false);
 
-  const watchedEmail = Form.useWatch('email', form) as string | undefined;
-  const emailForCooldown = (watchedEmail || initialEmail || '').trim();
-  const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown(
-    getResendCooldownStorageKey(emailForCooldown)
-  );
-
   useEffect(() => {
     if (initialEmail) {
       form.setFieldsValue({ email: initialEmail });
@@ -48,10 +40,9 @@ const ResendVerificationForm: React.FC<ResendVerificationFormProps> = ({
           message: t('success_title'),
           description: t('success_description'),
         });
-        startCooldown(60);
       } else {
         const errorDesc =
-          res.statusCode === 429 || res.data?.message?.includes?.('limit')
+          res.statusCode === 429
             ? res.data?.message || t('rate_limit_error')
             : res.data?.message || t('error_description');
 
@@ -59,10 +50,6 @@ const ResendVerificationForm: React.FC<ResendVerificationFormProps> = ({
           message: t('error_title'),
           description: errorDesc,
         });
-
-        if (res.statusCode === 429 || res.data?.message?.includes?.('limit')) {
-          startCooldown(60);
-        }
       }
     } catch {
       notification.error({
@@ -109,12 +96,10 @@ const ResendVerificationForm: React.FC<ResendVerificationFormProps> = ({
               loading={isLoading}
               htmlType="submit"
               className="login-form-button btn-border"
-              disabled={isLoading || isCooldownActive}
+              disabled={isLoading}
               icon={<ReloadOutlined spin={isLoading} />}
             >
-              {isCooldownActive
-                ? t('btn_resend_cooldown', { seconds: secondsLeft })
-                : t('btn_submit')}
+              {t('btn_submit')}
             </Button>
             <Flex
               justify="space-between"

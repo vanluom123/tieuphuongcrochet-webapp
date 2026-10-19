@@ -13,7 +13,6 @@ import { User } from '@/app/lib/definitions';
 import logo from '@/public/logo.png';
 import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
 import { resendVerificationEmail } from '@/app/lib/service/registerService';
-import { useResendCooldown } from '@/app/hooks/useResendCooldown';
 import { notification } from '@/app/lib/notify';
 import '../../ui/components/login.scss';
 
@@ -26,9 +25,6 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [unverifiedEmail, setUnverifiedEmail] = useState('');
     const [isResending, setIsResending] = useState(false);
-    const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown(
-        unverifiedEmail ? `login_${unverifiedEmail}` : 'login_default'
-    );
 
     useEffect(() => {
         if (session?.user?.email && status === 'authenticated') {
@@ -77,15 +73,15 @@ const Login = () => {
                     message: t('btn_resend_verification'),
                     description: t('unverified_account_desc'),
                 });
-                startCooldown(60);
             } else {
+                const description =
+                    res.statusCode === 429
+                        ? res.data?.message || t('rate_limit_error')
+                        : res.data?.message || t('error_login_unknown_error');
                 notification.error({
                     message: t('error_login_title'),
-                    description: res.data?.message || t('error_login_unknown_error'),
+                    description,
                 });
-                if (res.statusCode === 429) {
-                    startCooldown(60);
-                }
             }
         } catch {
             notification.error({
@@ -128,12 +124,10 @@ const Login = () => {
                                             className="btn-border"
                                             icon={<ReloadOutlined spin={isResending} />}
                                             loading={isResending}
-                                            disabled={isCooldownActive || isResending}
+                                            disabled={isResending}
                                             onClick={handleResendFromLogin}
                                         >
-                                            {isCooldownActive
-                                                ? t('btn_resend_cooldown', { seconds: secondsLeft })
-                                                : t('btn_resend_verification')}
+                                            {t('btn_resend_verification')}
                                         </Button>
                                     </div>
                                 }

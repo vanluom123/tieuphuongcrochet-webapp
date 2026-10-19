@@ -1,10 +1,8 @@
 @import "../../variables.module.scss";
 
 
-.auth-page {
-  &.login-page {
-    padding-bottom: 50px;
-  }
+.login-page {
+  padding-bottom: 50px;
 
   .logo {
     max-height: 170px;
