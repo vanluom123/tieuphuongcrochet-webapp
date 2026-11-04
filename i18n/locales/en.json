@@ -765,5 +765,30 @@
     "createError": "Error creating collection",
     "saveSuccess": "Saved to collection",
     "saveError": "Error saving to collection"
+  },
+  "VideoPopupList": {
+    "title": "Video popups",
+    "add": "Add list",
+    "name": "Title",
+    "cta_url": "CTA URL",
+    "cta_label": "CTA label",
+    "active": "Active",
+    "clips": "Playback order",
+    "clip_label": "Clip label",
+    "add_clip": "Add video",
+    "choose_file": "Choose file",
+    "move_up": "Move up",
+    "move_down": "Move down",
+    "remove_clip": "Remove video",
+    "remove_list": "Remove list",
+    "order_hint": "The top video plays first. When it ends, the next one starts.",
+    "empty": "No list yet. Add one, then put videos in playback order.",
+    "save": "Save",
+    "clips_required": "Each list needs a title and at least one video file",
+    "title_required": "Please enter a title",
+    "video_required": "Please choose a video",
+    "clip_progress": "Video {current}/{total}",
+    "close_in": "Close in {seconds}s",
+    "cta_fallback": "View more"
   }
 }

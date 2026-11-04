@@ -28,6 +28,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No files uploaded" }, { status: 400 });
     }
 
+    const videoTypes = new Set(["video/mp4", "video/webm"]);
+    const maxVideoBytes = 100 * 1024 * 1024;
+    for (const file of files) {
+      if (!file.type.startsWith("video/")) continue;
+      if (!videoTypes.has(file.type) || file.size > maxVideoBytes) {
+        return NextResponse.json(
+          { error: "Video must be mp4 or webm and at most 100MB" },
+          { status: 400 },
+        );
+      }
+    }
+
     const uploadedUrls: FileUpload[] = [];
 
     for (const file of files) {

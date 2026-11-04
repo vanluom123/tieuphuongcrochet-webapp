@@ -765,5 +765,30 @@
     "createError": "Lỗi khi tạo bộ sưu tập",
     "saveSuccess": "Đã lưu vào bộ sưu tập",
     "saveError": "Lỗi khi lưu vào bộ sưu tập"
+  },
+  "VideoPopupList": {
+    "title": "Video popup",
+    "add": "Thêm danh sách",
+    "name": "Tiêu đề",
+    "cta_url": "Link CTA",
+    "cta_label": "Nhãn CTA",
+    "active": "Bật",
+    "clips": "Thứ tự phát",
+    "clip_label": "Nhãn clip",
+    "add_clip": "Thêm video",
+    "choose_file": "Chọn file",
+    "move_up": "Đưa lên",
+    "move_down": "Đưa xuống",
+    "remove_clip": "Xóa video",
+    "remove_list": "Xóa danh sách",
+    "order_hint": "Video phía trên phát trước. Hết clip này thì sang clip kế.",
+    "empty": "Chưa có danh sách. Thêm một danh sách, rồi xếp video theo thứ tự phát.",
+    "save": "Lưu",
+    "clips_required": "Mỗi danh sách cần tiêu đề và ít nhất một video đã chọn file",
+    "title_required": "Vui lòng nhập tiêu đề",
+    "video_required": "Vui lòng chọn video",
+    "clip_progress": "Video {current}/{total}",
+    "close_in": "Đóng sau {seconds}s",
+    "cta_fallback": "Xem thêm"
   }
 }

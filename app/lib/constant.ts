@@ -262,6 +262,7 @@ export const API_ROUTES = {
   // Banner routes
   BANNERS: '/api/v1/banners',
   BANNER_TYPES: '/api/v1/banner-types',
+  VIDEO_POPUP_LISTS: '/api/v1/video-popup-lists',
 
   // Settings
   SETTINGS: '/api/v1/settings',

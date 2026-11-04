@@ -62,6 +62,15 @@ export async function uploadMultipleImagesToR2(
   }
 }
 
+export async function uploadVideoToR2(file: File): Promise<FileUpload | null> {
+  const uploaded = await uploadMultipleImagesToR2(
+    [{ originFileObj: file, uid: file.name, name: file.name } as FileUpload],
+    'settings',
+    'video-popups',
+  )
+  return uploaded[0] ?? null
+}
+
 export async function deleteMultipleFilesToR2(keys: string[]): Promise<boolean> {
   try {
     const response = await fetch(API_ROUTES.R2_PRESIGNED, {
