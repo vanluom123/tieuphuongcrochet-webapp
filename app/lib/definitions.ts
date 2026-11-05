@@ -365,13 +365,12 @@ export interface VideoPopupClip {
   videoUrl: string
   videoFileName: string
   label?: string
+  ctaUrl?: string
 }
 
 export interface VideoPopupList {
   id?: string
   title: string
-  ctaUrl?: string
-  ctaLabel?: string
   active: boolean
   clips: VideoPopupClip[]
 }
