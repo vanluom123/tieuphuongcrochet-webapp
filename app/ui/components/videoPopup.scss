@@ -13,10 +13,6 @@
   font-size: 13px;
 }
 
-.video-popup__label {
-  margin: 0 0 12px;
-}
-
 .video-popup-settings {
   display: flex;
   flex-direction: column;
@@ -67,7 +63,7 @@
 
   &__clip {
     display: grid;
-    grid-template-columns: 28px minmax(140px, 1fr) minmax(140px, 1.2fr) auto;
+    grid-template-columns: 28px minmax(120px, 1fr) minmax(140px, 1.1fr) minmax(120px, 0.9fr) auto;
     gap: 8px;
     align-items: center;
     margin-bottom: 8px;

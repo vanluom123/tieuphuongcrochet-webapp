@@ -25,8 +25,6 @@ interface ClipDraft extends VideoPopupClip {
 interface ListDraft {
   id?: string
   title: string
-  ctaUrl?: string
-  ctaLabel?: string
   active: boolean
   clips: ClipDraft[]
 }
@@ -36,6 +34,20 @@ const emptyList = (): ListDraft => ({
   active: true,
   clips: [],
 })
+
+function toListDraft(item: VideoPopupList): ListDraft {
+  return {
+    id: item.id,
+    title: item.title,
+    active: item.active,
+    clips: (item.clips ?? []).map((clip) => ({
+      videoUrl: clip.videoUrl,
+      videoFileName: clip.videoFileName,
+      label: clip.label,
+      ctaUrl: clip.ctaUrl,
+    })),
+  }
+}
 
 function fileLabel(clip: ClipDraft): string {
   if (clip.file?.name) return clip.file.name
@@ -53,16 +65,7 @@ export default function VideoPopupListSettings() {
 
   useEffect(() => {
     fetchVideoPopupListsAdmin().then((data) => {
-      setLists(
-        data.map((item) => ({
-          id: item.id,
-          title: item.title,
-          ctaUrl: item.ctaUrl,
-          ctaLabel: item.ctaLabel,
-          active: item.active,
-          clips: item.clips ?? [],
-        })),
-      )
+      setLists(data.map(toListDraft))
     })
   }, [])
 
@@ -110,20 +113,20 @@ export default function VideoPopupListSettings() {
               videoUrl: uploaded.fileContent,
               videoFileName: uploaded.fileName,
               label: clip.label,
+              ctaUrl: clip.ctaUrl,
             })
           } else {
             clips.push({
               videoUrl: clip.videoUrl,
               videoFileName: clip.videoFileName,
               label: clip.label,
+              ctaUrl: clip.ctaUrl,
             })
           }
         }
         payload.push({
           id: list.id,
           title: list.title,
-          ctaUrl: list.ctaUrl,
-          ctaLabel: list.ctaLabel,
           active: list.active,
           clips,
         })
@@ -136,7 +139,7 @@ export default function VideoPopupListSettings() {
       const ok = await createUpdateVideoPopupLists(payload)
       if (ok) {
         const fresh = await fetchVideoPopupListsAdmin()
-        setLists(fresh)
+        setLists(fresh.map(toListDraft))
       }
     } finally {
       setSaving(false)
@@ -193,20 +196,6 @@ export default function VideoPopupListSettings() {
                 onChange={(event) => updateList(index, { title: event.target.value })}
               />
             </Form.Item>
-            <Space size={12} style={{ display: 'flex' }} align="start">
-              <Form.Item label={t('cta_url')} style={{ flex: 1 }}>
-                <Input
-                  value={item.ctaUrl}
-                  onChange={(event) => updateList(index, { ctaUrl: event.target.value })}
-                />
-              </Form.Item>
-              <Form.Item label={t('cta_label')} style={{ flex: 1 }}>
-                <Input
-                  value={item.ctaLabel}
-                  onChange={(event) => updateList(index, { ctaLabel: event.target.value })}
-                />
-              </Form.Item>
-            </Space>
 
             <Form.Item
               label={t('clips')}
@@ -240,6 +229,15 @@ export default function VideoPopupListSettings() {
                         {name}
                       </span>
                     </div>
+                    <Input
+                      placeholder={t('cta_url')}
+                      value={clip.ctaUrl}
+                      onChange={(event) => {
+                        const clips = [...item.clips]
+                        clips[clipIndex] = { ...clips[clipIndex], ctaUrl: event.target.value }
+                        updateList(index, { clips })
+                      }}
+                    />
                     <Input
                       placeholder={t('clip_label')}
                       value={clip.label}
@@ -283,7 +281,7 @@ export default function VideoPopupListSettings() {
                 icon={<PlusOutlined />}
                 onClick={() =>
                   updateList(index, {
-                    clips: [...item.clips, { videoUrl: '', videoFileName: '', label: '' }],
+                    clips: [...item.clips, { videoUrl: '', videoFileName: '', label: '', ctaUrl: '' }],
                   })
                 }
               >

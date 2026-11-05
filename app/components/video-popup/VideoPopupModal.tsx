@@ -68,10 +68,9 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
           onEnded={advance}
         />
       ) : null}
-      {clip?.label ? <p className="video-popup__label">{clip.label}</p> : null}
-      {popup.ctaUrl ? (
-        <Button type="primary" href={popup.ctaUrl} target="_blank">
-          {popup.ctaLabel || t('cta_fallback')}
+      {clip?.ctaUrl ? (
+        <Button type="primary" href={clip.ctaUrl} target="_blank">
+          {clip.label || t('cta_fallback')}
         </Button>
       ) : null}
     </Modal>
