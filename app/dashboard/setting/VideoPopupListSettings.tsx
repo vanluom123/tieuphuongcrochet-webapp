@@ -49,6 +49,7 @@ export default function VideoPopupListSettings() {
   const [lists, setLists] = useState<ListDraft[]>([])
   const [saving, setSaving] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
+  const [removedKeys, setRemovedKeys] = useState<string[]>([])
 
   useEffect(() => {
     fetchVideoPopupListsAdmin().then((data) => {
@@ -126,6 +127,11 @@ export default function VideoPopupListSettings() {
           active: list.active,
           clips,
         })
+      }
+      const keys = removedKeys.filter(Boolean)
+      if (keys.length > 0) {
+        await deleteMultipleFilesToR2(keys)
+        setRemovedKeys([])
       }
       const ok = await createUpdateVideoPopupLists(payload)
       if (ok) {
@@ -260,11 +266,14 @@ export default function VideoPopupListSettings() {
                         danger
                         aria-label={t('remove_clip')}
                         icon={<DeleteOutlined />}
-                        onClick={() =>
+                        onClick={() => {
+                          if (clip.videoFileName) {
+                            setRemovedKeys((keys) => [...keys, clip.videoFileName])
+                          }
                           updateList(index, {
                             clips: item.clips.filter((_, i) => i !== clipIndex),
                           })
-                        }
+                        }}
                       />
                     </Space>
                   </div>
