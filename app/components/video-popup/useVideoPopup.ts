@@ -64,15 +64,17 @@ export function useVideoPopup() {
     const run = async () => {
       const lists = await fetchActiveVideoPopupLists()
       if (cancelled) return
-      const eligible = lists.find(
+      const eligible = lists.filter(
         (item) => item.id && item.clips?.length > 0 && !isInCooldown(item.id),
       )
-      if (!eligible?.id) return
+      if (eligible.length === 0) return
+      const picked = eligible[Math.floor(Math.random() * eligible.length)]
+      if (!picked?.id) return
 
       await wait(VIDEO_POPUP_SHOW_DELAY_MS, isCancelled)
       if (cancelled || hasBlockingModal()) return
-      markWatching(eligible.id)
-      setPopup(eligible)
+      markWatching(picked.id)
+      setPopup(picked)
       setOpen(true)
     }
 
