@@ -6,6 +6,8 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { FileUpload } from "@/app/lib/definitions";
+import { v4 as uuidv4 } from "uuid";
+import { extname } from "path";
 
 const s3 = new S3Client({
   region: "auto",
@@ -44,36 +46,33 @@ export async function POST(req: NextRequest) {
 
     for (const file of files) {
 
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const fileName = file.name;
-      const contentType = file.type;
-      const uniqueFileName = `${Date.now()}-${fileName}`;
-      const env = process.env.NEXT_PUBLIC_ENV || "local"; // fallback nếu chưa khai báo
+      const uniqueFileName = `${uuidv4()}${extname(file.name)}`;
+      const env = process.env.NEXT_PUBLIC_ENV || "development"; // fallback nếu chưa khai báo
       const key = `${env}/${page}/${category}/${uniqueFileName}`;
 
       const command = new PutObjectCommand({
         Bucket: process.env.R2_BUCKET_NAME,
         Key: key,
-        ContentType: contentType,
+        ContentType: file.type,
       });
 
       const signedUrl = await getSignedUrl(s3, command, { expiresIn: 300 });
 
       const uploadRes = await fetch(signedUrl, {
         method: "PUT",
-        headers: { "Content-Type": contentType },
-        body: buffer,
+        headers: { "Content-Type": file.type },
+        body: file
       });
 
       if (!uploadRes.ok) {
-        console.error(`Upload failed for ${fileName}`, await uploadRes.text());
+        console.error(`Upload failed for ${file.name}`, await uploadRes.text());
         continue;
       }
 
       uploadedUrls.push({
         url: `${process.env.R2_CDN_URL}/${key}`,
         fileContent: `${process.env.R2_CDN_URL}/${key}`,
-        name: fileName, // Tên file gốc
+        name: file.name, // Tên file gốc
         fileName: key, // Tên file sau khi đã uploaded
         uid: uniqueFileName,
       });
