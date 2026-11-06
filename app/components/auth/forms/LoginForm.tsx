@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { LockOutlined, MailOutlined, GoogleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Checkbox, Divider, Flex, Form, Input, Spin } from 'antd';
+import { Alert, Button, Divider, Flex, Form, Input, Spin } from 'antd';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -26,13 +26,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
   const [unverifiedEmail, setUnverifiedEmail] = useState('');
   const [isResending, setIsResending] = useState(false);
 
-  const onFinish = async (values: User & { remember?: boolean }) => {
+  const onFinish = async (values: User) => {
     setIsLoading(true);
     try {
       const result = await signIn('credentials', {
         email: values.email,
         password: values.password,
-        remember: values.remember ? 'true' : 'false',
         redirect: false,
       });
 
@@ -126,7 +125,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
           form={form}
           name="normal_login"
           className="login-form layout-wrap"
-          initialValues={{ remember: true }}
           onFinish={onFinish}
           disabled={isLoading}
         >
@@ -164,10 +162,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
             />
           </Form.Item>
           <Form.Item>
-            <Flex justify="space-between" align="center" style={{ width: '100%' }}>
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>{t('remember_me')}</Checkbox>
-              </Form.Item>
+            <Flex justify="flex-end" align="center" style={{ width: '100%' }}>
               <AuthTextLink className="login-form-forgot" onClick={() => onNavigate('forgot')}>
                 {t('forgot_password')}
               </AuthTextLink>

@@ -1,10 +1,5 @@
 import CredentialsProvider from 'next-auth/providers/credentials'
-import {
-    API_ROUTES,
-    AUTH_SESSION_MAX_AGE_DEFAULT,
-    AUTH_SESSION_MAX_AGE_REMEMBER,
-    ROUTE_PATH,
-} from '@/app/lib/constant';
+import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
 import { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import apiService, { ApiError } from '../../../lib/service/apiService';
@@ -62,10 +57,6 @@ async function ensureFreshAccessToken(token: JWT): Promise<JWT> {
 
 export const options: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
-    session: {
-        strategy: 'jwt',
-        maxAge: AUTH_SESSION_MAX_AGE_REMEMBER,
-    },
     pages: {
         signIn: ROUTE_PATH.LOGIN,
         error: ROUTE_PATH.ERROR
@@ -84,27 +75,18 @@ export const options: NextAuthOptions = {
                     label: "Password:",
                     type: "password",
                     placeholder: "Enter your password"
-                },
-                remember: {
-                    label: "Remember me",
-                    type: "text",
-                },
+                }
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
-                const rememberMe =
-                    credentials.remember === 'true' || credentials.remember === '1';
                 try {
                     const res = await apiService({
                         baseUrl: process.env.NEXT_PUBLIC_API_URL,
                         endpoint: API_ROUTES.LOGIN,
                         method: 'POST',
-                        data: {
-                            email: credentials.email,
-                            password: credentials.password,
-                        },
+                        data: credentials
                     });
                     if (res?.success === false) {
                         if (isEmailNotVerified(res)) {
@@ -112,10 +94,7 @@ export const options: NextAuthOptions = {
                         }
                         return null;
                     }
-                    return {
-                        ...res.data,
-                        rememberMe,
-                    };
+                    return res.data;
                 } catch (error: unknown) {
                     if (error instanceof ApiError && (isEmailNotVerified(error) || isEmailNotVerified(error.data))) {
                         throw new Error('EMAIL_NOT_VERIFIED');
@@ -158,17 +137,10 @@ export const options: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user, trigger, session }) {
             if (user) {
-                const rememberMe = user.rememberMe;
-                const maxAgeSec =
-                    rememberMe === false
-                        ? AUTH_SESSION_MAX_AGE_DEFAULT
-                        : AUTH_SESSION_MAX_AGE_REMEMBER;
                 token = {
                     ...token,
                     ...user,
-                    picture: user.imageUrl,
-                    rememberMe,
-                    exp: Math.floor(Date.now() / 1000) + maxAgeSec,
+                    picture: user.imageUrl
                 };
             }
             if (trigger === "update" && session?.role) {

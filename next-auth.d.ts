@@ -24,8 +24,7 @@ declare module "next-auth" {
         accessToken?: string | null,
         refreshToken?: string | null,
         imageUrl?: string | null,
-        backgroundImageUrl?: string | null,
-        rememberMe?: boolean,
+        backgroundImageUrl?: string | null
     }
 }
 

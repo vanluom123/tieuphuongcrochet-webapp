@@ -235,7 +235,6 @@
     "btn_register": "Tạo tài khoản mới",
     "input_email": "Email",
     "input_password": "Mật khẩu",
-    "remember_me": "Ghi nhớ tôi",
     "forgot_password": "Quên mật khẩu",
     "error_msg_incorrect_email": "Định dạng email không chính xác!",
     "error_msg_required_email": "Vui lòng nhập email",

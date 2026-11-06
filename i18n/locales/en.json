@@ -235,7 +235,6 @@
     "btn_register": "Create a new account",
     "input_email": "Email",
     "input_password": "Password",
-    "remember_me": "Remember me",
     "forgot_password": "Forgot password",
     "error_msg_incorrect_email": "Email format is incorrect!",
     "error_msg_required_email": "Please input your email",
