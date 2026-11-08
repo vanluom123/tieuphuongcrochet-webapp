@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { LockOutlined, MailOutlined, GoogleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
+import { Alert, Button, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 import Link from 'next/link';
@@ -32,13 +32,12 @@ const Login = () => {
         }
     }, [session, router, status]);
 
-    const onFinish = async (values: User & { remember?: boolean }) => {
+    const onFinish = async (values: User) => {
         setIsLoading(true);
         try {
             const result = await signIn('credentials', {
                 email: values.email,
                 password: values.password,
-                remember: values.remember ? 'true' : 'false',
                 redirect: false,
             });
             
@@ -138,7 +137,6 @@ const Login = () => {
                             form={form}
                             name="normal_login"
                             className="login-form layout-wrap"
-                            initialValues={{ remember: true }}
                             onFinish={onFinish}
                             disabled={isLoading}
                         >
@@ -181,11 +179,7 @@ const Login = () => {
                                     placeholder={t('input_password')} />
                             </Form.Item>
                             <Form.Item>
-                                <Flex justify="space-between" align="center" style={{ width: '100%' }}>
-                                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                                        <Checkbox>{t('remember_me')}</Checkbox>
-                                    </Form.Item>
-
+                                <Flex justify="flex-end" align="center" style={{ width: '100%' }}>
                                     <Link className="login-form-forgot" href="/forgot-password">
                                         {t('forgot_password')}
                                     </Link>

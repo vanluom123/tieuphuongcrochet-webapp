@@ -235,7 +235,6 @@
     "btn_register": "Tạo tài khoản mới",
     "input_email": "Email",
     "input_password": "Mật khẩu",
-    "remember_me": "Ghi nhớ tôi",
     "forgot_password": "Quên mật khẩu",
     "error_msg_incorrect_email": "Định dạng email không chính xác!",
     "error_msg_required_email": "Vui lòng nhập email",
@@ -250,7 +249,8 @@
     "unverified_account_desc": "Vui lòng xác thực email để có thể đăng nhập.",
     "resend_verification_link": "Chưa nhận được email kích hoạt?",
     "btn_resend_verification": "Gửi lại email kích hoạt",
-    "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát."
+    "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát.",
+    "remember_me": "Ghi nhớ đăng nhập"
   },
   "ResendVerification": {
     "title": "Gửi lại email kích hoạt",
@@ -284,7 +284,7 @@
     "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát."
   },
   "ResetPassword": {
-    "title": "Đặt lại mật khẩu",
+    "title": "Đặt lại Mật khẩu",
     "description": "Nhập mật khẩu mới của bạn",
     "token_missing": "Token đặt lại mật khẩu bị thiếu. Vui lòng sử dụng liên kết trong email của bạn.",
     "token_invalid_or_missing": "Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.",
