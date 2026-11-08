@@ -1,11 +1,14 @@
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { API_ROUTES, ROUTE_PATH } from '@/app/lib/constant';
 import { NextAuthOptions } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
+import { encode as encodeJwt, JWT } from 'next-auth/jwt';
 import apiService, { ApiError } from '../../../lib/service/apiService';
 import refreshAccessToken from '@/app/lib/service/refreshTokenService';
 import { isAccessTokenExpired } from '@/app/lib/auth/jwt';
 import { isEmailNotVerified } from '@/app/lib/auth/emailVerification';
+
+const SESSION_MAX_AGE_DEFAULT = 86400; // 1 day (seconds)
+const SESSION_MAX_AGE_REMEMBER_ME = 2592000; // 30 days (seconds)
 
 const inFlightRefreshMap = new Map<string, Promise<{ accessToken: string; refreshToken?: string } | null>>();
 
@@ -61,6 +64,40 @@ export const options: NextAuthOptions = {
         signIn: ROUTE_PATH.LOGIN,
         error: ROUTE_PATH.ERROR
     },
+    session: {
+        maxAge: SESSION_MAX_AGE_REMEMBER_ME,
+    },
+    jwt: {
+        async encode(params) {
+            // NextAuth resets exp on every encode; preserve the deadline chosen at sign-in.
+            const sessionExpiresAt = params.token?.sessionExpiresAt;
+            const maxAge = typeof sessionExpiresAt === 'number'
+                ? Math.max(0, sessionExpiresAt - Math.floor(Date.now() / 1000))
+                : params.maxAge;
+            return encodeJwt({ ...params, maxAge });
+        },
+    },
+    events: {
+        async signOut({ token }) {
+            if (!token.refreshToken) {
+                return;
+            }
+            try {
+                await apiService({
+                    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+                    endpoint: API_ROUTES.LOGOUT,
+                    method: 'POST',
+                    data: { refreshToken: token.refreshToken },
+                    headers: token.accessToken
+                        ? { Authorization: `Bearer ${token.accessToken}` }
+                        : {},
+                    retry: 0,
+                });
+            } catch (error) {
+                console.error('Server-side logout failed:', error);
+            }
+        },
+    },
     providers: [
         CredentialsProvider({
             id: "credentials",
@@ -75,18 +112,27 @@ export const options: NextAuthOptions = {
                     label: "Password:",
                     type: "password",
                     placeholder: "Enter your password"
+                },
+                rememberMe: {
+                    label: "Remember Me",
+                    type: "text"
                 }
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
+                const rememberMe = credentials.rememberMe === 'true';
                 try {
                     const res = await apiService({
                         baseUrl: process.env.NEXT_PUBLIC_API_URL,
                         endpoint: API_ROUTES.LOGIN,
                         method: 'POST',
-                        data: credentials
+                        data: {
+                            email: credentials.email,
+                            password: credentials.password,
+                            rememberMe,
+                        }
                     });
                     if (res?.success === false) {
                         if (isEmailNotVerified(res)) {
@@ -94,7 +140,8 @@ export const options: NextAuthOptions = {
                         }
                         return null;
                     }
-                    return res.data;
+                    // Attach rememberMe flag to the user object for JWT callback
+                    return { ...res.data, rememberMe };
                 } catch (error: unknown) {
                     if (error instanceof ApiError && (isEmailNotVerified(error) || isEmailNotVerified(error.data))) {
                         throw new Error('EMAIL_NOT_VERIFIED');
@@ -137,10 +184,15 @@ export const options: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user, trigger, session }) {
             if (user) {
+                const rememberMe = 'rememberMe' in user
+                    && (user as Record<string, unknown>).rememberMe === true;
                 token = {
                     ...token,
                     ...user,
-                    picture: user.imageUrl
+                    picture: user.imageUrl,
+                    rememberMe,
+                    sessionExpiresAt: Math.floor(Date.now() / 1000)
+                        + (rememberMe ? SESSION_MAX_AGE_REMEMBER_ME : SESSION_MAX_AGE_DEFAULT),
                 };
             }
             if (trigger === "update" && session?.role) {
@@ -159,6 +211,9 @@ export const options: NextAuthOptions = {
                 session.user.imageUrl = token.picture;
                 session.user.role = token.role;
                 session.user.id = token.userId;
+            }
+            if (typeof token.sessionExpiresAt === 'number') {
+                session.expires = new Date(token.sessionExpiresAt * 1000).toISOString();
             }
             return session;
         }

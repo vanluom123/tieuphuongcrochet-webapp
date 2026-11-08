@@ -249,7 +249,8 @@
     "unverified_account_desc": "Please verify your email address before logging in.",
     "resend_verification_link": "Didn't receive verification email?",
     "btn_resend_verification": "Resend activation email",
-    "rate_limit_error": "Request limit exceeded. Please wait a moment before trying again."
+    "rate_limit_error": "Request limit exceeded. Please wait a moment before trying again.",
+    "remember_me": "Remember me"
   },
   "ResendVerification": {
     "title": "Resend Activation Email",

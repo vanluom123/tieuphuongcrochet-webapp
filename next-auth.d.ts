@@ -35,6 +35,8 @@ declare module "next-auth/jwt" {
         role?: string | null,
         accessToken?: string | null,
         refreshToken?: string | null,
-        backgroundImageUrl?: string | null
+        backgroundImageUrl?: string | null,
+        rememberMe?: boolean,
+        sessionExpiresAt?: number
     }
 }

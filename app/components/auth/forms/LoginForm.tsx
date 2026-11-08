@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LockOutlined, MailOutlined, GoogleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Divider, Flex, Form, Input, Spin } from 'antd';
+import { Alert, Button, Checkbox, Divider, Flex, Form, Input, Spin } from 'antd';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -12,6 +12,8 @@ import { REGEX } from '@/app/lib/constant';
 import { resendVerificationEmail } from '@/app/lib/service/registerService';
 import { notification } from '@/app/lib/notify';
 import AuthTextLink from '../primitives/AuthTextLink';
+
+const SAVED_EMAIL_KEY = 'saved_login_email';
 
 interface LoginFormProps {
   onNavigate: (view: 'register' | 'forgot') => void;
@@ -26,12 +28,22 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
   const [unverifiedEmail, setUnverifiedEmail] = useState('');
   const [isResending, setIsResending] = useState(false);
 
-  const onFinish = async (values: User) => {
+  // Pre-fill saved email on mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem(SAVED_EMAIL_KEY);
+    if (savedEmail) {
+      form.setFieldsValue({ email: savedEmail, rememberMe: true });
+    }
+  }, [form]);
+
+  const onFinish = async (values: User & { rememberMe?: boolean }) => {
     setIsLoading(true);
     try {
+      const rememberMe = !!values.rememberMe;
       const result = await signIn('credentials', {
         email: values.email,
         password: values.password,
+        rememberMe: String(rememberMe),
         redirect: false,
       });
 
@@ -46,6 +58,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
           result.status === 401 ? t('error_login_401_description') : result.error;
         notification.error({ message: t('error_login_title'), description });
       } else if (result?.ok) {
+        // Persist or clear saved email based on rememberMe
+        if (rememberMe) {
+          localStorage.setItem(SAVED_EMAIL_KEY, values.email);
+        } else {
+          localStorage.removeItem(SAVED_EMAIL_KEY);
+        }
         await onLoginSuccess();
       }
     } catch (error) {
@@ -162,7 +180,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
             />
           </Form.Item>
           <Form.Item>
-            <Flex justify="flex-end" align="center" style={{ width: '100%' }}>
+            <Flex justify="space-between" align="center" style={{ width: '100%' }}>
+              <Form.Item name="rememberMe" valuePropName="checked" noStyle>
+                <Checkbox>{t('remember_me')}</Checkbox>
+              </Form.Item>
               <AuthTextLink className="login-form-forgot" onClick={() => onNavigate('forgot')}>
                 {t('forgot_password')}
               </AuthTextLink>
