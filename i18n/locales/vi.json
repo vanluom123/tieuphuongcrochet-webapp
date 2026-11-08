@@ -284,6 +284,7 @@
     "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát."
   },
   "ResetPassword": {
+    "title": "Đặt lại Mật khẩu",
     "description": "Nhập mật khẩu mới của bạn",
     "token_missing": "Token đặt lại mật khẩu bị thiếu. Vui lòng sử dụng liên kết trong email của bạn.",
     "token_invalid_or_missing": "Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.",
@@ -334,6 +335,7 @@
       "resend_success_title": "Đã gửi lại email",
       "resend_success_description": "Liên kết kích hoạt mới đã được gửi tới hộp thư của bạn.",
       "resend_error_title": "Gửi lại thất bại",
+      "resend_error_description": "Không thể gửi lại email kích hoạt. Vui lòng thử lại sau.",
       "btn_sign_in": "Đăng nhập",
       "btn_edit_email": "Sai địa chỉ email? Chỉnh sửa"
     }
