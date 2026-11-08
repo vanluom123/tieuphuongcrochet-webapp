@@ -110,6 +110,10 @@
 
 @media (max-width: 720px) {
   .video-popup-settings__clip {
-    grid-template-columns: 28px 1fr;
+    grid-template-columns: 1fr;
+  }
+
+  .video-popup-settings__file {
+    flex-wrap: wrap;
   }
 }

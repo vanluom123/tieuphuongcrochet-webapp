@@ -62,13 +62,29 @@ export async function uploadMultipleImagesToR2(
   }
 }
 
-export async function uploadVideoToR2(file: File): Promise<FileUpload | null> {
-  const uploaded = await uploadMultipleImagesToR2(
-    [{ originFileObj: file, uid: file.name, name: file.name } as FileUpload],
-    'settings',
-    'video-popups',
-  )
-  return uploaded[0] ?? null
+export async function uploadVideoToR2(
+  file: File
+): Promise<FileUpload & { fileName: string }> {
+  const formData = new FormData();
+  formData.append("page", "settings");
+  formData.append("category", "video-popups");
+  formData.append("files", file);
+
+  const res = await fetch(API_ROUTES.R2_PRESIGNED, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    throw new Error(`Video upload failed with status ${res.status}`);
+  }
+
+  const { publicUrls } = await res.json();
+  const uploaded = publicUrls?.[0];
+  if (!uploaded?.fileContent || !uploaded.fileName) {
+    throw new Error("Video upload returned no file");
+  }
+  return uploaded;
 }
 
 export async function deleteMultipleFilesToR2(keys: string[]): Promise<boolean> {

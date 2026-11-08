@@ -4,10 +4,8 @@ import { useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
 import { useTranslations } from 'next-intl'
 import { VideoPopupList } from '@/app/lib/definitions'
-import {
-  VIDEO_POPUP_CLOSE_COUNTDOWN_SEC,
-  VIDEO_POPUP_MODAL_CLASS,
-} from './videoPopup.constants'
+import { VIDEO_POPUP_CLOSE_COUNTDOWN_SEC, VIDEO_POPUP_MODAL_CLASS } from './videoPopup.constants'
+import { isSafeCtaUrl } from './videoPopupUrl'
 import '@/app/ui/components/videoPopup.scss'
 
 interface VideoPopupModalProps {
@@ -22,6 +20,8 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
   const [secondsLeft, setSecondsLeft] = useState(VIDEO_POPUP_CLOSE_COUNTDOWN_SEC)
   const clips = popup.clips ?? []
   const clip = clips[clipIndex]
+  const ctaUrl = clip?.ctaUrl?.trim()
+  const showCta = ctaUrl && isSafeCtaUrl(ctaUrl)
   const canClose = secondsLeft <= 0
 
   useEffect(() => {
@@ -60,16 +60,18 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
           key={`${popup.id}-${clipIndex}`}
           className="video-popup__player"
           src={clip.videoUrl}
+          aria-label={clip.label || popup.title}
           autoPlay
           playsInline
           controls
           muted
-          preload="auto"
+          preload="metadata"
           onEnded={advance}
+          onError={() => setSecondsLeft(0)}
         />
       ) : null}
-      {clip?.ctaUrl ? (
-        <Button type="primary" href={clip.ctaUrl} target="_blank">
+      {showCta ? (
+        <Button type="primary" href={ctaUrl} target="_blank" rel="noopener noreferrer">
           {clip.label || t('cta_fallback')}
         </Button>
       ) : null}

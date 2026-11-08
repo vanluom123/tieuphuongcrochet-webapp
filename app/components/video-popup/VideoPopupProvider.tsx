@@ -11,9 +11,7 @@ export default function VideoPopupProvider({ children }: { children: React.React
   return (
     <>
       {children}
-      {popup && open ? (
-        <VideoPopupModal open={open} popup={popup} onCompleted={complete} />
-      ) : null}
+      {popup && open ? <VideoPopupModal open={open} popup={popup} onCompleted={complete} /> : null}
     </>
   )
 }

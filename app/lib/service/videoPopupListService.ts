@@ -1,6 +1,5 @@
 import { API_ROUTES } from '../constant'
 import { VideoPopupList } from '../definitions'
-import { notification } from '../notify'
 import apiService from './apiService'
 import apiJwtService from './apiJwtService'
 
@@ -19,16 +18,13 @@ export async function fetchVideoPopupListsAdmin(): Promise<VideoPopupList[]> {
   return Array.isArray(res.data) ? res.data : []
 }
 
-export async function createUpdateVideoPopupLists(lists: VideoPopupList[]): Promise<boolean> {
+export async function createUpdateVideoPopupLists(
+  lists: VideoPopupList[],
+): Promise<VideoPopupList[]> {
   const res = await apiJwtService({
     endpoint: API_ROUTES.VIDEO_POPUP_LISTS,
     method: 'POST',
     data: lists,
   })
-  if (res.success) {
-    notification.success({ message: 'Success', description: 'Video popup lists updated' })
-    return true
-  }
-  notification.error({ message: 'Failed', description: 'Could not update video popup lists' })
-  return false
+  return res.data
 }

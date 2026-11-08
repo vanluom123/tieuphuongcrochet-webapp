@@ -1,21 +1,18 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { USER_ROLES } from '@/app/lib/constant'
 import { VideoPopupList } from '@/app/lib/definitions'
 import { fetchActiveVideoPopupLists } from '@/app/lib/service/videoPopupListService'
 import {
   BLOCKING_MODAL_POLL_MS,
+  VIDEO_POPUP_EXCLUDED_PATHS,
   VIDEO_POPUP_SHOW_DELAY_MS,
 } from './videoPopup.constants'
 import { hasBlockingModal } from './videoPopupBlocking'
-import {
-  abandonWatchingFromRefresh,
-  isInCooldown,
-  markCompleted,
-  markWatching,
-} from './videoPopupStorage'
+import { isInCooldown, markCompleted } from './videoPopupStorage'
 
 function isExemptRole(role?: string | null): boolean {
   return role === USER_ROLES.ADMIN || role === USER_ROLES.PREMIUM_USER
@@ -47,16 +44,15 @@ function wait(ms: number, isCancelled: () => boolean): Promise<void> {
 
 export function useVideoPopup() {
   const { data: session, status } = useSession()
+  const pathname = usePathname()
   const [popup, setPopup] = useState<VideoPopupList | null>(null)
   const [open, setOpen] = useState(false)
+  const isExcludedPath = VIDEO_POPUP_EXCLUDED_PATHS.some((path) => pathname.startsWith(path))
 
   useEffect(() => {
-    abandonWatchingFromRefresh()
-  }, [])
-
-  useEffect(() => {
-    if (status === 'loading') return
+    if (status === 'loading' || isExcludedPath) return
     if (isExemptRole(session?.user?.role)) return
+    if (isInCooldown()) return
 
     let cancelled = false
     const isCancelled = () => cancelled
@@ -64,16 +60,13 @@ export function useVideoPopup() {
     const run = async () => {
       const lists = await fetchActiveVideoPopupLists()
       if (cancelled) return
-      const eligible = lists.filter(
-        (item) => item.id && item.clips?.length > 0 && !isInCooldown(item.id),
-      )
+      const eligible = lists.filter((item) => item.id && item.clips?.length > 0)
       if (eligible.length === 0) return
       const picked = eligible[Math.floor(Math.random() * eligible.length)]
       if (!picked?.id) return
 
       await wait(VIDEO_POPUP_SHOW_DELAY_MS, isCancelled)
       if (cancelled || hasBlockingModal()) return
-      markWatching(picked.id)
       setPopup(picked)
       setOpen(true)
     }
@@ -82,22 +75,16 @@ export function useVideoPopup() {
     return () => {
       cancelled = true
     }
-  }, [status, session?.user?.role])
+  }, [status, session?.user?.role, isExcludedPath])
 
   useEffect(() => {
-    if (!open) return
-    const onBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault()
-      event.returnValue = ''
-    }
-    window.addEventListener('beforeunload', onBeforeUnload)
-    return () => window.removeEventListener('beforeunload', onBeforeUnload)
-  }, [open])
+    if (isExcludedPath) setOpen(false)
+  }, [isExcludedPath])
 
   const complete = useCallback(() => {
-    if (popup?.id) markCompleted(popup.id)
     setOpen(false)
-  }, [popup?.id])
+    markCompleted()
+  }, [])
 
   return { popup, open, complete }
 }

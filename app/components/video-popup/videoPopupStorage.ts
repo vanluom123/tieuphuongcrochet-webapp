@@ -1,38 +1,27 @@
-import {
-  VIDEO_POPUP_COMPLETED_PREFIX,
-  VIDEO_POPUP_COOLDOWN_MS,
-  VIDEO_POPUP_WATCHING_KEY,
-} from './videoPopup.constants'
+import { VIDEO_POPUP_COMPLETED_AT_KEY, VIDEO_POPUP_COOLDOWN_MS } from './videoPopup.constants'
 
-export function isInCooldown(listId: string, now = Date.now()): boolean {
-  if (typeof window === 'undefined') return false
-  const raw = window.localStorage.getItem(VIDEO_POPUP_COMPLETED_PREFIX + listId)
-  if (!raw) return false
-  const completedAt = Number(raw)
-  if (!Number.isFinite(completedAt)) return false
-  return now - completedAt < VIDEO_POPUP_COOLDOWN_MS
+function readCompletedAt(): number | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = window.localStorage.getItem(VIDEO_POPUP_COMPLETED_AT_KEY)
+    if (!raw) return null
+    const completedAt = Number(raw)
+    return Number.isFinite(completedAt) ? completedAt : null
+  } catch {
+    return null
+  }
 }
 
-export function markCompleted(listId: string): void {
-  window.localStorage.setItem(VIDEO_POPUP_COMPLETED_PREFIX + listId, String(Date.now()))
-  clearWatching()
+export function isInCooldown(now = Date.now()): boolean {
+  const completedAt = readCompletedAt()
+  return completedAt !== null && now - completedAt < VIDEO_POPUP_COOLDOWN_MS
 }
 
-export function markWatching(listId: string): void {
-  window.sessionStorage.setItem(
-    VIDEO_POPUP_WATCHING_KEY,
-    JSON.stringify({ listId, startedAt: Date.now() }),
-  )
-}
-
-export function clearWatching(): void {
-  window.sessionStorage.removeItem(VIDEO_POPUP_WATCHING_KEY)
-}
-
-/** Refresh mid-watch keeps sessionStorage. Drop it so the user must watch again. */
-export function abandonWatchingFromRefresh(): void {
+export function markCompleted(): void {
   if (typeof window === 'undefined') return
-  if (window.sessionStorage.getItem(VIDEO_POPUP_WATCHING_KEY)) {
-    clearWatching()
+  try {
+    window.localStorage.setItem(VIDEO_POPUP_COMPLETED_AT_KEY, String(Date.now()))
+  } catch {
+    // Storage can be unavailable in private browsing; closing must still work.
   }
 }
