@@ -62,6 +62,41 @@ export async function uploadMultipleImagesToR2(
   }
 }
 
+async function readErrorMessage(res: Response): Promise<string> {
+  try {
+    const body = await res.json();
+    return typeof body?.error === "string" ? body.error : "";
+  } catch {
+    return "";
+  }
+}
+
+export async function uploadVideoToR2(
+  file: File
+): Promise<FileUpload & { fileName: string }> {
+  const formData = new FormData();
+  formData.append("page", "settings");
+  formData.append("category", "video-popups");
+  formData.append("files", file);
+
+  const res = await fetch(API_ROUTES.R2_PRESIGNED, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const message = await readErrorMessage(res);
+    throw new Error(message || `Video upload failed with status ${res.status}`);
+  }
+
+  const { publicUrls } = await res.json();
+  const uploaded = publicUrls?.[0];
+  if (!uploaded?.fileContent || !uploaded.fileName) {
+    throw new Error("Video upload returned no file");
+  }
+  return uploaded;
+}
+
 export async function deleteMultipleFilesToR2(keys: string[]): Promise<boolean> {
   try {
     const response = await fetch(API_ROUTES.R2_PRESIGNED, {
