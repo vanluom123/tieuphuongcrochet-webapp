@@ -787,11 +787,13 @@
     "save_error": "Không lưu được video popup",
     "load_error": "Không tải được video popup",
     "video_invalid": "Video phải là mp4 hoặc webm và tối đa 100MB",
-    "cta_url_invalid": "Link CTA phải bắt đầu bằng http://, https:// hoặc /",
+    "video_upload_failed": "Không tải được video lên",
+    "cta_url_invalid": "Link CTA phải là link http(s) hoặc đường dẫn nội bộ",
     "title_required": "Vui lòng nhập tiêu đề",
     "video_required": "Vui lòng chọn video",
     "clip_progress": "Video {current}/{total}",
     "close_in": "Đóng sau {seconds}s",
+    "close": "Đóng",
     "cta_fallback": "Xem thêm"
   }
 }

@@ -4,11 +4,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { USER_ROLES } from '@/app/lib/constant'
-import { VideoPopupList } from '@/app/lib/definitions'
-import { fetchActiveVideoPopupLists } from '@/app/lib/service/videoPopupListService'
+import { VideoPopup } from '@/app/lib/definitions'
+import { fetchActiveVideoPopups } from '@/app/lib/service/videoPopupService'
 import {
   BLOCKING_MODAL_POLL_MS,
   VIDEO_POPUP_EXCLUDED_PATHS,
+  VIDEO_POPUP_MAX_WAIT_MS,
   VIDEO_POPUP_SHOW_DELAY_MS,
 } from './videoPopup.constants'
 import { hasBlockingModal } from './videoPopupBlocking'
@@ -18,22 +19,29 @@ function isExemptRole(role?: string | null): boolean {
   return role === USER_ROLES.ADMIN || role === USER_ROLES.PREMIUM_USER
 }
 
-function wait(ms: number, isCancelled: () => boolean): Promise<void> {
+// Resolves true when the delay elapsed and false when it gave up on a blocking modal.
+function wait(ms: number, isCancelled: () => boolean): Promise<boolean> {
   return new Promise((resolve) => {
+    const startedAt = Date.now()
     let remaining = ms
-    let last = Date.now()
+    let last = startedAt
     const tick = () => {
       if (isCancelled()) {
-        resolve()
+        resolve(false)
         return
       }
       const now = Date.now()
-      if (!hasBlockingModal()) {
+      const blocked = hasBlockingModal()
+      if (now - startedAt >= VIDEO_POPUP_MAX_WAIT_MS) {
+        resolve(false)
+        return
+      }
+      if (!blocked) {
         remaining -= now - last
       }
       last = now
-      if (remaining <= 0 && !hasBlockingModal()) {
-        resolve()
+      if (remaining <= 0 && !blocked) {
+        resolve(true)
         return
       }
       window.setTimeout(tick, BLOCKING_MODAL_POLL_MS)
@@ -45,7 +53,7 @@ function wait(ms: number, isCancelled: () => boolean): Promise<void> {
 export function useVideoPopup() {
   const { data: session, status } = useSession()
   const pathname = usePathname()
-  const [popup, setPopup] = useState<VideoPopupList | null>(null)
+  const [popup, setPopup] = useState<VideoPopup | null>(null)
   const [open, setOpen] = useState(false)
   const isExcludedPath = VIDEO_POPUP_EXCLUDED_PATHS.some((path) => pathname.startsWith(path))
 
@@ -58,15 +66,15 @@ export function useVideoPopup() {
     const isCancelled = () => cancelled
 
     const run = async () => {
-      const lists = await fetchActiveVideoPopupLists()
+      const lists = await fetchActiveVideoPopups()
       if (cancelled) return
       const eligible = lists.filter((item) => item.id && item.clips?.length > 0)
       if (eligible.length === 0) return
       const picked = eligible[Math.floor(Math.random() * eligible.length)]
       if (!picked?.id) return
 
-      await wait(VIDEO_POPUP_SHOW_DELAY_MS, isCancelled)
-      if (cancelled || hasBlockingModal()) return
+      const ready = await wait(VIDEO_POPUP_SHOW_DELAY_MS, isCancelled)
+      if (!ready || cancelled) return
       setPopup(picked)
       setOpen(true)
     }

@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
 import {
   S3Client,
   PutObjectCommand,
   DeleteObjectsCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { FileUpload } from "@/app/lib/definitions";
-import { v4 as uuidv4 } from "uuid";
 import { extname } from "path";
+import { v4 as uuidv4 } from "uuid";
+import { FileUpload } from "@/app/lib/definitions";
+import { USER_ROLES, VIDEO_UPLOAD } from "@/app/lib/constant";
+import { options as authOptions } from "@/app/api/auth/[...nextauth]/options";
 
 const s3 = new S3Client({
   region: "auto",
@@ -19,44 +22,51 @@ const s3 = new S3Client({
   forcePathStyle: true,
 });
 
+const LONG_UPLOAD_TIMEOUT_MS = 120_000;
+const SAFE_SEGMENT = /^[a-z0-9_-]{1,64}$/;
+
+function readSegment(value: FormDataEntryValue | null, fallback: string): string {
+  const raw = value?.toString().trim().toLowerCase() ?? "";
+  return SAFE_SEGMENT.test(raw) ? raw : fallback;
+}
+
+async function isAdmin(): Promise<boolean> {
+  const session = await getServerSession(authOptions);
+  return session?.user?.role === USER_ROLES.ADMIN;
+}
+
+async function isAuthenticated(): Promise<boolean> {
+  const session = await getServerSession(authOptions);
+  return Boolean(session?.user);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const files = formData.getAll("files") as File[];
-    const page = formData.get("page")?.toString().trim().toLowerCase() || "general";
-    const category = formData.get("category")?.toString().trim().toLowerCase() || "uncategorized";
+    const page = readSegment(formData.get("page"), "general");
+    const category = readSegment(formData.get("category"), "uncategorized");
 
     if (files.length === 0) {
       return NextResponse.json({ error: "No files uploaded" }, { status: 400 });
     }
 
     const isVideoPopupUpload = page === "settings" && category === "video-popups";
-    const videoTypes = new Set(["video/mp4", "video/webm"]);
-    const videoExtensions = new Set([".mp4", ".webm"]);
-    const maxVideoBytes = 100 * 1024 * 1024;
 
-    if (isVideoPopupUpload && files.length !== 1) {
-      return NextResponse.json({ error: "Upload one video at a time" }, { status: 400 });
-    }
-
-    for (const file of files) {
-      if (isVideoPopupUpload) {
-        const extension = extname(file.name).toLowerCase();
-        if (
-          !videoTypes.has(file.type) ||
-          !videoExtensions.has(extension) ||
-          file.size > maxVideoBytes
-        ) {
-          return NextResponse.json(
-            { error: "Video must be mp4 or webm and at most 100MB" },
-            { status: 400 },
-          );
-        }
-        continue;
+    if (isVideoPopupUpload) {
+      if (!(await isAdmin())) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
-
-      if (!file.type.startsWith("video/")) continue;
-      if (!videoTypes.has(file.type) || file.size > maxVideoBytes) {
+      if (files.length !== 1) {
+        return NextResponse.json({ error: "Upload one video at a time" }, { status: 400 });
+      }
+      const file = files[0];
+      const extension = extname(file.name).toLowerCase();
+      if (
+        !VIDEO_UPLOAD.MIME_TYPES.includes(file.type) ||
+        !VIDEO_UPLOAD.EXTENSIONS.includes(extension) ||
+        file.size > VIDEO_UPLOAD.MAX_BYTES
+      ) {
         return NextResponse.json(
           { error: "Video must be mp4 or webm and at most 100MB" },
           { status: 400 },
@@ -69,7 +79,7 @@ export async function POST(req: NextRequest) {
     for (const file of files) {
 
       const uniqueFileName = `${uuidv4()}${extname(file.name)}`;
-      const env = process.env.NEXT_PUBLIC_ENV || "development"; // fallback nếu chưa khai báo
+      const env = process.env.NEXT_PUBLIC_ENV || "local"; // fallback nếu chưa khai báo
       const key = `${env}/${page}/${category}/${uniqueFileName}`;
 
       const command = new PutObjectCommand({
@@ -83,7 +93,8 @@ export async function POST(req: NextRequest) {
       const uploadRes = await fetch(signedUrl, {
         method: "PUT",
         headers: { "Content-Type": file.type },
-        body: file
+        body: file,
+        signal: isVideoPopupUpload ? AbortSignal.timeout(LONG_UPLOAD_TIMEOUT_MS) : undefined,
       });
 
       if (!uploadRes.ok) {
@@ -112,9 +123,17 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    if (!(await isAuthenticated())) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const { keys } = await req.json();
 
-    if (!Array.isArray(keys) || keys.length === 0) {
+    if (
+      !Array.isArray(keys) ||
+      keys.length === 0 ||
+      keys.some((key) => typeof key !== "string" || key.length === 0)
+    ) {
       return NextResponse.json(
         { error: "Missing or invalid keys" },
         { status: 400 }

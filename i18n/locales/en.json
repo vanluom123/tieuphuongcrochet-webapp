@@ -787,11 +787,13 @@
     "save_error": "Could not save video popups",
     "load_error": "Could not load video popups",
     "video_invalid": "Video must be mp4 or webm and at most 100MB",
-    "cta_url_invalid": "CTA URL must start with http://, https:// or /",
+    "video_upload_failed": "Could not upload the video",
+    "cta_url_invalid": "CTA URL must be an http(s) link or an internal path",
     "title_required": "Please enter a title",
     "video_required": "Please choose a video",
     "clip_progress": "Video {current}/{total}",
     "close_in": "Close in {seconds}s",
+    "close": "Close",
     "cta_fallback": "View more"
   }
 }

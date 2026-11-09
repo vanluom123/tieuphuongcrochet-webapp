@@ -3,14 +3,14 @@
 import { useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
 import { useTranslations } from 'next-intl'
-import { VideoPopupList } from '@/app/lib/definitions'
+import { VideoPopup } from '@/app/lib/definitions'
 import { VIDEO_POPUP_CLOSE_COUNTDOWN_SEC, VIDEO_POPUP_MODAL_CLASS } from './videoPopup.constants'
 import { isSafeCtaUrl } from './videoPopupUrl'
 import '@/app/ui/components/videoPopup.scss'
 
 interface VideoPopupModalProps {
   open: boolean
-  popup: VideoPopupList
+  popup: VideoPopup
   onCompleted: () => void
 }
 
@@ -20,8 +20,8 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
   const [secondsLeft, setSecondsLeft] = useState(VIDEO_POPUP_CLOSE_COUNTDOWN_SEC)
   const clips = popup.clips ?? []
   const clip = clips[clipIndex]
-  const ctaUrl = clip?.ctaUrl?.trim()
-  const showCta = ctaUrl && isSafeCtaUrl(ctaUrl)
+  const ctaUrl = clip?.ctaUrl?.trim() ?? ''
+  const showCta = ctaUrl !== '' && isSafeCtaUrl(ctaUrl)
   const canClose = secondsLeft <= 0
 
   useEffect(() => {
@@ -39,6 +39,8 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
     setClipIndex((index) => (index + 1 < clips.length ? index + 1 : index))
   }
 
+  const close = canClose ? <Button onClick={onCompleted}>{t('close')}</Button> : null
+
   return (
     <Modal
       open={open}
@@ -47,14 +49,16 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
       closable={canClose}
       keyboard={canClose}
       maskClosable={false}
-      footer={null}
+      footer={close}
       onCancel={canClose ? onCompleted : undefined}
       destroyOnClose
     >
-      <div className="video-popup__meta">
-        <span>{t('clip_progress', { current: clipIndex + 1, total: clips.length })}</span>
-        {!canClose ? <span>{t('close_in', { seconds: secondsLeft })}</span> : null}
-      </div>
+      {clips.length > 0 ? (
+        <div className="video-popup__meta">
+          <span>{t('clip_progress', { current: clipIndex + 1, total: clips.length })}</span>
+          {!canClose ? <span>{t('close_in', { seconds: secondsLeft })}</span> : null}
+        </div>
+      ) : null}
       {clip ? (
         <video
           key={`${popup.id}-${clipIndex}`}

@@ -70,6 +70,16 @@ export const USER_ROLES = {
   PREMIUM_USER: 'PREMIUM_USER',
 };
 
+export const VIDEO_UPLOAD: {
+  MAX_BYTES: number;
+  MIME_TYPES: string[];
+  EXTENSIONS: string[];
+} = {
+  MAX_BYTES: 100 * 1024 * 1024,
+  MIME_TYPES: ['video/mp4', 'video/webm'],
+  EXTENSIONS: ['.mp4', '.webm'],
+};
+
 export const LOCAL_STORAGE_NAMES = {
   SYSTEM_AUTHORITY: 'system-authority',
   ACCESS_TOKEN: 'accessToken',

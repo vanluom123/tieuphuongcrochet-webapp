@@ -368,7 +368,7 @@ export interface VideoPopupClip {
   ctaUrl?: string
 }
 
-export interface VideoPopupList {
+export interface VideoPopup {
   id?: string
   title: string
   active: boolean

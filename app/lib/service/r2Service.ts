@@ -62,6 +62,15 @@ export async function uploadMultipleImagesToR2(
   }
 }
 
+async function readErrorMessage(res: Response): Promise<string> {
+  try {
+    const body = await res.json();
+    return typeof body?.error === "string" ? body.error : "";
+  } catch {
+    return "";
+  }
+}
+
 export async function uploadVideoToR2(
   file: File
 ): Promise<FileUpload & { fileName: string }> {
@@ -76,7 +85,8 @@ export async function uploadVideoToR2(
   });
 
   if (!res.ok) {
-    throw new Error(`Video upload failed with status ${res.status}`);
+    const message = await readErrorMessage(res);
+    throw new Error(message || `Video upload failed with status ${res.status}`);
   }
 
   const { publicUrls } = await res.json();
