@@ -24,26 +24,51 @@ const s3 = new S3Client({
 
 const LONG_UPLOAD_TIMEOUT_MS = 120_000;
 const SAFE_SEGMENT = /^[a-z0-9_-]{1,64}$/;
+const VIDEO_TYPE_ERROR = "Video must be mp4 or webm";
+const VIDEO_SIZE_ERROR = "Video must be at most 100MB";
+
+interface VideoValidation {
+  valid: boolean;
+  error?: string;
+}
 
 function readSegment(value: FormDataEntryValue | null, fallback: string): string {
   const raw = value?.toString().trim().toLowerCase() ?? "";
   return SAFE_SEGMENT.test(raw) ? raw : fallback;
 }
 
-async function isAdmin(): Promise<boolean> {
-  const session = await getServerSession(authOptions);
-  return session?.user?.role === USER_ROLES.ADMIN;
+function readFiles(formData: FormData): File[] {
+  return formData.getAll("files").filter((entry): entry is File => entry instanceof File);
 }
 
-async function isAuthenticated(): Promise<boolean> {
+function validateVideoFile(file: File): VideoValidation {
+  const extension = extname(file.name).toLowerCase();
+  if (!VIDEO_UPLOAD.MIME_TYPES.includes(file.type) || !VIDEO_UPLOAD.EXTENSIONS.includes(extension)) {
+    return { valid: false, error: VIDEO_TYPE_ERROR };
+  }
+  if (file.size > VIDEO_UPLOAD.MAX_BYTES) {
+    return { valid: false, error: VIDEO_SIZE_ERROR };
+  }
+  return { valid: true };
+}
+
+async function getSessionUser() {
   const session = await getServerSession(authOptions);
-  return Boolean(session?.user);
+  return session?.user ?? null;
+}
+
+function parseDeleteKeys(body: unknown): string[] | null {
+  if (typeof body !== "object" || body === null) return null;
+  const { keys } = body as { keys?: unknown };
+  if (!Array.isArray(keys) || keys.length === 0) return null;
+  if (!keys.every((key): key is string => typeof key === "string" && key.length > 0)) return null;
+  return keys;
 }
 
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const files = formData.getAll("files") as File[];
+    const files = readFiles(formData);
     const page = readSegment(formData.get("page"), "general");
     const category = readSegment(formData.get("category"), "uncategorized");
 
@@ -54,23 +79,16 @@ export async function POST(req: NextRequest) {
     const isVideoPopupUpload = page === "settings" && category === "video-popups";
 
     if (isVideoPopupUpload) {
-      if (!(await isAdmin())) {
+      const user = await getSessionUser();
+      if (user?.role !== USER_ROLES.ADMIN) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
       if (files.length !== 1) {
         return NextResponse.json({ error: "Upload one video at a time" }, { status: 400 });
       }
-      const file = files[0];
-      const extension = extname(file.name).toLowerCase();
-      if (
-        !VIDEO_UPLOAD.MIME_TYPES.includes(file.type) ||
-        !VIDEO_UPLOAD.EXTENSIONS.includes(extension) ||
-        file.size > VIDEO_UPLOAD.MAX_BYTES
-      ) {
-        return NextResponse.json(
-          { error: "Video must be mp4 or webm and at most 100MB" },
-          { status: 400 },
-        );
+      const validation = validateVideoFile(files[0]);
+      if (!validation.valid) {
+        return NextResponse.json({ error: validation.error }, { status: 400 });
       }
     }
 
@@ -123,17 +141,12 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    if (!(await isAuthenticated())) {
+    if (!(await getSessionUser())) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { keys } = await req.json();
-
-    if (
-      !Array.isArray(keys) ||
-      keys.length === 0 ||
-      keys.some((key) => typeof key !== "string" || key.length === 0)
-    ) {
+    const keys = parseDeleteKeys(await req.json());
+    if (!keys) {
       return NextResponse.json(
         { error: "Missing or invalid keys" },
         { status: 400 }

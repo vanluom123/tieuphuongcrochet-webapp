@@ -71,9 +71,24 @@ async function readErrorMessage(res: Response): Promise<string> {
   }
 }
 
-export async function uploadVideoToR2(
-  file: File
-): Promise<FileUpload & { fileName: string }> {
+export type UploadedVideo = FileUpload & { fileName: string };
+
+function parseUploadedVideo(body: unknown): UploadedVideo {
+  const publicUrls = (body as { publicUrls?: unknown } | null)?.publicUrls;
+  const uploaded = Array.isArray(publicUrls) ? (publicUrls[0] as Partial<FileUpload> | undefined) : undefined;
+  if (
+    !uploaded ||
+    typeof uploaded.fileContent !== "string" ||
+    typeof uploaded.fileName !== "string" ||
+    !uploaded.fileContent ||
+    !uploaded.fileName
+  ) {
+    throw new Error("Video upload returned no file");
+  }
+  return uploaded as UploadedVideo;
+}
+
+export async function uploadVideoToR2(file: File): Promise<UploadedVideo> {
   const formData = new FormData();
   formData.append("page", "settings");
   formData.append("category", "video-popups");
@@ -89,12 +104,7 @@ export async function uploadVideoToR2(
     throw new Error(message || `Video upload failed with status ${res.status}`);
   }
 
-  const { publicUrls } = await res.json();
-  const uploaded = publicUrls?.[0];
-  if (!uploaded?.fileContent || !uploaded.fileName) {
-    throw new Error("Video upload returned no file");
-  }
-  return uploaded;
+  return parseUploadedVideo(await res.json());
 }
 
 export async function deleteMultipleFilesToR2(keys: string[]): Promise<boolean> {
@@ -108,11 +118,11 @@ export async function deleteMultipleFilesToR2(keys: string[]): Promise<boolean> 
     });
 
     if (!response.ok) {
-      console.error("Failed to delete files:", await response.text());
+      console.error("Failed to delete files:", await readErrorMessage(response));
       return false;
     }
 
-    const result = await response.json();
+    const result = (await response.json()) as { deleted?: unknown };
     return Array.isArray(result.deleted) && result.deleted.length > 0;
   } catch (error) {
     console.error("Error deleting files:", error);

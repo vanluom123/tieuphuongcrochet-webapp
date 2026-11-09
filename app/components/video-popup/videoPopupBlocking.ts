@@ -1,23 +1,17 @@
 import { VIDEO_POPUP_MODAL_CLASS } from './videoPopup.constants'
 
-function isVisible(element: Element): boolean {
-  const style = window.getComputedStyle(element)
-  return style.display !== 'none' && style.visibility !== 'hidden'
-}
+const BLOCKING_OVERLAYS = [
+  `.ant-modal-wrap:not(.${VIDEO_POPUP_MODAL_CLASS})`,
+  '.ant-drawer-open',
+  '.ant-image-preview-wrap',
+].join(', ')
 
 export function hasBlockingModal(): boolean {
-  if (typeof document === 'undefined') return false
+  if (typeof window === 'undefined') return false
 
-  const wraps = document.querySelectorAll('.ant-modal-wrap')
-  for (const wrap of wraps) {
-    if (wrap.classList.contains(VIDEO_POPUP_MODAL_CLASS)) continue
-    if (isVisible(wrap)) return true
+  for (const overlay of document.querySelectorAll(BLOCKING_OVERLAYS)) {
+    const style = window.getComputedStyle(overlay)
+    if (style.display !== 'none' && style.visibility !== 'hidden') return true
   }
-
-  const overlays = document.querySelectorAll('.ant-drawer-open, .ant-image-preview-wrap')
-  for (const overlay of overlays) {
-    if (isVisible(overlay)) return true
-  }
-
   return false
 }
