@@ -86,7 +86,11 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
 
   const onSubmitForm = async (values: Pattern) => {
     setState((prevState) => ({ ...prevState, loading: true }))
-    let sendData = { ...values }
+
+    let sendData = {
+      ...values,
+      home: values.home || false,
+    }
     if (modalData.id) {
       sendData = {
         ...sendData,
