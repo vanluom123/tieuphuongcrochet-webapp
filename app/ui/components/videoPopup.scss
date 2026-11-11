@@ -15,6 +15,21 @@
   font-size: 13px;
 }
 
+.video-popup__countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, tokens.$textSecondColor 10%, white);
+}
+
+.video-popup__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .video-popup-settings {
   display: flex;
   flex-direction: column;

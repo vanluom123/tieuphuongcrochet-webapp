@@ -797,7 +797,6 @@
     "video_required": "Vui lòng chọn video",
     "clip_progress": "Video {current}/{total}",
     "close_in": "Đóng sau {seconds}s",
-    "close": "Đóng",
     "cta_fallback": "Xem thêm"
   }
 }

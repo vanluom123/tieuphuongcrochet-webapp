@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Modal } from 'antd'
+import { ExportOutlined, FieldTimeOutlined, LinkOutlined } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
 import { VideoPopup } from '@/app/lib/definitions'
 import { VIDEO_POPUP_CLOSE_COUNTDOWN_SEC, VIDEO_POPUP_MODAL_CLASS } from './videoPopup.constants'
@@ -43,21 +44,35 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
   }
 
   const ctaLabel = clip?.label || t('cta_fallback')
+  const ctaContent = (
+    <>
+      <LinkOutlined aria-hidden="true" />
+      <span>{ctaLabel}</span>
+      {!isInternalCta ? <ExportOutlined aria-hidden="true" /> : null}
+    </>
+  )
   const ctaButton =
     showCta &&
     (isInternalCta ? (
       <Button
         type="primary"
+        className="video-popup__cta"
         onClick={() => {
           onCompleted()
           router.push(ctaUrl)
         }}
       >
-        {ctaLabel}
+        {ctaContent}
       </Button>
     ) : (
-      <Button type="primary" href={ctaUrl} target="_blank" rel="noopener noreferrer">
-        {ctaLabel}
+      <Button
+        type="primary"
+        className="video-popup__cta"
+        href={ctaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {ctaContent}
       </Button>
     ))
 
@@ -69,18 +84,19 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
       closable={canClose}
       keyboard={canClose}
       maskClosable={false}
-      footer={canClose ? (
-        <Button onClick={onCompleted} aria-label={t('close')}>
-          {t('close')}
-        </Button>
-      ) : null}
+      footer={null}
       onCancel={canClose ? onCompleted : undefined}
       destroyOnClose
     >
       {clips.length > 0 ? (
         <div className="video-popup__meta">
           <span>{t('clip_progress', { current: clipIndex + 1, total: clips.length })}</span>
-          {!canClose ? <span aria-live="polite">{t('close_in', { seconds: secondsLeft })}</span> : null}
+          {!canClose ? (
+            <span className="video-popup__countdown" aria-live="polite">
+              <FieldTimeOutlined aria-hidden="true" />
+              <span>{t('close_in', { seconds: secondsLeft })}</span>
+            </span>
+          ) : null}
         </div>
       ) : null}
       {clip ? (
