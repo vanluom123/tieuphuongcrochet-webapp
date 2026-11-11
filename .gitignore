@@ -42,3 +42,4 @@ package-lock.json
 .idea
 
 .agents/skills
+tests/upload-lifecycle.test.cjs
