@@ -15,6 +15,7 @@ import {
 } from '@/app/lib/service/freePatternService'
 import { UploadFile } from 'antd/es/upload'
 import { uploadMultipleImagesToServer } from '@/app/lib/utils'
+import { notification } from '@/app/lib/notify'
 import dynamic from 'next/dynamic'
 
 const CustomEditor = dynamic(() => import('../custom-editor'), {
@@ -98,31 +99,27 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
       }
     }
 
-    // Use Promise.all to handle concurrent uploads
-    const categoryName = categories.find((ct) => ct.key === sendData.category_id)?.name
-    const [uploadedImages, uploadedFiles] = await Promise.all([
-      uploadMultipleImagesToServer(
-        sendData.images,
-        state.pattern.images,
-        'free-pattern',
-        categoryName,
-      ),
-      uploadMultipleImagesToServer(
-        sendData.files,
-        state.pattern.files,
-        'free-pattern',
-        categoryName,
-      ),
-    ])
+    try {
+      const categoryName = categories.find((ct) => ct.key === sendData.category_id)?.name
+      const [uploadedImages, uploadedFiles] = await Promise.all([
+        uploadMultipleImagesToServer(sendData.images, 'free-pattern', categoryName),
+        uploadMultipleImagesToServer(sendData.files, 'free-pattern', categoryName),
+      ])
 
-    sendData.images = uploadedImages
-    sendData.files = uploadedFiles
+      sendData.images = uploadedImages
+      sendData.files = uploadedFiles
 
-    const res = await createUpdateFreePattern(sendData)
-    if (res.success) {
-      onHandleCancel()
-      onRefreshData()
-    } else {
+      const res = await createUpdateFreePattern(sendData)
+      if (res.success) {
+        onHandleCancel()
+        onRefreshData()
+      }
+    } catch (error) {
+      notification.error({
+        message: 'Save failed',
+        description: error instanceof Error ? error.message : undefined,
+      })
+    } finally {
       setState((prevState) => ({ ...prevState, loading: false }))
     }
   }

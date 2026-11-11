@@ -25,7 +25,7 @@ export function useVideoPopupEditor() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
-  const [removedKeys, setRemovedKeys] = useState<string[]>([])
+  const [hasRemovedLists, setHasRemovedLists] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -72,25 +72,22 @@ export function useVideoPopupEditor() {
 
   const removeClip = useCallback(
     (listIndex: number, clipIndex: number) => {
-      const result = removeClipAt(lists, listIndex, clipIndex)
-      if (result.removedKey) setRemovedKeys((keys) => [...keys, result.removedKey])
-      setLists(result.lists)
+      setLists((current) => removeClipAt(current, listIndex, clipIndex))
     },
-    [lists],
+    [],
   )
 
   const removeList = useCallback(
     (index: number) => {
-      const result = removeListAt(lists, index)
-      if (result.removedKeys.length > 0) setRemovedKeys((keys) => [...keys, ...result.removedKeys])
-      setLists(result.lists)
+      setLists((current) => removeListAt(current, index))
+      setHasRemovedLists(true)
     },
-    [lists],
+    [],
   )
 
   const onSave = useCallback(async () => {
     if (loading || saving) return
-    if (lists.length === 0 && removedKeys.length === 0) return
+    if (lists.length === 0 && !hasRemovedLists) return
 
     const errors = lists.map(validateDraftList)
     if (errors.some((error) => error.titleMissing || error.videoMissing)) {
@@ -105,9 +102,9 @@ export function useVideoPopupEditor() {
     setShowErrors(false)
     setSaving(true)
     try {
-      const savedLists = await syncVideoPopupDrafts(lists, removedKeys, t('video_upload_failed'))
+      const savedLists = await syncVideoPopupDrafts(lists, t('video_upload_failed'))
       setLists(savedLists.map(toDraftList))
-      setRemovedKeys([])
+      setHasRemovedLists(false)
       notification.success({ message: t('save_success') })
     } catch (error) {
       notification.error({
@@ -117,14 +114,14 @@ export function useVideoPopupEditor() {
     } finally {
       setSaving(false)
     }
-  }, [loading, saving, lists, removedKeys, t])
+  }, [loading, saving, lists, hasRemovedLists, t])
 
   return {
     lists,
     loading,
     saving,
     showErrors,
-    canSave: !loading && !saving && (lists.length > 0 || removedKeys.length > 0),
+    canSave: !loading && !saving && (lists.length > 0 || hasRemovedLists),
     onSave,
     addList,
     removeList,

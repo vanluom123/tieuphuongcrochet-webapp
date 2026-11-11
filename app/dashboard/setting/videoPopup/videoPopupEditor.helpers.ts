@@ -125,20 +125,12 @@ export function removeClipAt(
   lists: ListDraft[],
   listIndex: number,
   clipIndex: number,
-): { lists: ListDraft[]; removedKey: string } {
-  const removedKey = lists[listIndex]?.clips[clipIndex]?.videoFileName ?? ''
-  return {
-    lists: lists.map((list, i) =>
-      i === listIndex ? { ...list, clips: list.clips.filter((_, j) => j !== clipIndex) } : list,
-    ),
-    removedKey,
-  }
+): ListDraft[] {
+  return lists.map((list, i) =>
+    i === listIndex ? { ...list, clips: list.clips.filter((_, j) => j !== clipIndex) } : list,
+  )
 }
 
-export function removeListAt(lists: ListDraft[], index: number): { lists: ListDraft[]; removedKeys: string[] } {
-  const removedKeys = (lists[index]?.clips ?? []).map((clip) => clip.videoFileName).filter(Boolean)
-  return {
-    lists: lists.filter((_, i) => i !== index),
-    removedKeys,
-  }
+export function removeListAt(lists: ListDraft[], index: number): ListDraft[] {
+  return lists.filter((_, i) => i !== index)
 }

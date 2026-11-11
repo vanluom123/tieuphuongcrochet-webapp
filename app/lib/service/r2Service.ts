@@ -1,65 +1,26 @@
 import { API_ROUTES } from "../constant";
-import { FileUpload } from "../definitions";
+import type { FileUpload } from "../definitions";
 
 export async function uploadImageToR2(
-  file: File, 
+  file: File,
   page: string,
   category: string = ''
 ): Promise<FileUpload[]> {
-  try {
-    const formData = new FormData();
-    formData.append("page", page);
-    formData.append("category", category);
-    formData.append("files", file); 
-
-    const res = await fetch(API_ROUTES.R2_PRESIGNED, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) {
-      console.error("Multi-upload failed:", await res.text());
-      return [];
-    }
-
-    const { publicUrls } = await res.json();
-    return publicUrls;
-  } catch (err) {
-    console.error("Upload error:", err);
-    return [];
-  }
+  return uploadFiles([file], page, category);
 }
 
 export async function uploadMultipleImagesToR2(
-  files: FileUpload[], 
+  files: FileUpload[],
   page: string,
   category: string = ''
 ): Promise<FileUpload[]> {
-  try {
-    const formData = new FormData();
-    formData.append("page", page);
-    formData.append("category", category);
-
-    for (const file of files) {
-      formData.append("files", file.originFileObj as File); // same key for multiple files
+  const originals = files.map((file) => {
+    if (!(file.originFileObj instanceof File)) {
+      throw new Error(`Missing upload file: ${file.name}`);
     }
-
-    const res = await fetch(API_ROUTES.R2_PRESIGNED, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) {
-      console.error("Multi-upload failed:", await res.text());
-      return [];
-    }
-
-    const { publicUrls } = await res.json();
-    return publicUrls;
-  } catch (err) {
-    console.error("Upload error:", err);
-    return [];
-  }
+    return file.originFileObj;
+  });
+  return uploadFiles(originals, page, category);
 }
 
 async function readErrorMessage(res: Response): Promise<string> {
@@ -71,61 +32,55 @@ async function readErrorMessage(res: Response): Promise<string> {
   }
 }
 
-export type UploadedVideo = FileUpload & { fileName: string };
+type UploadedFile = FileUpload & { fileName: string };
+export type UploadedVideo = UploadedFile;
 
-function parseUploadedVideo(body: unknown): UploadedVideo {
+function isUploadedFile(value: unknown): value is UploadedFile {
+  if (typeof value !== "object" || value === null) return false;
+  const file = value as Record<string, unknown>;
+  return ["uid", "name", "url", "fileContent", "fileName"].every(
+    (key) => typeof file[key] === "string" && file[key].trim().length > 0
+  );
+}
+
+function parseUploadedFiles(body: unknown, expectedCount: number): UploadedFile[] {
   const publicUrls = (body as { publicUrls?: unknown } | null)?.publicUrls;
-  const uploaded = Array.isArray(publicUrls) ? (publicUrls[0] as Partial<FileUpload> | undefined) : undefined;
-  if (
-    !uploaded ||
-    typeof uploaded.fileContent !== "string" ||
-    typeof uploaded.fileName !== "string" ||
-    !uploaded.fileContent ||
-    !uploaded.fileName
-  ) {
-    throw new Error("Video upload returned no file");
+  if (!Array.isArray(publicUrls) || publicUrls.length !== expectedCount || !publicUrls.every(isUploadedFile)) {
+    throw new Error(`Upload returned invalid or incomplete files (expected ${expectedCount})`);
   }
-  return uploaded as UploadedVideo;
+  return publicUrls;
+}
+
+async function uploadFiles(files: File[], page: string, category: string): Promise<UploadedFile[]> {
+  if (files.length === 0 || files.some((file) => !(file instanceof File))) {
+    throw new Error("No valid files selected for upload");
+  }
+  const formData = new FormData();
+  formData.append("page", page);
+  formData.append("category", category);
+  for (const file of files) formData.append("files", file);
+
+  let res: Response;
+  try {
+    res = await fetch(API_ROUTES.R2_PRESIGNED, { method: "POST", body: formData });
+  } catch {
+    throw new Error("Upload request failed. Please try again.");
+  }
+  if (!res.ok) {
+    const message = await readErrorMessage(res);
+    throw new Error(message || `Upload failed with status ${res.status}`);
+  }
+
+  let body: unknown;
+  try {
+    body = await res.json();
+  } catch {
+    throw new Error("Upload returned an invalid response");
+  }
+  return parseUploadedFiles(body, files.length);
 }
 
 export async function uploadVideoToR2(file: File): Promise<UploadedVideo> {
-  const formData = new FormData();
-  formData.append("page", "settings");
-  formData.append("category", "video-popups");
-  formData.append("files", file);
-
-  const res = await fetch(API_ROUTES.R2_PRESIGNED, {
-    method: "POST",
-    body: formData,
-  });
-
-  if (!res.ok) {
-    const message = await readErrorMessage(res);
-    throw new Error(message || `Video upload failed with status ${res.status}`);
-  }
-
-  return parseUploadedVideo(await res.json());
-}
-
-export async function deleteMultipleFilesToR2(keys: string[]): Promise<boolean> {
-  try {
-    const response = await fetch(API_ROUTES.R2_PRESIGNED, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ keys }),
-    });
-
-    if (!response.ok) {
-      console.error("Failed to delete files:", await readErrorMessage(response));
-      return false;
-    }
-
-    const result = (await response.json()) as { deleted?: unknown };
-    return Array.isArray(result.deleted) && result.deleted.length > 0;
-  } catch (error) {
-    console.error("Error deleting files:", error);
-    return false;
-  }
+  const uploaded = await uploadFiles([file], "settings", "video-popups");
+  return uploaded[0];
 }
