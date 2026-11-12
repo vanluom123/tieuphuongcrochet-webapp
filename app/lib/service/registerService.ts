@@ -1,88 +1,75 @@
 import { API_ROUTES } from '../constant'
 import { User } from '@/app/lib/definitions'
+import apiService, { ApiError } from './apiService'
 
-export const registerService = async (data: User) => {
-  try {
-    const url = new URL(API_ROUTES.SIGNUP, process.env.NEXT_PUBLIC_API_URL)
-
-    const response = await fetch(url.toString(), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-
-    return {
-      status: response.ok,
-      statusCode: response.status,
-    }
-  } catch (error: any) {}
+export interface AuthResult {
+  status: boolean
+  statusCode?: number
+  data?: any
 }
 
-export const passwordResetRequest = async (email: string) => {
-  try {
-    const url = new URL(API_ROUTES.RESET_PASSWORD, process.env.NEXT_PUBLIC_API_URL)
-    url.searchParams.append('email', email)
-
-    const response = await fetch(url.toString(), {
-      method: 'GET',
-    })
-
-    const data = await response.json()
-    return {
-      status: response.ok,
-      data
-    }
-  } catch (error: any) {
-    return { status: false, data: null }
-  }
-}
-
-export const resetPassword = async (token: string, newPassword: string) => {
-  try {
-    const url = new URL(API_ROUTES.RESET_PASSWORD_SUBMIT, process.env.NEXT_PUBLIC_API_URL)
-    url.searchParams.append('passwordResetToken', token)
-
-    const response = await fetch(url.toString(), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ newPassword }),
-    })
-
-    const data = await response.json()
-    return {
-      status: response.ok,
-      data
-    }
-  } catch (error: any) {
-    return { status: false, data: null }
-  }
-}
-
-export const resendVerificationEmail = async (email: string) => {
-  try {
-    const url = new URL(API_ROUTES.RESEND_VERIFICATION, process.env.NEXT_PUBLIC_API_URL)
-    url.searchParams.append('email', email.trim().toLowerCase())
-
-    const response = await fetch(url.toString(), {
-      method: 'GET',
-    })
-
-    const data = await response.json().catch(() => null)
-    return {
-      status: response.ok,
-      statusCode: response.status,
-      data,
-    }
-  } catch (error: any) {
+function toAuthResult(error: unknown): AuthResult {
+  if (error instanceof ApiError) {
     return {
       status: false,
-      statusCode: 500,
-      data: { message: error?.message || 'Network error' },
+      statusCode: error.statusCode,
+      data: error.data ?? { message: error.message },
     }
   }
+  return { status: false, statusCode: 500, data: { message: 'Network error' } }
 }
-
+
+export const registerService = async (data: User): Promise<AuthResult> => {
+  try {
+    await apiService({
+      endpoint: API_ROUTES.SIGNUP,
+      method: 'POST',
+      data,
+    })
+    return { status: true }
+  } catch (error) {
+    return toAuthResult(error)
+  }
+}
+
+export const passwordResetRequest = async (email: string): Promise<AuthResult> => {
+  try {
+    const res = await apiService({
+      endpoint: API_ROUTES.RESET_PASSWORD,
+      method: 'GET',
+      queryParams: { email },
+      retry: 0,
+    })
+    return { status: true, data: res }
+  } catch (error) {
+    return toAuthResult(error)
+  }
+}
+
+export const resetPassword = async (token: string, newPassword: string): Promise<AuthResult> => {
+  try {
+    const res = await apiService({
+      endpoint: API_ROUTES.RESET_PASSWORD_SUBMIT,
+      method: 'POST',
+      queryParams: { passwordResetToken: token },
+      data: { newPassword },
+    })
+    return { status: true, data: res }
+  } catch (error) {
+    return toAuthResult(error)
+  }
+}
+
+export const resendVerificationEmail = async (email: string): Promise<AuthResult> => {
+  try {
+    const res = await apiService({
+      endpoint: API_ROUTES.RESEND_VERIFICATION,
+      method: 'GET',
+      queryParams: { email: email.trim().toLowerCase() },
+      retry: 0,
+    })
+    return { status: true, data: res }
+  } catch (error) {
+    return toAuthResult(error)
+  }
+}

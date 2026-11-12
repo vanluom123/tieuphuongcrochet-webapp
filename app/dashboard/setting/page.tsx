@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { filter, find } from "lodash";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import BannerItem from "@/app/components/cover-page/BannerItem";
 import { Banner, FileUpload, IBannerType, DataType } from "@/app/lib/definitions";
 import { uid } from "@/app/lib/utils";
@@ -11,6 +12,7 @@ import BannerType from "./BannerType";
 import BannerForm, { EdittingBanner, initialEdittingBanner } from "./BannerForm";
 import { createUpdateBanners, fetchBanners, fetchBannerTypes } from "@/app/lib/service/settingService";
 import SubscriptionPricingForm from "./SubscriptionPricingForm";
+import VideoPopupListSettings from "./VideoPopupListSettings";
 
 const Setting = () => {
     const [isUpdatedBList, setIsUpdatedBList] = useState(false);
@@ -24,6 +26,7 @@ const Setting = () => {
     const { Item } = Form;
     const { Title } = Typography;
     const router = useRouter();
+    const t = useTranslations('VideoPopupList');
 
     useEffect(() => {
         setLoading(true);
@@ -108,6 +111,9 @@ const Setting = () => {
             />
             <Divider style={{ margin: '30px 0' }} />
             <SubscriptionPricingForm />
+            <Divider style={{ margin: '30px 0' }} />
+            <Title level={2} className="align-center">{t('title')}</Title>
+            <VideoPopupListSettings />
             <Divider style={{ margin: '30px 0' }} />
             <Title level={2} className="align-center">Banners</Title>
             <Collapse

@@ -78,13 +78,17 @@ const BannerForm = ({
     let fileName = bannerImage[0]?.fileName || bannerImage[0]?.name || ''
 
     if (bannerImage[0]?.originFileObj) {
-      const uploadedFiles = await uploadMultipleImagesToServer(bannerImage, [], 'banners')
-      if (!uploadedFiles || uploadedFiles.length === 0) {
-        notification.error({ message: 'Error', description: 'Failed to upload image' })
+      try {
+        const uploadedFiles = await uploadMultipleImagesToServer(bannerImage, 'banners')
+        fileContent = uploadedFiles[0].fileContent
+        fileName = uploadedFiles[0].fileName
+      } catch (error) {
+        notification.error({
+          message: 'Upload failed',
+          description: error instanceof Error ? error.message : undefined,
+        })
         return
       }
-      fileContent = uploadedFiles[0].fileContent
-      fileName = uploadedFiles[0].fileName
     }
 
     const banner: Banner = {

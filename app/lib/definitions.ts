@@ -360,3 +360,17 @@ export interface PaymentOrderResponse {
 export interface CapturePaymentRequest {
   orderId: string
 }
+
+export interface VideoPopupClip {
+  videoUrl: string
+  videoFileName: string
+  label?: string
+  ctaUrl?: string
+}
+
+export interface VideoPopup {
+  id?: string
+  title: string
+  active: boolean
+  clips: VideoPopupClip[]
+}

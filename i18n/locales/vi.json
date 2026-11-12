@@ -221,6 +221,11 @@
     "register": "Đăng ký",
     "upgrade_premium": "Nâng cấp Premium"
   },
+  "Auth": {
+    "intent_save_pattern": "Đăng nhập để lưu mẫu này.",
+    "intent_like": "Đăng nhập để thích mẫu này.",
+    "intent_comment": "Đăng nhập để bình luận."
+  },
   "Login": {
     "title": "Đăng nhập",
     "description": "Đăng nhập vào tài khoản của bạn",
@@ -230,7 +235,6 @@
     "btn_register": "Tạo tài khoản mới",
     "input_email": "Email",
     "input_password": "Mật khẩu",
-    "remember_me": "Ghi nhớ tôi",
     "forgot_password": "Quên mật khẩu",
     "error_msg_incorrect_email": "Định dạng email không chính xác!",
     "error_msg_required_email": "Vui lòng nhập email",
@@ -245,7 +249,8 @@
     "unverified_account_desc": "Vui lòng xác thực email để có thể đăng nhập.",
     "resend_verification_link": "Chưa nhận được email kích hoạt?",
     "btn_resend_verification": "Gửi lại email kích hoạt",
-    "btn_resend_cooldown": "Gửi lại sau {seconds}s"
+    "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát.",
+    "remember_me": "Ghi nhớ đăng nhập"
   },
   "ResendVerification": {
     "title": "Gửi lại email kích hoạt",
@@ -255,7 +260,6 @@
     "error_msg_required_email": "Vui lòng nhập email",
     "error_msg_incorrect_email": "Định dạng email không chính xác!",
     "btn_submit": "Gửi email kích hoạt",
-    "btn_resend_cooldown": "Gửi lại sau {seconds}s",
     "back_to_login": "Quay lại Đăng nhập",
     "back_to_register": "Tạo tài khoản mới",
     "success_title": "Đã gửi email thành công",
@@ -276,10 +280,11 @@
     "success_title": "Đã gửi yêu cầu thành công",
     "success_description": "Vui lòng kiểm tra email của bạn để nhận liên kết đặt lại mật khẩu.",
     "error_title": "Gửi yêu cầu thất bại",
-    "error_description": "Không thể xử lý yêu cầu đặt lại mật khẩu. Vui lòng thử lại sau."
+    "error_description": "Không thể xử lý yêu cầu đặt lại mật khẩu. Vui lòng thử lại sau.",
+    "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát."
   },
   "ResetPassword": {
-    "title": "Đặt lại mật khẩu",
+    "title": "Đặt lại Mật khẩu",
     "description": "Nhập mật khẩu mới của bạn",
     "token_missing": "Token đặt lại mật khẩu bị thiếu. Vui lòng sử dụng liên kết trong email của bạn.",
     "token_invalid_or_missing": "Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.",
@@ -315,6 +320,8 @@
     "note_content_1": "Các trường bắt buộc",
     "note_content_2": "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 ký tự đặc biệt, chữ thường và số.",
     "error_register_400": "Email đã tồn tại!",
+    "error_register_500": "Lỗi máy chủ hoặc kết nối mạng, vui lòng thử lại sau.",
+    "error_register_default": "Đã có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại.",
     "success_register_msg": "Đăng ký tài khoản thành công!",
     "error_register_title": "Đăng ký thất bại",
     "success_register_title": "Thành công!",
@@ -324,7 +331,7 @@
       "sent_to": "Đã gửi tới:",
       "spam_note": "Nếu không thấy trong hộp thư chính, vui lòng kiểm tra mục Thư rác/Spam.",
       "btn_resend": "Gửi lại email kích hoạt",
-      "btn_resend_cooldown": "Gửi lại sau {seconds}s",
+      "rate_limit_error": "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi trong giây lát.",
       "resend_success_title": "Đã gửi lại email",
       "resend_success_description": "Liên kết kích hoạt mới đã được gửi tới hộp thư của bạn.",
       "resend_error_title": "Gửi lại thất bại",
@@ -758,5 +765,38 @@
     "createError": "Lỗi khi tạo bộ sưu tập",
     "saveSuccess": "Đã lưu vào bộ sưu tập",
     "saveError": "Lỗi khi lưu vào bộ sưu tập"
+  },
+  "VideoPopupList": {
+    "title": "Video popup",
+    "add": "Thêm danh sách",
+    "name": "Tiêu đề",
+    "cta_url": "Link CTA",
+    "active": "Bật",
+    "clips": "Thứ tự phát",
+    "clip_label": "Nhãn clip",
+    "add_clip": "Thêm video",
+    "choose_file": "Chọn file",
+    "move_up": "Đưa lên",
+    "move_down": "Đưa xuống",
+    "remove_clip": "Xóa video",
+    "remove_list": "Xóa danh sách",
+    "delete_list_confirm": "Bạn có chắc chắn muốn xóa danh sách này?",
+    "delete_clip_confirm": "Bạn có chắc chắn muốn xóa video này?",
+    "confirm_yes": "Xóa",
+    "confirm_no": "Hủy",
+    "order_hint": "Video phía trên phát trước. Hết clip này thì sang clip kế.",
+    "empty": "Chưa có danh sách. Thêm một danh sách, rồi xếp video theo thứ tự phát.",
+    "save": "Lưu",
+    "save_success": "Đã cập nhật danh sách video popup",
+    "save_error": "Không lưu được video popup",
+    "load_error": "Không tải được video popup",
+    "video_invalid": "Video phải là mp4 hoặc webm và tối đa 100MB",
+    "video_upload_failed": "Không tải được video lên",
+    "cta_url_invalid": "Link CTA phải là link http(s) hoặc đường dẫn nội bộ",
+    "title_required": "Vui lòng nhập tiêu đề",
+    "video_required": "Vui lòng chọn video",
+    "clip_progress": "Video {current}/{total}",
+    "close_in": "Đóng sau {seconds}s",
+    "cta_fallback": "Xem thêm"
   }
 }

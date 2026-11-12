@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Button, Modal, Typography, Flex } from 'antd';
 import { MailOutlined, ReloadOutlined, InfoCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
-import { useResendCooldown } from '@/app/hooks/useResendCooldown';
 import { resendVerificationEmail } from '@/app/lib/service/registerService';
 import { notification } from '@/app/lib/notify';
 
@@ -27,9 +26,6 @@ const ActiveAccountModal: React.FC<ActiveAccountModalProps> = ({
 }) => {
   const t = useTranslations('Register.ActiveModal');
   const [isResending, setIsResending] = useState(false);
-  const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown(
-    email ? `active_modal_${email}` : 'active_modal_default'
-  );
 
   if (!isOpen) {
     return null;
@@ -52,10 +48,9 @@ const ActiveAccountModal: React.FC<ActiveAccountModalProps> = ({
           message: t('resend_success_title'),
           description: t('resend_success_description'),
         });
-        startCooldown(60);
       } else {
         const errorDesc =
-          res.statusCode === 429 || res.data?.message?.includes?.('limit')
+          res.statusCode === 429
             ? res.data?.message || t('rate_limit_error')
             : res.data?.message || t('resend_error_description');
 
@@ -63,10 +58,6 @@ const ActiveAccountModal: React.FC<ActiveAccountModalProps> = ({
           message: t('resend_error_title'),
           description: errorDesc,
         });
-
-        if (res.statusCode === 429 || res.data?.message?.includes?.('limit')) {
-          startCooldown(60);
-        }
       }
     } catch {
       notification.error({
@@ -147,12 +138,10 @@ const ActiveAccountModal: React.FC<ActiveAccountModalProps> = ({
             type="default"
             icon={<ReloadOutlined spin={isResending} />}
             loading={isResending}
-            disabled={isCooldownActive || isResending}
+            disabled={isResending}
             onClick={handleResend}
           >
-            {isCooldownActive
-              ? t('btn_resend_cooldown', { seconds: secondsLeft })
-              : t('btn_resend')}
+            {t('btn_resend')}
           </Button>
         </Flex>
       </div>
