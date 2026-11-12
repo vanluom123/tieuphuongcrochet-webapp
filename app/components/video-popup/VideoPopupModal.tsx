@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button, Modal } from 'antd'
+import { ExportOutlined, FieldTimeOutlined, LinkOutlined } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
 import { VideoPopup } from '@/app/lib/definitions'
 import { VIDEO_POPUP_CLOSE_COUNTDOWN_SEC, VIDEO_POPUP_MODAL_CLASS } from './videoPopup.constants'
-import { isSafeCtaUrl } from './videoPopupUrl'
+import { formatCtaLink, isSafeCtaUrl } from './videoPopupUrl'
 import '@/app/ui/components/videoPopup.scss'
 
 interface VideoPopupModalProps {
@@ -16,12 +18,14 @@ interface VideoPopupModalProps {
 
 export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopupModalProps) {
   const t = useTranslations('VideoPopupList')
+  const router = useRouter()
   const [clipIndex, setClipIndex] = useState(0)
   const [secondsLeft, setSecondsLeft] = useState(VIDEO_POPUP_CLOSE_COUNTDOWN_SEC)
   const clips = popup.clips ?? []
   const clip = clips[clipIndex]
-  const ctaUrl = clip?.ctaUrl?.trim() ?? ''
-  const showCta = ctaUrl !== '' && isSafeCtaUrl(ctaUrl)
+  const ctaUrl = formatCtaLink(clip?.ctaUrl ?? '')
+  const showCta = isSafeCtaUrl(ctaUrl)
+  const isInternalCta = ctaUrl.startsWith('/')
   const canClose = secondsLeft <= 0
 
   useEffect(() => {
@@ -39,7 +43,38 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
     setClipIndex((index) => (index + 1 < clips.length ? index + 1 : index))
   }
 
-  const close = canClose ? <Button onClick={onCompleted}>{t('close')}</Button> : null
+  const ctaLabel = clip?.label || t('cta_fallback')
+  const ctaContent = (
+    <>
+      <LinkOutlined aria-hidden="true" />
+      <span>{ctaLabel}</span>
+      {!isInternalCta ? <ExportOutlined aria-hidden="true" /> : null}
+    </>
+  )
+  const ctaButton =
+    showCta &&
+    (isInternalCta ? (
+      <Button
+        type="primary"
+        className="video-popup__cta"
+        onClick={() => {
+          onCompleted()
+          router.push(ctaUrl)
+        }}
+      >
+        {ctaContent}
+      </Button>
+    ) : (
+      <Button
+        type="primary"
+        className="video-popup__cta"
+        href={ctaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {ctaContent}
+      </Button>
+    ))
 
   return (
     <Modal
@@ -49,14 +84,19 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
       closable={canClose}
       keyboard={canClose}
       maskClosable={false}
-      footer={close}
+      footer={null}
       onCancel={canClose ? onCompleted : undefined}
       destroyOnClose
     >
       {clips.length > 0 ? (
         <div className="video-popup__meta">
           <span>{t('clip_progress', { current: clipIndex + 1, total: clips.length })}</span>
-          {!canClose ? <span>{t('close_in', { seconds: secondsLeft })}</span> : null}
+          {!canClose ? (
+            <span className="video-popup__countdown" aria-live="polite">
+              <FieldTimeOutlined aria-hidden="true" />
+              <span>{t('close_in', { seconds: secondsLeft })}</span>
+            </span>
+          ) : null}
         </div>
       ) : null}
       {clip ? (
@@ -74,11 +114,7 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
           onError={() => setSecondsLeft(0)}
         />
       ) : null}
-      {showCta ? (
-        <Button type="primary" href={ctaUrl} target="_blank" rel="noopener noreferrer">
-          {clip.label || t('cta_fallback')}
-        </Button>
-      ) : null}
+      {ctaButton}
     </Modal>
   )
 }

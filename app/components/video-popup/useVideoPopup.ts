@@ -13,41 +13,48 @@ import {
   VIDEO_POPUP_SHOW_DELAY_MS,
 } from './videoPopup.constants'
 import { hasBlockingModal } from './videoPopupBlocking'
-import { isInCooldown, markCompleted } from './videoPopupStorage'
+import { isWithinCooldown, recordCompletionTimestamp } from './videoPopupStorage'
 
 function isExemptRole(role?: string | null): boolean {
   return role === USER_ROLES.ADMIN || role === USER_ROLES.PREMIUM_USER
 }
 
-// Resolves true when the delay elapsed and false when it gave up on a blocking modal.
-function wait(ms: number, isCancelled: () => boolean): Promise<boolean> {
+// Resolves true when the show delay elapsed, false when cancelled or blocked too long.
+// The latest timer id is reported so the caller can clear it immediately on unmount.
+function waitForShowDelay(isCancelled: () => boolean, onTimer: (id: number) => void): Promise<boolean> {
   return new Promise((resolve) => {
     const startedAt = Date.now()
-    let remaining = ms
+    let remaining = VIDEO_POPUP_SHOW_DELAY_MS
     let last = startedAt
+
     const tick = () => {
       if (isCancelled()) {
         resolve(false)
         return
       }
       const now = Date.now()
-      const blocked = hasBlockingModal()
       if (now - startedAt >= VIDEO_POPUP_MAX_WAIT_MS) {
         resolve(false)
         return
       }
-      if (!blocked) {
-        remaining -= now - last
-      }
+      const blocked = hasBlockingModal()
+      if (!blocked) remaining -= now - last
       last = now
-      if (remaining <= 0 && !blocked) {
+      if (!blocked && remaining <= 0) {
         resolve(true)
         return
       }
-      window.setTimeout(tick, BLOCKING_MODAL_POLL_MS)
+      onTimer(window.setTimeout(tick, BLOCKING_MODAL_POLL_MS))
     }
+
     tick()
   })
+}
+
+function pickRandomPopup(lists: VideoPopup[]): VideoPopup | null {
+  const eligible = lists.filter((item) => item.id && item.clips?.length > 0)
+  if (eligible.length === 0) return null
+  return eligible[Math.floor(Math.random() * eligible.length)] ?? null
 }
 
 export function useVideoPopup() {
@@ -60,20 +67,23 @@ export function useVideoPopup() {
   useEffect(() => {
     if (status === 'loading' || isExcludedPath) return
     if (isExemptRole(session?.user?.role)) return
-    if (isInCooldown()) return
+    if (isWithinCooldown()) return
 
     let cancelled = false
-    const isCancelled = () => cancelled
+    let timerId: number | null = null
 
     const run = async () => {
       const lists = await fetchActiveVideoPopups()
       if (cancelled) return
-      const eligible = lists.filter((item) => item.id && item.clips?.length > 0)
-      if (eligible.length === 0) return
-      const picked = eligible[Math.floor(Math.random() * eligible.length)]
-      if (!picked?.id) return
+      const picked = pickRandomPopup(lists)
+      if (!picked) return
 
-      const ready = await wait(VIDEO_POPUP_SHOW_DELAY_MS, isCancelled)
+      const ready = await waitForShowDelay(
+        () => cancelled,
+        (id) => {
+          timerId = id
+        },
+      )
       if (!ready || cancelled) return
       setPopup(picked)
       setOpen(true)
@@ -82,17 +92,14 @@ export function useVideoPopup() {
     run()
     return () => {
       cancelled = true
+      if (timerId !== null) window.clearTimeout(timerId)
     }
   }, [status, session?.user?.role, isExcludedPath])
 
-  useEffect(() => {
-    if (isExcludedPath) setOpen(false)
-  }, [isExcludedPath])
-
   const complete = useCallback(() => {
     setOpen(false)
-    markCompleted()
+    recordCompletionTimestamp()
   }, [])
 
-  return { popup, open, complete }
+  return { popup, open: open && !isExcludedPath, complete }
 }

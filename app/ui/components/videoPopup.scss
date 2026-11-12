@@ -1,7 +1,9 @@
+@use "../../variables.module.scss" as tokens;
+
 .video-popup__player {
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: #111;
+  background: tokens.$textPrimaryColor;
   display: block;
   margin-bottom: 12px;
 }
@@ -11,6 +13,21 @@
   justify-content: space-between;
   margin-bottom: 8px;
   font-size: 13px;
+}
+
+.video-popup__countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, tokens.$textSecondColor 10%, white);
+}
+
+.video-popup__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .video-popup-settings {
@@ -27,11 +44,11 @@
 
   &__empty {
     margin: 0;
-    color: #6b6b6b;
+    color: tokens.$textSecondColor;
   }
 
   &__card {
-    border: 1px solid #e6e6e6;
+    border: 1px solid color-mix(in srgb, tokens.$textSecondColor 24%, transparent);
     border-radius: 8px;
     padding: 16px 16px 8px;
   }
@@ -41,6 +58,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    flex-wrap: wrap;
     margin-bottom: 12px;
   }
 
@@ -57,21 +75,34 @@
 
   &__hint {
     margin: 0 0 12px;
-    color: #6b6b6b;
+    color: tokens.$textSecondColor;
     font-size: 13px;
   }
 
   &__clip {
-    display: grid;
-    grid-template-columns: 28px minmax(120px, 1fr) minmax(140px, 1.1fr) minmax(120px, 0.9fr) auto;
+    display: flex;
+    flex-direction: column;
     gap: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid color-mix(in srgb, tokens.$textSecondColor 24%, transparent);
+    border-radius: 8px;
+  }
+
+  &__clip-bar {
+    display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__clip-actions {
+    margin-left: auto;
   }
 
   &__index {
     font-variant-numeric: tabular-nums;
-    color: #6b6b6b;
+    color: tokens.$textSecondColor;
   }
 
   &__file {
@@ -79,6 +110,7 @@
     align-items: center;
     gap: 8px;
     min-width: 0;
+    flex: 0 1 auto;
   }
 
   &__filename {
@@ -86,34 +118,43 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 13px;
+    min-width: 0;
   }
 
-  .ant-form-item .ant-switch {
-    height: 22px;
-    width: 44px;
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
-    .ant-switch-handle {
-      top: 2px;
-      width: 18px;
-      height: 18px;
-
-      &::before {
-        border-radius: 9px;
-      }
-    }
-
-    &.ant-switch-checked .ant-switch-handle {
-      inset-inline-start: calc(100% - 20px);
-    }
+  &__field-hint {
+    color: tokens.$color-warning;
+    font-size: 12px;
   }
 }
 
-@media (max-width: 720px) {
-  .video-popup-settings__clip {
-    grid-template-columns: 1fr;
+// Restore the compact switch size; global form styles enlarge every switch to 44x90.
+.video-popup-settings .ant-form-item .ant-switch {
+  height: 22px;
+  width: 44px;
+
+  .ant-switch-handle {
+    top: 2px;
+    width: 18px;
+    height: 18px;
+
+    &::before {
+      border-radius: 9px;
+    }
   }
 
+  &.ant-switch-checked .ant-switch-handle {
+    inset-inline-start: calc(100% - 20px);
+  }
+}
+
+@media (max-width: 576px) {
   .video-popup-settings__file {
-    flex-wrap: wrap;
+    flex-basis: 100%;
   }
 }

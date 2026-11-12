@@ -1,167 +1,141 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import {
-  S3Client,
-  PutObjectCommand,
-  DeleteObjectsCommand,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { extname } from "path";
-import { v4 as uuidv4 } from "uuid";
-import { FileUpload } from "@/app/lib/definitions";
+import type { FileUpload } from "@/app/lib/definitions";
 import { USER_ROLES, VIDEO_UPLOAD } from "@/app/lib/constant";
 import { options as authOptions } from "@/app/api/auth/[...nextauth]/options";
 
-const s3 = new S3Client({
-  region: "auto",
-  endpoint: process.env.R2_ENDPOINT,
-  credentials: {
-    accessKeyId: process.env.R2_ACCESS_KEY || "",
-    secretAccessKey: process.env.R2_SECRET_KEY || "",
-  },
-  forcePathStyle: true,
-});
-
 const LONG_UPLOAD_TIMEOUT_MS = 120_000;
 const SAFE_SEGMENT = /^[a-z0-9_-]{1,64}$/;
+const VIDEO_TYPE_ERROR = "Video must be mp4 or webm";
+const VIDEO_SIZE_ERROR = "Video must be at most 100MB";
+
+interface VideoValidation {
+  valid: boolean;
+  error?: string;
+}
 
 function readSegment(value: FormDataEntryValue | null, fallback: string): string {
   const raw = value?.toString().trim().toLowerCase() ?? "";
   return SAFE_SEGMENT.test(raw) ? raw : fallback;
 }
 
-async function isAdmin(): Promise<boolean> {
-  const session = await getServerSession(authOptions);
-  return session?.user?.role === USER_ROLES.ADMIN;
+function readFiles(formData: FormData): File[] | null {
+  const entries = formData.getAll("files");
+  return entries.every((entry): entry is File => entry instanceof File) ? entries : null;
 }
 
-async function isAuthenticated(): Promise<boolean> {
-  const session = await getServerSession(authOptions);
-  return Boolean(session?.user);
+function validateVideoFile(file: File): VideoValidation {
+  const extension = extname(file.name).toLowerCase();
+  if (!VIDEO_UPLOAD.MIME_TYPES.includes(file.type) || !VIDEO_UPLOAD.EXTENSIONS.includes(extension)) {
+    return { valid: false, error: VIDEO_TYPE_ERROR };
+  }
+  if (file.size > VIDEO_UPLOAD.MAX_BYTES) {
+    return { valid: false, error: VIDEO_SIZE_ERROR };
+  }
+  return { valid: true };
+}
+
+interface UploadReservation {
+  objectKey: string;
+  publicUrl: string;
+  signedUrl: string;
+}
+
+function parseReservation(body: unknown): UploadReservation | null {
+  if (typeof body !== "object" || body === null) return null;
+  const { success, data } = body as { success?: unknown; data?: unknown };
+  if (success !== true || typeof data !== "object" || data === null) return null;
+  const reservation = data as Partial<UploadReservation>;
+  if (
+    typeof reservation.objectKey !== "string" || !reservation.objectKey.split("/").pop() ||
+    typeof reservation.publicUrl !== "string" || !reservation.publicUrl.trim() ||
+    typeof reservation.signedUrl !== "string" || !reservation.signedUrl.trim()
+  ) return null;
+  return reservation as UploadReservation;
 }
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    const user = session?.user;
+    if (!user?.accessToken || session?.error) {
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    }
+
     const formData = await req.formData();
-    const files = formData.getAll("files") as File[];
+    const files = readFiles(formData);
     const page = readSegment(formData.get("page"), "general");
     const category = readSegment(formData.get("category"), "uncategorized");
 
-    if (files.length === 0) {
-      return NextResponse.json({ error: "No files uploaded" }, { status: 400 });
+    if (!files || files.length === 0) {
+      return NextResponse.json({ error: "Missing or invalid files" }, { status: 400 });
     }
 
     const isVideoPopupUpload = page === "settings" && category === "video-popups";
 
     if (isVideoPopupUpload) {
-      if (!(await isAdmin())) {
+      if (user.role !== USER_ROLES.ADMIN) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
       if (files.length !== 1) {
         return NextResponse.json({ error: "Upload one video at a time" }, { status: 400 });
       }
-      const file = files[0];
-      const extension = extname(file.name).toLowerCase();
-      if (
-        !VIDEO_UPLOAD.MIME_TYPES.includes(file.type) ||
-        !VIDEO_UPLOAD.EXTENSIONS.includes(extension) ||
-        file.size > VIDEO_UPLOAD.MAX_BYTES
-      ) {
-        return NextResponse.json(
-          { error: "Video must be mp4 or webm and at most 100MB" },
-          { status: 400 },
-        );
+      const validation = validateVideoFile(files[0]);
+      if (!validation.valid) {
+        return NextResponse.json({ error: validation.error }, { status: 400 });
       }
     }
 
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "");
+    if (!apiUrl) {
+      return NextResponse.json({ error: "Upload service is not configured" }, { status: 500 });
+    }
+
     const uploadedUrls: FileUpload[] = [];
-
     for (const file of files) {
-
-      const uniqueFileName = `${uuidv4()}${extname(file.name)}`;
-      const env = process.env.NEXT_PUBLIC_ENV || "local"; // fallback nếu chưa khai báo
-      const key = `${env}/${page}/${category}/${uniqueFileName}`;
-
-      const command = new PutObjectCommand({
-        Bucket: process.env.R2_BUCKET_NAME,
-        Key: key,
-        ContentType: file.type,
+      const contentType = file.type || "application/octet-stream";
+      const reservationRes = await fetch(`${apiUrl}/api/v1/uploads/presigned`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ module: page, category, fileName: file.name, contentType, size: file.size }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(LONG_UPLOAD_TIMEOUT_MS),
       });
+      if (!reservationRes.ok) {
+        const status = reservationRes.status >= 400 && reservationRes.status < 500 ? reservationRes.status : 502;
+        return NextResponse.json({ error: `Upload reservation failed with status ${reservationRes.status}` }, { status });
+      }
+      const reservation = parseReservation(await reservationRes.json());
+      if (!reservation) {
+        return NextResponse.json({ error: "Invalid upload reservation response" }, { status: 502 });
+      }
 
-      const signedUrl = await getSignedUrl(s3, command, { expiresIn: 300 });
-
-      const uploadRes = await fetch(signedUrl, {
+      const uploadRes = await fetch(reservation.signedUrl, {
         method: "PUT",
-        headers: { "Content-Type": file.type },
+        headers: { "Content-Type": contentType },
         body: file,
-        signal: isVideoPopupUpload ? AbortSignal.timeout(LONG_UPLOAD_TIMEOUT_MS) : undefined,
+        signal: AbortSignal.timeout(LONG_UPLOAD_TIMEOUT_MS),
       });
-
       if (!uploadRes.ok) {
-        console.error(`Upload failed for ${file.name}`, await uploadRes.text());
-        if (isVideoPopupUpload) {
-          return NextResponse.json({ error: "Video upload failed" }, { status: 502 });
-        }
-        continue;
+        return NextResponse.json({ error: "Upload failed" }, { status: 502 });
       }
 
       uploadedUrls.push({
-        url: `${process.env.R2_CDN_URL}/${key}`,
-        fileContent: `${process.env.R2_CDN_URL}/${key}`,
-        name: file.name, // Tên file gốc
-        fileName: key, // Tên file sau khi đã uploaded
-        uid: uniqueFileName,
+        url: reservation.publicUrl,
+        fileContent: reservation.publicUrl,
+        name: file.name,
+        fileName: reservation.objectKey,
+        uid: reservation.objectKey.split("/").pop()!,
       });
     }
 
     return NextResponse.json({ publicUrls: uploadedUrls });
-  } catch (err) {
-    console.error("Upload error:", err);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
-  }
-}
-
-export async function DELETE(req: NextRequest) {
-  try {
-    if (!(await isAuthenticated())) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
-    const { keys } = await req.json();
-
-    if (
-      !Array.isArray(keys) ||
-      keys.length === 0 ||
-      keys.some((key) => typeof key !== "string" || key.length === 0)
-    ) {
-      return NextResponse.json(
-        { error: "Missing or invalid keys" },
-        { status: 400 }
-      );
-    }
-
-    const command = new DeleteObjectsCommand({
-      Bucket: process.env.R2_BUCKET_NAME,
-      Delete: {
-        Objects: keys.map((key) => ({ Key: key })),
-      },
-    });
-
-    const result = await s3.send(command);
-    
-    const deleted = result.Deleted?.map((d) => d.Key) ?? [];
-    const errors =
-      result.Errors?.map((e) => ({
-        key: e.Key,
-        message: e.Message,
-      })) ?? [];
-    return NextResponse.json({
-      success: errors.length === 0,
-      deleted,
-      errors,
-    });
-  } catch (error) {
-    console.error("Delete error:", error);
-    return NextResponse.json({ error: "Delete failed" }, { status: 500 });
+  } catch {
+    // Network errors can contain signed URLs; do not log or expose their details.
+    return NextResponse.json({ error: "Upload failed" }, { status: 502 });
   }
 }

@@ -780,6 +780,10 @@
     "move_down": "Đưa xuống",
     "remove_clip": "Xóa video",
     "remove_list": "Xóa danh sách",
+    "delete_list_confirm": "Bạn có chắc chắn muốn xóa danh sách này?",
+    "delete_clip_confirm": "Bạn có chắc chắn muốn xóa video này?",
+    "confirm_yes": "Xóa",
+    "confirm_no": "Hủy",
     "order_hint": "Video phía trên phát trước. Hết clip này thì sang clip kế.",
     "empty": "Chưa có danh sách. Thêm một danh sách, rồi xếp video theo thứ tự phát.",
     "save": "Lưu",
@@ -793,7 +797,6 @@
     "video_required": "Vui lòng chọn video",
     "clip_progress": "Video {current}/{total}",
     "close_in": "Đóng sau {seconds}s",
-    "close": "Đóng",
     "cta_fallback": "Xem thêm"
   }
 }
