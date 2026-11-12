@@ -16,24 +16,20 @@ interface SingleUploadProps {
 
 const SingleUpload = ({ onUpload, className, icon, isCrop = false, page }: SingleUploadProps) => {
     const t = useTranslations("Profile");
-    let avatarUrl = '';
     const [loading, setLoading] = useState(false);
     const handleUpload = async (file: File) => {
         setLoading(true);
         try {
-            const formData = new FormData();
-            formData.append('files', file);
-
             const res = await uploadImageToR2(file, page);
-            avatarUrl = res[0].fileContent;
+            onUpload(res[0].fileContent);
         } catch (error) {
             notification.error({
                 message: t('Failed to upload avatar')
             });
         } finally {
-            onUpload(avatarUrl);
             setLoading(false);
         }
+        return false;
     }
 
     const uploadNode = (

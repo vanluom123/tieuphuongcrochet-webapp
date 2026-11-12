@@ -11,6 +11,7 @@ import {createUpdateProduct, fetchProductDetail} from "@/app/lib/service/product
 import Select, {DefaultOptionType} from "antd/es/select";
 import CustomEditor from "@/app/components/custom-editor";
 import { uploadMultipleImagesToServer } from "@/app/lib/utils";
+import { notification } from "@/app/lib/notify";
 
 interface ProductFormProps {
     params?: {
@@ -68,20 +69,27 @@ const ProductForm = ({ params }: ProductFormProps) => {
             }
         }
 
-        // Handle upload, delete images
-        const categoryName = categories.find(ct => ct.key === sendData.category_id)?.name;
-        sendData.images = await uploadMultipleImagesToServer(
-            sendData.images,
-            state.product.images,
-            'products',
-            categoryName
-        );
+        try {
+            const categoryName = categories.find(ct => ct.key === sendData.category_id)?.name;
+            sendData.images = await uploadMultipleImagesToServer(
+                sendData.images,
+                'products',
+                categoryName
+            );
 
-        const res: ResponseData<any> = await createUpdateProduct(sendData);
-        setState(initialState);
-        if (res.success) {
-            form.resetFields();
-            router.push(ROUTE_PATH.DASHBOARD_PRODUCTS);
+            const res: ResponseData<any> = await createUpdateProduct(sendData);
+            if (res.success) {
+                setState(initialState);
+                form.resetFields();
+                router.push(ROUTE_PATH.DASHBOARD_PRODUCTS);
+            }
+        } catch (error) {
+            notification.error({
+                message: 'Save failed',
+                description: error instanceof Error ? error.message : undefined,
+            });
+        } finally {
+            setState(prevState => ({ ...prevState, loading: false }));
         }
     }
 

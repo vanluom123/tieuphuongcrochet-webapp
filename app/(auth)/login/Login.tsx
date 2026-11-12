@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { LockOutlined, MailOutlined, GoogleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Button, Checkbox, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
+import { Alert, Button, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 import Link from 'next/link';
@@ -13,7 +13,6 @@ import { User } from '@/app/lib/definitions';
 import logo from '@/public/logo.png';
 import { ROUTE_PATH, REGEX } from '@/app/lib/constant';
 import { resendVerificationEmail } from '@/app/lib/service/registerService';
-import { useResendCooldown } from '@/app/hooks/useResendCooldown';
 import { notification } from '@/app/lib/notify';
 import '../../ui/components/login.scss';
 
@@ -26,9 +25,6 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [unverifiedEmail, setUnverifiedEmail] = useState('');
     const [isResending, setIsResending] = useState(false);
-    const { secondsLeft, isCooldownActive, startCooldown } = useResendCooldown(
-        unverifiedEmail ? `login_${unverifiedEmail}` : 'login_default'
-    );
 
     useEffect(() => {
         if (session?.user?.email && status === 'authenticated') {
@@ -76,15 +72,15 @@ const Login = () => {
                     message: t('btn_resend_verification'),
                     description: t('unverified_account_desc'),
                 });
-                startCooldown(60);
             } else {
+                const description =
+                    res.statusCode === 429
+                        ? res.data?.message || t('rate_limit_error')
+                        : res.data?.message || t('error_login_unknown_error');
                 notification.error({
                     message: t('error_login_title'),
-                    description: res.data?.message || t('error_login_unknown_error'),
+                    description,
                 });
-                if (res.statusCode === 429) {
-                    startCooldown(60);
-                }
             }
         } catch {
             notification.error({
@@ -127,12 +123,10 @@ const Login = () => {
                                             className="btn-border"
                                             icon={<ReloadOutlined spin={isResending} />}
                                             loading={isResending}
-                                            disabled={isCooldownActive || isResending}
+                                            disabled={isResending}
                                             onClick={handleResendFromLogin}
                                         >
-                                            {isCooldownActive
-                                                ? t('btn_resend_cooldown', { seconds: secondsLeft })
-                                                : t('btn_resend_verification')}
+                                            {t('btn_resend_verification')}
                                         </Button>
                                     </div>
                                 }
@@ -143,7 +137,6 @@ const Login = () => {
                             form={form}
                             name="normal_login"
                             className="login-form layout-wrap"
-                            initialValues={{ remember: true }}
                             onFinish={onFinish}
                             disabled={isLoading}
                         >
@@ -186,11 +179,7 @@ const Login = () => {
                                     placeholder={t('input_password')} />
                             </Form.Item>
                             <Form.Item>
-                                <Flex justify="space-between" align="center" style={{ width: '100%' }}>
-                                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                                        <Checkbox>{t('remember_me')}</Checkbox>
-                                    </Form.Item>
-
+                                <Flex justify="flex-end" align="center" style={{ width: '100%' }}>
                                     <Link className="login-form-forgot" href="/forgot-password">
                                         {t('forgot_password')}
                                     </Link>

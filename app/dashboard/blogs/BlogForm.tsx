@@ -9,6 +9,7 @@ import UploadFiles from "@/app/components/upload-files";
 import { FileUpload, Post } from "@/app/lib/definitions";
 import { createUpdatePost, fetchPostDetail } from "@/app/lib/service/blogsService";
 import { uploadMultipleImagesToServer } from "@/app/lib/utils";
+import { notification } from "@/app/lib/notify";
 import { ROUTE_PATH } from "@/app/lib/constant";
 import {
     fetchBlogCategories,
@@ -91,21 +92,21 @@ const BlogForm = ({ params }: BlogFormProps) => {
             }
         }
 
-        // Handle upload, delete images
-        sendData.files = await uploadMultipleImagesToServer(
-            sendData.files,
-            state.post.files,
-            'blogs',
-        )
-
-        createUpdatePost(sendData).then((res) => {
+        try {
+            sendData.files = await uploadMultipleImagesToServer(sendData.files, 'blogs');
+            const res = await createUpdatePost(sendData);
             if (res.success) {
                 form.resetFields();
                 router.push(ROUTE_PATH.DASHBOARD_POSTS);
             }
-        }).finally(() => {
+        } catch (error) {
+            notification.error({
+                message: 'Save failed',
+                description: error instanceof Error ? error.message : undefined,
+            });
+        } finally {
             setState(prevState => ({ ...prevState, loading: false }));
-        });
+        }
     }
 
     const onCancel = () => {
