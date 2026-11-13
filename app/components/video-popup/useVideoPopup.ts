@@ -63,10 +63,17 @@ export function useVideoPopup() {
   const [popup, setPopup] = useState<VideoPopup | null>(null)
   const [open, setOpen] = useState(false)
   const isExcludedPath = VIDEO_POPUP_EXCLUDED_PATHS.some((path) => pathname.startsWith(path))
+  const isExempt = isExemptRole(session?.user?.role)
 
   useEffect(() => {
+    if (isExempt) {
+      // A popup may already be visible when the session becomes Premium mid-visit;
+      // dismiss it right away instead of leaving it on screen until the next load.
+      setPopup(null)
+      setOpen(false)
+      return
+    }
     if (status === 'loading' || isExcludedPath) return
-    if (isExemptRole(session?.user?.role)) return
     if (isWithinCooldown()) return
 
     let cancelled = false
@@ -94,12 +101,12 @@ export function useVideoPopup() {
       cancelled = true
       if (timerId !== null) window.clearTimeout(timerId)
     }
-  }, [status, session?.user?.role, isExcludedPath])
+  }, [status, isExempt, isExcludedPath])
 
   const complete = useCallback(() => {
     setOpen(false)
     recordCompletionTimestamp()
   }, [])
 
-  return { popup, open: open && !isExcludedPath, complete }
+  return { popup, open: open && !isExcludedPath && !isExempt, complete }
 }
