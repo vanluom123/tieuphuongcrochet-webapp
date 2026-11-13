@@ -169,7 +169,8 @@ export async function loadUserInfo(id: string = '') {
         phone: res.data.phone,
         birthDate: res.data.birthDate,
         gender: res.data.gender,
-        backgroundImageUrl: res.data.backgroundImageUrl
+        backgroundImageUrl: res.data.backgroundImageUrl,
+        role: res.data.role
     };
 }
 
