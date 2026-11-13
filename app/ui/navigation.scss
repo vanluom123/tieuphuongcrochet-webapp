@@ -207,27 +207,7 @@
   .user-avatar-container {
     position: relative;
     display: inline-block;
-  }
-
-  .premium-avatar-badge {
-    position: absolute;
-    bottom: -4px;
-    right: -4px;
-    background: #fff;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-    z-index: 1;
-    border: 2px solid #fff;
-
-    .anticon {
-      color: #8e4838;
-      font-size: 12px;
-    }
+    overflow: visible;
   }
 
   .premium-avatar {
@@ -256,6 +236,7 @@
     background: transparent !important;
     box-shadow: none !important;
     padding: 0;
+    overflow: visible;
     
     &:hover {
       background: transparent !important;

@@ -13,6 +13,7 @@ import { User } from '@/app/lib/definitions';
 import { loadUserInfo, updateUserProfile } from '@/app/lib/service/profileService';
 import { notification } from '@/app/lib/notify';
 import SingleUpload from '@/app/components/upload-files/SingleUpload';
+import PremiumCrown from '@/app/components/premium/PremiumCrown';
 import { GENDER, USER_ROLES } from '@/app/lib/constant';
 import UserInfo from '../../components/profile/UserInfo';
 import defaultUser from '../../../public/default-user.png';
@@ -36,6 +37,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
         cover: false
     });
     const [userData, setUserData] = useState<User | null>(null);
+    const isPremiumUser = userData?.role === USER_ROLES.PREMIUM_USER;
 
     const t = useTranslations('Profile');
     const router = useRouter();
@@ -149,7 +151,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                     }
 
                     <Flex className="profile-avatar container" align="center" justify="start" gap="10px">
-                        <span className="profile-avatar-image">
+                        <span className={`profile-avatar-image ${isPremiumUser ? 'premium-avatar' : ''}`}>
                             {
                                 loading.avatar ? <Skeleton.Image
                                     active
@@ -163,6 +165,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                                         priority
                                     />
                             }
+                            {isPremiumUser && <PremiumCrown size="lg" />}
                             {
                                 isCreator && (
                                     <SingleUpload
@@ -181,7 +184,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                                     <>
                                         <div className="profile-info-name">
                                             {userData?.name}
-                                            {userData?.role === USER_ROLES.PREMIUM_USER && (
+                                            {isPremiumUser && (
                                                 <Tag color="gold" className="premium-tag">
                                                     <StarFilled /> Premium
                                                 </Tag>

@@ -7,7 +7,6 @@ import {
   LoginOutlined,
   UserAddOutlined,
   StarOutlined,
-  StarFilled,
 } from "@ant-design/icons";
 import { signOut, useSession } from "next-auth/react";
 import { ROUTE_PATH, USER_ROLES } from "@/app/lib/constant";
@@ -15,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useAuthModal } from "@/app/context/AuthModalProvider";
 import { useTranslations } from "next-intl";
 import "../../ui/navigation.scss";
+import PremiumCrown from "../premium/PremiumCrown";
 import PremiumUpgradeModal from "../premium/PremiumUpgradeModal";
 
 const UserAccount = () => {
@@ -26,6 +26,7 @@ const UserAccount = () => {
 
   const userAvatar = session?.user.imageUrl;
   const userId = session?.user.id;
+  const isPremiumUser = session?.user?.role === USER_ROLES.PREMIUM_USER;
 
   const items = useMemo<MenuProps["items"]>(() => [
     {
@@ -105,7 +106,7 @@ const UserAccount = () => {
               shape="circle"
               className="user-menu-icon"
               icon={
-                  <span className={`user-avatar-container ${session?.user?.role === USER_ROLES.PREMIUM_USER ? 'premium-avatar' : ''}`}>
+                  <span className={`user-avatar-container ${isPremiumUser ? 'premium-avatar' : ''}`}>
                     {userAvatar ? (
                     <Avatar src={userAvatar} size={32} />
                     ) : (
@@ -115,11 +116,7 @@ const UserAccount = () => {
                         size={32}
                     />
                     )}
-                    {session?.user?.role === USER_ROLES.PREMIUM_USER && (
-                      <span className="premium-avatar-badge">
-                        <StarFilled />
-                      </span>
-                    )}
+                    {isPremiumUser && <PremiumCrown />}
                   </span>
             }
           />
