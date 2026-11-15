@@ -24,8 +24,8 @@ const UserAccount = () => {
   const { openAuth } = useAuthModal();
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
 
-  const userAvatar = session?.user.imageUrl;
-  const userId = session?.user.id;
+  const userAvatar = session?.user?.imageUrl;
+  const userId = session?.user?.id;
   const isPremiumUser = session?.user?.role === USER_ROLES.PREMIUM_USER;
 
   const items = useMemo<MenuProps["items"]>(() => [

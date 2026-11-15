@@ -7,9 +7,28 @@ import { USER_ROLES } from '@/app/lib/constant'
 
 const ADSENSE_SCRIPT_SELECTOR =
     'script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]'
-const ADSENSE_AD_SELECTOR = 'ins.adsbygoogle'
+const ADSENSE_AD_SELECTOR = [
+    'ins.adsbygoogle',
+    '.google-auto-placed',
+    '.adsbygoogle-noablate',
+    '#google-anno-sa',
+    '.google-anno-sa',
+    '.google-anno-sc',
+    '[id^="google-anno-"]',
+    'iframe[id^="aswift_"]',
+    'iframe[name^="aswift_"]',
+    'iframe[id^="google_ads_iframe"]',
+    'iframe[name^="google_ads_iframe"]',
+    'iframe[src*="googleads"]',
+    'iframe[src*="doubleclick.net"]',
+    'iframe[src*="googlesyndication.com"]',
+    'div[id^="aswift_"]',
+    'div[id*="google_ads"]',
+    '[data-google-query-id]',
+].join(', ')
 
 function removeAdsense() {
+    document.body?.classList.add('google-anno-skip')
     document.querySelectorAll(ADSENSE_SCRIPT_SELECTOR).forEach((node) => node.remove())
     document.querySelectorAll(ADSENSE_AD_SELECTOR).forEach((node) => node.remove())
 }
@@ -46,9 +65,12 @@ export default function GoogleTag() {
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => removeAdsenseNodes(mutation.addedNodes));
         });
-        observer.observe(document.body, { childList: true, subtree: true });
+        observer.observe(document.documentElement, { childList: true, subtree: true });
 
-        return () => observer.disconnect();
+        return () => {
+            observer.disconnect();
+            document.body?.classList.remove('google-anno-skip');
+        };
     }, [isSessionLoaded, isPremium]);
 
     return (
