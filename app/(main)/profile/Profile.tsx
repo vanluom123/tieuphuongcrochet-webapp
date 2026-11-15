@@ -41,7 +41,7 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
 
     const t = useTranslations('Profile');
     const router = useRouter();
-    const { data: session } = useSession();
+    const { data: session, update } = useSession();
     const userId = params?.slug;
 
     const isCreator = useMemo(() => {
@@ -112,9 +112,10 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                 message: t('message.upload_avatar_success')
             });
             setUserData(updatedUser);
+            await update({ imageUrl: file });
         }
         setLoading(prev => ({ ...prev, avatar: false }));
-    }, [t]);
+    }, [t, update]);
 
     const onUploadCover = useCallback(async (file: string) => {
         if (!file) return;

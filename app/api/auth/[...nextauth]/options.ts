@@ -195,8 +195,14 @@ export const options: NextAuthOptions = {
                         + (rememberMe ? SESSION_MAX_AGE_REMEMBER_ME : SESSION_MAX_AGE_DEFAULT),
                 };
             }
-            if (trigger === "update" && session?.role) {
-                token.role = session.role;
+            if (trigger === "update") {
+                if (session?.role) {
+                    token.role = session.role;
+                }
+                if (session?.imageUrl) {
+                    token.picture = session.imageUrl;
+                    token.imageUrl = session.imageUrl;
+                }
             }
             return ensureFreshAccessToken(token);
         },
