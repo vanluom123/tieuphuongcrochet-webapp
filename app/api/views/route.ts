@@ -33,17 +33,22 @@ export async function POST(request: NextRequest) {
 
     // 4. Rate limit (max 10 requests per minute per IP)
     const rateKey = `ratelimit:views:${hash}`
-    const current = await redis.incr(rateKey)
-    if (current === 1) {
-      await redis.expire(rateKey, 60)
-    }
+    const current = await redis.eval<[number], number>(
+      `local current = redis.call('INCR', KEYS[1])
+       if current == 1 then
+         redis.call('EXPIRE', KEYS[1], ARGV[1])
+       end
+       return current`,
+      [rateKey],
+      [60],
+    )
     if (current > 10) {
       return NextResponse.json({ error: 'Rate limited' }, { status: 429 })
     }
 
     // 5. Deduplicate (once per 24h for same IP + pattern)
     const dedupKey = `dedup:views:${type}:${id}:${hash}`
-    const isNew = await redis.set(dedupKey, '1', { nx: true, ex: 24 * 60 * 60 })
+    const isNew = await redis.set(dedupKey, '1', { nx: true, ex: 1 * 60 * 60 })
     if (!isNew) {
       return NextResponse.json({ success: true, dedup: true }, { status: 200 })
     }
@@ -53,12 +58,12 @@ export async function POST(request: NextRequest) {
     try {
       const res = await fetch(javaApiUrl, { method: 'POST', cache: 'no-store' })
       if (!res.ok) {
+        await redis.del(dedupKey)
         console.error('Java API returned non-OK status:', res.status)
-        // Do NOT delete dedup key on backend error — the view may have already
-        // been persisted before the error occurred in response serialization.
         return NextResponse.json({ error: 'Backend error' }, { status: 502 })
       }
     } catch (error) {
+      await redis.del(dedupKey)
       console.error('Failed to call Java API:', error)
       return NextResponse.json({ error: 'Backend unreachable' }, { status: 503 })
     }
