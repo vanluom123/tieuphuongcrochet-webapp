@@ -1,45 +1,43 @@
-'use client'
+"use client";
 
-import { Avatar, Button, Card, Flex, Skeleton, Tag, Tooltip } from 'antd'
+import { Avatar, Button, Flex, Skeleton, Tooltip } from "antd";
 import {
+  BookFilled,
+  BookOutlined,
   DeleteFilled,
   EditFilled,
   EyeOutlined,
   HeartFilled,
   HeartOutlined,
   UserOutlined,
-} from '@ant-design/icons'
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import Image from 'next/image'
-import { useRequireAuth } from '@/app/hooks/useRequireAuth'
-import { ROUTE_PATH, TRANSLATION_STATUS } from '@/app/lib/constant'
-import { Pattern } from '@/app/lib/definitions'
-import { getStatusColor } from '@/app/lib/utils'
-import CustomNextImage from '../next-image'
-import { useSession } from 'next-auth/react'
-import { removePatternFromCollection } from '@/app/lib/service/collectionService'
-import { toggleLike } from '@/app/lib/service/interactionService'
-import whiteBookmark from '@/public/white-bookmark.png'
-import primaryBookmark from '@/public/primary-bookmark.png'
-import { getIconTag } from '../free-pattern-status'
-import CollectionPopup from '../collection-popup'
-import '../../ui/components/freePatternCard.scss'
+} from "@ant-design/icons";
+import React, { useState } from "react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useRequireAuth } from "@/app/hooks/useRequireAuth";
+import { ROUTE_PATH, TRANSLATION_STATUS } from "@/app/lib/constant";
+import { Pattern } from "@/app/lib/definitions";
+import CustomNextImage from "../next-image";
+import { useSession } from "next-auth/react";
+import { removePatternFromCollection } from "@/app/lib/service/collectionService";
+import { toggleLike } from "@/app/lib/service/interactionService";
+import { getIconTag } from "../free-pattern-status";
+import CollectionPopup from "../collection-popup";
+import "../../ui/components/freePatternCard.scss";
 
 interface FreePatternCardProps {
-  width?: string | number
-  pattern: Pattern
-  onReadDetail?: () => void
-  loading?: boolean
-  isShowActions?: boolean
-  onDelete?: () => void
-  onEdit?: () => void
-  onUnbookmark?: () => void
+  width?: string | number;
+  pattern: Pattern;
+  onReadDetail?: () => void;
+  loading?: boolean;
+  isShowActions?: boolean;
+  onDelete?: () => void;
+  onEdit?: () => void;
+  onUnbookmark?: () => void;
 }
 
 const FreePatternCard = ({
-  pattern = { name: '', author: '', src: '' },
+  pattern = { name: "", author: "", src: "" },
   width,
   onReadDetail,
   loading,
@@ -48,7 +46,6 @@ const FreePatternCard = ({
   onEdit,
   onUnbookmark,
 }: FreePatternCardProps) => {
-  const { Meta } = Card
   const {
     name,
     src,
@@ -61,273 +58,280 @@ const FreePatternCard = ({
     likeCount: initialLikeCount,
     is_liked: initialIsLiked,
     viewCount,
-  } = pattern
-  const t = useTranslations('FreePattern')
-  const profileT = useTranslations('Profile')
-  const { data: session } = useSession()
-  const { requireAuth } = useRequireAuth()
-  const [isLoading, setIsLoading] = useState(false)
-  const [isInCollection, setIsInCollection] = useState(in_collection || false)
-  const [showCollectionPopup, setShowCollectionPopup] = useState(false)
+  } = pattern;
+  const t = useTranslations("FreePattern");
+  const profileT = useTranslations("Profile");
+  const { data: session } = useSession();
+  const { requireAuth } = useRequireAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isInCollection, setIsInCollection] = useState(in_collection || false);
+  const [showCollectionPopup, setShowCollectionPopup] = useState(false);
 
-  const [isLiked, setIsLiked] = useState(initialIsLiked || false)
-  const [likeCount, setLikeCount] = useState(initialLikeCount || 0)
-  const [likeLoading, setLikeLoading] = useState(false)
+  const [isLiked, setIsLiked] = useState(initialIsLiked || false);
+  const [likeCount, setLikeCount] = useState(initialLikeCount || 0);
+  const [likeLoading, setLikeLoading] = useState(false);
 
-  // Sync state when prop in_collection changes from server
   React.useEffect(() => {
-    setIsInCollection(!!in_collection)
-  }, [in_collection])
+    setIsInCollection(!!in_collection);
+  }, [in_collection]);
 
-  // Sync state when prop is_liked / likeCount changes from server
   React.useEffect(() => {
-    setIsLiked(!!initialIsLiked)
-    setLikeCount(initialLikeCount || 0)
-  }, [initialIsLiked, initialLikeCount])
+    setIsLiked(!!initialIsLiked);
+    setLikeCount(initialLikeCount || 0);
+  }, [initialIsLiked, initialLikeCount]);
 
   const handleToggleBookmark = async (patternId: string) => {
-    if (!patternId) return
+    if (!patternId) return;
 
-    // Check if user is not logged in
-    if (!requireAuth('save_pattern')) {
-      return
+    if (!requireAuth("save_pattern")) {
+      return;
     }
 
     if (isInCollection) {
-      // If already in collection, remove from collection
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        await removePatternFromCollection(patternId)
-        setIsInCollection(false)
+        await removePatternFromCollection(patternId);
+        setIsInCollection(false);
 
-        // Call the onUnbookmark callback if provided
         if (onUnbookmark) {
-          onUnbookmark()
+          onUnbookmark();
         }
       } catch (error) {
-        console.error('Error removing from collection:', error)
+        console.error("Error removing from collection:", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     } else {
-      // If not in collection, show popup to select collection
-      setShowCollectionPopup(true)
+      setShowCollectionPopup(true);
     }
-  }
+  };
 
-  // Handling when save successfully from popup
   const handleSaveSuccess = () => {
-    setIsInCollection(true)
-  }
+    setIsInCollection(true);
+  };
 
   const handleToggleLike = async (e: React.MouseEvent) => {
-    e.stopPropagation()
+    e.stopPropagation();
 
-    if (!requireAuth('like')) {
-      return
+    if (!requireAuth("like")) {
+      return;
     }
 
-    const patternId = id?.toString() || ''
-    if (!patternId) return
+    const patternId = id?.toString() || "";
+    if (!patternId) return;
 
-    setLikeLoading(true)
+    setLikeLoading(true);
 
-    // Optimistic update
-    const wasLiked = isLiked
-    const optimisticIsLiked = !wasLiked
-    setIsLiked(optimisticIsLiked)
-    setLikeCount((prev) => (optimisticIsLiked ? prev + 1 : prev - 1))
+    const wasLiked = isLiked;
+    const optimisticIsLiked = !wasLiked;
+    setIsLiked(optimisticIsLiked);
+    setLikeCount((prev) => (optimisticIsLiked ? prev + 1 : prev - 1));
 
     try {
-      const newIsLiked = await toggleLike(patternId, 'FREE_PATTERN')
-      // Sync with server response
+      const newIsLiked = await toggleLike(patternId, "FREE_PATTERN");
       if (newIsLiked !== optimisticIsLiked) {
-        // Server rejected the toggle, revert count
-        setIsLiked(newIsLiked)
-        setLikeCount((prev) => (wasLiked ? prev + 1 : prev - 1))
+        setIsLiked(newIsLiked);
+        setLikeCount((prev) => (wasLiked ? prev + 1 : prev - 1));
       }
-      // If server matches optimistic, count is already correct
-      // but ensure isLiked is synced
-      setIsLiked(newIsLiked)
+      setIsLiked(newIsLiked);
     } catch (error) {
-      // Revert optimistic update on error
-      setIsLiked(wasLiked)
-      setLikeCount((prev) => (wasLiked ? prev + 1 : prev - 1))
-      console.error('Error toggling like:', error)
+      setIsLiked(wasLiked);
+      setLikeCount((prev) => (wasLiked ? prev + 1 : prev - 1));
+      console.error("Error toggling like:", error);
     } finally {
-      setLikeLoading(false)
+      setLikeLoading(false);
     }
+  };
+
+  if (loading) {
+    return (
+      <div
+        className="free-pattern-card pattern-tile is-loading"
+        style={{ width: width || "100%" }}
+      >
+        <div className="pattern-tile__skeleton-media">
+          <Skeleton.Image active />
+        </div>
+        <Skeleton active title={{ width: "80%" }} paragraph={{ rows: 1 }} />
+      </div>
+    );
   }
+
+  const bookmarkTooltip = !session?.user
+    ? t("login_to_save")
+    : isInCollection
+    ? t("remove_from_collection")
+    : t("save");
 
   return (
     <>
-      <Card
-        loading={loading}
-        hoverable
-        className="free-pattern-card card-item"
-        style={{ width: width || '100%' }}
-        styles={{
-          body: {
-            overflow: 'hidden',
-          },
-        }}
-        cover={
-          <>
-            {src && loading ? (
-              <Skeleton.Image active />
-            ) : (
-              <div className="card-cover-custom" style={{ position: 'relative' }}>
-                <div className="mark-dark"></div>
+      <article
+        className="free-pattern-card pattern-tile"
+        style={{ width: width || "100%" }}
+        onClick={onReadDetail}
+      >
+        <div className="pattern-tile__media card-cover-custom">
+          <CustomNextImage
+            className="pattern-tile__img"
+            src={src}
+            alt={name}
+          />
 
-                <Flex className="action-buttons" vertical>
-                  {/* Bookmark button remains unchanged */}
-                  {userId && (
+          {status && status !== TRANSLATION_STATUS.NONE && (
+            <span
+              className={`pattern-tile__status status-${status.toLowerCase()}`}
+            >
+              {getIconTag(status)}
+              <span>{t(`status.${status}`)}</span>
+            </span>
+          )}
+
+          <Flex className="action-buttons" vertical gap={6}>
+            {userId && (
+              <Tooltip title={bookmarkTooltip}>
+                <Button
+                  type="text"
+                  shape="circle"
+                  loading={isLoading}
+                  disabled={isLoading}
+                  aria-label={bookmarkTooltip}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleBookmark(id?.toString() || "");
+                  }}
+                  className={`action-button ${isInCollection ? "is-saved" : ""}`}
+                  icon={
+                    isInCollection ? (
+                      <BookFilled />
+                    ) : (
+                      <BookOutlined />
+                    )
+                  }
+                />
+              </Tooltip>
+            )}
+
+            {isShowActions && (
+              <>
+                <Tooltip title={profileT("patterns.edit")}>
+                  <Button
+                    type="text"
+                    shape="circle"
+                    aria-label={profileT("patterns.edit")}
+                    icon={<EditFilled />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onEdit) onEdit();
+                    }}
+                    className="action-button"
+                  />
+                </Tooltip>
+                <Tooltip title={profileT("patterns.delete")}>
+                  <Button
+                    type="text"
+                    shape="circle"
+                    aria-label={profileT("patterns.delete")}
+                    icon={<DeleteFilled />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onDelete) onDelete();
+                    }}
+                    className="action-button is-danger"
+                  />
+                </Tooltip>
+              </>
+            )}
+          </Flex>
+        </div>
+
+        <Skeleton loading={!name} active paragraph={{ rows: 1 }}>
+          {name && (
+            <div className="pattern-tile__body">
+              <button
+                type="button"
+                className="card-title pattern-tile__title"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onReadDetail) onReadDetail();
+                }}
+              >
+                {name}
+              </button>
+
+              <div className="pattern-tile__meta">
+                <div className="creator">
+                  {userAvatar ? (
+                    <Avatar size={20} src={userAvatar} />
+                  ) : (
+                    <Avatar size={20} icon={<UserOutlined />} className="creator-fallback" />
+                  )}
+                  <Link
+                    href={`${ROUTE_PATH.PROFILE}/${userId}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="creator-link"
+                  >
+                    {username}
+                  </Link>
+                </div>
+
+                <div
+                  className="pattern-tile__stats"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="pattern-tile__stat">
                     <Tooltip
                       title={
                         !session?.user
-                          ? t('login_to_save')
-                          : isInCollection
-                            ? t('remove_from_collection')
-                            : t('save')
+                          ? t("login_to_like")
+                          : isLiked
+                          ? t("unlike")
+                          : t("like")
                       }
                     >
                       <Button
                         type="text"
-                        loading={isLoading}
-                        disabled={isLoading}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleToggleBookmark(id?.toString() || '')
-                        }}
-                        className="action-button"
-                      >
-                        <Image
-                          width={20}
-                          height={20}
-                          src={isInCollection ? primaryBookmark : whiteBookmark}
-                          alt="bookmark"
-                          key={`bookmark-${id}-${isInCollection ? 'filled' : 'empty'}`}
-                        />
-                      </Button>
-                    </Tooltip>
-                  )}
-
-                  {isShowActions && (
-                    <>
-                      <Tooltip title={profileT('patterns.edit')}>
-                        <Button
-                          type="text"
-                          icon={<EditFilled />}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            if (onEdit) onEdit()
-                          }}
-                          className="action-button"
-                        />
-                      </Tooltip>
-                      <Tooltip title={profileT('patterns.delete')}>
-                        <Button
-                          type="text"
-                          icon={<DeleteFilled />}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            if (onDelete) onDelete()
-                          }}
-                          className="action-button"
-                        />
-                      </Tooltip>
-                    </>
-                  )}
-                </Flex>
-                <CustomNextImage src={src} alt={name} />
-              </div>
-            )}
-          </>
-        }
-        onClick={onReadDetail}
-      >
-        <Skeleton loading={!name} active>
-          {name && (
-            <Meta
-              title={
-                <span tabIndex={1} className="card-title" onClick={onReadDetail}>
-                  {status && status !== TRANSLATION_STATUS.NONE && (
-                    <Tag
-                      className="status-tag"
-                      color={getStatusColor(status)}
-                      icon={getIconTag(status)}
-                    />
-                  )}
-                  {name}
-                </span>
-              }
-              description={
-                <Flex justify="space-between" align="center">
-                  <div className="creator">
-                    {userAvatar ? <Avatar size={20} src={userAvatar} /> : <UserOutlined />}
-                    <Link
-                      href={`${ROUTE_PATH.PROFILE}/${userId}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="creator-link"
-                    >
-                      &nbsp;{username}
-                    </Link>
-                  </div>
-                  <Flex align="center" gap={16} onClick={(e) => e.stopPropagation()}>
-                    <Flex align="center" gap={2}>
-                      <Tooltip
-                        title={
-                          !session?.user
-                            ? t('login_to_like')
-                            : isLiked
-                              ? t('unlike')
-                              : t('like')
+                        size="small"
+                        loading={likeLoading}
+                        disabled={likeLoading}
+                        aria-label={isLiked ? t("unlike") : t("like")}
+                        onClick={handleToggleLike}
+                        className={`like-button ${isLiked ? "liked" : ""}`}
+                        icon={
+                          isLiked ? (
+                            <HeartFilled />
+                          ) : (
+                            <HeartOutlined />
+                          )
                         }
-                      >
-                        <Button
-                          type="text"
-                          size="small"
-                          loading={likeLoading}
-                          disabled={likeLoading}
-                          onClick={handleToggleLike}
-                          className={`like-button ${isLiked ? 'liked' : ''}`}
-                          icon={
-                            isLiked ? (
-                              <HeartFilled style={{ color: '#ff4d4f', fontSize: 14 }} />
-                            ) : (
-                              <HeartOutlined style={{ fontSize: 14 }} />
-                            )
-                          }
-                        />
-                      </Tooltip>
-                      {likeCount > 0 && (
-                        <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{likeCount}</span>
-                      )}
-                    </Flex>
-                    <Flex align="center" gap={2}>
-                      <EyeOutlined style={{ fontSize: 14, color: '#666' }} />
-                      {(viewCount || 0) > 0 && (
-                        <span style={{ fontSize: 12, color: '#666', lineHeight: 1 }}>{viewCount}</span>
-                      )}
-                    </Flex>
-                  </Flex>
-                </Flex>
-              }
-            />
+                      />
+                    </Tooltip>
+                    {likeCount > 0 && (
+                      <span className="stat-count">{likeCount}</span>
+                    )}
+                  </div>
+
+                  <div className="pattern-tile__stat">
+                    <EyeOutlined className="stat-eye-icon" />
+                    {(viewCount || 0) > 0 && (
+                      <span className="stat-count">{viewCount}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </Skeleton>
-      </Card>
+      </article>
 
-      {/* Collection Popup */}
       <CollectionPopup
         isOpen={showCollectionPopup}
         onClose={() => setShowCollectionPopup(false)}
-        patternId={id?.toString() || ''}
+        patternId={id?.toString() || ""}
         patternName={name}
         onSuccess={handleSaveSuccess}
       />
     </>
-  )
-}
+  );
+};
 
-export default FreePatternCard
+export default FreePatternCard;

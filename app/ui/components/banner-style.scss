@@ -1,41 +1,270 @@
-
 @import "../../variables.module.scss";
 
+.hero-shell {
+  padding-top: 16px;
+  padding-bottom: 8px;
+
+  @media screen and (min-width: $md) {
+    padding-top: 24px;
+    padding-bottom: 12px;
+  }
+}
+
+.craft-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 24px 20px;
+  box-shadow: var(--shadow-card);
+
+  @media screen and (min-width: $md) {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 36px;
+    padding: 36px 40px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-display), var(--font-body), sans-serif;
+    font-size: clamp(1.75rem, 3.2vw, 2.65rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--color-ink);
+  }
+
+  &__desc {
+    margin: 0;
+    max-width: 48ch;
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: var(--color-ink-muted);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  &__primary-btn,
+  &__secondary-btn {
+    height: 42px;
+    padding: 0 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+  }
+
+  &__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+  }
+}
+
+.banner-wrap {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-subtle);
+  box-shadow: var(--shadow-card);
+
+  .ant-carousel .slick-dots.dots-custom {
+    bottom: 14px;
+
+    li {
+      width: 10px;
+      height: 10px;
+      margin-inline: 4px;
+
+      button {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        opacity: 1;
+      }
+
+      &.slick-active {
+        width: 24px;
+
+        button {
+          width: 24px;
+          height: 10px;
+          background: var(--color-accent);
+        }
+      }
+    }
+  }
+}
+
 .banner-item {
-	position: relative;
-	
-	img {
-		height: 100%;
-		width: 100%;
-	}
+  position: relative;
+  width: 100%;
 
-	&__infor {
-		position: absolute;
-		text-align: center;
-		top: 50%;
-		right: 30%;
-		transform: translate(50%, -50%);
-		margin-right: 5px;
+  &.hero-banner-item {
+    min-height: 280px;
+    max-height: 480px;
+    overflow: hidden;
 
-		.title {
-			color: #fff;
-			margin-bottom: 0;
-			transition: all 1s ease 0s;
-			-webkit-transition: all 1s ease 0s;
-		}
+    @media screen and (min-width: $md) {
+      aspect-ratio: 21 / 9;
+      min-height: 340px;
+    }
 
-		.content {
-			color: #fff;
-			font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
-			font-weight: $fontWeight_normal;
-			margin: 5px auto;
-		}
+    .banner-image-container {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
 
-		.btn-view {
-			font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
-			text-transform: uppercase;
-			padding: 5px;
-			border-radius: 0;
-		}
-	}
+      @media screen and (min-width: $md) {
+        min-height: 340px;
+      }
+
+      .next-image-custom {
+        height: 100%;
+        min-height: inherit;
+      }
+    }
+
+    .banner-item__scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(30, 27, 26, 0.74) 0%,
+        rgba(30, 27, 26, 0.36) 55%,
+        rgba(30, 27, 26, 0.06) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .banner-item__infor {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 36px;
+      top: auto;
+      transform: none;
+      text-align: left;
+      max-width: 46ch;
+      z-index: 2;
+      background: transparent;
+      padding: 0;
+
+      @media screen and (min-width: $md) {
+        left: 44px;
+        bottom: 44px;
+      }
+
+      .title {
+        font-family: var(--font-display), var(--font-body), sans-serif;
+        font-size: clamp(1.35rem, 3vw, 2.35rem);
+        font-weight: 700;
+        line-height: 1.2;
+        margin: 0 0 8px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+      }
+
+      .content {
+        font-family: var(--font-body), sans-serif;
+        font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+        font-weight: 400;
+        line-height: 1.5;
+        margin: 0 0 16px;
+        opacity: 0.94;
+      }
+
+      .btn-view {
+        height: 40px;
+        padding: 0 20px;
+        border-radius: var(--radius-sm);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.bread-crumbs-wrap {
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  background-size: cover;
+  background-position: center center;
+  border-bottom: 1px dashed var(--color-border-strong);
+
+  @media screen and (min-width: $md) {
+    min-height: 148px;
+  }
+
+  .bread-crumbs-veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      95deg,
+      rgba(252, 251, 250, 0.96) 35%,
+      rgba(252, 251, 250, 0.8) 72%,
+      rgba(252, 251, 250, 0.58) 100%
+    );
+    pointer-events: none;
+  }
+
+  .bread-crumbs-inner {
+    position: relative;
+    z-index: 1;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .bread-crumbs-title {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .ant-breadcrumb {
+      font-size: 13px;
+      color: var(--color-ink-muted);
+
+      a {
+        color: var(--color-ink-muted);
+
+        &:hover {
+          color: var(--color-accent);
+          background-color: transparent;
+          text-decoration: underline;
+        }
+      }
+
+      li:last-child {
+        color: var(--color-ink);
+        font-weight: 500;
+      }
+    }
+
+    .title-page {
+      margin: 0;
+      font-family: var(--font-display), var(--font-body), sans-serif;
+      font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--color-ink);
+    }
+  }
 }

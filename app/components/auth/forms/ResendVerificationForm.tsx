@@ -68,7 +68,7 @@ const ResendVerificationForm: React.FC<ResendVerificationFormProps> = ({
         <Form
           form={form}
           name="resend_verification"
-          className="login-form layout-wrap"
+          className="login-form"
           onFinish={onFinish}
           disabled={isLoading}
         >

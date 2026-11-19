@@ -57,7 +57,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackToLogin }
         <Form
           form={form}
           name="forgot_password"
-          className="login-form layout-wrap"
+          className="login-form"
           onFinish={onFinish}
           disabled={isLoading}
         >

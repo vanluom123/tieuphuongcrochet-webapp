@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Free crochet patterns',
     start_url: '/',
     display: 'standalone',
-    background_color: '#fff',
-    theme_color: '#fc8282',
+    background_color: '#FCFBFA',
+    theme_color: '#C42D47',
     icons: [
       {
         src: '/favicon.ico',

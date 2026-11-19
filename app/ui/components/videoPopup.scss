@@ -4,6 +4,7 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   background: tokens.$textPrimaryColor;
+  border-radius: var(--radius-md);
   display: block;
   margin-bottom: 12px;
 }

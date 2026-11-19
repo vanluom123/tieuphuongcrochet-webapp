@@ -103,21 +103,26 @@ const UserAccount = () => {
           menu={{ items: session?.user?.email ? items : loginMenu }}
         >
           <Button
-              shape="circle"
-              className="user-menu-icon"
-              icon={
-                  <span className={`user-avatar-container ${isPremiumUser ? 'premium-avatar' : ''}`}>
-                    {userAvatar ? (
-                    <Avatar src={userAvatar} size={32} />
-                    ) : (
-                    <Avatar
-                        className="default-user-avatar"
-                        icon={<UserOutlined />}
-                        size={32}
-                    />
-                    )}
-                    {isPremiumUser && <PremiumCrown />}
-                  </span>
+            shape="circle"
+            className="user-menu-icon"
+            aria-label={session?.user?.email ? t("profile") : t("sign_in")}
+            icon={
+              <span
+                className={`user-avatar-container ${
+                  isPremiumUser ? "premium-avatar" : ""
+                }`}
+              >
+                {userAvatar ? (
+                  <Avatar src={userAvatar} size={34} />
+                ) : (
+                  <Avatar
+                    className="default-user-avatar"
+                    icon={<UserOutlined />}
+                    size={34}
+                  />
+                )}
+                {isPremiumUser && <PremiumCrown />}
+              </span>
             }
           />
         </Dropdown>

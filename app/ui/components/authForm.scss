@@ -1,16 +1,16 @@
 @import "../../variables.module.scss";
 
 .auth-form {
-  font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
+  font-family: var(--font-body), sans-serif;
 
   label {
-    color: $textPrimaryColor;
+    color: var(--color-ink);
   }
 
   .note {
     font-style: italic;
-    color: $textSecondColor;
-    font-size: $fontSize_small;
+    color: var(--color-ink-muted);
+    font-size: 13.5px;
     margin-bottom: 16px;
   }
 }
@@ -20,33 +20,36 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  color: $secondColor;
-  font-size: $fontSize_middle;
+  color: var(--color-accent);
+  font-size: 14.5px;
+  font-weight: 500;
   font-family: inherit;
   text-align: inherit;
 
   &:hover {
+    color: var(--color-accent-hover);
     text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   &:focus-visible {
-    outline: 2px solid $colorPrimary;
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: 3px;
   }
 }
 
 .auth-form-switch {
   margin: 14px 0 0;
-  font-size: $fontSize_small;
-  color: $textSecondColor;
+  font-size: 14px;
+  color: var(--color-ink-muted);
 }
 
 .auth-form-instruction {
   margin: 0 0 20px;
-  font-size: $fontSize_small;
-  color: $textSecondColor;
-  line-height: 1.5;
+  font-size: 14.5px;
+  color: var(--color-ink-muted);
+  line-height: 1.55;
   text-align: left;
 }
 

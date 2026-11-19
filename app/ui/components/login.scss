@@ -1,50 +1,61 @@
 @import "../../variables.module.scss";
 
-
 .login-page {
-  padding-bottom: 50px;
+  max-width: 440px;
+  margin: 12px auto 32px;
+  padding: 28px 24px 32px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+
+  @media (min-width: $md) {
+    padding: 36px 32px;
+  }
 
   .logo {
-    max-height: 170px;
+    margin-bottom: 12px;
 
     img {
-      max-height: 150px;
-      margin: 10px 0;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      object-fit: contain;
     }
   }
 
   .header-title {
-    .title {
-      margin-bottom: 10px;
-    }
+    color: var(--color-ink);
+    margin: 0 0 20px;
+    text-align: center;
 
-    color: $textPrimaryColor;
-    margin-top: 0;
-    margin-bottom: 20px;
+    .title {
+      margin: 0;
+      font-family: var(--font-display), var(--font-body), sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--color-ink);
+    }
   }
 
-  .ant-row {
-    justify-content: center;
+  .description-text {
+    color: var(--color-ink-muted);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
 
-    &>* {
-      font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
-
-      label {
-        color: $textPrimaryColor;
-      }
-    }
-
-    .note {
-      font-style: italic;
-      color: $textSecondColor;
-    }
+  .note {
+    font-style: italic;
+    color: var(--color-ink-muted);
   }
 
   a {
-    color: $secondColor;
-    font-size: $fontSize_middle;
+    color: var(--color-accent);
+    font-size: 14.5px;
 
     &:hover {
+      color: var(--color-accent-hover);
       text-decoration: underline;
     }
   }

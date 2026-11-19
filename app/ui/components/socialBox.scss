@@ -1,19 +1,60 @@
 .card-social {
-	.ant-card-meta-detail {
-		display: flex;
-		justify-content: center;
-	}
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  transition: border-color 180ms ease-out, background-color 180ms ease-out,
+    box-shadow 180ms ease-out;
 
-	.ant-card-cover {
-		padding: 5px;
+  &:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
 
-		.ant-image {
-			overflow: visible;
+  &__emblem {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-			img {
-				border-radius: 50%;
-			}
-		}
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 
-	}
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__name {
+    font-family: var(--font-display), var(--font-body), sans-serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--color-ink);
+    line-height: 1.25;
+  }
+
+  &__handle {
+    font-size: 13px;
+    color: var(--color-ink-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

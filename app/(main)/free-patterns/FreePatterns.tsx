@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PlusOutlined } from '@ant-design/icons'
 import { FloatButton } from 'antd'
+import { useTranslations } from 'next-intl'
 import { SegmentedValue } from 'antd/es/segmented'
 import { ALL_ITEM, ROUTE_PATH, TRANSLATION_STATUS } from '@/app/lib/constant'
 import { useSession } from 'next-auth/react'
@@ -22,6 +23,7 @@ interface FreePatternProps {
 
 const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
   const router = useRouter()
+  const t = useTranslations('FreePattern')
   const [state, setState] = useState<DataTableState>(initialData)
   const [filters, setFilters] = useState({
     status: '',
@@ -173,6 +175,8 @@ const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
       <FloatButton
         type="primary"
         className="float-btn-right-bottom"
+        tooltip={t('createPattern')}
+        aria-label={t('createPattern')}
         icon={<PlusOutlined />}
         onClick={onAddPattern}
       />

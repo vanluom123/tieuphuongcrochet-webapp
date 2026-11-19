@@ -402,7 +402,12 @@
       "nameRequired": "Vui lòng nhập tên bộ sưu tập",
       "itemCount": "Số lượng mẫu",
       "no_collections": "Không có bộ sưu tập nào",
-      "no_patterns": "Không có mẫu nào"
+      "no_patterns": "Không có mẫu nào",
+      "loading": "Đang tải..."
+    },
+    "breadcrumb": {
+      "profile": "Hồ sơ",
+      "collections": "Bộ sưu tập"
     },
     "patterns": {
       "empty": "Chưa có mẫu nào",

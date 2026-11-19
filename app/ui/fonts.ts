@@ -1,16 +1,15 @@
-import { Rubik, Playfair, Playfair_Display } from 'next/font/google'
- 
-export const rubik = Rubik({
-  subsets: ['latin'],
+import { Bricolage_Grotesque, Be_Vietnam_Pro } from 'next/font/google';
+
+export const bricolageDisplay = Bricolage_Grotesque({
+  subsets: ['latin', 'vietnamese'],
+  weight: ['500', '600', '700'],
   display: 'swap',
-})
- 
-export const playfair = Playfair({
-  subsets: ['latin'],
+  variable: '--font-display',
+});
+
+export const beVietnamBody = Be_Vietnam_Pro({
+  subsets: ['latin', 'vietnamese'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
-})
- 
-export const playfair_display = Playfair_Display({
-  subsets: ['latin'],
-  display: 'swap',
-})
+  variable: '--font-body',
+});

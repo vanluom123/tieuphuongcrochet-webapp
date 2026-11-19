@@ -8,6 +8,7 @@ import AuthProvider from "./context/AuthProvider";
 import { AuthModalProvider } from "./context/AuthModalProvider";
 import GoogleTag from "./components/GoogleTag";
 import VideoPopupProvider from "./components/video-popup/VideoPopupProvider";
+import { bricolageDisplay, beVietnamBody } from "./ui/fonts";
 import "./globals.scss";
 
 export async function generateMetadata() {
@@ -75,7 +76,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${bricolageDisplay.variable} ${beVietnamBody.variable}`}>
       <body>
         <AuthProvider>
           <GoogleTag />

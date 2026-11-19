@@ -1,0 +1,122 @@
+@import "../../variables.module.scss";
+
+.comment-section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+
+  @media screen and (min-width: $md) {
+    padding: 28px 32px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed var(--color-border-strong);
+
+    h4.comment-section__title {
+      margin: 0;
+      font-family: var(--font-display), var(--font-body), sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-ink);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .comment-item {
+    margin-bottom: 16px;
+
+    &.is-reply {
+      margin-left: 24px;
+      padding-left: 12px;
+      border-left: 2px solid var(--color-border);
+
+      @media screen and (min-width: $md) {
+        margin-left: 40px;
+        padding-left: 16px;
+      }
+    }
+  }
+
+  .comment-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .comment-avatar {
+    flex-shrink: 0;
+    background-color: var(--color-accent);
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .comment-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .comment-bubble {
+    background-color: var(--color-surface-subtle);
+    border: 1px solid #ece7e1;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: inline-block;
+    max-width: 100%;
+
+    .comment-author {
+      font-weight: 600;
+      color: var(--color-ink);
+      cursor: pointer;
+
+      &:hover {
+        color: var(--color-accent);
+        text-decoration: underline;
+      }
+    }
+
+    .comment-mention {
+      margin-left: 6px;
+      color: var(--color-accent);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .comment-text {
+      margin: 4px 0 0;
+      color: var(--color-ink);
+      white-space: pre-wrap;
+      line-height: 1.6;
+      max-width: 65ch;
+    }
+  }
+
+  .comment-actions {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .comment-action-link {
+      padding: 0;
+      height: auto;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-ink-muted);
+
+      &:hover {
+        color: var(--color-accent);
+      }
+    }
+
+    .comment-time {
+      font-size: 12.5px;
+      color: var(--color-ink-subtle);
+    }
+  }
+}

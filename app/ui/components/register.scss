@@ -1,69 +1,54 @@
 @import "../../variables.module.scss";
 
-
 .register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
 
-    .auth-page {
-        width: 100%;
-        max-width: 800px;
-        margin: 0 auto;
+  .auth-page {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 28px 24px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+  }
+
+  .auth-content {
+    width: 100%;
+  }
+
+  .logo {
+    margin-bottom: 16px;
+  }
+
+  .header-title {
+    margin-bottom: 24px;
+    text-align: center;
+
+    .title {
+      margin-bottom: 8px;
+      font-size: 26px;
     }
 
-    .auth-content {
-        width: 100%;
+    h3 {
+      font-size: 16px;
     }
+  }
 
-    .logo {
-        margin-bottom: 30px;
-    }
+  form {
+    width: 100%;
+  }
 
-    .header-title {
-        margin-bottom: 40px;
-        text-align: center;
-
-        .title {
-            margin-bottom: 15px;
-            font-size: 28px;
-        }
-
-        h3 {
-            font-size: 18px;
-        }
-    }
-
-    form {
-        width: 100%;
-    }
-
-    .note {
-        margin-bottom: 25px;
-        font-size: 14px;
-    }
-
-    // Add some responsive adjustments
-    @media (max-width: $md) {
-        .auth-page {
-            max-width: 100%;
-        }
-
-        .header-title {
-            .title {
-                font-size: 24px;
-            }
-
-            h3 {
-                font-size: 16px;
-            }
-        }
-    }
+  .note {
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
 }
 
-// antd Modal renders in a portal on document.body, outside .register-container
 .active-account-modal {
   .modal-icon-header {
     display: flex;
@@ -71,16 +56,16 @@
     margin-bottom: 16px;
 
     .icon-wrapper {
-      width: 64px;
-      height: 64px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      background-color: #fff1f0;
-      color: $colorPrimary;
-      font-size: 32px;
+      background-color: var(--color-accent-soft);
+      color: var(--color-accent);
+      font-size: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid $borderColor;
+      border: 1px solid rgba(196, 45, 71, 0.2);
     }
   }
 
@@ -88,9 +73,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #fafafa;
-    border: 1px solid #f0f0f0;
-    border-radius: 8px;
+    background-color: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     padding: 10px 14px;
     margin: 14px 0 10px;
 
@@ -98,7 +83,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: $textPrimaryColor;
+      color: var(--color-ink);
       font-weight: 500;
       font-size: 14px;
       overflow: hidden;
@@ -106,15 +91,15 @@
       white-space: nowrap;
 
       .mail-icon {
-        color: $colorPrimary;
+        color: var(--color-accent);
         font-size: 16px;
       }
     }
   }
 
   .spam-note {
-    font-size: 12px;
-    color: $textSecondColor;
+    font-size: 12.5px;
+    color: var(--color-ink-muted);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -122,10 +107,10 @@
   }
 
   .resend-section {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     padding: 12px;
-    background: #fdfdfd;
-    border-radius: 8px;
-    border: 1px dashed #e8e8e8;
+    background: var(--color-canvas);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-border-strong);
   }
-}
+}

@@ -165,10 +165,16 @@ const NotificationsPage: React.FC = () => {
             {total > 0 && (
                 <div style={{ textAlign: 'center', marginTop: '24px' }}>
                     <Pagination
+                        className="pagination"
                         current={page}
                         pageSize={pageSize}
                         total={total}
-                        onChange={setPage}
+                        onChange={(nextPage, nextPageSize) => {
+                            setPage(nextPage);
+                            if (nextPageSize) {
+                                setPageSize(nextPageSize);
+                            }
+                        }}
                         showSizeChanger
                         showQuickJumper
                     />

@@ -1,25 +1,37 @@
 @import "../../variables.module.scss";
 
-// Notification page styles
 .notifications-page {
+  max-width: 820px;
   margin: 0 auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 24px 16px;
+  box-shadow: var(--shadow-card);
+
+  @media screen and (min-width: $md) {
+    padding: 32px;
+  }
 
   .notifications-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
     margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--color-border-strong);
     flex-wrap: wrap;
+
+    h2 {
+      margin: 0;
+      font-family: var(--font-display), var(--font-body), sans-serif;
+    }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    >* {
-      margin: 0;
-      padding-bottom: 5px;
+      gap: 10px;
     }
   }
 

@@ -1,25 +1,27 @@
 "use client";
 import { memo, useEffect, useRef, useState } from "react";
 import {
-  Affix,
   Avatar,
   Button,
   Col,
   Divider,
   Flex,
   Row,
-  Space,
   Tag,
 } from "antd";
-import { EyeOutlined, LeftOutlined, RightOutlined, UserOutlined, HeartOutlined } from "@ant-design/icons";
+import {
+  EyeOutlined,
+  HeartOutlined,
+  LeftOutlined,
+  RightOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import Link from "next/link";
 import { findIndex, map } from "lodash";
 import { useTranslations } from "next-intl";
 
-import { FileUpload, Product } from "@/app/lib/definitions";
-import { Pattern } from "@/app/lib/definitions";
-import { getElement, getStatusColor } from "@/app/lib/utils";
-import { DragScroll } from "@/app/lib/utils";
+import { FileUpload, Product, Pattern } from "@/app/lib/definitions";
+import { DragScroll, getStatusColor } from "@/app/lib/utils";
 import DownloadImage from "../custom-image";
 import {
   ROUTE_PATH,
@@ -36,10 +38,9 @@ interface IntroductionCardProps {
   isPreviewAvatar?: boolean;
   viewCount?: number;
   likeCount?: number;
+  actions?: React.ReactNode;
+  showFloatingShare?: boolean;
 }
-
-const IMAGE_MARGIN = 10;
-const IMAGE_AMOUNT = 4;
 
 const IntroductionCard = ({
   data,
@@ -47,14 +48,18 @@ const IntroductionCard = ({
   isPreviewAvatar,
   viewCount,
   likeCount,
+  actions,
+  showFloatingShare = false,
 }: IntroductionCardProps) => {
-  const { src, name, author, description, images, link, price, currency_code, id } = data;
+  const { src, name, author, description, images, link, price, currency_code } =
+    data;
   const { status, userId, userAvatar, username } = data as Pattern;
   const currentViewCount = viewCount !== undefined ? viewCount : data.viewCount;
-  const currentLikeCount = likeCount !== undefined ? likeCount : (data as any).likeCount;
+  const currentLikeCount =
+    likeCount !== undefined ? likeCount : (data as Pattern).likeCount;
   const [activeThumbnail, setActiveThumbnail] = useState({ index: 0, src });
   const t = useTranslations("IntroductionCard");
-  const sliderRef = useRef(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   const onClickThumbnail = (index: number, url: string) => {
     setActiveThumbnail({ index, src: url });
@@ -74,116 +79,79 @@ const IntroductionCard = ({
       );
       if (index !== -1) {
         setActiveThumbnail({ index, src });
+      } else {
+        setActiveThumbnail({ index: 0, src });
       }
     }
-    if (isShowThumbnail && images && images?.length > 1) {
-      DragScroll(".images-outer");
-      const widthThumbnail = getElement(".images").offsetWidth;
-      const thumbnailItems = document.querySelectorAll(".thumbnail-item");
-      for (let i = 0; i < thumbnailItems.length; i++) {
-        const item = thumbnailItems[i] as HTMLElement;
-        const size = `${widthThumbnail / IMAGE_AMOUNT - IMAGE_MARGIN}px`;
-        item.style.width = size;
-        item.style.height = size;
-      }
-
-      if (images.length > 4) {
-        getElement(".thumbnail-photos")?.classList.add("show-prev-next");
+    if (isShowThumbnail && images && images.length > 1) {
+      const outerEl = document.querySelector(".images-outer");
+      if (outerEl) {
+        DragScroll(".images-outer");
       }
     }
   }, [data.name, src, images, isShowThumbnail]);
 
-  const getImageWidth = () => {
-    return (
-      (getElement(".thumbnail-item").offsetWidth + IMAGE_MARGIN) * IMAGE_AMOUNT
-    );
+  const getScrollStep = () => {
+    const container = sliderRef.current;
+    if (!container) return 220;
+    return Math.max(180, container.clientWidth * 0.75);
   };
 
   const onClickPrev = () => {
-    onMouseClickPrev(getImageWidth());
+    const container = sliderRef.current;
+    if (!container) return;
+    container.scrollLeft = Math.max(0, container.scrollLeft - getScrollStep());
   };
 
   const onClickNext = () => {
-    onMouseClickNext(getImageWidth());
+    const container = sliderRef.current;
+    if (!container) return;
+    container.scrollLeft = Math.min(
+      container.scrollWidth,
+      container.scrollLeft + getScrollStep()
+    );
   };
 
-  const onMouseClickNext = (offsetWidth: number) => {
-    const container = sliderRef.current as unknown as HTMLDivElement;
-    let scrollLeft = container.scrollLeft;
-    scrollLeft += offsetWidth;
-    if (scrollLeft >= container.scrollWidth) {
-      scrollLeft = container.scrollWidth;
-    }
-    container.scrollLeft = scrollLeft;
-  };
-
-  const onMouseClickPrev = (offsetWidth: number) => {
-    const container = sliderRef.current as unknown as HTMLDivElement;
-    let scrollLeft = container.scrollLeft;
-    scrollLeft -= offsetWidth;
-    if (scrollLeft <= 0) {
-      scrollLeft = 0;
-    }
-    container.scrollLeft = scrollLeft;
-  };
+  const hasThumbnails = Boolean(images && images.length > 1 && isShowThumbnail);
 
   return (
-    <div className="introduction-card">
-      {username && (
-        <Affix offsetTop={0}>
-          <Flex
-            align="center"
-            justify="space-between"
-            className="introduction-card_creator"
-          >
-            <div className="creator">
-              {userAvatar ? (
-                <Avatar size="default" src={userAvatar} />
-              ) : (
-                <UserOutlined />
-              )}
-              {username && (
-                <Link
-                  href={`${ROUTE_PATH.PROFILE}/${userId}`}
-                  className="creator-link"
-                >
-                  {username}
-                </Link>
-              )}
-            </div>
-            <Flex align="center" gap={12}>
-              {typeof currentViewCount === "number" && (
-                <Flex align="center" gap={4} className="creator-views" style={{ color: "#666", fontSize: 13 }}>
-                  <EyeOutlined style={{ fontSize: 15 }} />
-                  <span>{currentViewCount}</span>
-                </Flex>
-              )}
-              {typeof currentLikeCount === "number" && (
-                <Flex align="center" gap={4} className="creator-likes" style={{ color: "#666", fontSize: 13 }}>
-                  <HeartOutlined style={{ fontSize: 15 }} />
-                  <span>{currentLikeCount}</span>
-                </Flex>
-              )}
-            </Flex>
-          </Flex>
-        </Affix>
-      )}
+    <section className="introduction-card">
+      <Row gutter={[28, 24]} align="top">
+        <Col xs={24} md={11} lg={10}>
+          <div className="introduction-card__media">
+            <DownloadImage
+              width="100%"
+              src={activeThumbnail.src}
+              preview={isPreviewAvatar}
+              alt={name}
+            />
+          </div>
 
-      <Row gutter={[20, 20]}>
-        <Col span={24}></Col>
-
-        <Col xs={24} md={12}>
-          <DownloadImage
-            width="100%"
-            src={activeThumbnail.src}
-            preview={isPreviewAvatar}
-          />
-          {images && images?.length > 1 && isShowThumbnail && (
-            <div className="thumbnail-photos">
+          {hasThumbnails && (
+            <div
+              className={`thumbnail-photos ${
+                images && images.length > 4 ? "show-prev-next" : ""
+              }`}
+            >
+              {images && images.length > 4 && (
+                <Button
+                  onClick={onClickPrev}
+                  shape="circle"
+                  size="small"
+                  aria-label="Previous thumbnails"
+                  className="thumb-nav prev"
+                  icon={<LeftOutlined />}
+                />
+              )}
               <div ref={sliderRef} className="images-outer">
-                <Flex className="images">
-                  {images &&
-                    map(images, (image, index) => (
+                <div className="images">
+                  {map(images, (image, index) => (
+                    <div
+                      key={`intro_img_${index}`}
+                      className={`thumbnail-slot ${
+                        activeThumbnail.index === index ? "is-active" : ""
+                      }`}
+                    >
                       <DownloadImage
                         onClick={() =>
                           onClickThumbnail(
@@ -191,94 +159,133 @@ const IntroductionCard = ({
                             image.url || image.fileContent
                           )
                         }
-                        className={`${
+                        className={`thumbnail-item ${
                           activeThumbnail.index === index
-                            ? "active-thumbnail thumbnail-item"
-                            : "thumbnail-item"
+                            ? "active-thumbnail"
+                            : ""
                         }`}
-                        key={`intro_img_${index}`}
                         src={image?.fileContent}
                         preview={false}
+                        alt={`${name} ${index + 1}`}
                       />
-                    ))}
-                </Flex>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="prev-next">
-                <Button
-                  onClick={onClickPrev}
-                  shape="circle"
-                  className="prev"
-                  icon={<LeftOutlined />}
-                />
+              {images && images.length > 4 && (
                 <Button
                   onClick={onClickNext}
                   shape="circle"
-                  className="next"
+                  size="small"
+                  aria-label="Next thumbnails"
+                  className="thumb-nav next"
                   icon={<RightOutlined />}
                 />
-              </div>
+              )}
             </div>
           )}
         </Col>
-        <Col xs={24} md={12}>
-          <div className="text-box">
+
+        <Col xs={24} md={13} lg={14}>
+          <div className="text-box introduction-card__info">
+            {username && (
+              <div className="introduction-card_creator">
+                <Link
+                  href={`${ROUTE_PATH.PROFILE}/${userId}`}
+                  className="creator"
+                >
+                  {userAvatar ? (
+                    <Avatar size={28} src={userAvatar} />
+                  ) : (
+                    <Avatar
+                      size={28}
+                      icon={<UserOutlined />}
+                      className="creator-fallback"
+                    />
+                  )}
+                  <span className="creator-link">{username}</span>
+                </Link>
+              </div>
+            )}
+
             <h1 className="card-title mt-0">{name}</h1>
-            <Flex align="center" gap={12} wrap="wrap" style={{ marginTop: 8, marginBottom: 8 }}>
+
+            <Flex
+              align="center"
+              gap={12}
+              wrap="wrap"
+              className="introduction-card__meta"
+            >
               {status && status !== TRANSLATION_STATUS.NONE && (
-                <div>
-                  <Tag
-                    className="status-tag"
-                    color={getStatusColor(status || "NONE")}
-                  >
-                    {t(`status.${status}`)}
-                  </Tag>
-                </div>
+                <Tag
+                  className={`status-tag status-${status.toLowerCase()}`}
+                  color={getStatusColor(status || "NONE")}
+                >
+                  {t(`status.${status}`)}
+                </Tag>
               )}
               {typeof currentViewCount === "number" && (
-                <Flex align="center" gap={4} style={{ color: "#666", fontSize: 13 }}>
-                  <EyeOutlined style={{ fontSize: 14 }} />
-                  <span>{currentViewCount} {t("views")}</span>
-                </Flex>
+                <span className="meta-stat">
+                  <EyeOutlined />
+                  <span>
+                    {currentViewCount} {t("views")}
+                  </span>
+                </span>
               )}
               {typeof currentLikeCount === "number" && (
-                <Flex align="center" gap={4} style={{ color: "#666", fontSize: 13 }}>
-                  <HeartOutlined style={{ fontSize: 14 }} />
+                <span className="meta-stat">
+                  <HeartOutlined />
                   <span>{currentLikeCount}</span>
-                </Flex>
+                </span>
               )}
             </Flex>
 
             {author && (
-              <span className="author">
-                {t("author")}:&nbsp;<i>{author}</i>
-              </span>
+              <p className="author">
+                {t("author")}: <span>{author}</span>
+              </p>
             )}
+
             {description && <p className="description">{description}</p>}
+
             {price && (
               <>
                 <Divider />
-                <Space direction="vertical" size="middle">
-                  {price && (
-                    <FormattedCurrency
-                      price={price}
-                      currency_code={currency_code}
-                    />
-                  )}
+                <Flex
+                  align="center"
+                  justify="space-between"
+                  wrap="wrap"
+                  gap={16}
+                  className="introduction-card__commerce"
+                >
+                  <FormattedCurrency
+                    price={price}
+                    currency_code={currency_code}
+                  />
                   {(price || link) && (
-                    <Link href={link || SOCIAL_LINKS.FACEBOOK} target="_blank">
+                    <Link
+                      href={link || SOCIAL_LINKS.FACEBOOK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <Button className="btn-border" type="primary">
                         {t("btn_order")}
                       </Button>
                     </Link>
                   )}
-                </Space>
+                </Flex>
               </>
+            )}
+
+            {actions && (
+              <div className="introduction-card__actions">{actions}</div>
             )}
           </div>
         </Col>
       </Row>
-      <ShareButton />
-    </div>
+
+      {showFloatingShare && <ShareButton />}
+    </section>
   );
 };
 

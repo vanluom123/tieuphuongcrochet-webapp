@@ -402,7 +402,12 @@
       "nameRequired": "Please enter the collection name",
       "itemCount": "Item count",
       "no_collections": "No collections",
-      "no_patterns": "No patterns"
+      "no_patterns": "No patterns",
+      "loading": "Loading..."
+    },
+    "breadcrumb": {
+      "profile": "Profile",
+      "collections": "Collections"
     },
     "patterns": {
       "empty": "No patterns yet",

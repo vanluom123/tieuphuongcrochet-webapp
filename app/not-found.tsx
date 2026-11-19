@@ -5,28 +5,32 @@ import { getTranslations } from "next-intl/server";
 import { ROUTE_PATH } from "@/app/lib/constant";
 
 export const generateMetadata = async () => {
-  const t = await getTranslations('NotFound');
+  const t = await getTranslations("NotFound");
 
   return {
-    title: t('title'),
-  }
-}
+    title: t("title"),
+  };
+};
 
 const NotFound = async () => {
-    const t = await getTranslations('NotFound');
+  const t = await getTranslations("NotFound");
 
   return (
-    <Result
-      status="404"
-      title={t('title')}
-      subTitle={t('description')}
-      extra={
-        <Button className='btn-border' type="primary">
-          <Link href={ROUTE_PATH.HOME}>{t('back_home')}</Link>
-        </Button>
-      }
-    />
+    <div className="status-result-card">
+      <Result
+        status="404"
+        title={t("title")}
+        subTitle={t("description")}
+        extra={
+          <Link href={ROUTE_PATH.HOME}>
+            <Button className="btn-border" type="primary">
+              {t("back_home")}
+            </Button>
+          </Link>
+        }
+      />
+    </div>
   );
-}
+};
 
 export default NotFound;

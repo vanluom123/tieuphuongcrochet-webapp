@@ -1,118 +1,217 @@
 @import "../../variables.module.scss";
 
 .introduction-card {
-  .card-title {
-    font-size: $fontSize_middle;
-    font-weight: 600;
-    margin: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 20px 16px;
+  box-shadow: var(--shadow-card);
+
+  @media screen and (min-width: $md) {
+    padding: 28px 32px;
   }
 
-  .author {
-    margin-top: 20px;
-    font-size: $fontSize_middle;
-    font-weight: 500;
-    line-height: 48px;
+  &__media {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+
+    .ant-image {
+      display: block;
+      width: 100%;
+
+      img {
+        display: block;
+        width: 100%;
+        max-height: 480px;
+        object-fit: cover;
+      }
+    }
   }
 
   .thumbnail-photos {
-    width: 100%;
-    padding: 10px 30px 0;
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
 
-    &.show-prev-next {
+    .thumb-nav {
+      flex-shrink: 0;
+      border-color: var(--color-border);
+      color: var(--color-ink-muted);
+
       &:hover {
-
-        .prev,
-        .next {
-          transform: scale(1);
-          transition: 0.3;
-        }
+        border-color: var(--color-accent);
+        color: var(--color-accent);
       }
     }
 
-    .prev,
-    .next {
-      position: absolute;
-      top: 35%;
-      transform: scale(0);
-    }
-
-    .prev {
-      left: 15px;
-    }
-
-    .next {
-      right: 15px;
-    }
-
     .images-outer {
-
-      position: relative;
-      overflow-x: scroll;
-      transform: translate3d(0, 0, 0);
+      flex: 1;
+      min-width: 0;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
 
       &::-webkit-scrollbar {
         display: none;
       }
+    }
 
-      .images {
+    .images {
+      display: flex;
+      gap: 8px;
+    }
 
-        .ant-image {
-          &:not(:last-child) {
-            margin-right: 10px;
-          }
+    .thumbnail-slot {
+      flex: 0 0 calc((100% - 24px) / 4);
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 2px solid transparent;
+      background: var(--color-surface-subtle);
+      cursor: pointer;
+      transition: border-color 160ms ease-out;
 
-          .thumbnail-item {
-            opacity: 0.5;
-            object-fit: fill;
+      &.is-active {
+        border-color: var(--color-accent);
+      }
 
-            &:hover {
-              opacity: .7;
-            }
+      .ant-image {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
 
-            &.active-thumbnail {
-              opacity: 1;
-            }
-          }
+      .thumbnail-item {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.7;
+        transition: opacity 160ms ease-out;
+
+        &:hover,
+        &.active-thumbnail {
+          opacity: 1;
         }
-
-        // @media screen and (min-width: $xs) {
-        // 	width: 435px;
-        // }
-
-        // @media screen and (min-width: $md) {
-        // 	width: 600px;
-        // }
-
-        // @media screen and (min-width: $xl) {
-        // 	width: 900px;
-        // }
-
-        // @media screen and (min-width: $xxl) {
-        // 	width: 1000px;
-        // }
       }
     }
   }
 
-  .creator {
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .introduction-card_creator {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--color-border-strong);
 
-    .creator-link {
-      font-size: $fontSize_middle;
-      color: $textPrimaryColor;
-      margin-left: 5px;
-      font-weight: $fontWeight_medium;
+    .creator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
 
-      &:hover {
-        text-decoration: underline;
+      .creator-fallback {
+        background: var(--color-surface-subtle);
+        color: var(--color-ink-muted);
+      }
+
+      .creator-link {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--color-ink);
+
+        &:hover {
+          color: var(--color-accent);
+          text-decoration: underline;
+        }
       }
     }
   }
 
-  .introduction-card_creator{
-    padding: 10px 0;
-    background-color: $backgroundColor;
+  .card-title {
+    font-family: var(--font-display), var(--font-body), sans-serif;
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  &__meta {
+    margin: 2px 0;
+
+    .status-tag {
+      margin: 0;
+      border-radius: var(--radius-pill);
+      font-weight: 500;
+    }
+
+    .meta-stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13.5px;
+      color: var(--color-ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .author {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--color-ink-muted);
+
+    span {
+      color: var(--color-ink);
+      font-weight: 500;
+    }
+  }
+
+  .description {
+    margin: 4px 0 0;
+    max-width: 60ch;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+  }
+
+  &__commerce {
+    .price-wrap {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--color-border-strong);
+
+    .pattern-action-btn.is-liked,
+    .pattern-action-btn.is-saved {
+      background: var(--color-accent-soft);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+
+      &:hover {
+        background: var(--color-accent);
+        color: #ffffff;
+      }
+    }
   }
 }

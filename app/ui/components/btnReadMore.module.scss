@@ -1,37 +1,26 @@
-@import "../../variables.module.scss";
-
 .readmoreBtn {
-	overflow: hidden;
-	
-	a {
-		color: $textPrimaryColor;
-		font-size: 18px;
-		padding-bottom: 5px;
-		border-bottom: 2px solid $borderColor;
-		display: inline-block;
-		position: relative;
+  display: inline-block;
 
-		&::before {
-			content: '';
-			position: absolute;
-			display: block;
-			width: 100%;
-			top: 100%;
-			opacity: 0;
-			z-index: 9;
-			transform: translateX(-100%);
-			border-bottom: 2px solid $colorPrimary;
-			transition: all .7s ease 0s;
-			-webkit-transition: all .7s ease 0s;
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 160ms ease-out, background-color 160ms ease-out,
+      color 160ms ease-out;
 
-		}
-
-		&:hover {
-			color: $textSecondColor;
-			&::before {
-				opacity: 1;
-				transform: translateX(0);
-			}
-		}
-	}
+    &:hover {
+      border-color: var(--color-accent);
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+  }
 }

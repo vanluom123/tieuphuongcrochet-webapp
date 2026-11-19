@@ -142,7 +142,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
         <Form
           form={form}
           name="normal_login"
-          className="login-form layout-wrap"
+          className="login-form"
           onFinish={onFinish}
           disabled={isLoading}
         >

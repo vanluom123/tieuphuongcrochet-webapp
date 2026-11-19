@@ -52,19 +52,19 @@ const ForgotPassword = () => {
         <div className='auth-page login-page'>
             <Flex justify='center' className='logo'>
                 <Link href={ROUTE_PATH.HOME}>
-                    <Image priority src={logo} alt='Tiệm len Tiểu Phương' width={150} height={150} />
+                    <Image priority src={logo} alt='Tiệm len Tiểu Phương' width={72} height={72} />
                 </Link>
             </Flex>
             <Flex className="header-title" justify='center'>
-                <h3 className="title">{t('title')}</h3>
+                <h2 className="title">{t('title')}</h2>
             </Flex>
             <Spin spinning={isLoading} tip="Loading...">
                 <Row>
-                    <Col xs={20} sm={18} md={10}>
+                    <Col span={24}>
                         <Form
                             form={form}
                             name="forgot_password"
-                            className="login-form layout-wrap"
+                            className="login-form"
                             onFinish={onFinish}
                             disabled={isLoading}
                         >

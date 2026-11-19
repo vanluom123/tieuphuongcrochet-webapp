@@ -1,41 +1,77 @@
-import React, { useMemo } from 'react';
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { Col, Flex, Row } from 'antd';
-import CopyRight from '../copy-right';
-import { FOOTER_LINK, ROUTE_PATH } from '@/app/lib/constant';
-import logo from '@/public/logo.png';
-import Image from 'next/image';
+import React, { useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+
+import CopyRight from "../copy-right";
+import { FOOTER_LINK, ROUTE_PATH, SOCIAL_LINKS } from "@/app/lib/constant";
+import logo from "@/public/logo.png";
 
 interface FooterProps {
-    currentNav: string
+  currentNav: string;
 }
 
 const FooterPage: React.FC<FooterProps> = ({ currentNav }) => {
-    const t = useTranslations("MenuNav");
+  const t = useTranslations("MenuNav");
+  const tApp = useTranslations("App");
+  const tSocial = useTranslations("Home.Social");
 
-    const getActiveClass = useMemo(() => (path: string) => {
-        if (currentNav === ROUTE_PATH.HOME) {
-            return path === currentNav ? 'actived' : '';
-        }
-        return path.includes(currentNav) ? 'actived' : '';
-    }, [currentNav]);
+  const getActiveClass = useMemo(
+    () => (path: string) => {
+      if (currentNav === ROUTE_PATH.HOME) {
+        return path === currentNav ? "actived" : "";
+      }
+      return path.includes(currentNav) ? "actived" : "";
+    },
+    [currentNav]
+  );
 
-    return (
-        <footer className='footer-wrap'>
-            <Flex vertical align='center'>
-                <Image className='footer-logo' priority src={logo} alt="Logo" width={300} height={360} />
-                <Row className='footer-link-wrap' gutter={[48, 12]}>
-                    {FOOTER_LINK.map(({ name, path }, index) =>
-                        <Col className={getActiveClass(path)} key={`${name}_${index}`} md={8} xs={12}>
-                            <Link className='footer-link' href={path}>{t(name)}</Link>
-                        </Col>
-                    )}
-                </Row>
-                <CopyRight />
-            </Flex>
-        </footer>
-    );
+  return (
+    <footer className="footer-wrap">
+      <div className="container">
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <Link href={ROUTE_PATH.HOME} className="footer-brand__head">
+              <Image
+                className="footer-brand__logo"
+                src={logo}
+                alt={tApp("title_mobile")}
+                width={52}
+                height={52}
+              />
+              <span className="footer-brand__name">{tApp("title_mobile")}</span>
+            </Link>
+            <p className="footer-brand__desc">{tApp("description")}</p>
+          </div>
+
+          <nav className="footer-nav" aria-label="Footer navigation">
+            {FOOTER_LINK.map(({ name, path }, index) => (
+              <div
+                className={getActiveClass(path)}
+                key={`${name}_${index}`}
+              >
+                <Link className="footer-link" href={path}>
+                  {t(name)}
+                </Link>
+              </div>
+            ))}
+          </nav>
+
+          <div className="footer-community">
+            <p className="footer-community__label">{tSocial("title")}</p>
+            <Link href={SOCIAL_LINKS.FACEBOOK} target="_blank" rel="noopener noreferrer" className="footer-link">
+              Facebook Fanpage
+            </Link>
+            <Link href={SOCIAL_LINKS.SOPEE} target="_blank" rel="noopener noreferrer" className="footer-link">
+              Shopee Store
+            </Link>
+          </div>
+        </div>
+
+        <CopyRight />
+      </div>
+    </footer>
+  );
 };
 
 export default React.memo(FooterPage);

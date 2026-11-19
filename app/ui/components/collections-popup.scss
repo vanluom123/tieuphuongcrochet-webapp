@@ -1,12 +1,20 @@
-@import '../../variables.module.scss';
+@import "../../variables.module.scss";
 
 .collectionsPopup {
-  ~ * {
-    color: $textPrimaryColor;
-  }
   .collectionsPopup__items {
     max-height: 400px;
     overflow-y: auto;
+    margin-top: 8px;
+
+    .ant-list-item {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      transition: background-color 160ms ease-out;
+
+      &:hover {
+        background-color: var(--color-surface-subtle);
+      }
+    }
   }
 
   .collectionsPopup__footer {
@@ -16,14 +24,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
 
       .ant-form-item {
         margin-bottom: 0;
+        flex: 1;
       }
     }
 
     &-btn {
-      height: 44px;
+      height: 42px;
+      border-radius: var(--radius-sm);
     }
   }
 }

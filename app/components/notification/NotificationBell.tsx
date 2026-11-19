@@ -195,7 +195,13 @@ const NotificationBell: React.FC = () => {
         overlayClassName="notification-popover"
       >
         <Badge count={unreadCount} overflowCount={99}>
-          <BellOutlined className="bell-icon" />
+          <button
+            type="button"
+            className="bell-trigger"
+            aria-label={t('title')}
+          >
+            <BellOutlined className="bell-icon" />
+          </button>
         </Badge>
       </Popover>
     </div>

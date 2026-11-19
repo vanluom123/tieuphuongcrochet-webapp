@@ -1,21 +1,93 @@
-@import './../variables.module.scss';
+@import "./../variables.module.scss";
 
 .contact-page {
+  .contact-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
 
-    .form-contact {
-      padding: 30px;
-      background-color: #fff;
-      box-shadow: 0 10px 10px 0px $colorPrimary;
-      border-radius: 3px;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all .7s ease 0s;
-      -webkit-transition: all .7s ease 0s;
-  
-      input,
-      textarea {
-        border-radius: 0;
-        border-color: $borderColor;
+  .content-title {
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .content-text {
+    margin: 0;
+    max-width: 48ch;
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--color-ink-muted);
+  }
+
+  .contact-direct-card {
+    margin-top: 8px;
+    padding: 18px 20px;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14.5px;
+      font-variant-numeric: tabular-nums;
+
+      a {
+        color: var(--color-ink);
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+          color: var(--color-accent);
+          text-decoration: underline;
+        }
       }
     }
+
+    &__icon {
+      color: var(--color-accent);
+      font-size: 16px;
+    }
   }
+
+  .form-contact {
+    padding: 24px 20px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+
+    @media screen and (min-width: $md) {
+      padding: 32px;
+    }
+
+    &__title {
+      margin: 0 0 20px;
+      font-family: var(--font-display), var(--font-body), sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-ink);
+    }
+
+    &__submit {
+      margin-top: 8px;
+    }
+  }
+}
+
+.contact-social-section {
+  &__title {
+    margin: 0 0 20px;
+    font-family: var(--font-display), var(--font-body), sans-serif;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+}

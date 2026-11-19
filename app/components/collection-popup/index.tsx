@@ -202,8 +202,8 @@ const CollectionPopup = ({
                     <FolderOutlined
                       style={{
                         fontSize:
-                          typeof window !== 'undefined' && window.innerWidth < 768 ? 24 : 20,
-                        color: '#1890ff',
+                          typeof window !== 'undefined' && window.innerWidth < 768 ? 22 : 20,
+                        color: 'var(--color-craft-wood)',
                       }}
                     />
                   )

@@ -31,19 +31,23 @@ const About = async () => {
           description: t("description"),
         })}
       />
-      <div className="about-page scroll-animate">
-        <div className="animation-wrap">
-          <h1 className="content-title align-center">{t("message")}</h1>
-        </div>
-        <Row gutter={50}>
-          <Col xs={24} md={12}>
+      <section className="about-page">
+        <Row gutter={[40, 28]} align="middle">
+          <Col xs={24} md={13}>
+            <h1 className="content-title">{t("message")}</h1>
             <p className="content-text">{t("content")}</p>
           </Col>
-          <Col xs={24} md={12} className="animation-wrap">
-            <Image className="img-about" src={coverImg.src} alt="cover" />
+          <Col xs={24} md={11}>
+            <div className="about-image-frame">
+              <Image
+                className="img-about"
+                src={coverImg.src}
+                alt={t("title")}
+              />
+            </div>
           </Col>
         </Row>
-      </div>
+      </section>
     </>
   );
 };

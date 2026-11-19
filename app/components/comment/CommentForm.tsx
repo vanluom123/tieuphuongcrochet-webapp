@@ -53,6 +53,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
 
             if (result.success) {
                 form.resetFields();
+                setDisabled(true);
                 onSuccess();
                 message.success(t('success'));
             }
