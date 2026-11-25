@@ -363,7 +363,7 @@ export interface CapturePaymentRequest {
 
 export interface VideoPopupClip {
   videoUrl: string
-  videoFileName: string
+  videoFileName?: string
   label?: string
   ctaUrl?: string
 }
