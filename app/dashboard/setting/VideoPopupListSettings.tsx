@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Button, Form, Input, Modal, Popconfirm, Space, Spin, Switch, Tag, Upload } from 'antd'
+import { Button, Form, Input, Modal, Popconfirm, Segmented, Space, Spin, Switch, Tag, Upload } from 'antd'
 import type { FormInstance } from 'antd'
 import {
   ArrowDownOutlined,
@@ -12,7 +12,11 @@ import {
   UploadOutlined,
 } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
-import { isSafeCtaUrl } from '@/app/components/video-popup/videoPopup.utils'
+import {
+  isSafeCtaUrl,
+  isSafeVideoUrl,
+  resolveVideoEmbedUrl,
+} from '@/app/components/video-popup/videoPopup.utils'
 import { VIDEO_UPLOAD } from '@/app/lib/constant'
 import { VideoPopup, VideoPopupClip } from '@/app/lib/definitions'
 import { notification } from '@/app/lib/notify'
@@ -25,9 +29,12 @@ import {
 } from '@/app/lib/service/videoPopupService'
 import styles from './VideoPopupListSettings.module.scss'
 
+type ClipSourceType = 'upload' | 'url'
+
 interface ClipFormValue {
+  sourceType: ClipSourceType
   videoUrl: string
-  videoFileName: string
+  videoFileName?: string
   label?: string
   ctaUrl?: string
   file?: File
@@ -37,6 +44,16 @@ interface PopupFormValues {
   title: string
   active: boolean
   clips: ClipFormValue[]
+}
+
+function createEmptyClip(): ClipFormValue {
+  return {
+    sourceType: 'upload',
+    videoUrl: '',
+    videoFileName: '',
+    label: '',
+    ctaUrl: '',
+  }
 }
 
 function resolveFileDisplayName(clip?: ClipFormValue): string {
@@ -59,6 +76,19 @@ function ClipPreview({ file, videoUrl }: { file?: File; videoUrl?: string }) {
     return () => URL.revokeObjectURL(url)
   }, [file])
 
+  const embedUrl = !file && videoUrl ? resolveVideoEmbedUrl(videoUrl) : null
+  if (embedUrl) {
+    return (
+      <iframe
+        className={styles.previewIframe}
+        src={embedUrl}
+        title="Video preview"
+        allow="fullscreen; picture-in-picture"
+        allowFullScreen
+      />
+    )
+  }
+
   const src = objectUrl || videoUrl
   if (!src) return null
 
@@ -77,33 +107,35 @@ interface ClipRowProps {
 function ClipRow({ fieldName, index, total, form, onMove, onRemove }: ClipRowProps) {
   const t = useTranslations('VideoPopupList')
   const clip = Form.useWatch(['clips', fieldName], form)
+  const sourceType: ClipSourceType = clip?.sourceType ?? 'upload'
   const fileName = resolveFileDisplayName(clip)
+  const safePreviewUrl = isSafeVideoUrl(clip?.videoUrl ?? '') ? clip?.videoUrl?.trim() : undefined
+
+  const handleSourceChange = (nextValue: string | number) => {
+    if (nextValue === 'url') {
+      form.setFieldValue(['clips', fieldName, 'file'], undefined)
+      form.setFieldValue(['clips', fieldName, 'videoFileName'], undefined)
+      return
+    }
+    form.setFieldValue(['clips', fieldName, 'videoUrl'], '')
+  }
 
   return (
     <div className={styles.clip}>
       <div className={styles.clipBar}>
         <span className={styles.clipIndex}>#{String(index + 1).padStart(2, '0')}</span>
-        <div className={styles.filePicker}>
-          <Upload
-            maxCount={1}
-            showUploadList={false}
-            accept={VIDEO_UPLOAD.MIME_TYPES.join(',')}
-            beforeUpload={(file) => {
-              if (!VIDEO_UPLOAD.MIME_TYPES.includes(file.type) || file.size > VIDEO_UPLOAD.MAX_BYTES) {
-                notification.error({ message: t('video_invalid') })
-                return false
-              }
-              form.setFieldValue(['clips', fieldName, 'file'], file)
-              form.validateFields([['clips', fieldName, 'videoFileName']]).catch(() => undefined)
-              return false
-            }}
-          >
-            <Button icon={<UploadOutlined />}>{t('choose_file')}</Button>
-          </Upload>
-          <span className={styles.fileName} title={fileName}>
-            {fileName}
-          </span>
-        </div>
+        <Form.Item name={[fieldName, 'sourceType']} noStyle>
+          <Segmented
+            size="small"
+            className={styles.sourceSegmented}
+            aria-label={t('clips')}
+            options={[
+              { label: t('source_upload'), value: 'upload' },
+              { label: t('source_url'), value: 'url' },
+            ]}
+            onChange={handleSourceChange}
+          />
+        </Form.Item>
         <Space className={styles.clipActions}>
           <Button
             aria-label={t('move_up')}
@@ -129,45 +161,95 @@ function ClipRow({ fieldName, index, total, form, onMove, onRemove }: ClipRowPro
         </Space>
       </div>
 
-      <Form.Item
-        name={[fieldName, 'videoFileName']}
-        className={styles.fieldItem}
-        rules={[
-          {
-            validator: async () => {
-              const current = form.getFieldValue(['clips', fieldName]) as ClipFormValue | undefined
-              if (!current?.file && !current?.videoUrl) {
-                return Promise.reject(new Error(t('video_required')))
-              }
+      {sourceType === 'upload' ? (
+        <>
+          <div className={styles.uploadRow}>
+            <Upload
+              maxCount={1}
+              showUploadList={false}
+              accept={VIDEO_UPLOAD.MIME_TYPES.join(',')}
+              beforeUpload={(file) => {
+                if (!VIDEO_UPLOAD.MIME_TYPES.includes(file.type) || file.size > VIDEO_UPLOAD.MAX_BYTES) {
+                  notification.error({ message: t('video_invalid') })
+                  return false
+                }
+                form.setFieldValue(['clips', fieldName, 'file'], file)
+                form.validateFields([['clips', fieldName, 'videoFileName']]).catch(() => undefined)
+                return false
+              }}
+            >
+              <Button icon={<UploadOutlined />}>{t('choose_file')}</Button>
+            </Upload>
+            {fileName ? (
+              <span className={styles.fileBadge} title={fileName}>
+                <span className={styles.fileName}>{fileName}</span>
+              </span>
+            ) : null}
+          </div>
+
+          <Form.Item
+            name={[fieldName, 'videoFileName']}
+            className={styles.fieldItem}
+            rules={[
+              {
+                validator: async () => {
+                  const current = form.getFieldValue(['clips', fieldName]) as ClipFormValue | undefined
+                  if (!current?.file && !current?.videoUrl) {
+                    return Promise.reject(new Error(t('video_required')))
+                  }
+                },
+              },
+            ]}
+          >
+            <input type="hidden" />
+          </Form.Item>
+        </>
+      ) : (
+        <Form.Item
+          name={[fieldName, 'videoUrl']}
+          className={styles.fieldItem}
+          rules={[
+            {
+              validator: async (_, value: string | undefined) => {
+                const trimmed = (value ?? '').trim()
+                if (!trimmed) {
+                  return Promise.reject(new Error(t('video_required')))
+                }
+                if (!isSafeVideoUrl(trimmed)) {
+                  return Promise.reject(new Error(t('video_url_invalid')))
+                }
+              },
             },
-          },
-        ]}
-      >
-        <input type="hidden" />
-      </Form.Item>
+          ]}
+        >
+          <Input placeholder={t('video_url_placeholder')} aria-label={t('video_url')} />
+        </Form.Item>
+      )}
 
-      <ClipPreview file={clip?.file} videoUrl={clip?.videoUrl} />
+      <ClipPreview file={clip?.file} videoUrl={safePreviewUrl} />
 
-      <Form.Item
-        name={[fieldName, 'ctaUrl']}
-        className={styles.fieldItem}
-        rules={[
-          {
-            validator: async (_, value: string | undefined) => {
-              const trimmed = (value ?? '').trim()
-              if (trimmed && !isSafeCtaUrl(trimmed)) {
-                return Promise.reject(new Error(t('cta_url_invalid')))
-              }
+      <div className={styles.metaFields}>
+        <Form.Item
+          name={[fieldName, 'ctaUrl']}
+          className={styles.fieldItem}
+          rules={[
+            {
+              validator: async (_, value: string | undefined) => {
+                const trimmed = (value ?? '').trim()
+                if (trimmed && !isSafeCtaUrl(trimmed)) {
+                  return Promise.reject(new Error(t('cta_url_invalid')))
+                }
+              },
             },
-          },
-        ]}
-      >
-        <Input placeholder={t('cta_url')} aria-label={t('cta_url')} />
-      </Form.Item>
+          ]}
+        >
+          <Input placeholder={t('cta_url')} aria-label={t('cta_url')} />
+        </Form.Item>
 
-      <Form.Item name={[fieldName, 'label']} className={styles.fieldItem}>
-        <Input placeholder={t('clip_label')} aria-label={t('clip_label')} />
-      </Form.Item>
+        <Form.Item name={[fieldName, 'label']} className={styles.fieldItem}>
+          <Input placeholder={t('clip_label')} aria-label={t('clip_label')} />
+        </Form.Item>
+      </div>
     </div>
   )
 }
@@ -210,7 +292,7 @@ export default function VideoPopupListSettings() {
     form.setFieldsValue({
       title: '',
       active: true,
-      clips: [{ videoUrl: '', videoFileName: '', label: '', ctaUrl: '' }],
+      clips: [createEmptyClip()],
     })
     setModalOpen(true)
   }
@@ -221,8 +303,9 @@ export default function VideoPopupListSettings() {
       title: item.title,
       active: item.active,
       clips: (item.clips ?? []).map((clip) => ({
+        sourceType: clip.videoFileName ? 'upload' : 'url',
         videoUrl: clip.videoUrl,
-        videoFileName: clip.videoFileName,
+        videoFileName: clip.videoFileName ?? '',
         label: clip.label ?? '',
         ctaUrl: clip.ctaUrl ?? '',
       })),
@@ -275,6 +358,18 @@ export default function VideoPopupListSettings() {
     try {
       const clips: VideoPopupClip[] = []
       for (const clip of values.clips) {
+        const label = clip.label?.trim() || undefined
+        const ctaUrl = clip.ctaUrl?.trim() || undefined
+
+        if (clip.sourceType === 'url') {
+          clips.push({
+            videoUrl: clip.videoUrl.trim(),
+            label,
+            ctaUrl,
+          })
+          continue
+        }
+
         let videoUrl = clip.videoUrl
         let videoFileName = clip.videoFileName
         if (clip.file) {
@@ -290,8 +385,8 @@ export default function VideoPopupListSettings() {
         clips.push({
           videoUrl,
           videoFileName,
-          label: clip.label?.trim() || undefined,
-          ctaUrl: clip.ctaUrl?.trim() || undefined,
+          label,
+          ctaUrl,
         })
       }
 
@@ -430,10 +525,7 @@ export default function VideoPopupListSettings() {
                       onRemove={remove}
                     />
                   ))}
-                  <Button
-                    icon={<PlusOutlined />}
-                    onClick={() => add({ videoUrl: '', videoFileName: '', label: '', ctaUrl: '' })}
-                  >
+                  <Button icon={<PlusOutlined />} onClick={() => add(createEmptyClip())}>
                     {t('add_clip')}
                   </Button>
                   <Form.ErrorList errors={errors} />

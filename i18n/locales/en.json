@@ -779,6 +779,11 @@
     "clip_label": "Clip label",
     "add_clip": "Add video",
     "choose_file": "Choose file",
+    "source_upload": "Upload file",
+    "source_url": "Direct URL",
+    "video_url": "Video URL",
+    "video_url_placeholder": "https://example.com/video.mp4",
+    "video_url_invalid": "Video URL must start with http:// or https://",
     "move_up": "Move up",
     "move_down": "Move down",
     "remove_clip": "Remove video",
@@ -804,6 +809,7 @@
     "clips_required": "At least one video is required",
     "clip_progress": "Video {current}/{total}",
     "close_in": "Close in {seconds}s",
-    "cta_fallback": "View more"
+    "cta_fallback": "View more",
+    "next_clip": "Next video"
   }
 }

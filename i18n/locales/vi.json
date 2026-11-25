@@ -779,6 +779,11 @@
     "clip_label": "Nhãn clip",
     "add_clip": "Thêm video",
     "choose_file": "Chọn file",
+    "source_upload": "Tải từ thiết bị",
+    "source_url": "Nhập URL",
+    "video_url": "URL video",
+    "video_url_placeholder": "https://example.com/video.mp4",
+    "video_url_invalid": "URL video phải bắt đầu bằng http:// hoặc https://",
     "move_up": "Đưa lên",
     "move_down": "Đưa xuống",
     "remove_clip": "Xóa video",
@@ -804,6 +809,7 @@
     "clips_required": "Cần ít nhất 1 video trong danh sách",
     "clip_progress": "Video {current}/{total}",
     "close_in": "Đóng sau {seconds}s",
-    "cta_fallback": "Xem thêm"
+    "cta_fallback": "Xem thêm",
+    "next_clip": "Video tiếp theo"
   }
 }

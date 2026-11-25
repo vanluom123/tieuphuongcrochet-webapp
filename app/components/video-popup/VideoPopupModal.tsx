@@ -6,7 +6,12 @@ import { Button, Modal } from 'antd'
 import { ExportOutlined, FieldTimeOutlined, LinkOutlined } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
 import { VideoPopup } from '@/app/lib/definitions'
-import { formatCtaLink, isSafeCtaUrl, VIDEO_POPUP_CLOSE_COUNTDOWN_SEC } from './videoPopup.utils'
+import {
+  formatCtaLink,
+  isSafeCtaUrl,
+  resolveVideoEmbedUrl,
+  VIDEO_POPUP_CLOSE_COUNTDOWN_SEC,
+} from './videoPopup.utils'
 import styles from './VideoPopupModal.module.scss'
 
 interface VideoPopupModalProps {
@@ -25,10 +30,12 @@ export default function VideoPopupModal({ popup, onCompleted }: VideoPopupModalP
 
   const clips = popup.clips ?? []
   const clip = clips[clipIndex]
+  const embedUrl = clip ? resolveVideoEmbedUrl(clip.videoUrl, { autoplay: true }) : null
   const ctaUrl = formatCtaLink(clip?.ctaUrl ?? '')
   const showCta = isSafeCtaUrl(ctaUrl)
   const isInternalCta = ctaUrl.startsWith('/')
   const canClose = secondsLeft <= 0
+  const hasNextEmbedClip = Boolean(embedUrl) && clipIndex + 1 < clips.length
 
   useEffect(() => {
     const onVisibilityChange = () => {
@@ -110,21 +117,39 @@ export default function VideoPopupModal({ popup, onCompleted }: VideoPopupModalP
         </div>
       ) : null}
       {clip ? (
-        <video
-          key={`${popup.id ?? popup.title}-${clipIndex}`}
-          className={styles.player}
-          src={clip.videoUrl}
-          aria-label={clip.label || popup.title}
-          autoPlay
-          playsInline
-          controls
-          muted
-          preload="metadata"
-          onEnded={handleClipEnded}
-          onError={() => setSecondsLeft(0)}
-        />
+        embedUrl ? (
+          <iframe
+            key={`${popup.id ?? popup.title}-${clipIndex}`}
+            className={styles.player}
+            src={embedUrl}
+            title={clip.label || popup.title}
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <video
+            key={`${popup.id ?? popup.title}-${clipIndex}`}
+            className={styles.player}
+            src={clip.videoUrl}
+            aria-label={clip.label || popup.title}
+            autoPlay
+            playsInline
+            controls
+            muted
+            preload="metadata"
+            onEnded={handleClipEnded}
+            onError={() => setSecondsLeft(0)}
+          />
+        )
       ) : null}
-      {ctaButton}
+      {ctaButton || hasNextEmbedClip ? (
+        <div className={styles.actions}>
+          {ctaButton}
+          {hasNextEmbedClip ? (
+            <Button onClick={() => setClipIndex((i) => i + 1)}>{t('next_clip')}</Button>
+          ) : null}
+        </div>
+      ) : null}
     </Modal>
   )
 }

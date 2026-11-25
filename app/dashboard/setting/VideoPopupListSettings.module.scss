@@ -1,11 +1,14 @@
-.settings {
+.settings,
+.modalForm {
   --vp-surface: #ffffff;
   --vp-tint: #fff8f8;
   --vp-ink: #262121;
   --vp-muted: #6f6565;
   --vp-accent: #d95367;
   --vp-border: #efe3e6;
+}
 
+.settings {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -81,8 +84,8 @@
 .clip {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 12px;
+  gap: 12px;
+  padding: 14px;
   margin-bottom: 12px;
   border: 1px solid var(--vp-border);
   border-radius: 10px;
@@ -92,45 +95,127 @@
 .clipBar {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .clipIndex {
   font-variant-numeric: tabular-nums;
-  color: var(--vp-muted);
-}
-
-.filePicker {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  flex: 1 1 200px;
-}
-
-.fileName {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   font-size: 13px;
-  min-width: 0;
+  font-weight: 600;
+  color: var(--vp-muted);
+  min-width: 28px;
+}
+
+.sourceSegmented {
+  background: var(--vp-surface);
+  border: 1px solid var(--vp-border);
+  border-radius: 8px;
+  padding: 2px;
+
+  :global(.ant-segmented-item) {
+    color: var(--vp-muted);
+    font-size: 13px;
+    border-radius: 6px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+
+    &:hover {
+      color: var(--vp-ink);
+    }
+  }
+
+  :global(.ant-segmented-item-selected) {
+    background-color: var(--vp-accent);
+    color: var(--vp-surface);
+    font-weight: 500;
+    box-shadow: none;
+
+    &:hover {
+      color: var(--vp-surface);
+    }
+  }
+
+  :global(.ant-segmented-thumb) {
+    background-color: var(--vp-accent);
+    border-radius: 6px;
+    box-shadow: none;
+  }
+
+  :global(.ant-segmented-item-input:focus-visible + .ant-segmented-item-label) {
+    outline: 2px solid var(--vp-accent);
+    outline-offset: 2px;
+  }
 }
 
 .clipActions {
   margin-left: auto;
 }
 
+.uploadRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.fileBadge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
+  flex: 1 1 180px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--vp-surface);
+  border: 1px solid var(--vp-border);
+  color: var(--vp-ink);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.fileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
 .preview {
   width: 100%;
   max-height: 220px;
   background: var(--vp-ink);
+  border-radius: 8px;
+  display: block;
+}
+
+.previewIframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
   border-radius: 6px;
   display: block;
+  background: var(--vp-ink);
+}
+
+.metaFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-items: start;
 }
 
 .fieldItem {
   margin-bottom: 0;
+}
+
+.settings :global(.ant-btn:focus-visible),
+.modalForm :global(.ant-btn:focus-visible),
+.modalForm :global(.ant-input:focus-visible),
+.settings :global(.ant-switch:focus-visible),
+.modalForm :global(.ant-switch:focus-visible) {
+  outline: 2px solid var(--vp-accent);
+  outline-offset: 2px;
 }
 
 // Keep compact switch dimensions inside Antd forms scoped to this component.
@@ -157,4 +242,21 @@
 .settings :global(.ant-switch-checked),
 .modalForm :global(.ant-switch-checked) {
   background-color: var(--vp-accent);
+}
+
+@media (max-width: 575px) {
+  .metaFields {
+    grid-template-columns: 1fr;
+  }
+
+  .clipActions {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sourceSegmented :global(.ant-segmented-item),
+  .sourceSegmented :global(.ant-segmented-thumb) {
+    transition: none;
+  }
 }
