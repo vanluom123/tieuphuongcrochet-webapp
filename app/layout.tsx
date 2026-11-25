@@ -7,7 +7,7 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import AuthProvider from "./context/AuthProvider";
 import { AuthModalProvider } from "./context/AuthModalProvider";
 import GoogleTag from "./components/GoogleTag";
-import VideoPopupProvider from "./components/video-popup/VideoPopupProvider";
+import VideoPopup from "./components/video-popup/VideoPopup";
 import "./globals.scss";
 
 export async function generateMetadata() {
@@ -83,11 +83,10 @@ export default async function RootLayout({
             <ThemeProvider>
               <AntdRegistry>
                 <AuthModalProvider>
-                  <VideoPopupProvider>
-                    <LayoutPage>
-                      {children}
-                    </LayoutPage>
-                  </VideoPopupProvider>
+                  <LayoutPage>
+                    {children}
+                  </LayoutPage>
+                  <VideoPopup />
                 </AuthModalProvider>
               </AntdRegistry>
             </ThemeProvider>

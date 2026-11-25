@@ -6,21 +6,23 @@ import { Button, Modal } from 'antd'
 import { ExportOutlined, FieldTimeOutlined, LinkOutlined } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
 import { VideoPopup } from '@/app/lib/definitions'
-import { VIDEO_POPUP_CLOSE_COUNTDOWN_SEC, VIDEO_POPUP_MODAL_CLASS } from './videoPopup.constants'
-import { formatCtaLink, isSafeCtaUrl } from './videoPopupUrl'
-import '@/app/ui/components/videoPopup.scss'
+import { formatCtaLink, isSafeCtaUrl, VIDEO_POPUP_CLOSE_COUNTDOWN_SEC } from './videoPopup.utils'
+import styles from './VideoPopupModal.module.scss'
 
 interface VideoPopupModalProps {
-  open: boolean
   popup: VideoPopup
   onCompleted: () => void
 }
 
-export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopupModalProps) {
+export default function VideoPopupModal({ popup, onCompleted }: VideoPopupModalProps) {
   const t = useTranslations('VideoPopupList')
   const router = useRouter()
   const [clipIndex, setClipIndex] = useState(0)
   const [secondsLeft, setSecondsLeft] = useState(VIDEO_POPUP_CLOSE_COUNTDOWN_SEC)
+  const [isTabVisible, setIsTabVisible] = useState(
+    () => typeof document === 'undefined' || document.visibilityState === 'visible',
+  )
+
   const clips = popup.clips ?? []
   const clip = clips[clipIndex]
   const ctaUrl = formatCtaLink(clip?.ctaUrl ?? '')
@@ -29,18 +31,25 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
   const canClose = secondsLeft <= 0
 
   useEffect(() => {
-    setClipIndex(0)
-    setSecondsLeft(VIDEO_POPUP_CLOSE_COUNTDOWN_SEC)
-  }, [popup.id, open])
+    const onVisibilityChange = () => {
+      setIsTabVisible(document.visibilityState === 'visible')
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange)
+  }, [])
 
   useEffect(() => {
-    if (!open || secondsLeft <= 0) return
-    const timer = window.setTimeout(() => setSecondsLeft((value) => value - 1), 1000)
+    if (!isTabVisible || secondsLeft <= 0) return
+    const timer = window.setTimeout(() => setSecondsLeft((value) => Math.max(0, value - 1)), 1000)
     return () => window.clearTimeout(timer)
-  }, [open, secondsLeft])
+  }, [isTabVisible, secondsLeft])
 
-  const advance = () => {
-    setClipIndex((index) => (index + 1 < clips.length ? index + 1 : index))
+  const handleClipEnded = () => {
+    if (clipIndex + 1 < clips.length) {
+      setClipIndex((index) => index + 1)
+    } else {
+      setSecondsLeft(0)
+    }
   }
 
   const ctaLabel = clip?.label || t('cta_fallback')
@@ -51,12 +60,13 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
       {!isInternalCta ? <ExportOutlined aria-hidden="true" /> : null}
     </>
   )
+
   const ctaButton =
     showCta &&
     (isInternalCta ? (
       <Button
         type="primary"
-        className="video-popup__cta"
+        className={styles.cta}
         onClick={() => {
           onCompleted()
           router.push(ctaUrl)
@@ -67,10 +77,11 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
     ) : (
       <Button
         type="primary"
-        className="video-popup__cta"
+        className={styles.cta}
         href={ctaUrl}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={onCompleted}
       >
         {ctaContent}
       </Button>
@@ -78,9 +89,8 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
 
   return (
     <Modal
-      open={open}
+      open
       title={popup.title}
-      wrapClassName={VIDEO_POPUP_MODAL_CLASS}
       closable={canClose}
       keyboard={canClose}
       maskClosable={false}
@@ -89,10 +99,10 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
       destroyOnClose
     >
       {clips.length > 0 ? (
-        <div className="video-popup__meta">
+        <div className={styles.meta}>
           <span>{t('clip_progress', { current: clipIndex + 1, total: clips.length })}</span>
           {!canClose ? (
-            <span className="video-popup__countdown" aria-live="polite">
+            <span className={styles.countdown} aria-live="polite">
               <FieldTimeOutlined aria-hidden="true" />
               <span>{t('close_in', { seconds: secondsLeft })}</span>
             </span>
@@ -101,8 +111,8 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
       ) : null}
       {clip ? (
         <video
-          key={`${popup.id}-${clipIndex}`}
-          className="video-popup__player"
+          key={`${popup.id ?? popup.title}-${clipIndex}`}
+          className={styles.player}
           src={clip.videoUrl}
           aria-label={clip.label || popup.title}
           autoPlay
@@ -110,7 +120,7 @@ export default function VideoPopupModal({ open, popup, onCompleted }: VideoPopup
           controls
           muted
           preload="metadata"
-          onEnded={advance}
+          onEnded={handleClipEnded}
           onError={() => setSecondsLeft(0)}
         />
       ) : null}

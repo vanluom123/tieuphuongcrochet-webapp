@@ -1,0 +1,141 @@
+@use "../../variables.module.scss" as tokens;
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.empty {
+  margin: 0;
+  color: tokens.$textSecondColor;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid color-mix(in srgb, tokens.$textSecondColor 24%, transparent);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 16px;
+}
+
+.cardSub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: tokens.$textSecondColor;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hint {
+  margin: 0 0 12px;
+  color: tokens.$textSecondColor;
+  font-size: 13px;
+}
+
+.clip {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid color-mix(in srgb, tokens.$textSecondColor 24%, transparent);
+  border-radius: 8px;
+}
+
+.clipBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.clipIndex {
+  font-variant-numeric: tabular-nums;
+  color: tokens.$textSecondColor;
+}
+
+.filePicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 200px;
+}
+
+.fileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.clipActions {
+  margin-left: auto;
+}
+
+.preview {
+  width: 100%;
+  max-height: 220px;
+  background: tokens.$textPrimaryColor;
+  border-radius: 6px;
+  display: block;
+}
+
+.fieldItem {
+  margin-bottom: 0;
+}
+
+// Keep compact switch dimensions inside Antd forms scoped to this component.
+.settings :global(.ant-switch),
+.modalForm :global(.ant-form-item .ant-switch) {
+  height: 22px;
+  width: 44px;
+
+  :global(.ant-switch-handle) {
+    top: 2px;
+    width: 18px;
+    height: 18px;
+
+    &::before {
+      border-radius: 9px;
+    }
+  }
+
+  &:global(.ant-switch-checked .ant-switch-handle) {
+    inset-inline-start: calc(100% - 20px);
+  }
+}

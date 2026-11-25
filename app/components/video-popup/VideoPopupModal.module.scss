@@ -1,0 +1,33 @@
+@use "../../variables.module.scss" as tokens;
+
+.player {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: tokens.$textPrimaryColor;
+  display: block;
+  margin-bottom: 12px;
+  border-radius: 6px;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, tokens.$textSecondColor 10%, white);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
