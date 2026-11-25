@@ -1,6 +1,11 @@
-@use "../../variables.module.scss" as tokens;
-
 .settings {
+  --vp-surface: #ffffff;
+  --vp-tint: #fff8f8;
+  --vp-ink: #262121;
+  --vp-muted: #6f6565;
+  --vp-accent: #d95367;
+  --vp-border: #efe3e6;
+
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -13,7 +18,12 @@
 
 .empty {
   margin: 0;
-  color: tokens.$textSecondColor;
+  padding: 28px 20px;
+  text-align: center;
+  border: 1px dashed var(--vp-border);
+  border-radius: 10px;
+  color: var(--vp-muted);
+  font-size: 14px;
 }
 
 .list {
@@ -23,9 +33,10 @@
 }
 
 .card {
-  border: 1px solid color-mix(in srgb, tokens.$textSecondColor 24%, transparent);
-  border-radius: 8px;
+  border: 1px solid var(--vp-border);
+  border-radius: 10px;
   padding: 16px;
+  background: var(--vp-surface);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,6 +54,8 @@
 .cardTitle {
   margin: 0;
   font-size: 16px;
+  font-weight: 600;
+  color: var(--vp-ink);
 }
 
 .cardSub {
@@ -50,7 +63,7 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: tokens.$textSecondColor;
+  color: var(--vp-muted);
 }
 
 .cardActions {
@@ -61,7 +74,7 @@
 
 .hint {
   margin: 0 0 12px;
-  color: tokens.$textSecondColor;
+  color: var(--vp-muted);
   font-size: 13px;
 }
 
@@ -71,8 +84,9 @@
   gap: 10px;
   padding: 12px;
   margin-bottom: 12px;
-  border: 1px solid color-mix(in srgb, tokens.$textSecondColor 24%, transparent);
-  border-radius: 8px;
+  border: 1px solid var(--vp-border);
+  border-radius: 10px;
+  background: var(--vp-tint);
 }
 
 .clipBar {
@@ -84,7 +98,7 @@
 
 .clipIndex {
   font-variant-numeric: tabular-nums;
-  color: tokens.$textSecondColor;
+  color: var(--vp-muted);
 }
 
 .filePicker {
@@ -110,7 +124,7 @@
 .preview {
   width: 100%;
   max-height: 220px;
-  background: tokens.$textPrimaryColor;
+  background: var(--vp-ink);
   border-radius: 6px;
   display: block;
 }
@@ -138,4 +152,9 @@
   &:global(.ant-switch-checked .ant-switch-handle) {
     inset-inline-start: calc(100% - 20px);
   }
+}
+
+.settings :global(.ant-switch-checked),
+.modalForm :global(.ant-switch-checked) {
+  background-color: var(--vp-accent);
 }
