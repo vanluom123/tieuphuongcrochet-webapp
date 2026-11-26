@@ -47,10 +47,9 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
 
   useEffect(() => {
     if (!modalData.open) {
-      form.resetFields()
       setState(initialState)
     }
-  }, [modalData.open, form])
+  }, [modalData.open])
 
   useEffect(() => {
     fetchCategories().then((data) => {

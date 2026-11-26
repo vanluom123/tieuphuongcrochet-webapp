@@ -97,7 +97,9 @@ const CollectionPopup = ({
   }
 
   const handleClose = () => {
-    form.resetFields()
+    if (showCreateForm) {
+      form.resetFields()
+    }
     setShowCreateForm(false)
     onClose()
   }
