@@ -219,7 +219,7 @@ const ViewTable = ({
             onChange={onChange}
           />
         ) : (
-          <Empty imageStyle={{ height: 80 }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          <Empty styles={{ image: { height: 80 } }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
       </Spin>
     </div>

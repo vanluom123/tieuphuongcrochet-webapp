@@ -143,7 +143,7 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
       open={modalData.open}
       onOk={onHandleOk}
       onCancel={onHandleCancel}
-      destroyOnClose={true}
+      destroyOnHidden={true}
       confirmLoading={state.loading}
     >
       <Spin spinning={state.loading} tip={t('loading')}>

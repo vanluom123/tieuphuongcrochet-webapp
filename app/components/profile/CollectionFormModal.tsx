@@ -81,7 +81,7 @@ const CollectionFormModal = ({ modalData, setModalData, onRefreshData, userId }:
             open={modalData.open}
             onOk={onHandleOk}
             onCancel={onHandleCancel}
-            destroyOnClose={true}
+            destroyOnHidden={true}
             confirmLoading={state.loading}
         >
             <Form form={form} onFinish={({ name }) => onSubmitForm(name)}>

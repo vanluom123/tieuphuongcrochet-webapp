@@ -60,7 +60,7 @@ const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }:
 					</p>
 					{(!content && !images) &&
 						<Empty
-							imageStyle={{ height: 80 }}
+							styles={{ image: { height: 80 } }}
 							image={Empty.PRESENTED_IMAGE_SIMPLE}
 						/>
 					}

@@ -114,7 +114,7 @@ const CollectionPopup = ({
       onCancel={handleClose}
       width={typeof window !== 'undefined' && window.innerWidth < 768 ? '95%' : 500}
       centered
-      destroyOnClose
+      destroyOnHidden
       // style={{
       //   maxWidth: '95vw',
       //   margin: '0 auto',

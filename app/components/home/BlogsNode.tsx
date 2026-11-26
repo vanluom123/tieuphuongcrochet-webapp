@@ -38,7 +38,7 @@ const BlogsNode = ({ posts }: { posts: Post[] }) => {
 						<ReadMoreBtn path={ROUTE_PATH.BLOG} />
 					</div> :
 					<Empty
-						imageStyle={{ height: 80 }}
+						styles={{ image: { height: 80 } }}
 						image={Empty.PRESENTED_IMAGE_SIMPLE}
 
 					/>

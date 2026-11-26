@@ -44,7 +44,7 @@ const FreePatternsNode = ({ patterns }: { patterns: Pattern[] }) => {
           <ReadMoreBtn path={ROUTE_PATH.FREEPATTERNS} />
         </div>
       ) : (
-        <Empty imageStyle={{ height: 80 }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <Empty styles={{ image: { height: 80 } }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
       )}
     </div>
   )

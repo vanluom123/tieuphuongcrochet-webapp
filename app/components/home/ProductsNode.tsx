@@ -43,7 +43,7 @@ const ProductsNode = ({products}: {products: Product[]}) => {
             <ReadMoreBtn path={ROUTE_PATH.SHOP} />
           </div> :
           <Empty
-            imageStyle={{ height: 80 }}
+            styles={{ image: { height: 80 } }}
             image={Empty.PRESENTED_IMAGE_SIMPLE}
           />
       }
