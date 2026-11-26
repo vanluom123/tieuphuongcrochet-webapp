@@ -1,0 +1,33 @@
+.symbolsCollapse {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  border: 1px solid #f4b6bf;
+  background: #fff5f6;
+  overflow: hidden;
+
+  :global(.ant-collapse-header) {
+    font-weight: 600;
+    color: #b83b5e !important;
+    padding: 14px 18px !important;
+    align-items: center !important;
+  }
+
+  :global(.ant-collapse-content) {
+    border-top: 1px dashed #f4b6bf;
+    background: #fff;
+  }
+
+  :global(.ant-collapse-content-box) {
+    padding: 16px 18px !important;
+  }
+}
+
+.symbolsBody {
+  blockquote:last-of-type {
+    margin-bottom: 0;
+  }
+
+  > p:last-child {
+    margin-bottom: 0;
+  }
+}

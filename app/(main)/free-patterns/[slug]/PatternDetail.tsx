@@ -1,14 +1,10 @@
 'use client'
-import { Divider, Flex, FloatButton, Tooltip } from 'antd'
-import { HeartFilled, HeartOutlined } from '@ant-design/icons'
+import { Button, Tooltip } from 'antd'
+import { BookFilled, BookOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons'
 import { useTranslations } from 'next-intl'
-import IntroductionCard from '@/app/components/introduction-card'
-import ViewDetailWrapper from '@/app/components/view-detail-wrapper'
+import DetailHero from '@/app/components/detail-hero'
 import { Pattern } from '@/app/lib/definitions'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import primaryBookmark from '@/public/primary-bookmark.png'
-import bookmark from '@/public/bookmark.png'
 import CommentSection from '@/app/components/comment/CommentSection'
 import { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
@@ -27,6 +23,7 @@ const ViewImagesList = dynamic(
 
 const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
   const t = useTranslations('FreePattern')
+  const tDH = useTranslations('DetailHero')
   const { data: session } = useSession()
   const { requireAuth } = useRequireAuth()
   const [isLoading, setIsLoading] = useState(false)
@@ -130,8 +127,22 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
     }
   }
 
+  const likeButton = (
+    <Button
+      size="large"
+      shape="round"
+      className="detail-btn detail-btn--ghost"
+      loading={likeLoading}
+      aria-pressed={isLiked}
+      onClick={handleToggleLike}
+      icon={isLiked ? <HeartFilled className="detail-btn__heart--on" /> : <HeartOutlined />}
+    >
+      {`${isLiked ? tDH('liked') : tDH('like')} (${likeCount})`}
+    </Button>
+  )
+
   return (
-    <ViewDetailWrapper isShowAlert alertMessage={t('note')} alertType="warning">
+    <article className="detail-page">
       {pattern?.id && (
         <ReportView
           id={pattern.id.toString()}
@@ -139,142 +150,53 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
           onViewCounted={handleViewCounted}
         />
       )}
-      {/* Introducing the free pattern */}
-      <div className="pattern-header">
-        <Flex vertical gap="small">
-          <IntroductionCard
-            isPreviewAvatar
-            data={pattern}
-            isShowThumbnail
-            viewCount={viewCount}
-            likeCount={likeCount}
-          />
-        </Flex>
-      </div>
 
-      <Divider />
-
-      {/* ViewImagesList sẽ chỉ được render ở client side */}
-      <ViewImagesList
-        isPattern
-        name="free-patterns"
-        contentTitle={t('detail')}
-        content={pattern?.content}
-        images={pattern?.files}
+      <DetailHero
+        name={pattern.name}
+        images={pattern.images}
+        coverSrc={pattern.src}
+        author={pattern.author}
+        description={pattern.description}
+        status={pattern.status}
+        creator={{
+          id: pattern.userId,
+          name: pattern.username,
+          avatar: pattern.userAvatar,
+        }}
+        viewCount={viewCount}
+        note={t('note')}
+        actions={
+          <>
+            <Button
+              size="large"
+              shape="round"
+              className="detail-btn detail-btn--primary"
+              loading={isLoading}
+              aria-pressed={isInCollection}
+              icon={isInCollection ? <BookFilled /> : <BookOutlined />}
+              onClick={() => toggleBookmark(pattern?.id?.toString() || '')}
+            >
+              {isInCollection ? tDH('saved') : tDH('save')}
+            </Button>
+            {!session?.user ? (
+              <Tooltip title={t('login_to_like')}>{likeButton}</Tooltip>
+            ) : (
+              likeButton
+            )}
+          </>
+        }
       />
 
-      {/* Floating like button with count */}
-      <Tooltip
-        title={
-          !session?.user
-            ? t('login_to_like')
-            : isLiked
-              ? t('unlike')
-              : t('like')
-        }
-      >
-        <FloatButton
-          shape="circle"
-          className="custom-like-button"
-          onClick={handleToggleLike}
-          badge={{ count: likeCount }}
-          icon={
-            likeLoading ? (
-              <span
-                className="like-loading-spinner"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 20,
-                  height: 20,
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 50 50">
-                  <circle
-                    cx="25"
-                    cy="25"
-                    r="20"
-                    fill="none"
-                    stroke="#999"
-                    strokeWidth="5"
-                    strokeDasharray="31.415, 31.415"
-                    transform="rotate(72.0001 25 25)"
-                  >
-                    <animateTransform
-                      attributeName="transform"
-                      type="rotate"
-                      from="0 25 25"
-                      to="360 25 25"
-                      dur="1s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                </svg>
-              </span>
-            ) : isLiked ? (
-              <HeartFilled style={{ color: '#ff4d4f' }} />
-            ) : (
-              <HeartOutlined />
-            )
-          }
-          style={{ zIndex: 10 }}
+      <section className="detail-page__section">
+        <h2 className="detail-page__title">{t('detail')}</h2>
+        {/* ViewImagesList sẽ chỉ được render ở client side */}
+        <ViewImagesList
+          isPattern
+          name="free-patterns"
+          content={pattern?.content}
+          images={pattern?.files}
         />
-      </Tooltip>
-
-      {/* Custom bookmark button for both desktop and mobile */}
-      <Tooltip title={isInCollection ? t('remove_from_collection') : t('save')}>
-        <FloatButton
-          shape="circle"
-          className="custom-bookmark-button"
-          onClick={() => toggleBookmark(pattern?.id?.toString() || '')}
-          icon={
-            isLoading ? (
-              <span
-                className="bookmark-loading-spinner"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 20,
-                  height: 20,
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 50 50">
-                  <circle
-                    cx="25"
-                    cy="25"
-                    r="20"
-                    fill="none"
-                    stroke="#999"
-                    strokeWidth="5"
-                    strokeDasharray="31.415, 31.415"
-                    transform="rotate(72.0001 25 25)"
-                  >
-                    <animateTransform
-                      attributeName="transform"
-                      type="rotate"
-                      from="0 25 25"
-                      to="360 25 25"
-                      dur="1s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                </svg>
-              </span>
-            ) : (
-              <Image
-                width={20}
-                height={20}
-                src={isInCollection ? primaryBookmark : bookmark}
-                alt="bookmark"
-                priority={true}
-              />
-            )
-          }
-          style={{ zIndex: 10 }}
-        />
-      </Tooltip>
+      </section>
 
       <CommentSection id={pattern?.id?.toString() || ''} type={'free-pattern'} />
 
@@ -286,7 +208,7 @@ const PatternDetail = ({ pattern }: { pattern: Pattern }) => {
         patternName={pattern?.name}
         onSuccess={handleSaveSuccess}
       />
-    </ViewDetailWrapper>
+    </article>
   )
 }
 

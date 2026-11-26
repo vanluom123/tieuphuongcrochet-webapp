@@ -51,6 +51,7 @@
     "description": "Dưới đây là những mẫu móc mà mình đã sưu tầm được ( Mình sẽ dịch dần dần nhé). Trong thời gian sắp tới, mình sẽ tiếp tục cập nhật thêm nhiều mẫu móc len đẹp khác và những mẫu mà mình tự sáng tạo nữa đấy. Hãy tham khảo và lựa chọn cho mình một mẫu ưng ý nhé!",
     "detail": "Chi tiết",
     "content": "Chart đã dịch",
+    "crochet_symbols_guide": "Ký hiệu móc len (Crochet symbols) & Gợi ý shop phụ kiện",
     "note": "Nếu mình nhỡ đăng nhằm chart có bản quyền, xin hãy nói với mình để mình gỡ xuống ạ! Cảm ơn bạn!",
     "createPattern": "Tạo chart mới",
     "updatePattern": "Cập nhật chart",
@@ -811,5 +812,20 @@
     "close_in": "Đóng sau {seconds}s",
     "cta_fallback": "Xem thêm",
     "next_clip": "Video tiếp theo"
+  },
+  "DetailHero": {
+    "author": "Tác giả",
+    "shared_by": "Đăng bởi",
+    "views": "{count} lượt xem",
+    "likes": "{count} lượt thích",
+    "save": "Lưu vào bộ sưu tập",
+    "saved": "Đã lưu",
+    "like": "Thích",
+    "liked": "Đã thích",
+    "order": "Nhắn tin đặt hàng",
+    "price_contact": "Liên hệ báo giá",
+    "status_SUCCESS": "Đã dịch",
+    "status_PENDING": "Đang dịch",
+    "photo": "Ảnh {index}/{total}"
   }
 }

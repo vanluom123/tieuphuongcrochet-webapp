@@ -51,6 +51,7 @@
     "description": "Below are the crochet patterns that I have collected (I will translate gradually). In the near future, I will continue to update many other beautiful crochet patterns and patterns that I create myself. Please refer and choose for yourself a satisfactory model!",
     "detail": "Chart detail",
     "content": "Translated chart",
+    "crochet_symbols_guide": "Crochet symbols & recommended shops",
     "note": "If I accidentally posted a copyrighted chart, please tell me so I can take it down! Thank you!",
     "createPattern": "Create new chart",
     "updatePattern": "Update chart",
@@ -811,5 +812,20 @@
     "close_in": "Close in {seconds}s",
     "cta_fallback": "View more",
     "next_clip": "Next video"
+  },
+  "DetailHero": {
+    "author": "Designer",
+    "shared_by": "Shared by",
+    "views": "{count, plural, one {# view} other {# views}}",
+    "likes": "{count, plural, one {# like} other {# likes}}",
+    "save": "Save to collection",
+    "saved": "Saved",
+    "like": "Like",
+    "liked": "Liked",
+    "order": "Message to order",
+    "price_contact": "Price on request",
+    "status_SUCCESS": "Translated",
+    "status_PENDING": "Translation in progress",
+    "photo": "Photo {index} of {total}"
   }
 }

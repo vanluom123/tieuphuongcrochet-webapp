@@ -1,10 +1,13 @@
+'use client'
 import { IMAGE_FALLBACK, DEFAULT_CHART_EDITOR } from "@/app/lib/constant";
 import { FileUpload } from "@/app/lib/definitions";
 import { checkPdfFile } from "@/app/lib/utils";
-import { Watermark, Flex, Row, Col, Image, Empty } from "antd"
+import { Watermark, Flex, Row, Col, Image, Empty, Collapse } from "antd"
 import { map } from "lodash";
+import { useTranslations } from "next-intl";
 import DownloadImage from "../custom-image";
 import PdfViewer from "../pdf-viewer";
+import styles from "./ViewImagesList.module.scss";
 
 
 interface ViewImagesProps {
@@ -17,6 +20,7 @@ interface ViewImagesProps {
 }
 
 const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }: ViewImagesProps) => {
+	const t = useTranslations('FreePattern');
 
 	const renderImage = () => (
 		<Image.PreviewGroup
@@ -66,7 +70,24 @@ const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }:
 					}
 
 					{/* crochet symbols default  */}
-					{isPattern && <div className='editor-view disable-select text-box' dangerouslySetInnerHTML={{ __html: DEFAULT_CHART_EDITOR || '' }} />}
+					{isPattern && (
+						<Collapse
+							className={styles.symbolsCollapse}
+							expandIconPosition="end"
+							items={[
+								{
+									key: 'crochet-symbols',
+									label: t('crochet_symbols_guide'),
+									children: (
+										<div
+											className={`editor-view disable-select text-box ${styles.symbolsBody}`}
+											dangerouslySetInnerHTML={{ __html: DEFAULT_CHART_EDITOR || '' }}
+										/>
+									),
+								},
+							]}
+						/>
+					)}
 
 					{images && images.length > 0 && renderImage()}
 					{content &&
