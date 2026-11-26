@@ -81,7 +81,7 @@ const CollectionDetail = ({ params }: CollectionDetailProps) => {
     fetchCollectionData()
   }, [collectionId, session?.user?.id, para]) // Only depend on stable values
 
-  const onViewPattern = (id: React.Key) => {
+  const onViewPattern = (id: string | number) => {
     router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`)
   }
 

@@ -8,7 +8,8 @@ import { CURRENCY_LIST, ROUTE_PATH } from "@/app/lib/constant";
 import { fetchCategories } from "@/app/lib/service/categoryService";
 import UploadFiles from "@/app/components/upload-files";
 import {createUpdateProduct, fetchProductDetail} from "@/app/lib/service/productService";
-import Select, {DefaultOptionType} from "antd/es/select";
+import Select from "antd/es/select";
+import type { DataNode } from "rc-tree-select/lib/interface";
 import CustomEditor from "@/app/components/custom-editor";
 import { uploadMultipleImagesToServer } from "@/app/lib/utils";
 import { notification } from "@/app/lib/notify";
@@ -137,7 +138,7 @@ const ProductForm = ({ params }: ProductFormProps) => {
                                 rules={[{ required: true, message: 'Please select the category' }]}
                             >
                                 <TreeSelect
-                                    treeData={categories as DefaultOptionType[]}
+                                    treeData={categories as DataNode[]}
                                 />
                             </Item>
                         </Col>

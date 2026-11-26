@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Col, Flex, Form, Input, Modal, Row, Spin, TreeSelect } from 'antd'
 import { useTranslations } from 'next-intl'
-import { DefaultOptionType } from 'antd/es/select'
+import type { DataNode } from 'rc-tree-select/lib/interface'
 
 import { Category, FileUpload, Pattern } from '@/app/lib/definitions'
 import { TRANSLATION_STATUS } from '@/app/lib/constant'
@@ -47,10 +47,9 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
 
   useEffect(() => {
     if (!modalData.open) {
-      form.resetFields()
       setState(initialState)
     }
-  }, [modalData.open, form])
+  }, [modalData.open])
 
   useEffect(() => {
     fetchCategories().then((data) => {
@@ -143,7 +142,7 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
       open={modalData.open}
       onOk={onHandleOk}
       onCancel={onHandleCancel}
-      destroyOnClose={true}
+      destroyOnHidden={true}
       confirmLoading={state.loading}
     >
       <Spin spinning={state.loading} tip={t('loading')}>
@@ -199,7 +198,7 @@ const FreePatternFormModal = ({ modalData, setModalData, onRefreshData }: FreePa
                   label={t('Fields.category')}
                   rules={[{ required: true, message: t('Fields.error_msg_required_category') }]}
                 >
-                  <TreeSelect treeData={categories as DefaultOptionType[]} />
+                  <TreeSelect treeData={categories as DataNode[]} />
                 </Item>
               </Col>
             </Row>

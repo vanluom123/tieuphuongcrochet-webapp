@@ -31,11 +31,11 @@ const Users = () => {
         });
     }, [params]);
 
-    const onEditRecord = (id: React.Key) => {
+    const onEditRecord = (id: string | number) => {
         router.push(`${ROUTE_PATH.DASHBOARD_USERS}/${id}`);
     }
 
-    const onDeleteRecord = (id: React.Key) => {
+    const onDeleteRecord = (id: string | number) => {
         deleteUser(id as string);
     }
 

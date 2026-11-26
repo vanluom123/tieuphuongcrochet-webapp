@@ -51,11 +51,11 @@ const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {
         onRefreshData();
     }, [onRefreshData]);  // ✅ Chỉ thay đổi khi onRefreshData
 
-    const onViewPattern = (id: React.Key) => {
+    const onViewPattern = (id: string | number) => {
         router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`);
     };
 
-    const showDeleteConfirm = (id: React.Key) => {
+    const showDeleteConfirm = (id: string | number) => {
         modal.confirm({
             title: t('patterns.delete_confirm_title'),
             icon: <ExclamationCircleFilled />,
@@ -69,7 +69,7 @@ const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {
         });
     };
 
-    const onDeletePattern = (id: React.Key) => {
+    const onDeletePattern = (id: string | number) => {
         deleteUserPattern(id.toString())
             .then(() => {
                 notification
@@ -90,7 +90,7 @@ const FreePatterns = ({ isCreator, userId }: FreePatternsProps) => {
         setModalData({ open: true, id: '' })
     };
 
-    const onEditPattern = (id: React.Key) => {
+    const onEditPattern = (id: string | number) => {
         setModalData({ open: true, id: `${id}` })
     };
 

@@ -18,10 +18,11 @@ export async function generateMetadata(): Promise<Metadata> {
     };
 }
 
-const ProfilePage = ({params}: { params: { slug: string } }) => {
+const ProfilePage = async ({params}: { params: Promise<{ slug: string }> }) => {
+    const resolvedParams = await params;
 
     return (
-        <ProfileDetail params={params}/>
+        <ProfileDetail params={resolvedParams}/>
     );
 };
 

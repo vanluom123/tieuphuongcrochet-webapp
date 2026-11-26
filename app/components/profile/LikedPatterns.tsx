@@ -40,7 +40,7 @@ const LikedPatterns = ({ userId }: LikedPatternsProps) => {
         onRefreshData();
     }, [onRefreshData]);
 
-    const onViewPattern = (id: React.Key) => {
+    const onViewPattern = (id: string | number) => {
         router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`);
     };
 

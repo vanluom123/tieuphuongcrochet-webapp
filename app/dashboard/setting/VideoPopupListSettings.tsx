@@ -482,7 +482,7 @@ export default function VideoPopupListSettings() {
         cancelText={t('cancel')}
         confirmLoading={saving}
         maskClosable={false}
-        destroyOnClose
+        destroyOnHidden
         width={720}
       >
         <Form form={form} layout="vertical" className={styles.modalForm} onFinish={handleFinish}>

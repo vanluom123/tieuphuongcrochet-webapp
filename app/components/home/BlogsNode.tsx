@@ -13,7 +13,7 @@ import { Post } from "@/app/lib/definitions";
 const BlogsNode = ({ posts }: { posts: Post[] }) => {
 	const router = useRouter();
 
-	const onViewBlog = (id: React.Key) => {
+	const onViewBlog = (id: string | number) => {
 		router.push(`${ROUTE_PATH.BLOG}/${id}`);
 	};
 
@@ -38,7 +38,7 @@ const BlogsNode = ({ posts }: { posts: Post[] }) => {
 						<ReadMoreBtn path={ROUTE_PATH.BLOG} />
 					</div> :
 					<Empty
-						imageStyle={{ height: 80 }}
+						styles={{ image: { height: 80 } }}
 						image={Empty.PRESENTED_IMAGE_SIMPLE}
 
 					/>

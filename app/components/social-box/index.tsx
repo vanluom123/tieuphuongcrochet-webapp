@@ -26,7 +26,7 @@ const SocialBox = ({ textColor, src, social, url, description }: SocialBoxProps)
 		>
 			<Card
 				className='card-item'
-				bordered={false}
+				variant="borderless"
 				hoverable
 				cover={
 					<Image

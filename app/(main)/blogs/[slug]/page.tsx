@@ -10,15 +10,15 @@ import StructureData, {
 } from "@/app/components/StructureData";
 
 type Props = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const slug = params.slug;
+  const { slug } = await params;
   const blog = await fetchPostDetail(slug, {
     revalidate: 86400,
     tags: [`blog-${slug}`],
@@ -35,10 +35,11 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const post = await fetchPostDetail(params.slug, {
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await fetchPostDetail(slug, {
     revalidate: 86400,
-    tags: [`blog-${params.slug}`],
+    tags: [`blog-${slug}`],
   });
   const t = await getTranslations("MenuNav");
 
@@ -56,14 +57,14 @@ export default async function Page({ params }: { params: { slug: string } }) {
           },
           {
             name: post.title,
-            url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.BLOG}/${params.slug}`,
+            url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.BLOG}/${slug}`,
           },
         ])}
       />
       <StructureData
         data={createArticleSchema({
           title: post.title,
-          url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.BLOG}/${params.slug}`,
+          url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.BLOG}/${slug}`,
           image: post.src,
           datePublished: post.createdDate,
           articleBody: post.content,

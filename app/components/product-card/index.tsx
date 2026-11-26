@@ -53,7 +53,7 @@ const ProductCard = (
 		<Card
 			className={name ? 'card-product card-item' : 'card-product not-title card-item'}
 			hoverable
-			bordered={false}
+			variant="borderless"
 			style={{ width: width || '100%' }}
 			styles={{
 				body: {

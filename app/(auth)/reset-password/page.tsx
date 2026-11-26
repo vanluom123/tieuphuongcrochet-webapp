@@ -25,14 +25,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 interface ResetPasswordPageProps {
-  searchParams: {
+  searchParams: Promise<{
     token?: string;
-  };
+  }>;
 }
 
-const ResetPasswordPage = ({ searchParams }: ResetPasswordPageProps) => {
+const ResetPasswordPage = async ({ searchParams }: ResetPasswordPageProps) => {
+    const { token } = await searchParams;
     return (
-        <ResetPassword token={searchParams?.token || ''} />
+        <ResetPassword token={token || ''} />
     )
 }
 

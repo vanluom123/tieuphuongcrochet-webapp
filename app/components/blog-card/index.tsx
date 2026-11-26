@@ -27,7 +27,7 @@ const BlogCard = ({ item, onReadDetail }: BlogCardProps) => {
 	return (
 		<Card
 			className='card-article card-item'
-			bordered={false}
+			variant="borderless"
 			hoverable
 			cover={
 				<div className='artice-image'>

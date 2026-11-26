@@ -4,12 +4,12 @@ import { useLocale, useTranslations } from 'next-intl';
 import { CloseOutlined } from '@ant-design/icons';
 
 interface ItemSelected {
-    key: React.Key;
-    childKey: React.Key;
+    key: string | number;
+    childKey: string | number;
 }
 
 interface TabsItem {
-    key: React.Key;
+    key: string | number;
     label: string;
     children?: TabsItem[];
 }
@@ -19,7 +19,7 @@ interface CategoryDrawerProps {
     open: boolean;
     setOpen: (open: boolean) => void;
     itemSelected: ItemSelected;
-    onClickItem: (key: React.Key, childKey?: React.Key, index?: number) => void;
+    onClickItem: (key: string | number, childKey?: string | number, index?: number) => void;
 }
 
 const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: CategoryDrawerProps) => {
@@ -43,7 +43,7 @@ const CategoryDrawer = ({ open, setOpen, items, itemSelected, onClickItem }: Cat
     }, [setOpen]);
 
     const onClickItemBtn = useCallback(
-        (key: React.Key, childKey?: React.Key, index?: number) => {
+        (key: string | number, childKey?: string | number, index?: number) => {
             onClickItem(key, childKey, index);
             onClose();
         },

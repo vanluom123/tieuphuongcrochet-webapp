@@ -11,7 +11,7 @@ const PUBLIC_API_PATHS = ["/api/views"];
 
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
-  async function middleware(request: NextRequestWithAuth) {
+  async function proxy(request: NextRequestWithAuth) {
     // Bỏ qua các request tới static files
     // Chỉ áp dụng middleware cho các route không bắt đầu bằng /api/
 
@@ -24,13 +24,6 @@ export default withAuth(
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
     });
-
-    // Kiểm tra token expiration
-    // const decoded = jwtDecode.decode(token?.accessToken as string) as JwtPayload;
-    // if (decoded && Date.now() >= (decoded.exp as number) * 1000) {
-    //     // Token đã hết hạn, redirect về trang login
-    //     return NextResponse.redirect(new URL(ROUTE_PATH.LOGIN, request.url))
-    // }
 
     // Kiểm tra nếu route bắt đầu bằng /dashboard
     if (request.nextUrl.pathname.startsWith(ROUTE_PATH.DASHBOARD)) {
@@ -50,7 +43,7 @@ export default withAuth(
   },
   {
     callbacks: {
-      // `authorized` runs before the middleware function above, so the public
+      // `authorized` runs before the function above, so the public
       // allowlist has to be enforced here as well.
       authorized: ({ token, req }) => {
         if (PUBLIC_API_PATHS.some((path) => req.nextUrl.pathname.startsWith(path))) {
@@ -63,7 +56,7 @@ export default withAuth(
 );
 
 // Applies next-auth only to matching routes - can be regex
-// Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+// Ref: https://nextjs.org/docs/app/api-reference/file-conventions/proxy#matcher
 // Chỉ định các route cần được bảo vệ
 export const config = {
   matcher: ["/api/:path*"],

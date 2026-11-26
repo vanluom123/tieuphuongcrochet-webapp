@@ -103,7 +103,7 @@ export default function VideoPopupModal({ popup, onCompleted }: VideoPopupModalP
       maskClosable={false}
       footer={null}
       onCancel={canClose ? onCompleted : undefined}
-      destroyOnClose
+      destroyOnHidden
     >
       {clips.length > 0 ? (
         <div className={styles.meta}>

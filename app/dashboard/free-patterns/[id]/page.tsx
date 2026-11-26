@@ -1,7 +1,8 @@
 import FreePatternForm from "../FreePatternForm";
 
-export default function UpdateFreePattern({ params }: { params: { id: string } }){
+export default async function UpdateFreePattern({ params }: { params: Promise<{ id: string }> }){
+    const resolvedParams = await params;
     return (
-        <FreePatternForm params={params} />
+        <FreePatternForm params={resolvedParams} />
     )
 }
