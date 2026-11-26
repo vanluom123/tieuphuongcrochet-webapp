@@ -72,7 +72,7 @@ const FreePatterns = ({ categories, initialData }: FreePatternProps) => {
     })
   }, [])
 
-  const onTabChange = useCallback((key: React.Key) => {
+  const onTabChange = useCallback((key: string | number) => {
     setParams((prev) => ({
       ...prev,
       categoryId: key === ALL_ITEM.key ? '' : (key as string),

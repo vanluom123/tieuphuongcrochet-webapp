@@ -1,7 +1,8 @@
 import BlogForm from "../BlogForm";
 
-export default function UpdateBlog({ params }: { params: { id: string } }){
+export default async function UpdateBlog({ params }: { params: Promise<{ id: string }> }){
+    const resolvedParams = await params;
     return (
-        <BlogForm params={params} />
+        <BlogForm params={resolvedParams} />
     )
 }

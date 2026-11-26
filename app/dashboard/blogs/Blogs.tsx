@@ -33,11 +33,11 @@ const Blogs = () => {
             });
     }, [params]);
 
-    const onEditRecord = (id: React.Key) => {
+    const onEditRecord = (id: string | number) => {
         router.push(`${ROUTE_PATH.DASHBOARD_POSTS}/${id}`)
     }
 
-    const onDeleteRecord = (id: React.Key) => {
+    const onDeleteRecord = (id: string | number) => {
         deletePost(id as string)
     }
 

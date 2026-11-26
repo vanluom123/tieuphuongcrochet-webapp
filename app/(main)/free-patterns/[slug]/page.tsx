@@ -11,8 +11,8 @@ import StructureData, {
 
 // Define metadata props
 type Props = {
-  params: { slug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 // Generate metadata
@@ -20,7 +20,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const slug = params.slug
+  const { slug } = await params
   const pattern = await fetchFreePatternDetail(slug, 3600).then((res) => res)
   const previousImages = (await parent).openGraph?.images || []
 
@@ -37,8 +37,9 @@ export async function generateMetadata(
 }
 
 // Generate Pattern Detail Page
-export default async function Page({ params }: { params: { slug: string } }) {
-  const pattern = await fetchFreePatternDetail(params.slug)
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const pattern = await fetchFreePatternDetail(slug)
   const t = await getTranslations('MenuNav')
 
   return (
@@ -55,7 +56,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           },
           {
             name: pattern.name,
-            url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${params.slug}`,
+            url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.FREEPATTERNS}/${slug}`,
           },
         ])}
       />
@@ -63,7 +64,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         data={createCreativeWorkSchema({
           title: pattern.name,
           description: pattern.description || '',
-          url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${params.slug}`,
+          url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.FREEPATTERNS}/${slug}`,
           author: pattern.author || pattern.username,
           image: pattern.images?.map((img) => img.fileContent),
         })}

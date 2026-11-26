@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 
 const FreePatternsNode = ({ patterns }: { patterns: Pattern[] }) => {
   const router = useRouter()
-  const onViewPattern = (id: React.Key) => {
+  const onViewPattern = (id: string | number) => {
     router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`)
   }
 

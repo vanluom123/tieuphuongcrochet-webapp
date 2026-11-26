@@ -52,14 +52,14 @@ const Blogs = ({initialData, blogCategories}: BlogsProps) => {
         })
     }
 
-    const onTabChange = useCallback((key: React.Key) => {
+    const onTabChange = useCallback((key: string | number) => {
         setParams((prev) => ({
             ...prev,
             categoryId: key === ALL_ITEM.key ? '' : (key as string),
         }));
     }, []);
 
-    const onViewBlog = (id: React.Key) => {
+    const onViewBlog = (id: string | number) => {
         router.push(`${ROUTE_PATH.BLOG}/${id}`);
     };
 

@@ -12,7 +12,7 @@ import { Product } from '@/app/lib/definitions';
 const ProductsNode = ({products}: {products: Product[]}) => {
  
   const router = useRouter();
-  const onViewProduct = (id: React.Key) => {
+  const onViewProduct = (id: string | number) => {
     router.push(`${ROUTE_PATH.SHOP}/${id}`);
   };
 

@@ -197,7 +197,7 @@ const Collections = ({ isCreator, userId }: CollectionProps) => {
     setModalData({ open: true, id: `${id}` })
   }
 
-  const onViewPattern = (id: React.Key) => {
+  const onViewPattern = (id: string | number) => {
     window.location.href = `${ROUTE_PATH.FREEPATTERNS}/${id}`
   }
 

@@ -9,15 +9,15 @@ import StructureData, {
 import { getTranslations } from "next-intl/server";
 
 type Props = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const slug = params.slug;
+  const { slug } = await params;
   const product = await fetchProductDetail(slug, 3600).then((res) => res);
   const previousImages = (await parent).openGraph?.images || [];
 
@@ -37,8 +37,9 @@ export async function generateMetadata(
 }
 
 // Generate Product Detail Page
-export default async function Page({ params }: { params: { slug: string } }) {
-  const product = await fetchProductDetail(params.slug, 3600);
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = await fetchProductDetail(slug, 3600);
   const t = await getTranslations("MenuNav");
 
   return (
@@ -54,7 +55,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           },
           {
             name: product.name,
-            url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.SHOP}/${params.slug}`,
+            url: `${process.env.NEXT_PUBLIC_URL}/${ROUTE_PATH.SHOP}/${slug}`,
           },
         ])}
       />
@@ -68,7 +69,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               `${process.env.NEXT_PUBLIC_URL}/opengraph-image.jpg}`,
           ],
           description: product?.description,
-          url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${params.slug}`,
+          url: `${process.env.NEXT_PUBLIC_URL}${ROUTE_PATH.SHOP}/${slug}`,
         })}
       />
       <ProductDetail product={product} />

@@ -11,7 +11,7 @@ import styles from './SettingPage.module.scss'
 
 interface ModalForm {
   open: boolean
-  id: React.Key
+  id: string | number
   name?: TBannerType
 }
 
@@ -111,12 +111,12 @@ interface BannerTypeProps {
 const BannerType = ({ bannerTypes, onRefresh, loading }: BannerTypeProps) => {
   const [openCUModal, setOpenCUModal] = useState<ModalForm>({ open: false, id: '' })
 
-  const onDeleteRecord = async (id: React.Key) => {
+  const onDeleteRecord = async (id: string | number) => {
     await deleteBannerType(id as string)
     onRefresh()
   }
 
-  const onEditRecord = (id: React.Key, values: IBannerType) => {
+  const onEditRecord = (id: string | number, values: IBannerType) => {
     setOpenCUModal({ open: true, id, name: values.name })
   }
 

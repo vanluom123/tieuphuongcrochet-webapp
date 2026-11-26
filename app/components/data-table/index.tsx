@@ -14,8 +14,8 @@ import { IMAGE_FALLBACK } from '@/app/lib/constant';
 interface DataTableProps extends TableProps<DataType> {
   pageSize?: number;
   pageIndex?: number;
-  onEditRecord: (key: React.Key, record?: any) => void;
-  onDeleteRecord: (key: React.Key) => void;
+  onEditRecord: (key: string | number, record?: any) => void;
+  onDeleteRecord: (key: string | number) => void;
   customColumns?: ColumnsType<DataType>;
   isShowImage?: boolean;
   visiblePagination?: boolean;

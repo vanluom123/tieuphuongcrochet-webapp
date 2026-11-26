@@ -1,4 +1,4 @@
-import {DefaultOptionType} from 'rc-tree-select/lib/TreeSelect';
+import type { DataNode } from 'rc-tree-select/lib/interface';
 import moment from 'moment';
 import {filter, findIndex, forEach, isEmpty, map} from 'lodash';
 
@@ -92,10 +92,10 @@ export function computePaging({pageSize, pageIndex, currentIndex}: Paging) {
     return (pageIndex * pageSize) + 1 + currentIndex;
 }
 
-export const mapTreeData = (data: Category[]): DefaultOptionType[] => {
+export const mapTreeData = (data: Category[]): DataNode[] => {
     const result = data.map((item: Category) => {
         const {children, ...rest} = item;
-        let newItem: DefaultOptionType = {
+        let newItem: DataNode = {
             name: rest.name,
             nameEn: rest.nameEn,
             key: rest.id,

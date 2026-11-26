@@ -24,10 +24,10 @@ export interface ViewTableProps {
   onSearch?: (value: string) => void
   pageIndex?: number
   loading?: boolean
-  onReadDetail: (key: React.Key) => void
+  onReadDetail: (key: string | number) => void
   isShowTabs?: boolean
   itemsTabs?: DataType[]
-  onTabChange?: (key: React.Key) => void
+  onTabChange?: (key: string | number) => void
   onStatusFilter?: (value: SegmentedValue) => void
   isShowStatusFilter?: boolean
 }
@@ -89,7 +89,7 @@ const ViewTable = ({
     }
   }
 
-  const onClickMenu = (key: React.Key) => {
+  const onClickMenu = (key: string | number) => {
     if (onTabChange instanceof Function) {
       onTabChange(key)
     }

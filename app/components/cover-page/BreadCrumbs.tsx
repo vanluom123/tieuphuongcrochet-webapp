@@ -59,7 +59,7 @@ const BreadCrumbs = ({ pathname = '', banners = [] }: BreadCrumbsProps) => {
                 <div className="bread-crumbs-title">
                     <h3 className="title-page">{t(titlePage)}</h3>
                     <Breadcrumb
-                        items={crumbs}
+                        items={crumbs as Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[]}
                         itemRender={itemRender as (route: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>, params: AnyObject, routes: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[], paths: string[]) => ReactNode}
                     />
                 </div>

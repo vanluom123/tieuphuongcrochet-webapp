@@ -17,7 +17,7 @@ import SearchTable from '@/app/components/data-table/SearchTable'
 import { deleteFreePattern, fetchFreePatterns } from '@/app/lib/service/freePatternService'
 import { ROUTE_PATH } from '@/app/lib/constant'
 import { fetchCategories } from '@/app/lib/service/categoryService'
-import { DefaultOptionType } from 'antd/es/select'
+import type { DataNode } from 'rc-tree-select/lib/interface'
 
 const initialState: DataTableState = {
   loading: false,
@@ -50,11 +50,11 @@ const FreePatterns = () => {
       })
   }, [params])
 
-  const onEditRecord = (id: React.Key) => {
+  const onEditRecord = (id: string | number) => {
     router.push(`${ROUTE_PATH.DASHBOARD_FREE_PATTERNS}/${id}`)
   }
 
-  const onDeleteRecord = async (rd: React.Key) => {
+  const onDeleteRecord = async (rd: string | number) => {
     try {
       await deleteFreePattern(rd as string)
       // Refresh the data after successful deletion
@@ -127,7 +127,7 @@ const FreePatterns = () => {
           loading={state.loading}
           searchFields={['name', 'author', 'description']}
           isShowStatusFilter
-          categories={categories.current as DefaultOptionType[]}
+          categories={categories.current as DataNode[]}
         />
         <div className="admin-table">
           <DataTable
