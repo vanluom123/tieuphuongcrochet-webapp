@@ -112,7 +112,9 @@ const BannerForm = ({
 
     setIsUpdatedBList(true)
     SetBannersList(tempBanners)
-    form.resetFields()
+    if (!onClose) {
+      form.resetFields()
+    }
     onClose?.()
   }
 
@@ -120,7 +122,9 @@ const BannerForm = ({
     if (edittingBanner.isEditting) {
       setEdittingBanner(initialEdittingBanner)
     }
-    form.resetFields()
+    if (!onClose) {
+      form.resetFields()
+    }
     onClose?.()
   }
 
