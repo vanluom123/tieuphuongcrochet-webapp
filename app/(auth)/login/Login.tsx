@@ -185,7 +185,7 @@ const Login = () => {
                                     </Link>
                                 </Flex>
                             </Form.Item>
-                            <Form.Item name='actions' className='actions'>
+                            <Form.Item className='actions'>
                                 <Row gutter={[10, 20]} align='middle'>
                                     <Col xs={24} md={24} lg={12} >
                                         <Button

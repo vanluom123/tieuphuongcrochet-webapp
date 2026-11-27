@@ -31,14 +31,17 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 
 
 	useEffect(() => {
+		if (!isModalOpen) return;
 		if (isEditing) {
 			const formData: Category = {
 				name: categorySelected.name,
 				nameEn: (categorySelected as any).nameEn,
 			}
 			form.setFieldsValue(formData);
+		} else {
+			form.resetFields();
 		}
-	}, [categorySelected, isEditing, form]);
+	}, [categorySelected, isEditing, isModalOpen, form]);
 
 	const handleOk = async () => {
 		setLoading(true);
@@ -169,7 +172,6 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 						!isEditing &&
 						// Form Creating
 						<Form.Item
-							name="parentIds"
 							label="Parents"
 						>
 							<Checkbox
@@ -197,7 +199,7 @@ const CRUCategoryModal = ({ isModalOpen, setIsModalOpen, categorySelected, setCa
 					disabled={loading}
 				>
 
-					< Form.Item name='children' label='Children'>
+					<Form.Item label='Children'>
 						<List
 							itemLayout="horizontal"
 							dataSource={categorySelected?.children as { key: string, name: string }[]}

@@ -146,7 +146,8 @@ const ProfileDetail = ({ params }: ProfileDetailProps) => {
                             <Image
                                 src={userData?.backgroundImageUrl && userData.backgroundImageUrl.trim() ? userData.backgroundImageUrl : defaultBackground}
                                 alt="User cover image"
-                                layout="fill"
+                                fill
+                                sizes="100vw"
                                 className="cover-image"
                             />
                     }

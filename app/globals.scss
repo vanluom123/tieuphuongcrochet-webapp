@@ -1,4 +1,4 @@
-@import "variables.module.scss";
+@use "variables.module.scss" as *;
 
 :root {
   --ant-layout-header-height: 64px; // Adjust value as needed
@@ -831,8 +831,9 @@ body {
 
 // responsive
 @media screen and (min-width: $xxl) {
-  .container {
+  .layout-wrap .container {
     width: 1440px;
+    max-width: 100%;
     margin: 0 auto;
   }
 
@@ -1172,6 +1173,7 @@ body {
     border-top: 1px solid $borderColor;
     padding-top: 60px;
     max-width: 300px;
+    height: auto;
     margin-bottom: 80px;
   }
 
@@ -1264,6 +1266,7 @@ body {
     height: 75px;
 
     img {
+      width: auto;
       height: 100%;
     }
   }

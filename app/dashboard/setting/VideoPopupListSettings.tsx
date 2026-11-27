@@ -287,36 +287,42 @@ export default function VideoPopupListSettings() {
     }
   }, [t])
 
+  useEffect(() => {
+    if (!modalOpen) return
+    if (editingItem) {
+      form.setFieldsValue({
+        title: editingItem.title,
+        active: editingItem.active,
+        clips: (editingItem.clips ?? []).map((clip) => ({
+          sourceType: clip.videoFileName ? 'upload' : 'url',
+          videoUrl: clip.videoUrl,
+          videoFileName: clip.videoFileName ?? '',
+          label: clip.label ?? '',
+          ctaUrl: clip.ctaUrl ?? '',
+        })),
+      })
+    } else {
+      form.setFieldsValue({
+        title: '',
+        active: true,
+        clips: [createEmptyClip()],
+      })
+    }
+  }, [modalOpen, editingItem, form])
+
   const openCreate = () => {
     setEditingItem(null)
-    form.setFieldsValue({
-      title: '',
-      active: true,
-      clips: [createEmptyClip()],
-    })
     setModalOpen(true)
   }
 
   const openEdit = (item: VideoPopup) => {
     setEditingItem(item)
-    form.setFieldsValue({
-      title: item.title,
-      active: item.active,
-      clips: (item.clips ?? []).map((clip) => ({
-        sourceType: clip.videoFileName ? 'upload' : 'url',
-        videoUrl: clip.videoUrl,
-        videoFileName: clip.videoFileName ?? '',
-        label: clip.label ?? '',
-        ctaUrl: clip.ctaUrl ?? '',
-      })),
-    })
     setModalOpen(true)
   }
 
   const closeModal = () => {
     setModalOpen(false)
     setEditingItem(null)
-    form.resetFields()
   }
 
   const handleToggleActive = async (item: VideoPopup, active: boolean) => {

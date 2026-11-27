@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Col, Empty, Form, Input, List, message, Modal, Row, Spin } from 'antd'
+import { App, Button, Col, Empty, Form, Input, List, Modal, Row, Spin } from 'antd'
 import { FolderOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
@@ -26,6 +26,7 @@ const CollectionPopup = ({
   onSuccess,
 }: CollectionPopupProps) => {
   const t = useTranslations('CollectionPopup')
+  const { message } = App.useApp()
   const { data: session } = useSession()
   const [form] = Form.useForm()
 

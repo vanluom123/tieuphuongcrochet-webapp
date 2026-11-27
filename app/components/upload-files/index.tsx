@@ -165,11 +165,10 @@ const UploadFiles = ({
       >
         <Image
           alt="example"
-          style={{ maxWidth: "100%", height: "auto" }}
+          style={{ width: "100%", height: "auto" }}
           src={previewImage}
           width={800}
           height={600}
-          layout="responsive"
         />
       </Modal>
       {contextHolder}

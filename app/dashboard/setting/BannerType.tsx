@@ -25,13 +25,16 @@ const CUTypeModal = ({ openCUModal, setOpenCUModal, onRefresh }: TypeBannerModal
   const [form] = Form.useForm()
 
   useEffect(() => {
+    if (!openCUModal.open) return
     if (openCUModal.id) {
       const formData: IBannerType = {
         name: openCUModal.name || '',
       }
       form.setFieldsValue(formData)
+    } else {
+      form.resetFields()
     }
-  }, [form, openCUModal.name, openCUModal.id])
+  }, [form, openCUModal.open, openCUModal.name, openCUModal.id])
 
   const onSubmit = () => {
     form

@@ -73,6 +73,21 @@ export default function GoogleTag() {
         };
     }, [isSessionLoaded, isPremium]);
 
+    useEffect(() => {
+        const clientId = process.env.NEXT_PUBLIC_AD_CLIENT_ID;
+        if (!isSessionLoaded || isPremium || !clientId) {
+            return;
+        }
+        if (document.querySelector(ADSENSE_SCRIPT_SELECTOR)) {
+            return;
+        }
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+    }, [isSessionLoaded, isPremium]);
+
     return (
         <>
             <Script
@@ -91,12 +106,5 @@ export default function GoogleTag() {
 			`,
                 }}
             />
-            {isSessionLoaded && !isPremium && (
-                <Script
-                    async
-                    strategy="afterInteractive"
-                    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_AD_CLIENT_ID}`}
-                    crossOrigin="anonymous" />
-            )}
         </>)
 }
