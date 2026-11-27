@@ -1,4 +1,4 @@
-@import "variables.module.scss";
+@use "variables.module.scss" as *;
 
 :root {
   --ant-layout-header-height: 64px; // Adjust value as needed
@@ -831,8 +831,9 @@ body {
 
 // responsive
 @media screen and (min-width: $xxl) {
-  .container {
+  .layout-wrap .container {
     width: 1440px;
+    max-width: 100%;
     margin: 0 auto;
   }
 
@@ -1019,6 +1020,46 @@ body {
   // }
 }
 
+.crochet-symbols-collapse {
+  margin-bottom: 20px;
+  background-color: #fff5f5;
+  border: 1px solid #ffd6d6;
+  border-left: 4px solid $colorPrimary;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .ant-collapse-item {
+    border-bottom: none;
+  }
+
+  .ant-collapse-header {
+    padding: 12px 16px !important;
+    align-items: center !important;
+    color: $textPrimaryColor !important;
+    font-weight: $fontWeight_semibold;
+  }
+
+  .ant-collapse-content {
+    background-color: $backgroundColor;
+    border-top: 1px solid #ffd6d6;
+  }
+
+  .ant-collapse-content-box {
+    padding: 16px 12px 4px !important;
+  }
+
+  .crochet-symbols-collapse-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: $textPrimaryColor;
+
+    .anticon {
+      color: $colorPrimary;
+    }
+  }
+}
+
 // Editor view
 .editor-view {
   a {
@@ -1172,6 +1213,7 @@ body {
     border-top: 1px solid $borderColor;
     padding-top: 60px;
     max-width: 300px;
+    height: auto;
     margin-bottom: 80px;
   }
 
@@ -1264,6 +1306,7 @@ body {
     height: 75px;
 
     img {
+      width: auto;
       height: 100%;
     }
   }
