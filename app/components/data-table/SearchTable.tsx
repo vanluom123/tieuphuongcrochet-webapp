@@ -183,6 +183,7 @@ const SearchTable = ({
                     form={form}
                     initialValues={{
                         isHome: ALL_ITEM.key,
+                        status: TRANSLATION_STATUS.ALL,
                     }}
                     style={{flex: 'min-content'}}
                 >
@@ -221,7 +222,6 @@ const SearchTable = ({
                                                 {/* Translation status on large-screen*/}
                                                 <FreePatternStatus
                                                     className='large-screen'
-                                                    defaultValue={TRANSLATION_STATUS.ALL}
                                                     options={[
                                                         ...TRANSLATION_OPTIONS,
                                                         {
