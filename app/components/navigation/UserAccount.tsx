@@ -1,4 +1,4 @@
-import { Button, MenuProps, Dropdown, Modal, Avatar } from "antd";
+import { App, Button, MenuProps, Dropdown, Avatar } from "antd";
 import { useState, useMemo } from "react";
 import {
   UserOutlined,
@@ -18,6 +18,7 @@ import PremiumCrown from "../premium/PremiumCrown";
 import PremiumUpgradeModal from "../premium/PremiumUpgradeModal";
 
 const UserAccount = () => {
+  const { modal } = App.useApp();
   const { data: session } = useSession();
   const t = useTranslations("UserAccount");
   const router = useRouter();
@@ -66,7 +67,7 @@ const UserAccount = () => {
       label: t("logout"),
       icon: <LogoutOutlined />,
       onClick: () => {
-        Modal.confirm({
+        modal.confirm({
           title: t("logout_confirm"),
           onOk: () => {
             signOut({ callbackUrl: ROUTE_PATH.HOME });
@@ -74,7 +75,7 @@ const UserAccount = () => {
         });
       },
     },
-  ], [userId, t, router, setIsPremiumModalOpen]);
+  ], [userId, t, router, setIsPremiumModalOpen, modal]);
 
   const loginMenu = useMemo(() => [
     {

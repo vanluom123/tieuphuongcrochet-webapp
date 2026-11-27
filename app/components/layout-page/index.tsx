@@ -67,40 +67,38 @@ const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
 
   if (isSpecialRoute) {
     return (
-      <>
+      <App component={false} notification={{ placement: "topRight" }}>
+        <Notify />
         <Layout className="layout-wrap">
-          <App notification={{ placement: "topRight" }}>
-            <Notify />
-          </App>
           {children}
           {donationNode}
         </Layout>
         <DonateModal isOpen={isDonateModalOpen} onClose={toggleDonateModal} />
-      </>
+      </App>
     );
   }
 
   return (
-    <Layout className="layout-wrap">
-      <App notification={{ placement: "topRight" }}>
-        <Notify />
-      </App>
-      <Navigation
-        currentNav={currentNav}
-        setCurrentNav={setCurrentNavCallback}
-      />
+    <App component={false} notification={{ placement: "topRight" }}>
+      <Notify />
+      <Layout className="layout-wrap">
+        <Navigation
+          currentNav={currentNav}
+          setCurrentNav={setCurrentNavCallback}
+        />
 
-      {/* Cover image - banner - breadcrumbs */}
-      <CoverPage />
-      <Content className="content-wrap container">{children}</Content>
-      <FooterPage currentNav={currentNav} />
-      <FloatButton.BackTop
-        className="float-btn-back-top"
-        visibilityHeight={0}
-      />
-      {donationNode}
-      <DonateModal isOpen={isDonateModalOpen} onClose={toggleDonateModal} />
-    </Layout>
+        {/* Cover image - banner - breadcrumbs */}
+        <CoverPage />
+        <Content className="content-wrap container">{children}</Content>
+        <FooterPage currentNav={currentNav} />
+        <FloatButton.BackTop
+          className="float-btn-back-top"
+          visibilityHeight={0}
+        />
+        {donationNode}
+        <DonateModal isOpen={isDonateModalOpen} onClose={toggleDonateModal} />
+      </Layout>
+    </App>
   );
 };
 

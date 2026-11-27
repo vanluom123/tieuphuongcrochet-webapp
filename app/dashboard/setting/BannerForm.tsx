@@ -1,3 +1,4 @@
+import { memo, useEffect } from 'react'
 import {
   Button,
   Col,
@@ -7,17 +8,15 @@ import {
   notification,
   Row,
   Select,
-  Space,
   Switch,
   Typography,
 } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
-
+import { PlusOutlined, SaveOutlined } from '@ant-design/icons'
 import { map } from 'lodash'
-import { memo, useEffect } from 'react'
 import UploadFiles from '@/app/components/upload-files'
 import { Banner, DataType, FileUpload } from '@/app/lib/definitions'
 import { uploadMultipleImagesToServer } from '@/app/lib/utils'
+import styles from './SettingPage.module.scss'
 
 export interface EdittingBanner {
   isEditting: boolean
@@ -41,6 +40,7 @@ interface BannerItemProps {
   setIsUpdatedBList: (value: boolean) => void
   bannerTypes: DataType[]
   onRefresh: () => void
+  onClose?: () => void
 }
 
 const BannerForm = ({
@@ -50,7 +50,7 @@ const BannerForm = ({
   setEdittingBanner,
   SetBannersList,
   setIsUpdatedBList,
-  onRefresh,
+  onClose,
 }: BannerItemProps) => {
   const [form] = Form.useForm()
   const { Item } = Form
@@ -112,14 +112,20 @@ const BannerForm = ({
 
     setIsUpdatedBList(true)
     SetBannersList(tempBanners)
-    form.resetFields()
+    if (!onClose) {
+      form.resetFields()
+    }
+    onClose?.()
   }
 
   const onCancel = () => {
     if (edittingBanner.isEditting) {
       setEdittingBanner(initialEdittingBanner)
     }
-    form.resetFields()
+    if (!onClose) {
+      form.resetFields()
+    }
+    onClose?.()
   }
 
   return (
@@ -138,17 +144,17 @@ const BannerForm = ({
         url: '',
       }}
     >
-      <Row gutter={[30, 30]}>
+      <Row gutter={[20, 4]}>
         <Col xs={24} md={10}>
           <Item
             name="bannerImage"
             label={
               <>
-                Banner Image: <Text type="secondary">(Tỷ lệ 16:9 để hiển thị tốt nhất)</Text>
+                Hình ảnh banner <Text type="secondary">(tỷ lệ 16:9)</Text>
               </>
             }
             rules={[{ required: true, message: 'Vui lòng tải lên hình ảnh banner' }]}
-            extra="Kích thước đề xuất: 1600x900px hoặc tỷ lệ 16:9"
+            extra="Kích thước đề xuất: 1600×900px"
           >
             <UploadFiles
               files={edittingBanner.image}
@@ -161,23 +167,23 @@ const BannerForm = ({
             />
           </Item>
         </Col>
-        <Col xs={24} md={7}>
-          <Item name="active" label="Kích hoạt">
+        <Col xs={12} md={7}>
+          <Item name="active" label="Hiển thị" valuePropName="checked">
             <Switch />
           </Item>
         </Col>
-        <Col xs={24} md={7}>
-          <Item name="textColor" label="Màu chữ tiêu đề & nội dung:">
+        <Col xs={12} md={7}>
+          <Item name="textColor" label="Màu chữ tiêu đề & nội dung">
             <ColorPicker showText />
           </Item>
         </Col>
       </Row>
 
-      <Row gutter={[30, 30]}>
+      <Row gutter={[20, 4]}>
         <Col xs={24} md={12}>
           <Item
             name="bannerTypeId"
-            label="Loại banner:"
+            label="Loại banner"
             rules={[{ required: true, message: 'Vui lòng chọn loại banner' }]}
           >
             <Select
@@ -191,32 +197,33 @@ const BannerForm = ({
         </Col>
         <Col xs={24} md={12}>
           <Item name="title" label="Tiêu đề">
-            <Input placeholder="Nhập tiêu đề:" />
-          </Item>
-        </Col>
-      </Row>
-      <Row gutter={[30, 30]}>
-        <Col xs={24} md={12}>
-          <Item name="url" label="Đường dẫn:">
-            <Input placeholder="Nhập đường dẫn:" />
-          </Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Item name="content" label="Nội dung:">
-            <Input placeholder="Nhập nội dung:" />
+            <Input placeholder="Nhập tiêu đề" />
           </Item>
         </Col>
       </Row>
 
-      <div className="align-center">
-        <Space>
-          <Button danger htmlType="submit" className="btn-border" icon={<PlusOutlined />}>
-            {edittingBanner.isEditting ? 'Cập nhật' : 'Thêm mới'}
-          </Button>
-          <Button className="btn-form btn-border" onClick={onCancel}>
-            Hủy bỏ
-          </Button>
-        </Space>
+      <Row gutter={[20, 4]}>
+        <Col xs={24} md={12}>
+          <Item name="url" label="Đường dẫn">
+            <Input placeholder="Nhập đường dẫn" />
+          </Item>
+        </Col>
+        <Col xs={24} md={12}>
+          <Item name="content" label="Nội dung">
+            <Input placeholder="Nhập nội dung" />
+          </Item>
+        </Col>
+      </Row>
+
+      <div className={styles.formActions}>
+        <Button onClick={onCancel}>Hủy</Button>
+        <Button
+          type="primary"
+          htmlType="submit"
+          icon={edittingBanner.isEditting ? <SaveOutlined /> : <PlusOutlined />}
+        >
+          {edittingBanner.isEditting ? 'Cập nhật banner' : 'Thêm vào danh sách'}
+        </Button>
       </div>
     </Form>
   )

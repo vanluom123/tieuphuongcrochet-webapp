@@ -7,7 +7,7 @@ import {SegmentedValue} from 'antd/es/segmented';
 import {SearchParams} from '@/app/lib/definitions';
 import {ALL_ITEM, TRANSLATION_OPTIONS, TRANSLATION_STATUS} from '@/app/lib/constant';
 import FreePatternStatus from '../free-pattern-status';
-import {DefaultOptionType} from 'antd/es/select';
+import type { DataNode } from 'rc-tree-select/lib/interface';
 import {combineFilters} from "@/app/lib/filter-utils";
 import {debounce} from '@/app/lib/utils';
 
@@ -22,7 +22,7 @@ interface SearchTableProps {
     isShowAddNew?: boolean;
     searchFields?: string[];
     isShowStatusFilter?: boolean;
-    categories?: DefaultOptionType[];
+    categories?: DataNode[];
 }
 
 const SearchTable = ({
@@ -183,6 +183,7 @@ const SearchTable = ({
                     form={form}
                     initialValues={{
                         isHome: ALL_ITEM.key,
+                        status: TRANSLATION_STATUS.ALL,
                     }}
                     style={{flex: 'min-content'}}
                 >
@@ -221,7 +222,6 @@ const SearchTable = ({
                                                 {/* Translation status on large-screen*/}
                                                 <FreePatternStatus
                                                     className='large-screen'
-                                                    defaultValue={TRANSLATION_STATUS.ALL}
                                                     options={[
                                                         ...TRANSLATION_OPTIONS,
                                                         {

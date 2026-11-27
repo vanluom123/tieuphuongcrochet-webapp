@@ -9,14 +9,14 @@ import { useLocale, useTranslations } from "next-intl";
 
 interface CategoryMenuProps {
     items: TabsItem[];
-    onClickMenu: (key: React.Key) => void;
+    onClickMenu: (key: string | number) => void;
 }
 
 const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
     const scrollContainerRef = useRef<HTMLUListElement>(null);
     const [itemSelected, setItemSelected] = useState({
-        key: '' as React.Key,
-        childKey: '' as React.Key,
+        key: '' as string | number,
+        childKey: '' as string | number,
     });
     const [open, setOpen] = useState(false);
     const t = useTranslations('CategoryMenu');
@@ -53,7 +53,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
         });
     }, []);
 
-    const onClickItem = useCallback((key: React.Key, childKey?: React.Key, element?: HTMLElement) => {
+    const onClickItem = useCallback((key: string | number, childKey?: string | number, element?: HTMLElement) => {
         setItemSelected({ key, childKey: childKey || '' });
         onClickMenu(childKey || key);
 
@@ -63,7 +63,7 @@ const CategoryMenu = ({ items, onClickMenu }: CategoryMenuProps) => {
         }
     }, [onClickMenu, scrollToItem]);
 
-    const onClickItemBtn = useCallback((key: React.Key, childKey?: React.Key, index: number = -1) => {
+    const onClickItemBtn = useCallback((key: string | number, childKey?: string | number, index: number = -1) => {
         setItemSelected({ key, childKey: childKey || '' });
         onClickMenu(childKey || key);
 

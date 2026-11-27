@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Col, Empty, Form, Input, List, message, Modal, Row, Spin } from 'antd'
+import { App, Button, Col, Empty, Form, Input, List, Modal, Row, Spin } from 'antd'
 import { FolderOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
@@ -26,6 +26,7 @@ const CollectionPopup = ({
   onSuccess,
 }: CollectionPopupProps) => {
   const t = useTranslations('CollectionPopup')
+  const { message } = App.useApp()
   const { data: session } = useSession()
   const [form] = Form.useForm()
 
@@ -97,7 +98,9 @@ const CollectionPopup = ({
   }
 
   const handleClose = () => {
-    form.resetFields()
+    if (showCreateForm) {
+      form.resetFields()
+    }
     setShowCreateForm(false)
     onClose()
   }
@@ -114,7 +117,7 @@ const CollectionPopup = ({
       onCancel={handleClose}
       width={typeof window !== 'undefined' && window.innerWidth < 768 ? '95%' : 500}
       centered
-      destroyOnClose
+      destroyOnHidden
       // style={{
       //   maxWidth: '95vw',
       //   margin: '0 auto',

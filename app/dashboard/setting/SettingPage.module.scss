@@ -1,0 +1,396 @@
+.settingPage {
+  --setting-surface: #ffffff;
+  --setting-tint: #fff8f8;
+  --setting-ink: #262121;
+  --setting-muted: #6f6565;
+  --setting-accent: #d95367;
+  --setting-accent-hover: #c24155;
+  --setting-border: #efe3e6;
+
+  max-width: 1200px;
+  margin: 0 auto;
+  color: var(--setting-ink);
+  font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
+}
+
+.pageHeader {
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--setting-border);
+}
+
+.pageTitle {
+  margin: 0 0 6px;
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--setting-ink);
+}
+
+.pageSubtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--setting-muted);
+  max-width: 72ch;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 224px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.navRail {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-left: 3px solid transparent;
+  border-radius: 0 8px 8px 0;
+  background: transparent;
+  color: var(--setting-muted);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: var(--setting-tint);
+    color: var(--setting-ink);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--setting-accent);
+    outline-offset: 2px;
+  }
+}
+
+.navItemActive {
+  background: var(--setting-tint);
+  color: var(--setting-ink);
+  font-weight: 500;
+  border-left-color: var(--setting-accent);
+}
+
+.navBadge {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--setting-accent) 12%, transparent);
+  color: var(--setting-accent);
+  font-weight: 500;
+}
+
+.panel {
+  max-width: 920px;
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--setting-border);
+}
+
+.sectionTitle {
+  margin: 0 0 4px;
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--setting-ink);
+}
+
+.sectionSubtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--setting-muted);
+  max-width: 68ch;
+}
+
+.bannerEditor {
+  margin-bottom: 24px;
+  padding: 20px;
+  border: 1px solid var(--setting-border);
+  border-radius: 10px;
+  background: var(--setting-tint);
+}
+
+.bannerEditorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bannerEditorTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--setting-ink);
+}
+
+.bannerList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bannerRow {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid var(--setting-border);
+  border-radius: 10px;
+  background: var(--setting-surface);
+}
+
+.bannerPreview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1f1b1b;
+  position: relative;
+
+  :global(.banner-item__preview) {
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.banner-item__infor) {
+    padding: 8px 10px;
+  }
+
+  :global(.title),
+  :global(.content) {
+    margin: 0 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.bannerInfo {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bannerTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bannerTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--setting-ink);
+}
+
+.bannerContent {
+  margin: 0;
+  font-size: 13px;
+  color: var(--setting-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bannerUrl {
+  font-size: 12px;
+  color: var(--setting-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bannerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.emptyState {
+  padding: 28px 20px;
+  text-align: center;
+  border: 1px dashed var(--setting-border);
+  border-radius: 10px;
+  color: var(--setting-muted);
+  font-size: 14px;
+}
+
+.saveBar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 10;
+  margin-top: 20px;
+  padding: 12px 16px;
+  border: 1px solid var(--setting-accent);
+  border-radius: 10px;
+  background: var(--setting-tint);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 6px 20px rgba(38, 33, 33, 0.08);
+}
+
+.saveBarText {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--setting-ink);
+}
+
+.pricingForm {
+  max-width: 640px;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+// Normalize Ant Design form controls inside Settings so dashboard.scss's 44x90 switch does not deform inputs.
+.settingPage {
+  :global(.ant-btn) {
+    text-transform: none;
+    height: auto;
+    min-height: 36px;
+    padding: 6px 14px;
+    border-radius: 8px;
+  }
+
+  :global(.ant-btn-primary:not(:disabled)) {
+    background-color: var(--setting-accent);
+    border-color: var(--setting-accent);
+
+    &:hover {
+      background-color: var(--setting-accent-hover);
+      border-color: var(--setting-accent-hover);
+    }
+  }
+
+  :global(.ant-form-item .ant-form-item-label > label) {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--setting-ink);
+  }
+
+  :global(.ant-form-item .ant-form-item-control input.ant-input),
+  :global(.ant-form-item .ant-form-item-control .ant-select),
+  :global(.ant-form-item .ant-form-item-control .ant-input-number) {
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  :global(.ant-form-item .ant-form-item-control .ant-input-number-input) {
+    height: 38px;
+  }
+
+  :global(.ant-form-item .ant-form-item-control .ant-switch) {
+    height: 22px;
+    width: 44px;
+
+    :global(.ant-switch-handle) {
+      top: 2px;
+      width: 18px;
+      height: 18px;
+
+      &::before {
+        border-radius: 9px;
+      }
+    }
+
+    &:global(.ant-switch-checked .ant-switch-handle) {
+      inset-inline-start: calc(100% - 20px);
+    }
+  }
+
+  :global(.ant-switch-checked) {
+    background-color: var(--setting-accent);
+  }
+}
+
+@media (max-width: 991px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .navRail {
+    position: static;
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    gap: 8px;
+    border-bottom: 1px solid var(--setting-border);
+  }
+
+  .navItem {
+    width: auto;
+    white-space: nowrap;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .navItemActive {
+    border-left-color: transparent;
+    border-bottom-color: var(--setting-accent);
+  }
+}
+
+@media (max-width: 767px) {
+  .bannerRow {
+    grid-template-columns: 1fr;
+  }
+
+  .bannerActions {
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navItem {
+    transition: none;
+  }
+}

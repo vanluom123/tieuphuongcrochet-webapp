@@ -1,8 +1,10 @@
-import { IMAGE_FALLBACK, DEFAULT_CHART_EDITOR } from "@/app/lib/constant";
+'use client'
+import { IMAGE_FALLBACK } from "@/app/lib/constant";
 import { FileUpload } from "@/app/lib/definitions";
 import { checkPdfFile } from "@/app/lib/utils";
 import { Watermark, Flex, Row, Col, Image, Empty } from "antd"
 import { map } from "lodash";
+import CrochetSymbolsGuide from "../crochet-symbols-guide";
 import DownloadImage from "../custom-image";
 import PdfViewer from "../pdf-viewer";
 
@@ -17,7 +19,6 @@ interface ViewImagesProps {
 }
 
 const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }: ViewImagesProps) => {
-
 	const renderImage = () => (
 		<Image.PreviewGroup
 			fallback={IMAGE_FALLBACK}
@@ -49,7 +50,10 @@ const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }:
 
 	return (
 		<div>
-			< Watermark
+			{/* crochet symbols default */}
+			{isPattern && <CrochetSymbolsGuide />}
+
+			<Watermark
 				content={['小方', 'Tiểu Phương Crochet']}
 			>
 				<div
@@ -60,13 +64,10 @@ const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }:
 					</p>
 					{(!content && !images) &&
 						<Empty
-							imageStyle={{ height: 80 }}
+							styles={{ image: { height: 80 } }}
 							image={Empty.PRESENTED_IMAGE_SIMPLE}
 						/>
 					}
-
-					{/* crochet symbols default  */}
-					{isPattern && <div className='editor-view disable-select text-box' dangerouslySetInnerHTML={{ __html: DEFAULT_CHART_EDITOR || '' }} />}
 
 					{images && images.length > 0 && renderImage()}
 					{content &&
@@ -75,7 +76,7 @@ const ViewImagesList = ({ images, name, content = '', isPattern, contentTitle }:
 						</>
 					}
 				</div>
-			</Watermark >
+			</Watermark>
 		</div>
 	)
 }

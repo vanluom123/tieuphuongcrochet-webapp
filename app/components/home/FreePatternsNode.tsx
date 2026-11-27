@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 
 const FreePatternsNode = ({ patterns }: { patterns: Pattern[] }) => {
   const router = useRouter()
-  const onViewPattern = (id: React.Key) => {
+  const onViewPattern = (id: string | number) => {
     router.push(`${ROUTE_PATH.FREEPATTERNS}/${id}`)
   }
 
@@ -44,7 +44,7 @@ const FreePatternsNode = ({ patterns }: { patterns: Pattern[] }) => {
           <ReadMoreBtn path={ROUTE_PATH.FREEPATTERNS} />
         </div>
       ) : (
-        <Empty imageStyle={{ height: 80 }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <Empty styles={{ image: { height: 80 } }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
       )}
     </div>
   )

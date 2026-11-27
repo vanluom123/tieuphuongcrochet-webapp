@@ -189,7 +189,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onNavigate, onLoginSuccess }) => 
               </AuthTextLink>
             </Flex>
           </Form.Item>
-          <Form.Item name="actions" className="actions">
+          <Form.Item className="actions">
             <Button
               block
               type="primary"

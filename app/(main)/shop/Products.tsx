@@ -52,11 +52,11 @@ const Products = ({initialData, categories}: ProductsProps) => {
         })
     }
 
-    const onViewProduct = (id: React.Key) => {
+    const onViewProduct = (id: string | number) => {
         router.push(`${ROUTE_PATH.SHOP}/${id}`);
     };
 
-    const onTabChange = (key: React.Key) => {
+    const onTabChange = (key: string | number) => {
         setParams(prevParams => ({
             ...prevParams,
             categoryId: key === ALL_ITEM.key ? '' : key as string

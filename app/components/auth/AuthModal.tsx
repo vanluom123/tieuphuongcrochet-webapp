@@ -51,7 +51,7 @@ const AuthModal: React.FC = () => {
       centered
       width={440}
       className="auth-modal"
-      destroyOnClose
+      destroyOnHidden
       styles={{
         mask: { backgroundColor: 'rgba(41, 41, 41, 0.45)' },
       }}

@@ -29,10 +29,9 @@ const CollectionFormModal = ({ modalData, setModalData, onRefreshData, userId }:
 
     useEffect(() => {
         if (!modalData.open) {
-            form.resetFields();
             setState(initialState);
         }
-    }, [modalData.open, form]);
+    }, [modalData.open]);
 
     useEffect(() => {
         if (modalData.id && modalData.open) {
@@ -81,7 +80,7 @@ const CollectionFormModal = ({ modalData, setModalData, onRefreshData, userId }:
             open={modalData.open}
             onOk={onHandleOk}
             onCancel={onHandleCancel}
-            destroyOnClose={true}
+            destroyOnHidden={true}
             confirmLoading={state.loading}
         >
             <Form form={form} onFinish={({ name }) => onSubmitForm(name)}>

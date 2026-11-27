@@ -1,146 +1,156 @@
-import { Alert, Button, Divider, Flex, Form, Input, Modal, Space, Typography } from "antd";
-import React, { memo, useEffect, useState } from "react";
-import { includes, map } from "lodash";
-import { DataType, IBannerType, TBannerType } from "@/app/lib/definitions";
-import { BANNER_TYPES_DEFAULT } from "@/app/lib/constant";
-import DataTable from "@/app/components/data-table";
-import '../../ui/bannerTypes.scss';
-import { createUpdateBannerType, deleteBannerType } from "@/app/lib/service/settingService";
+import React, { memo, useEffect, useState } from 'react'
+import { Alert, Button, Divider, Form, Input, Modal, Space } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import { includes, map } from 'lodash'
+import DataTable from '@/app/components/data-table'
+import { BANNER_TYPES_DEFAULT } from '@/app/lib/constant'
+import { DataType, IBannerType, TBannerType } from '@/app/lib/definitions'
+import { createUpdateBannerType, deleteBannerType } from '@/app/lib/service/settingService'
+import '../../ui/bannerTypes.scss'
+import styles from './SettingPage.module.scss'
 
 interface ModalForm {
-	open: boolean;
-	id: React.Key;
-	name?: TBannerType;
+  open: boolean
+  id: string | number
+  name?: TBannerType
 }
 
 interface TypeBannerModalProps {
-	openCUModal: ModalForm;
-	setOpenCUModal: (value: ModalForm) => void;
-	onRefresh: () => void;
+  openCUModal: ModalForm
+  setOpenCUModal: (value: ModalForm) => void
+  onRefresh: () => void
 }
 
 const CUTypeModal = ({ openCUModal, setOpenCUModal, onRefresh }: TypeBannerModalProps) => {
-	const [form] = Form.useForm();
-	useEffect(() => {
-		if (openCUModal.id) {
-			const formData: IBannerType = {
-				name: openCUModal.name || '',
-			}
-			form.setFieldsValue(formData);
-		}
-	}, [form, openCUModal.name,openCUModal.id]);
+  const [form] = Form.useForm()
 
-	const onSubmit = () => {
-		form.validateFields().then(async (values: IBannerType) => {
-			const sendData = openCUModal.id ? { ...values, id: openCUModal.id } : values;
-			await createUpdateBannerType(sendData);
-			setOpenCUModal({ open: false, id: '' });
-			form.resetFields();
-			onRefresh();
-		}).catch((errorInfo: any) => {
-		});
-	}
+  useEffect(() => {
+    if (!openCUModal.open) return
+    if (openCUModal.id) {
+      const formData: IBannerType = {
+        name: openCUModal.name || '',
+      }
+      form.setFieldsValue(formData)
+    } else {
+      form.resetFields()
+    }
+  }, [form, openCUModal.open, openCUModal.name, openCUModal.id])
 
-	const oncancel = () => {
-		setOpenCUModal({ open: false, id: '', name: '' });
-		form.resetFields()
-	}
+  const onSubmit = () => {
+    form
+      .validateFields()
+      .then(async (values: IBannerType) => {
+        const sendData = openCUModal.id ? { ...values, id: openCUModal.id } : values
+        await createUpdateBannerType(sendData)
+        setOpenCUModal({ open: false, id: '' })
+        form.resetFields()
+        onRefresh()
+      })
+      .catch(() => {})
+  }
 
-	const validateName = (name: any) => {
-		if (includes(BANNER_TYPES_DEFAULT, name)) {
-			return Promise.resolve();
-		}
-		return Promise.reject(new Error('Vui lòng nhập tên thuộc một trong các tên bên trên!'));
-	}
+  const onCancel = () => {
+    setOpenCUModal({ open: false, id: '', name: '' })
+    form.resetFields()
+  }
 
-	return (
-		<Modal
-			title={openCUModal.id ? 'Cập nhật loại banner' : 'Tạo loại banner mới'}
-			open={openCUModal.open}
-			onOk={onSubmit}
-			onCancel={oncancel}
-			okText='Lưu'
-			cancelText='Hủy'>
-			<Space direction='vertical'>
-				<Alert showIcon message='Vui lòng nhập tên thuộc một trong các tên bên dưới!' type='warning'
-					description={
-						<Space wrap>
-							{map(BANNER_TYPES_DEFAULT, (b, index) => {
-								if (index === BANNER_TYPES_DEFAULT.length - 1) {
-									return <span key={`btype_${index}`}>{b}</span>
-								}
-								return <>
-									<span key={`btype_${index}`}>{b}<Divider type="vertical" /></span>
-								</>
-							})}
-						</Space>}
-				/>
-				<Form name='CUTypeForm'
-					layout="vertical"
-					form={form}
-				>
-					<Form.Item
-						name='name'
-						label='Tên:'
-						rules={[{ required: true, message: 'Vui lòng nhập tên' },
-						{
-							validator: (_, value) => validateName(value)
-						}
-						]}
-					>
-						<Input placeholder="Nhập tên:" />
-					</Form.Item>
-				</Form>
-			</Space>
-		</Modal>
-	)
+  const validateName = (name: string) => {
+    if (includes(BANNER_TYPES_DEFAULT, name)) {
+      return Promise.resolve()
+    }
+    return Promise.reject(new Error('Vui lòng nhập tên thuộc một trong các tên bên trên!'))
+  }
+
+  return (
+    <Modal
+      title={openCUModal.id ? 'Cập nhật loại banner' : 'Tạo loại banner mới'}
+      open={openCUModal.open}
+      onOk={onSubmit}
+      onCancel={onCancel}
+      okText="Lưu"
+      cancelText="Hủy"
+    >
+      <Space direction="vertical" style={{ width: '100%' }}>
+        <Alert
+          showIcon
+          message="Vui lòng nhập tên thuộc một trong các tên bên dưới!"
+          type="warning"
+          description={
+            <Space wrap>
+              {map(BANNER_TYPES_DEFAULT, (b, index) => (
+                <React.Fragment key={b}>
+                  <span>{b}</span>
+                  {index < BANNER_TYPES_DEFAULT.length - 1 ? <Divider type="vertical" /> : null}
+                </React.Fragment>
+              ))}
+            </Space>
+          }
+        />
+        <Form name="CUTypeForm" layout="vertical" form={form}>
+          <Form.Item
+            name="name"
+            label="Tên loại banner"
+            rules={[
+              { required: true, message: 'Vui lòng nhập tên' },
+              {
+                validator: (_, value) => validateName(value),
+              },
+            ]}
+          >
+            <Input placeholder="Nhập tên loại banner" />
+          </Form.Item>
+        </Form>
+      </Space>
+    </Modal>
+  )
 }
 
 interface BannerTypeProps {
-	bannerTypes: DataType[];
-	onRefresh: () => void;
-	loading: boolean;
+  bannerTypes: DataType[]
+  onRefresh: () => void
+  loading: boolean
 }
 
 const BannerType = ({ bannerTypes, onRefresh, loading }: BannerTypeProps) => {
-	const [openCUModal, setOpenCUModal] = useState<ModalForm>({ open: false, id: '' });
-	const { Title } = Typography;
+  const [openCUModal, setOpenCUModal] = useState<ModalForm>({ open: false, id: '' })
 
-	const onDeleteRecord = async (id: React.Key) => {
-		await deleteBannerType(id as string);
-		onRefresh();
-	};
+  const onDeleteRecord = async (id: string | number) => {
+    await deleteBannerType(id as string)
+    onRefresh()
+  }
 
-	const onEditRecord = (id: React.Key, values: IBannerType) => {
-		setOpenCUModal({ open: true, id, name: values.name });
-	}
+  const onEditRecord = (id: string | number, values: IBannerType) => {
+    setOpenCUModal({ open: true, id, name: values.name })
+  }
 
-	return (
-		<>
-			<div className="banner-type-wrapper">
-				<Title level={2} className="align-center">Loại Banner</Title>
-				<Flex justify="flex-end">
-					<Button
-						danger
-						className="banner-type__create btn-border"
-						onClick={() => setOpenCUModal({ open: true, id: '' })}
-					>
-						Tạo mới
-					</Button>
-				</Flex>
-				<DataTable
-					loading={loading}
-					dataSource={bannerTypes}
-					onDeleteRecord={onDeleteRecord}
-					onEditRecord={onEditRecord} />
-			</div>
-			{openCUModal.open && <CUTypeModal
-			 	openCUModal={openCUModal}
-			  	setOpenCUModal={setOpenCUModal}
-				onRefresh={onRefresh}
-			 />}
-		</>
-	)
+  return (
+    <>
+      <div>
+        <div className={styles.toolbar}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => setOpenCUModal({ open: true, id: '' })}
+          >
+            Tạo loại banner
+          </Button>
+        </div>
+        <DataTable
+          loading={loading}
+          dataSource={bannerTypes}
+          onDeleteRecord={onDeleteRecord}
+          onEditRecord={onEditRecord}
+        />
+      </div>
+      {openCUModal.open ? (
+        <CUTypeModal
+          openCUModal={openCUModal}
+          setOpenCUModal={setOpenCUModal}
+          onRefresh={onRefresh}
+        />
+      ) : null}
+    </>
+  )
 }
 
-export default memo(BannerType);
+export default memo(BannerType)

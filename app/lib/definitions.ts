@@ -63,13 +63,13 @@ export const UPLOAD_MODES = {
 // Breadcrumbs
 export interface BreadCrumbItem {
   path: string
-  title: string | ReactNode
+  title: string
 }
 
 // ----------------Table-----------------------
 
 export interface DataType {
-  key: React.Key
+  key: string | number
   name: string
   price?: number
   author?: string
@@ -131,7 +131,7 @@ export interface Banner {
 }
 
 export interface IBannerType {
-  id?: React.Key
+  id?: string | number
   name: TBannerType
   createdDate?: string
 }
@@ -153,7 +153,7 @@ export interface Setting {
 // ---------------------------------- Category ----------------------------------
 
 export interface Category {
-  id?: React.Key
+  id?: string | number
   name: string
   nameEn?: string
   children?: unknown[]
@@ -169,7 +169,7 @@ export interface Menu {
 }
 
 export interface Pattern {
-  id?: React.Key
+  id?: string | number
   name: string
   price?: number
   description?: string
@@ -211,7 +211,7 @@ export interface DataTableState {
 // -------------------------- Product --------------------------
 
 export interface Product {
-  id?: React.Key
+  id?: string | number
   name: string
   price?: number
   description?: string
@@ -241,7 +241,7 @@ export interface HomeData {
 
 export interface TabsItem {
   label: string
-  key: React.Key
+  key: string | number
   icon?: React.ReactNode
   children?: TabsItem[]
   nameEn?: string
@@ -276,7 +276,7 @@ export interface User {
 //------------------------Blogs--------------------------
 
 export interface Post {
-  id?: React.Key
+  id?: string | number
   title: string
   content: string
   createdDate: string
@@ -363,7 +363,7 @@ export interface CapturePaymentRequest {
 
 export interface VideoPopupClip {
   videoUrl: string
-  videoFileName: string
+  videoFileName?: string
   label?: string
   ctaUrl?: string
 }

@@ -1,213 +1,307 @@
 'use client'
-import { Form, Button, Space, Divider, List, Collapse, Typography } from "antd";
-import React, { useEffect, useRef, useState } from "react";
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { filter, find } from "lodash";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import BannerItem from "@/app/components/cover-page/BannerItem";
-import { Banner, FileUpload, IBannerType, DataType } from "@/app/lib/definitions";
-import { uid } from "@/app/lib/utils";
-import BannerType from "./BannerType";
-import BannerForm, { EdittingBanner, initialEdittingBanner } from "./BannerForm";
-import { createUpdateBanners, fetchBanners, fetchBannerTypes } from "@/app/lib/service/settingService";
-import SubscriptionPricingForm from "./SubscriptionPricingForm";
-import VideoPopupListSettings from "./VideoPopupListSettings";
+
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Popconfirm, Spin, Tag, notification } from 'antd'
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
+import { useTranslations } from 'next-intl'
+import BannerItem from '@/app/components/cover-page/BannerItem'
+import { Banner, DataType, IBannerType } from '@/app/lib/definitions'
+import { createUpdateBanners, fetchBanners, fetchBannerTypes } from '@/app/lib/service/settingService'
+import { uid } from '@/app/lib/utils'
+import BannerForm, { EdittingBanner, initialEdittingBanner } from './BannerForm'
+import BannerType from './BannerType'
+import SubscriptionPricingForm from './SubscriptionPricingForm'
+import VideoPopupListSettings from './VideoPopupListSettings'
+import styles from './SettingPage.module.scss'
+
+type SettingSection = 'banners' | 'video-popup' | 'pricing' | 'banner-types'
 
 const Setting = () => {
-    const [isUpdatedBList, setIsUpdatedBList] = useState(false);
-    const [edittingBanner, setEdittingBanner] = useState<EdittingBanner>(initialEdittingBanner);
-    const [bannersList, SetBannersList] = useState<Banner[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [bannerTypes, setBannerTypes] = useState<DataType[]>([]);
-    const bannerRef = useRef<Banner[]>([]);
+  const t = useTranslations('VideoPopupList')
+  const [activeSection, setActiveSection] = useState<SettingSection>('banners')
+  const [isUpdatedBList, setIsUpdatedBList] = useState(false)
+  const [showBannerForm, setShowBannerForm] = useState(false)
+  const [savingBanners, setSavingBanners] = useState(false)
+  const [edittingBanner, setEdittingBanner] = useState<EdittingBanner>(initialEdittingBanner)
+  const [bannersList, setBannersList] = useState<Banner[]>([])
+  const [loading, setLoading] = useState(false)
+  const [bannerTypes, setBannerTypes] = useState<DataType[]>([])
+  const bannerRef = useRef<Banner[]>([])
 
-    const [form] = Form.useForm();
-    const { Item } = Form;
-    const { Title } = Typography;
-    const router = useRouter();
-    const t = useTranslations('VideoPopupList');
+  useEffect(() => {
+    setLoading(true)
+    Promise.all([fetchBannerTypes(), fetchBanners()])
+      .then(([types, banners]) => {
+        setBannerTypes(types)
+        setBannersList(banners)
+        bannerRef.current = banners
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [])
 
-    useEffect(() => {
-        setLoading(true);
-        Promise.all([
-            fetchBannerTypes(),
-            fetchBanners()
-        ]).then(([bannerTypes, banners]) => {
-            setBannerTypes(bannerTypes);
-            SetBannersList(banners);
-            bannerRef.current = banners;
-        }).finally(() => {
-            setLoading(false);
-        })
-    }, [])
+  const handleRefreshBannerTypes = async () => {
+    const types = await fetchBannerTypes()
+    setBannerTypes(types)
+  }
 
-    const handleRefreshBannerTypes = async () => {
-        const bannerTypes = await fetchBannerTypes();
-        setBannerTypes(bannerTypes);
+  const handleRefreshBanners = async () => {
+    const banners = await fetchBanners()
+    setBannersList(banners)
+    bannerRef.current = banners
+  }
+
+  const onSaveBanners = async () => {
+    if (bannersList.length === 0) {
+      notification.warning({ message: 'Phải có ít nhất 1 banner' })
+      return
     }
-
-    const handleRefreshBanners = async () => {
-        const banners = await fetchBanners();
-        SetBannersList(banners);
+    setSavingBanners(true)
+    try {
+      await createUpdateBanners(bannersList)
+      bannerRef.current = bannersList
+      setIsUpdatedBList(false)
+    } finally {
+      setSavingBanners(false)
     }
+  }
 
-    const onSubmitForm = async () => {
-        await createUpdateBanners(bannersList);
-        setIsUpdatedBList(false);
-    }
+  const onDiscardBanners = () => {
+    setBannersList(bannerRef.current)
+    setIsUpdatedBList(false)
+    setEdittingBanner(initialEdittingBanner)
+    setShowBannerForm(false)
+  }
 
-    const onCancel = () => {
-        form.resetFields();
-        router.back();
-    }
+  const onEditBanner = (banner: Banner, index: number) => {
+    setEdittingBanner({
+      isEditting: true,
+      index,
+      image: [
+        {
+          fileContent: banner.fileContent,
+          fileName: banner.fileName,
+          url: banner.fileContent,
+          name: banner.fileName,
+          uid: banner.id || uid(),
+        },
+      ],
+      banner,
+    })
+    setShowBannerForm(true)
+  }
 
-    const onEditBanner = (banner: Banner, index: number) => {
-        const bannerImage: FileUpload[] = [{
-            fileContent: banner.fileContent,
-            fileName: banner.fileName,
-            url: banner.fileContent,
-            name: banner.fileName,
-            uid: banner.id || uid()
-        }];
+  const onDeleteBanner = (index: number) => {
+    setBannersList((prev) => prev.filter((_, i) => i !== index))
+    setIsUpdatedBList(true)
+  }
 
-        setEdittingBanner({
-            isEditting: true,
-            index,
-            image: bannerImage,
-            banner
-        });
-    }
+  const getBannerTypeName = (id?: string, bannerType?: IBannerType) => {
+    return id ? bannerTypes.find((bt) => bt.key === id)?.name : bannerType?.name
+  }
 
-    const onDeleteBanner = (index: number) => {
-        const newBannerList = filter([...bannerRef.current], (_, i) => i !== index);
-        SetBannersList(newBannerList);
-        setIsUpdatedBList(true);
-    }
+  const navItems: { key: SettingSection; label: string; count?: number }[] = [
+    { key: 'banners', label: 'Banner trang chủ', count: bannersList.length },
+    { key: 'video-popup', label: t('title') },
+    { key: 'pricing', label: 'Gói thành viên' },
+    { key: 'banner-types', label: 'Loại banner', count: bannerTypes.length },
+  ]
 
-    const validateBanners = () => {
-        if (bannersList.length > 0) {
-            return Promise.resolve();
-        }
-        return Promise.reject(new Error('Phải có ít nhất 1 banner'));
-    };
+  const sectionMeta: Record<SettingSection, { title: string; subtitle: string }> = {
+    banners: {
+      title: 'Banner trang chủ',
+      subtitle: 'Sắp xếp nội dung hiển thị ở đầu trang và kiểm tra trước khi xuất bản.',
+    },
+    'video-popup': {
+      title: t('title'),
+      subtitle: 'Cấu hình danh sách video giới thiệu hiển thị tự động cho khách truy cập.',
+    },
+    pricing: {
+      title: 'Gói thành viên',
+      subtitle: 'Thiết lập mức giá thanh toán theo tháng và theo năm cho tài khoản Premium.',
+    },
+    'banner-types': {
+      title: 'Loại banner',
+      subtitle: 'Quản lý các vị trí và phân loại banner đang được hỗ trợ trên hệ thống.',
+    },
+  }
 
-    const getBannerType = (id?: string, bannerType?: IBannerType) => {
-        return id ? find(bannerTypes, bt => bt.key === id)?.name : bannerType?.name;
-    };
+  const currentMeta = sectionMeta[activeSection]
+  const isEditorVisible = showBannerForm || edittingBanner.isEditting
 
-    const getActiveKey = () => {
-        return edittingBanner.isEditting ?
-            { activeKey: ['bannerItem'] } :
-            { defaultActiveKey: [] }
-    }
+  return (
+    <div className={styles.settingPage}>
+      <header className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Cài đặt cửa hàng</h1>
+        <p className={styles.pageSubtitle}>
+          Quản lý banner trang chủ, video popup, giá gói thành viên và danh mục banner.
+        </p>
+      </header>
 
-    return (<>
-        <div className="setting-page">
-            <BannerType
-                bannerTypes={bannerTypes}
-                onRefresh={handleRefreshBannerTypes}
-                loading={loading}
-            />
-            <Divider style={{ margin: '30px 0' }} />
-            <SubscriptionPricingForm />
-            <Divider style={{ margin: '30px 0' }} />
-            <Title level={2} className="align-center">{t('title')}</Title>
-            <VideoPopupListSettings />
-            <Divider style={{ margin: '30px 0' }} />
-            <Title level={2} className="align-center">Banners</Title>
-            <Collapse
-                expandIconPosition='end'
-                {...getActiveKey()}
-                items={[
-                    {
-                        key: 'bannerItem',
-                        label: 'Thêm/Sửa Banner',
-                        children:
-                            <BannerForm
-                                bannerTypes={bannerTypes}
-                                bannersList={bannersList}
-                                edittingBanner={edittingBanner}
-                                setEdittingBanner={setEdittingBanner}
-                                SetBannersList={SetBannersList}
-                                setIsUpdatedBList={setIsUpdatedBList}
-                                onRefresh={handleRefreshBanners}
-                            />
-                    }]}
-            />
-            <Form layout="vertical"
-                name='CUSettingForm'
-                form={form}
-                onFinish={onSubmitForm}
-                className="form-wrap"
-            >
+      <div className={styles.workspace}>
+        <nav className={styles.navRail} aria-label="Danh mục cài đặt">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.key
+            return (
+              <button
+                key={item.key}
+                type="button"
+                aria-current={isActive ? 'page' : undefined}
+                className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+                onClick={() => setActiveSection(item.key)}
+              >
+                <span>{item.label}</span>
+                {typeof item.count === 'number' ? (
+                  <span className={styles.navBadge}>{item.count}</span>
+                ) : null}
+              </button>
+            )
+          })}
+        </nav>
 
-                <Item name='bannersList'
-                    label='Danh sách banner'
-                    rules={[
-                        { validator: () => validateBanners() }
-                    ]}
-                >
-                    <List
-                        loading={loading}
-                        itemLayout="vertical"
-                        size="large"
-                        dataSource={bannersList}
-                        renderItem={(item, index) => (
-                            <List.Item
-                                key={`banner-item__${index}`}
-                                extra={
-                                    <div style={{ width: '320px', height: '180px', overflow: 'hidden' }}>
-                                        <BannerItem banner={item} classNames="banner-item__preview" />
-                                    </div>
-                                }
-                                actions={[
-                                    <Button
-                                        onClick={() => onEditBanner(item, index)}
-                                        shape="circle"
-                                        key="list-vertical-edit"
-                                        icon={<EditOutlined />}
-                                        disabled={edittingBanner.isEditting}
-                                        title="Sửa"
-                                    />,
-                                    <Button
-                                        shape="circle"
-                                        key="list-vertical-delete"
-                                        icon={<DeleteOutlined />}
-                                        disabled={edittingBanner.isEditting}
-                                        onClick={() => onDeleteBanner(index)}
-                                        title="Xóa"
-                                    />,
-                                ]}
-                            >
-                                <List.Item.Meta
-                                    title={item.title}
-                                    description={getBannerType(item.bannerTypeId, item.bannerType)}
-                                />
-                                {item.content}
-                            </List.Item>
-                        )}
-                    />
-                </Item>
-                <div className="align-center">
-                    <Space>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            disabled={edittingBanner.isEditting || !isUpdatedBList}
-                            className="btn-form btn-border"
-                        >
-                            Lưu thay đổi
-                        </Button>
-                        <Button
-                            disabled={edittingBanner.isEditting || !isUpdatedBList}
-                            className="btn-form btn-border"
-                            onClick={onCancel}>Hủy bỏ</Button>
-                    </Space>
+        <section className={styles.panel} aria-label={currentMeta.title}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <h2 className={styles.sectionTitle}>{currentMeta.title}</h2>
+              <p className={styles.sectionSubtitle}>{currentMeta.subtitle}</p>
+            </div>
+            {activeSection === 'banners' && !isEditorVisible ? (
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => setShowBannerForm(true)}
+              >
+                Thêm banner
+              </Button>
+            ) : null}
+          </div>
+
+          {activeSection === 'banners' ? (
+            <div>
+              {isEditorVisible ? (
+                <div className={styles.bannerEditor}>
+                  <div className={styles.bannerEditorHeader}>
+                    <h3 className={styles.bannerEditorTitle}>
+                      {edittingBanner.isEditting ? 'Chỉnh sửa banner' : 'Thêm banner mới'}
+                    </h3>
+                  </div>
+                  <BannerForm
+                    bannerTypes={bannerTypes}
+                    bannersList={bannersList}
+                    edittingBanner={edittingBanner}
+                    setEdittingBanner={setEdittingBanner}
+                    SetBannersList={setBannersList}
+                    setIsUpdatedBList={setIsUpdatedBList}
+                    onRefresh={handleRefreshBanners}
+                    onClose={() => setShowBannerForm(false)}
+                  />
                 </div>
-            </Form>
-        </div>
-    </>)
+              ) : null}
+
+              <Spin spinning={loading}>
+                {bannersList.length === 0 ? (
+                  <div className={styles.emptyState}>
+                    Chưa có banner nào. Nhấn &ldquo;Thêm banner&rdquo; để tạo banner đầu tiên.
+                  </div>
+                ) : (
+                  <div className={styles.bannerList}>
+                    {bannersList.map((item, index) => {
+                      const typeName = getBannerTypeName(item.bannerTypeId, item.bannerType)
+                      return (
+                        <article className={styles.bannerRow} key={item.id ?? `banner-${index}`}>
+                          <div className={styles.bannerPreview}>
+                            <BannerItem banner={item} classNames="banner-item__preview" />
+                          </div>
+
+                          <div className={styles.bannerInfo}>
+                            <div className={styles.bannerTitleRow}>
+                              <h3 className={styles.bannerTitle}>
+                                {item.title || `Banner #${index + 1}`}
+                              </h3>
+                              {typeName ? <Tag>{typeName}</Tag> : null}
+                              <Tag color={item.active ? 'green' : 'default'}>
+                                {item.active ? 'Đang hiển thị' : 'Đang ẩn'}
+                              </Tag>
+                            </div>
+                            {item.content ? (
+                              <p className={styles.bannerContent}>{item.content}</p>
+                            ) : null}
+                            {item.url ? (
+                              <span className={styles.bannerUrl} title={item.url}>
+                                {item.url}
+                              </span>
+                            ) : null}
+                          </div>
+
+                          <div className={styles.bannerActions}>
+                            <Button
+                              icon={<EditOutlined />}
+                              aria-label="Sửa banner"
+                              title="Sửa"
+                              disabled={edittingBanner.isEditting}
+                              onClick={() => onEditBanner(item, index)}
+                            />
+                            <Popconfirm
+                              title="Xóa banner này khỏi danh sách?"
+                              okText="Xóa"
+                              cancelText="Hủy"
+                              onConfirm={() => onDeleteBanner(index)}
+                            >
+                              <Button
+                                danger
+                                icon={<DeleteOutlined />}
+                                aria-label="Xóa banner"
+                                title="Xóa"
+                                disabled={edittingBanner.isEditting}
+                              />
+                            </Popconfirm>
+                          </div>
+                        </article>
+                      )
+                    })}
+                  </div>
+                )}
+              </Spin>
+
+              {isUpdatedBList ? (
+                <div className={styles.saveBar} role="status" aria-live="polite">
+                  <span className={styles.saveBarText}>
+                    Bạn có thay đổi chưa lưu ở danh sách banner.
+                  </span>
+                  <div className={styles.bannerActions}>
+                    <Button disabled={savingBanners} onClick={onDiscardBanners}>
+                      Hủy thay đổi
+                    </Button>
+                    <Button
+                      type="primary"
+                      loading={savingBanners}
+                      disabled={edittingBanner.isEditting}
+                      onClick={onSaveBanners}
+                    >
+                      Lưu thay đổi
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
+          {activeSection === 'video-popup' ? <VideoPopupListSettings /> : null}
+
+          {activeSection === 'pricing' ? <SubscriptionPricingForm /> : null}
+
+          {activeSection === 'banner-types' ? (
+            <BannerType
+              bannerTypes={bannerTypes}
+              onRefresh={handleRefreshBannerTypes}
+              loading={loading}
+            />
+          ) : null}
+        </section>
+      </div>
+    </div>
+  )
 }
 
-export default Setting;
+export default Setting

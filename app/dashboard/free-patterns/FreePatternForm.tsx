@@ -4,7 +4,7 @@ import { Button, Col, Flex, Form, Input, Row, Spin, Switch, TreeSelect } from "a
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { DefaultOptionType } from "antd/es/select";
+import type { DataNode } from "rc-tree-select/lib/interface";
 
 import { Category, FileUpload, Pattern } from "@/app/lib/definitions";
 import { ROUTE_PATH, TRANSLATION_STATUS } from "@/app/lib/constant";
@@ -165,7 +165,7 @@ const FreePatternForm = ({ params }: FreePatternFormProps) => {
                                 rules={[{ required: true, message: t('Fields.error_msg_required_category') }]}
                             >
                                 <TreeSelect
-                                    treeData={categories as DefaultOptionType[]}
+                                    treeData={categories as DataNode[]}
                                 />
                             </Item>
                         </Col>

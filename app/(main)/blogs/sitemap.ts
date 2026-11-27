@@ -22,7 +22,8 @@ export async function generateSitemaps() {
     return sitemaps;
 }
 
-export default async function sitemap({ id }: { id: number }): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap(props: { id: Promise<string> }): Promise<MetadataRoute.Sitemap> {
+    const id = Number(await props.id);
     // Google's limit is 50,000 URLs per sitemap
     // Dynamic routes for free patterns
     const blogs = await fetchBlogs({ ...PARAMS_FOR_SITEMAP, pageNo: id }, {
@@ -35,7 +36,7 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
         lastModified: new Date(),
         changeFrequency: 'daily' as const,
         priority: 0.9,
-        images: [blog.src], // nếu có
+        images: blog.src ? [blog.src] : undefined, // nếu có
     }))
 
     return [...blogsRoutes]

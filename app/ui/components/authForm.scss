@@ -1,4 +1,4 @@
-@import "../../variables.module.scss";
+@use "../../variables.module.scss" as *;
 
 .auth-form {
   font-family: "Rubik", "HelveticaNeue", "Helvetica Neue", sans-serif;
